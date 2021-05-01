@@ -49,7 +49,7 @@ class EditableMindmapView extends TextFileView  {
 	}
 
 	getViewData(): string {
-		if (this.mm) {
+		if (this.mm && this.mm.mind) {
 			console.log(this.mm.get_data('node_tree'))
 		}
 		return this.data;
@@ -62,11 +62,11 @@ class EditableMindmapView extends TextFileView  {
 					item
 							.setTitle("Open as markdown")
 							.setIcon("document")
-							.onClick(() => {
+							.onClick(async () => {
 								this.plugin.mindmapFileModes[
 								(this.leaf as any).id || this.file.path
 										] = "markdown";
-								this.plugin.setMarkdownView(this.leaf);
+								await this.plugin.setMarkdownView(this.leaf);
 							});
 				})
 				.addSeparator();
@@ -113,9 +113,26 @@ class EditableMindmapView extends TextFileView  {
 			const options = {
 				container: el,
 				theme: 'asbestos', // TODO customizable
-				editable: true
+				editable: true,
+				shortcut:{
+					enable:true, 		// whether to enable shortcut
+					handles:{}, 			// Named shortcut key event processor
+					mapping:{ 			// shortcut key mapping
+						// addchild : 45, 	// <Insert>
+						addchild : 9, 	// <Tab>
+						addbrother : 13, // <Enter>
+						editnode : 113, 	// <F2>
+						delnode : 46, 	// <Delete>
+						toggle : 32, 	// <Space>
+						left : 37, 		// <Left>
+						up : 38, 		// <Up>
+						right : 39, 		// <Right>
+						down : 40, 		// <Down>
+					}
+				},
 			};
 			this.mm = new jsMind(options);
+			this.mm.mind = {};
 			// ↓ *quick hack* to avoid the timing issue...
 			setTimeout(() => { this.mm.show(mind) }, 0);
 		})
@@ -211,7 +228,7 @@ export default class MyPlugin extends Plugin {
 							menu
 									.addItem((item) => {
 										item
-												.setTitle("Open as kanban board")
+												.setTitle("Open as editable-mindmap")
 												.setIcon(EDITABLE_MARKDOWN_ICON)
 												.onClick(() => {
 													self.mindmapFileModes[
