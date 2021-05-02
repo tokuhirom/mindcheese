@@ -1,21 +1,21 @@
 "use strict";
 
 function parse(title, md) {
-  if (md==null) {
+  if (md == null) {
     throw new Error("md should not be null");
   }
 
-  const lines = md.split(/\n/)
-  let lastSpaces = '';
+  const lines = md.split(/\n/);
+  let lastSpaces = "";
   const root = {
-    id:"root",
+    id: "root",
     topic: title,
     children: [],
   };
   let i = 0;
   let lastElement = root;
   const anchor = {
-    0: root
+    0: root,
   };
 
   for (const line of lines) {
@@ -33,15 +33,17 @@ function parse(title, md) {
     const el = {
       id: ++i,
       topic: body,
-      children: []
+      children: [],
     };
 
     if (lastSpaces.length === leadingSpaces.length) {
       // console.log('same')
-    } else if (lastSpaces.length < leadingSpaces.length) { // indent
+    } else if (lastSpaces.length < leadingSpaces.length) {
+      // indent
       // console.log('indent')
       anchor[leadingSpaces.length] = lastElement;
-    } else { // dedend
+    } else {
+      // dedend
       // console.log('dedent')
     }
     anchor[leadingSpaces.length].children.push(el);
@@ -53,16 +55,16 @@ function parse(title, md) {
 
 function convertMD2MM(title, md) {
   return {
-    "meta": {
-      "name": "jsMind remote",
-      "author": "hizzgdev@163.com",
-      "version": "0.2"
+    meta: {
+      name: "jsMind remote",
+      author: "hizzgdev@163.com",
+      version: "0.2",
     },
-    "format": "node_tree",
-    "data": parse(title, md.replace(/^---$.*^---$/sm, ''))
+    format: "node_tree",
+    data: parse(title, md.replace(/^---$.*^---$/ms, "")),
   };
 }
 
 module.exports = {
-  convertMD2MM
-}
+  convertMD2MM,
+};

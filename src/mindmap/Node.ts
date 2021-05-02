@@ -12,10 +12,25 @@ export class Node {
   public children: any[];
   private _data: any;
 
-  constructor(sId:string, iIndex:number, sTopic:string, oData:any, bIsRoot:boolean, oParent:any, eDirection:any, bExpanded:boolean) {
-    if (!sId) { throw new Error('invalid nodeid'); }
-    if (typeof iIndex != 'number') { throw new Error('invalid node index'); }
-    if (typeof bExpanded === 'undefined') { bExpanded = true; }
+  constructor(
+    sId: string,
+    iIndex: number,
+    sTopic: string,
+    oData: any,
+    bIsRoot: boolean,
+    oParent: any,
+    eDirection: any,
+    bExpanded: boolean
+  ) {
+    if (!sId) {
+      throw new Error("invalid nodeid");
+    }
+    if (typeof iIndex != "number") {
+      throw new Error("invalid node index");
+    }
+    if (typeof bExpanded === "undefined") {
+      bExpanded = true;
+    }
     this.id = sId;
     this.index = iIndex;
     this.topic = sTopic;
@@ -48,7 +63,7 @@ export class Node {
     return r;
   }
 
-  static inherited(pnode: Node, node:Node) {
+  static inherited(pnode: Node, node: Node) {
     if (!!pnode && !!node) {
       if (pnode.id === node.id) {
         return true;
@@ -72,7 +87,7 @@ export class Node {
     const vd = this._data.view;
     return {
       x: vd.abs_x,
-      y: vd.abs_y
+      y: vd.abs_y,
     };
   }
 
@@ -80,8 +95,7 @@ export class Node {
     const vd = this._data.view;
     return {
       w: vd.width,
-      h: vd.height
-    }
+      h: vd.height,
+    };
   }
 }
-

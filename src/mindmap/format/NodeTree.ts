@@ -10,14 +10,16 @@
 }
  */
 
-import {Mind} from '../Mind';
-import {Node} from '../Node';
+import { Mind } from "../Mind";
+import { Node } from "../Node";
 
 // TODO move to constants file.
 const jm = {
   direction: {
-    left: -1, center: 0, right: 1
-  }
+    left: -1,
+    center: 0,
+    right: 1,
+  },
 };
 
 export class NodeTree {
@@ -35,9 +37,9 @@ export class NodeTree {
     json.meta = {
       name: mind.name,
       author: mind.author,
-      version: mind.version
+      version: mind.version,
     };
-    json.format = 'node_tree';
+    json.format = "node_tree";
     json.data = this._buildnode(mind.root);
     return json;
   }
@@ -45,7 +47,7 @@ export class NodeTree {
   private _parse(mind: Mind, node_root: Node) {
     const data = this._extract_data(node_root);
     mind.set_root(node_root.id, node_root.topic, data);
-    if ('children' in node_root) {
+    if ("children" in node_root) {
       const children = node_root.children;
       for (let i = 0; i < children.length; i++) {
         this._extract_subnode(mind, mind.root, children[i]);
@@ -56,7 +58,13 @@ export class NodeTree {
   private _extract_data(node_json: any): Record<string, any> {
     const data: Record<string, any> = {};
     for (const k in node_json) {
-      if (k == 'id' || k == 'topic' || k == 'children' || k == 'direction' || k == 'expanded') {
+      if (
+        k == "id" ||
+        k == "topic" ||
+        k == "children" ||
+        k == "direction" ||
+        k == "expanded"
+      ) {
         continue;
       }
       // @ts-ignore
@@ -69,10 +77,19 @@ export class NodeTree {
     const data = this._extract_data(node_json);
     let d = null;
     if (node_parent.isroot) {
-      d = node_json.direction == 'left' ? jm.direction.left : jm.direction.right;
+      d =
+        node_json.direction == "left" ? jm.direction.left : jm.direction.right;
     }
-    const node = mind.add_node(node_parent, node_json.id, node_json.topic, data, null, d, node_json.expanded);
-    if ('children' in node_json) {
+    const node = mind.add_node(
+      node_parent,
+      node_json.id,
+      node_json.topic,
+      data,
+      null,
+      d,
+      node_json.expanded
+    );
+    if ("children" in node_json) {
       const children = node_json.children;
       for (var i = 0; i < children.length; i++) {
         this._extract_subnode(mind, node, children[i]);
@@ -87,10 +104,10 @@ export class NodeTree {
     const o: Record<string, any> = {
       id: node.id,
       topic: node.topic,
-      expanded: node.expanded
+      expanded: node.expanded,
     };
     if (!!node.parent && node.parent.isroot) {
-      o.direction = node.direction == jm.direction.left ? 'left' : 'right';
+      o.direction = node.direction == jm.direction.left ? "left" : "right";
     }
     if (node.data != null) {
       const node_data = node.data;

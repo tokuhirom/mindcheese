@@ -16,8 +16,10 @@
 "use strict";
 
 export function initJsMindDrggable(jsMind, Node) {
-  'use strict';
-  if (typeof jsMind.draggable != 'undefined') { throw new Error("You install jsMind.draggable twice!"); }
+  "use strict";
+  if (typeof jsMind.draggable != "undefined") {
+    throw new Error("You install jsMind.draggable twice!");
+  }
 
   const jdom = jsMind.util.dom;
   const clear_selection = () => window.getSelection().removeAllRanges();
@@ -25,7 +27,7 @@ export function initJsMindDrggable(jsMind, Node) {
   const options = {
     line_width: 5,
     lookup_delay: 500,
-    lookup_interval: 80
+    lookup_interval: 80,
   };
 
   jsMind.draggable = function (jm) {
@@ -62,19 +64,19 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     _create_canvas: function () {
-      const c = document.createElement('canvas');
+      const c = document.createElement("canvas");
       this.jm.view.e_panel.appendChild(c);
-      const ctx = c.getContext('2d');
+      const ctx = c.getContext("2d");
       this.e_canvas = c;
       this.canvas_ctx = ctx;
     },
 
     _create_shadow: function () {
-      const s = document.createElement('jmnode');
-      s.style.visibility = 'hidden';
-      s.style.zIndex = '3';
-      s.style.cursor = 'move';
-      s.style.opacity = '0.7';
+      const s = document.createElement("jmnode");
+      s.style.visibility = "hidden";
+      s.style.zIndex = "3";
+      s.style.cursor = "move";
+      s.style.opacity = "0.7";
       this.shadow = s;
     },
 
@@ -94,19 +96,19 @@ export function initJsMindDrggable(jsMind, Node) {
 
     show_shadow: function () {
       if (!this.moved) {
-        this.shadow.style.visibility = 'visible';
+        this.shadow.style.visibility = "visible";
       }
     },
 
     hide_shadow: function () {
-      this.shadow.style.visibility = 'hidden';
+      this.shadow.style.visibility = "hidden";
     },
 
     _magnet_shadow: function (node) {
       if (!!node) {
         this.canvas_ctx.lineWidth = options.line_width;
-        this.canvas_ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-        this.canvas_ctx.lineCap = 'round';
+        this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
+        this.canvas_ctx.lineCap = "round";
         this._clear_lines();
         this._canvas_lineto(node.sp.x, node.sp.y, node.np.x, node.np.y);
       }
@@ -136,8 +138,8 @@ export function initJsMindDrggable(jsMind, Node) {
 
       var ns, nl;
 
-      var direct = (sx + sw / 2) >= root_x ?
-                   jsMind.direction.right : jsMind.direction.left;
+      var direct =
+        sx + sw / 2 >= root_x ? jsMind.direction.right : jsMind.direction.left;
       var nodes = this.jm.mind.nodes;
       var node = null;
       var min_distance = Number.MAX_VALUE;
@@ -155,13 +157,21 @@ export function initJsMindDrggable(jsMind, Node) {
           ns = node.get_size();
           nl = node.get_location();
           if (direct == jsMind.direction.right) {
-            if (sx - nl.x - ns.w <= 0) { continue; }
-            distance = Math.abs(sx - nl.x - ns.w) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            if (sx - nl.x - ns.w <= 0) {
+              continue;
+            }
+            distance =
+              Math.abs(sx - nl.x - ns.w) +
+              Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
             np = { x: nl.x + ns.w - options.line_width, y: nl.y + ns.h / 2 };
             sp = { x: sx + options.line_width, y: sy + sh / 2 };
           } else {
-            if (nl.x - sx - sw <= 0) { continue; }
-            distance = Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            if (nl.x - sx - sw <= 0) {
+              continue;
+            }
+            distance =
+              Math.abs(sx + sw - nl.x) +
+              Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
             np = { x: nl.x + options.line_width, y: nl.y + ns.h / 2 };
             sp = { x: sx + sw - options.line_width, y: sy + sh / 2 };
           }
@@ -179,7 +189,7 @@ export function initJsMindDrggable(jsMind, Node) {
           node: closest_node,
           direction: direct,
           sp: shadow_p,
-          np: closest_p
+          np: closest_p,
         };
       }
       return result_node;
@@ -197,40 +207,46 @@ export function initJsMindDrggable(jsMind, Node) {
     _event_bind: function () {
       var jd = this;
       var container = this.jm.view.container;
-      jdom.add_event(container, 'mousedown', function (e) {
+      jdom.add_event(container, "mousedown", function (e) {
         var evt = e || event;
         jd.dragstart.call(jd, evt);
       });
-      jdom.add_event(container, 'mousemove', function (e) {
+      jdom.add_event(container, "mousemove", function (e) {
         var evt = e || event;
         jd.drag.call(jd, evt);
       });
-      jdom.add_event(container, 'mouseup', function (e) {
+      jdom.add_event(container, "mouseup", function (e) {
         var evt = e || event;
         jd.dragend.call(jd, evt);
       });
-      jdom.add_event(container, 'touchstart', function (e) {
+      jdom.add_event(container, "touchstart", function (e) {
         var evt = e || event;
         jd.dragstart.call(jd, evt);
       });
-      jdom.add_event(container, 'touchmove', function (e) {
+      jdom.add_event(container, "touchmove", function (e) {
         var evt = e || event;
         jd.drag.call(jd, evt);
       });
-      jdom.add_event(container, 'touchend', function (e) {
+      jdom.add_event(container, "touchend", function (e) {
         var evt = e || event;
         jd.dragend.call(jd, evt);
       });
     },
 
     dragstart: function (e) {
-      if (!this.jm.get_editable()) { return; }
-      if (this.capture) { return; }
+      if (!this.jm.get_editable()) {
+        return;
+      }
+      if (this.capture) {
+        return;
+      }
       this.active_node = null;
 
       var jview = this.jm.view;
       var el = e.target || event.srcElement;
-      if (el.tagName.toLowerCase() !== 'jmnode') { return; }
+      if (el.tagName.toLowerCase() !== "jmnode") {
+        return;
+      }
       var nodeid = jview.get_binded_nodeid(el);
       if (!!nodeid) {
         var node = this.jm.get_node(nodeid);
@@ -260,7 +276,9 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     drag: function (e) {
-      if (!this.jm.get_editable()) { return; }
+      if (!this.jm.get_editable()) {
+        return;
+      }
       if (this.capture) {
         e.preventDefault();
         this.show_shadow();
@@ -270,14 +288,16 @@ export function initJsMindDrggable(jsMind, Node) {
         var py = (e.clientY || e.touches[0].clientY) - this.offset_y;
         var cx = px + this.client_hw;
         var cy = py + this.client_hh;
-        this.shadow.style.left = px + 'px';
-        this.shadow.style.top = py + 'px';
+        this.shadow.style.left = px + "px";
+        this.shadow.style.top = py + "px";
         clear_selection();
       }
     },
 
     dragend: function (e) {
-      if (!this.jm.get_editable()) { return; }
+      if (!this.jm.get_editable()) {
+        return;
+      }
       if (this.capture) {
         if (this.hlookup_delay !== 0) {
           window.clearTimeout(this.hlookup_delay);
@@ -302,17 +322,23 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     move_node: function (src_node, target_node, target_direct) {
-      console.log(`jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`)
+      console.log(
+        `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
+      );
       var shadow_h = this.shadow.offsetTop;
-      if (!!target_node && !!src_node && !Node.inherited(src_node, target_node)) {
-        console.log(`let's move!`)
+      if (
+        !!target_node &&
+        !!src_node &&
+        !Node.inherited(src_node, target_node)
+      ) {
+        console.log(`let's move!`);
         // lookup before_node
         var sibling_nodes = target_node.children;
         var sc = sibling_nodes.length;
         var node = null;
         var delta_y = Number.MAX_VALUE;
         var node_before = null;
-        var beforeid = '_last_';
+        var beforeid = "_last_";
         while (sc--) {
           node = sibling_nodes[sc];
           if (node.direction === target_direct && node.id !== src_node.id) {
@@ -320,12 +346,16 @@ export function initJsMindDrggable(jsMind, Node) {
             if (dy > 0 && dy < delta_y) {
               delta_y = dy;
               node_before = node;
-              beforeid = '_first_';
+              beforeid = "_first_";
             }
           }
         }
-        if (!!node_before) { beforeid = node_before.id; }
-        console.log(`Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`)
+        if (!!node_before) {
+          beforeid = node_before.id;
+        }
+        console.log(
+          `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
+        );
         this.jm.move_node(src_node, beforeid, target_node.id, target_direct);
         // this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
       }
@@ -338,10 +368,10 @@ export function initJsMindDrggable(jsMind, Node) {
       if (type === jsMind.event_type.resize) {
         this.resize();
       }
-    }
+    },
   };
 
-  const draggable_plugin = new jsMind.plugin('draggable', function (jm) {
+  const draggable_plugin = new jsMind.plugin("draggable", function (jm) {
     const jd = new jsMind.draggable(jm);
     jd.init();
     jm.add_event_listener(function (type, data) {
@@ -350,5 +380,4 @@ export function initJsMindDrggable(jsMind, Node) {
   });
 
   jsMind.register_plugin(draggable_plugin);
-
 }

@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-editable-markdown-plugin",
-	"name": "Editable Markdown Plugin",
-	"version": "0.0.1",
-	"minAppVersion": "0.9.12",
-	"description": "Editable markdown plugin.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md/about",
-	"isDesktopOnly": false
+  "id": "obsidian-editable-markdown-plugin",
+  "name": "Editable Markdown Plugin",
+  "version": "0.0.1",
+  "minAppVersion": "0.9.12",
+  "description": "Editable markdown plugin.",
+  "author": "Obsidian",
+  "authorUrl": "https://obsidian.md/about",
+  "isDesktopOnly": false
 }
