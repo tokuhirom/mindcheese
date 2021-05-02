@@ -1,6 +1,7 @@
 import {Menu, TextFileView, WorkspaceLeaf} from "obsidian";
+import {Mind} from "./mindmap/Mind";
 import {initJsMindDrggable} from './jsmind.draggable';
-import jsMind from "./jsmind";
+import {initJsMind} from "./jsmind";
 import {MINDMAP_VIEW_TYPE} from "./Constants";
 import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
@@ -8,6 +9,10 @@ import MD2MMConverter from "./MD2MMConverter";
 import {Node} from "./mindmap/Node";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
+
+console.log(`Minddddd=${Mind}`);
+console.log(Mind);
+const jsMind = initJsMind(Node, Mind);
 
 initJsMindDrggable(jsMind, Node);
 
@@ -130,7 +135,8 @@ export class EditableMindmapView extends TextFileView {
     if (eventType == jsMind.event_type.edit) {
       setTimeout(async () => {
         const viewData = this.getViewData();
-        console.log(`Write data by jsMind's event: ${viewData} ${JSON.stringify(params)}`)
+        console.log(`Write data by jsMind's event: ${viewData}`)
+        console.log(params)
         await this.plugin.app.vault.modify(this.file, viewData);
       }, 10)
     }

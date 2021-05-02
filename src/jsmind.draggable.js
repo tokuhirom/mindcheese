@@ -302,8 +302,10 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     move_node: function (src_node, target_node, target_direct) {
+      console.log(`jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`)
       var shadow_h = this.shadow.offsetTop;
       if (!!target_node && !!src_node && !Node.inherited(src_node, target_node)) {
+        console.log(`let's move!`)
         // lookup before_node
         var sibling_nodes = target_node.children;
         var sc = sibling_nodes.length;
@@ -313,7 +315,7 @@ export function initJsMindDrggable(jsMind, Node) {
         var beforeid = '_last_';
         while (sc--) {
           node = sibling_nodes[sc];
-          if (node.direction == target_direct && node.id != src_node.id) {
+          if (node.direction === target_direct && node.id !== src_node.id) {
             var dy = node.get_location().y - shadow_h;
             if (dy > 0 && dy < delta_y) {
               delta_y = dy;
@@ -323,7 +325,9 @@ export function initJsMindDrggable(jsMind, Node) {
           }
         }
         if (!!node_before) { beforeid = node_before.id; }
-        this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
+        console.log(`Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`)
+        this.jm.move_node(src_node, beforeid, target_node.id, target_direct);
+        // this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
       }
       this.active_node = null;
       this.target_node = null;
