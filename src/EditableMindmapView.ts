@@ -11,10 +11,11 @@ import { NodeTree } from "./mindmap/format/NodeTree";
 import { DataProvider } from "./mindmap/DataProvider";
 import GraphCanvas from "./mindmap/GraphCanvas";
 import ShortcutProvider from "./ShortcutProvider";
+import LayoutProvider from "./LayoutProvider";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas, ShortcutProvider);
+const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas, ShortcutProvider, LayoutProvider);
 
 initJsMindDrggable(jsMind, Node);
 

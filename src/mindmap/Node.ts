@@ -2,7 +2,7 @@
 export class Node {
   // TODO eDirection maybe the ENUM.
   public id: string;
-  index: number;
+  public index: number;
   public topic: string;
   public data: any;
   public isroot: boolean;
@@ -10,7 +10,7 @@ export class Node {
   public direction: any;
   public expanded: boolean;
   public children: any[];
-  private _data: any;
+  public _data: any;
 
   constructor(
     sId: string,
