@@ -12,10 +12,11 @@ import { DataProvider } from "./mindmap/DataProvider";
 import GraphCanvas from "./mindmap/GraphCanvas";
 import ShortcutProvider from "./ShortcutProvider";
 import LayoutProvider from "./LayoutProvider";
+import ViewProvider from "./mindmap/ViewProvider";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas, ShortcutProvider, LayoutProvider);
+const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas, ShortcutProvider, LayoutProvider, ViewProvider);
 
 initJsMindDrggable(jsMind, Node);
 
@@ -81,7 +82,7 @@ export class EditableMindmapView extends TextFileView {
     console.log(data);
     console.log(clear);
 
-    this.yfm = this.parseFrontamtter(data);
+    this.yfm = EditableMindmapView.parseFrontamtter(data);
 
     const title = this.file.basename;
     this.data = data;
@@ -143,7 +144,7 @@ export class EditableMindmapView extends TextFileView {
     }
   }
 
-  private parseFrontamtter(md: string): string {
+  private static parseFrontamtter(md: string): string {
     const m = md.match(FROMTMATTER_RE);
     if (m) {
       return m[0];

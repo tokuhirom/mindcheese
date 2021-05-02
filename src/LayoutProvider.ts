@@ -312,7 +312,7 @@ export default class LayoutProvider {
   get_min_size() {
     const nodes = this.jm.mind.nodes;
     let pout = null;
-    for (let nodeid in nodes) {
+    for (const nodeid in nodes) {
       const node = nodes[nodeid];
       pout = this.get_node_point_out(node);
       if (pout.x > this.bounds.e) {
@@ -422,7 +422,7 @@ export default class LayoutProvider {
 
   part_layout(node: Node) {
     const root = this.jm.mind.root;
-    if (!!root) {
+    if (root) {
       const root_layout_data = root._data.layout;
       if (node.isroot) {
         root_layout_data.outer_height_right = this._layout_offset_subnodes_height(

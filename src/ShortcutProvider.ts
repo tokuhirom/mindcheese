@@ -93,10 +93,10 @@ export default class ShortcutProvider {
 
   handle_addchild(_jm:any, e:any) {
     const selected_node = _jm.get_selected_node();
-    if (!!selected_node) {
+    if (selected_node) {
       const nodeid = this._newid();
       const node = _jm.add_node(selected_node, nodeid, "New Node");
-      if (!!node) {
+      if (node) {
         _jm.select_node(nodeid);
         _jm.begin_edit(nodeid);
       }
@@ -108,7 +108,7 @@ export default class ShortcutProvider {
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
       const node = _jm.insert_node_after(selected_node, nodeid, "New Node");
-      if (!!node) {
+      if (node) {
         _jm.select_node(nodeid);
         _jm.begin_edit(nodeid);
       }
@@ -117,7 +117,7 @@ export default class ShortcutProvider {
 
   handle_editnode (_jm:any, e:any) {
     const selected_node = _jm.get_selected_node();
-    if (!!selected_node) {
+    if (selected_node) {
       _jm.begin_edit(selected_node);
     }
   }
@@ -132,7 +132,7 @@ export default class ShortcutProvider {
 
   handle_toggle (_jm:any, e:any) {
     const selected_node = _jm.get_selected_node();
-    if (!!selected_node) {
+    if (selected_node) {
       _jm.toggle_node(selected_node.id);
       e.stopPropagation();
       e.preventDefault();
@@ -141,7 +141,7 @@ export default class ShortcutProvider {
 
   handle_up(_jm:any, e:any) {
     const selected_node = _jm.get_selected_node();
-    if (!!selected_node) {
+    if (selected_node) {
       let up_node = _jm.find_node_before(selected_node);
       if (!up_node) {
         const np = _jm.find_node_before(selected_node.parent);
@@ -149,7 +149,7 @@ export default class ShortcutProvider {
           up_node = np.children[np.children.length - 1];
         }
       }
-      if (!!up_node) {
+      if (up_node) {
         _jm.select_node(up_node);
       }
       e.stopPropagation();
@@ -159,7 +159,7 @@ export default class ShortcutProvider {
 
   handle_down(_jm:any, e:any) {
     const selected_node = _jm.get_selected_node();
-    if (!!selected_node) {
+    if (selected_node) {
       let down_node = _jm.find_node_after(selected_node);
       if (!down_node) {
         const np = _jm.find_node_after(selected_node.parent);
@@ -167,7 +167,7 @@ export default class ShortcutProvider {
           down_node = np.children[0];
         }
       }
-      if (!!down_node) {
+      if (down_node) {
         _jm.select_node(down_node);
       }
       e.stopPropagation();
@@ -187,7 +187,7 @@ export default class ShortcutProvider {
     let children;
     const selected_node = _jm.get_selected_node();
     let node = null;
-    if (!!selected_node) {
+    if (selected_node) {
       if (selected_node.isroot) {
         const c = selected_node.children;
         children = [];
@@ -206,7 +206,7 @@ export default class ShortcutProvider {
       } else {
         node = selected_node.parent;
       }
-      if (!!node) {
+      if (node) {
         _jm.select_node(node);
       }
       e.stopPropagation();
