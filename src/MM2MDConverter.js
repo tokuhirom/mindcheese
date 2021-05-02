@@ -4,6 +4,7 @@ function renderMd(node, level) {
   if (node == null) {
     return '';
   }
+
   let result = '';
   if (node.topic) {
     for (let i=0; i<level; i++) {
@@ -21,7 +22,7 @@ function renderMd(node, level) {
 }
 
 function convertMM2MD(data) {
-  const p = {
+  const p = { // Skip the root node。
     children: data.data.children
   };
   return renderMd(p, -1);

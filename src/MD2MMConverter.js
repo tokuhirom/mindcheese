@@ -28,7 +28,7 @@ function parse(title, md) {
     const leadingSpaces = match[1];
     const body = match[2];
 
-    console.log(`lead=${leadingSpaces.length} body=${body} root=${JSON.stringify(root)}`);
+    // console.log(`lead=${leadingSpaces.length} body=${body} root=${JSON.stringify(root)}`);
 
     const el = {
       id: ++i,
@@ -37,12 +37,12 @@ function parse(title, md) {
     };
 
     if (lastSpaces.length === leadingSpaces.length) {
-      console.log('same')
+      // console.log('same')
     } else if (lastSpaces.length < leadingSpaces.length) { // indent
-      console.log('indent')
+      // console.log('indent')
       anchor[leadingSpaces.length] = lastElement;
     } else { // dedend
-      console.log('dedent')
+      // console.log('dedent')
     }
     anchor[leadingSpaces.length].children.push(el);
     lastElement = el;

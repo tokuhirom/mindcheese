@@ -4,9 +4,13 @@ import {MINDMAP_VIEW_TYPE} from "./Constants";
 import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
+import {initJsMindDrggable} from './jsmind.draggable';
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
+initJsMindDrggable({
+  jsMind
+});
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
@@ -31,11 +35,16 @@ export class EditableMindmapView extends TextFileView {
   }
 
   getViewData(): string {
+    console.log(`getViewData: invoked`);
     if (this.mm && this.mm.mind) {
       const data = this.mm.get_data('node_tree');
-      console.log(data);
+      if (!data.data) {
+        // mindmap is not available, yet.
+        return this.data;
+      }
+      console.log(`getViewData: data=${JSON.stringify(data)}`);
       const md = MM2MDConverter.convertMM2MD(data) as string;
-      console.log(md);
+      console.log(`getViewData: data=${data} md=${md}`);
 
       return this.yfm + "\n\n" + md + "\n";
     }
@@ -63,20 +72,19 @@ export class EditableMindmapView extends TextFileView {
 
 
   setViewData(data: string, clear: boolean): void {
-    console.log(`資格資格資格資格資格 SET VIEW DATA ${clear}`)
+    console.log(`資格資格資格資格資格 SET VIEW DATA ${clear} ${data}`)
     console.log(data)
     console.log(clear)
 
     this.yfm = this.parseFrontamtter(data);
 
     const title = this.file.basename;
+    this.data = data;
 
     this.contentEl.createDiv({}, el => {
       el.setAttribute('id', 'jsmind_container')
       const mind = MD2MMConverter.convertMD2MM(title, data);
-      console.log("MIND!")
-      console.log(data);
-      console.log(mind);
+      console.log(`rendering mindmap: data=${data}, mind=${JSON.stringify(mind)}`)
       const options = {
         container: el,
         theme: 'asbestos', // TODO customizable
@@ -99,13 +107,12 @@ export class EditableMindmapView extends TextFileView {
         },
       };
       this.mm = new jsMind(options);
-      this.mm.mind = {};
+      this.mm.mind = {}; // without this, get_data will fail... XXX
       // ↓ *quick hack* to avoid the timing issue...
       setTimeout(() => {
         this.mm.show(mind)
       }, 0);
     })
-    this.data = data;
   }
 
   private parseFrontamtter(md: string): string {

@@ -3,6 +3,7 @@
 ## **Note**
 
 - This library depends on jsMind: https://github.com/hizzgdev/jsmind
+    - base commit hash is 33ad14832661034dc9a5a84bc0b0f18c93ceca4a
 - [ ] TODO: run jest on github actions
 - [ ] DnD support
 
