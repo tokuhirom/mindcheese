@@ -13,7 +13,7 @@
 
 "use strict";
 
-function initJsMind(Node, Mind, NodeTree, DataProvider) {
+function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
   const $w = window;
   console.log(`WTF????  Node=${Node} Mind=${require("./mindmap/Mind")}`);
   console.log(`WTF????  Node=${Node} Mind==${Object.keys(Mind)}`);
@@ -131,7 +131,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
     jm.current = this;
 
     this.version = __version__;
-    var opts = {};
+    const opts = {};
     jm.util.json.merge(opts, DEFAULT_OPTIONS);
     jm.util.json.merge(opts, options);
 
@@ -441,7 +441,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
       var element = e.target || event.srcElement;
       var nodeid = this.view.get_binded_nodeid(element);
       if (!!nodeid) {
-        if (element.tagName.toLowerCase() == "jmnode") {
+        if (element.tagName.toLowerCase() === "jmnode") {
           this.select_node(nodeid);
         }
       } else {
@@ -623,7 +623,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
 
     add_node: function (parent_node, nodeid, topic, data) {
       if (this.get_editable()) {
-        var node = this.mind.add_node(parent_node, nodeid, topic, data);
+        const node = this.mind.add_node(parent_node, nodeid, topic, data);
         if (!!node) {
           this.view.add_node(node);
           this.layout.layout();
@@ -1488,65 +1488,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
     },
   };
 
-  jm.graph_canvas = function (view) {
-    this.opts = view.opts;
-    this.e_canvas = $c("canvas");
-    this.e_canvas.className = "jsmind";
-    this.canvas_ctx = this.e_canvas.getContext("2d");
-    this.size = { w: 0, h: 0 };
-  };
-
-  jm.graph_canvas.prototype = {
-    element: function () {
-      return this.e_canvas;
-    },
-
-    set_size: function (w, h) {
-      this.size.w = w;
-      this.size.h = h;
-      this.e_canvas.width = w;
-      this.e_canvas.height = h;
-    },
-
-    clear: function () {
-      this.canvas_ctx.clearRect(0, 0, this.size.w, this.size.h);
-    },
-
-    draw_line: function (pout, pin, offset) {
-      var ctx = this.canvas_ctx;
-      ctx.strokeStyle = this.opts.line_color;
-      ctx.lineWidth = this.opts.line_width;
-      ctx.lineCap = "round";
-
-      this._bezier_to(
-        ctx,
-        pin.x + offset.x,
-        pin.y + offset.y,
-        pout.x + offset.x,
-        pout.y + offset.y
-      );
-    },
-
-    copy_to: function (dest_canvas_ctx, callback) {
-      dest_canvas_ctx.drawImage(this.e_canvas, 0, 0);
-      !!callback && callback();
-    },
-
-    _bezier_to: function (ctx, x1, y1, x2, y2) {
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.bezierCurveTo(x1 + ((x2 - x1) * 2) / 3, y1, x1, y2, x2, y2);
-      ctx.stroke();
-    },
-
-    _line_to: function (ctx, x1, y1, x2, y2) {
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-    },
-  };
-// view provider
+  // view provider
   jm.view_provider = function (jm, options) {
     this.opts = options;
     this.jm = jm;
@@ -1579,7 +1521,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
       this.e_nodes = $c("jmnodes");
       this.e_editor = $c("input");
 
-      this.graph = new jm.graph_canvas(this);
+      this.graph = new GraphCanvas(this);
 
       this.e_panel.className = "jsmind-inner";
       this.e_panel.appendChild(this.graph.element());

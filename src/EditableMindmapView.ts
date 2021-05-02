@@ -9,10 +9,11 @@ import MD2MMConverter from "./MD2MMConverter";
 import { Node } from "./mindmap/Node";
 import { NodeTree } from "./mindmap/format/NodeTree";
 import { DataProvider } from "./mindmap/DataProvider";
+import GraphCanvas from "./mindmap/GraphCanvas";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider);
+const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas);
 
 initJsMindDrggable(jsMind, Node);
 
