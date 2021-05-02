@@ -1,8 +1,18 @@
 // TODO convert to typescript
-class Node {
+export class Node {
   // TODO eDirection maybe the ENUM.
+  public id: string;
+  private index: number;
+  private topic: string;
+  private data: any;
+  private isroot: boolean;
+  private parent: any;
+  private direction: any;
+  private expanded: boolean;
+  private children: any[];
+  private _data: any;
 
-  constructor(sId, iIndex, sTopic, oData, bIsRoot, oParent, eDirection, bExpanded) {
+  constructor(sId:string, iIndex:number, sTopic:string, oData:any, bIsRoot:boolean, oParent:any, eDirection:any, bExpanded:boolean) {
     if (!sId) { throw new Error('invalid nodeid'); }
     if (typeof iIndex != 'number') { throw new Error('invalid node index'); }
     if (typeof bExpanded === 'undefined') { bExpanded = true; }
@@ -18,7 +28,7 @@ class Node {
     this._data = {};
   }
 
-  static compare(node1, node2) {
+  static compare(node1: Node, node2: Node) {
     // '-1' is alwary the last
     let r = 0;
     const i1 = node1.index;
@@ -38,7 +48,7 @@ class Node {
     return r;
   }
 
-  static inherited(pnode, node) {
+  static inherited(pnode: Node, node:Node) {
     if (!!pnode && !!node) {
       if (pnode.id === node.id) {
         return true;
@@ -75,6 +85,3 @@ class Node {
   }
 }
 
-module.exports = {
-  Node
-}
