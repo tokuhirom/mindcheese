@@ -72,44 +72,25 @@ export class EditableMindmapView extends TextFileView {
 
     this.contentEl.createDiv({}, el => {
       el.setAttribute('id', 'jsmind_container')
-      const mind = {
-        "meta": {
-          "name": "jsMind remote",
-          "author": "hizzgdev@163.com",
-          "version": "0.2"
-        },
-        "format": "node_tree",
-        "data": {
-          "id": "root", "topic": "jsMind", "children": [
-            {
-              "id": "easy", "topic": "Easy", "direction": "left", "children": [
-                {"id": "easy1", "topic": "Easy to show"},
-                {"id": "easy2", "topic": "Easy to edit"},
-                {"id": "easy3", "topic": "Easy to store"},
-                {"id": "easy4", "topic": "Easy to embed"}
-              ]
-            },
-            {
-              "id": "open", "topic": "Open Source", "direction": "right", "children": [
-                {"id": "open1", "topic": "on GitHub"},
-                {"id": "open2", "topic": "BSD License"}
-              ]
-            },
-            {
-              "id": "powerful", "topic": "Powerful", "direction": "right", "children": [
-                {"id": "powerful1", "topic": "Base on Javascript"},
-                {"id": "powerful2", "topic": "Base on HTML5"},
-                {"id": "powerful3", "topic": "Depends on you"}
-              ]
-            },
-            {
-              "id": "other", "topic": "test node", "direction": "left", "children": [
-                {"id": "other1", "topic": "I'm from local variable"},
-                {"id": "other2", "topic": "I can do everything"}
-              ]
-            }
-          ]
-        }
+      const mind: any = {
+        meta: { name: 'jsMind remote', author: 'hizzgdev@163.com', version: '0.2' },
+        format: 'node_tree',
+        data: {
+          id: 'root', topic: 'top', children: [
+            {id: 1, topic: 'A1', children: []},
+            {id: 2, topic: 'A2', children: [
+                {id: 3, topic: 'B1', children: []},
+                {id: 4, topic: 'B2', children: [
+                    {id: 5, topic: 'C1', children: []},
+                    {id: 6, topic: 'C2', children: [
+                        {id: 7, topic: 'D1', children: []},
+                        {id: 8, topic: 'D2', children: []},
+                      ]},
+                  ]},
+              ]},
+            {id: 9, topic: 'A3', children: []},
+            {id: 10, topic: 'A4', children: []}
+          ] }
       };
       const options = {
         container: el,
