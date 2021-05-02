@@ -8,10 +8,11 @@ import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
 import { Node } from "./mindmap/Node";
 import { NodeTree } from "./mindmap/format/NodeTree";
+import { DataProvider } from "./mindmap/DataProvider";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-const jsMind = initJsMind(Node, Mind, NodeTree);
+const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider);
 
 initJsMindDrggable(jsMind, Node);
 

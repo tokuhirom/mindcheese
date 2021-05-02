@@ -45,7 +45,7 @@ export class Mind {
     if (this.root == null) {
       console.log("set_root----------");
       console.log(Node);
-      this.root = new Node(nodeid, 0, topic, data, true);
+      this.root = new Node(nodeid, 0, topic, data, true, null, null, null);
       this._put_node(this.root);
     } else {
       console.error("root node is already exist");

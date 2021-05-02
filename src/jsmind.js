@@ -11,9 +11,10 @@
  * - replace var with let/const.
  */
 
-function initJsMind(Node, Mind, NodeTree) {
+"use strict";
+
+function initJsMind(Node, Mind, NodeTree, DataProvider) {
   const $w = window;
-  ("use strict");
   console.log(`WTF????  Node=${Node} Mind=${require("./mindmap/Mind")}`);
   console.log(`WTF????  Node=${Node} Mind==${Object.keys(Mind)}`);
   // set 'jsMind' as the library name.
@@ -379,12 +380,11 @@ function initJsMind(Node, Mind, NodeTree) {
         line_color: opts.view.line_color,
       };
       // create instance of function provider
-      this.data = new jm.data_provider(this);
+      this.data = new DataProvider(this);
       this.layout = new jm.layout_provider(this, opts_layout);
       this.view = new jm.view_provider(this, opts_view);
       this.shortcut = new jm.shortcut_provider(this, opts.shortcut);
 
-      this.data.init();
       this.layout.init();
       this.view.init();
       this.shortcut.init();
@@ -575,13 +575,10 @@ function initJsMind(Node, Mind, NodeTree) {
     _reset: function () {
       this.view.reset();
       this.layout.reset();
-      this.data.reset();
     },
 
     _show: function (mind) {
-      var m = mind || jm.format.node_array.example;
-
-      this.mind = this.data.load(m);
+      this.mind = this.data.load(mind);
       if (!this.mind) {
         logger.error("data.load error");
         return;
@@ -615,8 +612,7 @@ function initJsMind(Node, Mind, NodeTree) {
     },
 
     get_data: function (data_format) {
-      var df = data_format || "node_tree";
-      return this.data.get_data(df);
+      return this.data.get_data(data_format);
     },
 
     get_root: function () {
@@ -1018,37 +1014,6 @@ function initJsMind(Node, Mind, NodeTree) {
       var l = this.event_handles.length;
       for (var i = 0; i < l; i++) {
         this.event_handles[i](type, data);
-      }
-    },
-  };
-
-  // ============= data provider =============================================
-
-  jm.data_provider = function (jm) {
-    this.jm = jm;
-    this.format = {
-      node_tree: new NodeTree(),
-    };
-  };
-
-  jm.data_provider.prototype = {
-    init: function () {
-      logger.debug("data.init");
-    },
-
-    reset: function () {
-      logger.debug("data.reset");
-    },
-
-    load: function (mind_data) {
-      return this.format.node_tree.get_mind(mind_data);
-    },
-
-    get_data: function (data_format) {
-      if (data_format === "node_tree") {
-        return this.format.node_tree.get_data(this.jm.mind);
-      } else {
-        throw new Error(`Unknown format: ${data_format}`);
       }
     },
   };

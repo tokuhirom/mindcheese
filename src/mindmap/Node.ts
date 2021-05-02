@@ -2,7 +2,7 @@
 export class Node {
   // TODO eDirection maybe the ENUM.
   public id: string;
-  private index: number;
+  index: number;
   public topic: string;
   public data: any;
   public isroot: boolean;
