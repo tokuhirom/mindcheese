@@ -2,7 +2,8 @@ import {Menu, TextFileView, WorkspaceLeaf} from "obsidian";
 import jsMind from "./jsmind";
 import {MINDMAP_VIEW_TYPE} from "./Constants";
 import MyPlugin from "./main";
-import {convertMM2MD} from './MM2MDConverter';
+import MM2MDConverter from "./MM2MDConverter";
+import MD2MMConverter from "./MD2MMConverter";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
@@ -33,12 +34,10 @@ export class EditableMindmapView extends TextFileView {
     if (this.mm && this.mm.mind) {
       const data = this.mm.get_data('node_tree');
       console.log(data);
-      const md = convertMM2MD(data) as string;
+      const md = MM2MDConverter.convertMM2MD(data) as string;
       console.log(md);
 
-      console.log(this.yfm + "\n\n" + md);
-
-      // TODO keep original YFM.
+      return this.yfm + "\n\n" + md + "\n";
     }
     return this.data;
   }
@@ -70,28 +69,14 @@ export class EditableMindmapView extends TextFileView {
 
     this.yfm = this.parseFrontamtter(data);
 
+    const title = this.file.basename;
+
     this.contentEl.createDiv({}, el => {
       el.setAttribute('id', 'jsmind_container')
-      const mind: any = {
-        meta: { name: 'jsMind remote', author: 'hizzgdev@163.com', version: '0.2' },
-        format: 'node_tree',
-        data: {
-          id: 'root', topic: 'top', children: [
-            {id: 1, topic: 'A1', children: []},
-            {id: 2, topic: 'A2', children: [
-                {id: 3, topic: 'B1', children: []},
-                {id: 4, topic: 'B2', children: [
-                    {id: 5, topic: 'C1', children: []},
-                    {id: 6, topic: 'C2', children: [
-                        {id: 7, topic: 'D1', children: []},
-                        {id: 8, topic: 'D2', children: []},
-                      ]},
-                  ]},
-              ]},
-            {id: 9, topic: 'A3', children: []},
-            {id: 10, topic: 'A4', children: []}
-          ] }
-      };
+      const mind = MD2MMConverter.convertMD2MM(title, data);
+      console.log("MIND!")
+      console.log(data);
+      console.log(mind);
       const options = {
         container: el,
         theme: 'asbestos', // TODO customizable

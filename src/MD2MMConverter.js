@@ -1,6 +1,10 @@
 "use strict";
 
 function parse(title, md) {
+  if (md==null) {
+    throw new Error("md should not be null");
+  }
+
   const lines = md.split(/\n/)
   let lastSpaces = '';
   const root = {
@@ -55,7 +59,7 @@ function convertMD2MM(title, md) {
       "version": "0.2"
     },
     "format": "node_tree",
-    "data": parse(title, md)
+    "data": parse(title, md.replace(/^---$.*^---$/sm, ''))
   };
 }
 

@@ -139,9 +139,29 @@ test('basic', () => {
     data: {
       id: 'root', topic: 'top', children: [
         {id: 1, topic: 'A', children: [
-          {id: 2, topic: 'B', children: []}
-        ]},
+            {id: 2, topic: 'B', children: []}
+          ]},
         {id: 3, topic: 'C', children: []}
+      ] }
+  });
+});
+
+test('ignore yfm', () => {
+  const md = [
+    '---',
+    'aliases: []',
+    '---',
+    '',
+    '- A',
+  ].join("\n");
+  const mm = MD2MMConverter.convertMD2MM('top', md)
+  console.log(JSON.stringify(mm, null, 2));
+  expect(mm).toStrictEqual({
+    meta: { name: 'jsMind remote', author: 'hizzgdev@163.com', version: '0.2' },
+    format: 'node_tree',
+    data: {
+      id: 'root', topic: 'top', children: [
+        {id: 1, topic: 'A', children: []},
       ] }
   });
 });

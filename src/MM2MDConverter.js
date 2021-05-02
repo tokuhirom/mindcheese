@@ -20,8 +20,11 @@ function renderMd(node, level) {
   return result;
 }
 
- function convertMM2MD(data) {
-  return renderMd(data.data, 0);
+function convertMM2MD(data) {
+  const p = {
+    children: data.data.children
+  };
+  return renderMd(p, -1);
 }
 
 module.exports = {

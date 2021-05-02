@@ -4,6 +4,7 @@
 
 - This library depends on jsMind: https://github.com/hizzgdev/jsmind
 - [ ] TODO: run jest on github actions
+- [ ] DnD support
 
 ##
 
