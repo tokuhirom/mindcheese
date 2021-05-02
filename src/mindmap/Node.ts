@@ -3,13 +3,13 @@ export class Node {
   // TODO eDirection maybe the ENUM.
   public id: string;
   private index: number;
-  private topic: string;
-  private data: any;
-  private isroot: boolean;
-  private parent: any;
-  private direction: any;
-  private expanded: boolean;
-  private children: any[];
+  public topic: string;
+  public data: any;
+  public isroot: boolean;
+  public parent: any;
+  public direction: any;
+  public expanded: boolean;
+  public children: any[];
   private _data: any;
 
   constructor(sId:string, iIndex:number, sTopic:string, oData:any, bIsRoot:boolean, oParent:any, eDirection:any, bExpanded:boolean) {

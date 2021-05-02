@@ -7,12 +7,11 @@ import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
 import {Node} from "./mindmap/Node";
+import {NodeTree} from "./mindmap/format/NodeTree";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-console.log(`Minddddd=${Mind}`);
-console.log(Mind);
-const jsMind = initJsMind(Node, Mind);
+const jsMind = initJsMind(Node, Mind, NodeTree);
 
 initJsMindDrggable(jsMind, Node);
 

@@ -10,10 +10,10 @@ import instantiate = WebAssembly.instantiate;
 };
 
 export class Mind {
-  private name: string;
-  private author: string;
-  private version: string;
-  private root: any;
+  name: string;
+  author: string;
+  version: string;
+  root: any;
   private selected: any;
   private nodes: any;
 
@@ -48,7 +48,7 @@ export class Mind {
   }
 
   // XXX jsMind では parent_node に nodeid も受け付けていたっぽい。
-  add_node(parent_node: Node, nodeid: string, topic: string, data: string, idx: number, direction: any, expanded: boolean) {
+  add_node(parent_node: Node, nodeid: string, topic: string, data: any, idx: number, direction: any, expanded: boolean) {
     const nodeindex = idx || -1;
     let node;
     if (parent_node.isroot) {
