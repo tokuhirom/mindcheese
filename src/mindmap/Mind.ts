@@ -1,7 +1,6 @@
 "use strict";
 
 import { Node } from "./Node";
-import instantiate = WebAssembly.instantiate;
 // TODO move to constants file.
 const jm = {
   direction: {
@@ -28,19 +27,15 @@ export class Mind {
     this.nodes = {};
   }
 
-  get_node(nodeid: string) {
+  get_node(nodeid: string): Node {
     if (nodeid in this.nodes) {
       return this.nodes[nodeid];
     } else {
-      console.assert(
-        nodeid in this.nodes,
-        `the node[id=${nodeid}] can not be found...`
-      );
-      return null;
+      throw new Error(`the node[id=${nodeid}] can not be found...`);
     }
   }
 
-  set_root(nodeid: string, topic: string, data: any) {
+  set_root(nodeid: string, topic: string, data: any): void {
     console.log("set_root!");
     if (this.root == null) {
       console.log("set_root----------");
@@ -61,7 +56,7 @@ export class Mind {
     idx: number,
     direction: any,
     expanded: boolean
-  ) {
+  ): Node {
     const nodeindex = idx || -1;
     let node;
     if (parent_node.isroot) {
@@ -124,7 +119,7 @@ export class Mind {
     nodeid: string,
     topic: string,
     data: any
-  ) {
+  ): Node {
     const node_index = node_before.index - 0.5;
     return this.add_node(
       node_before.parent,
@@ -157,7 +152,7 @@ export class Mind {
     nodeid: string,
     topic: string,
     data: any
-  ) {
+  ): Node {
     const node_index = node_after.index + 0.5;
     return this.add_node(
       node_after.parent,
@@ -185,7 +180,7 @@ export class Mind {
   }
 
   // XXX jsMind では node に nodeid も受け付けていたっぽい。
-  move_node(node: Node, beforeid: string, parentid: string, direction: any) {
+  move_node(node: Node, beforeid: string, parentid: string, direction: any): Node {
     console.assert(node instanceof Node, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parentid} ${direction}`);
     if (!parentid) {
@@ -194,7 +189,7 @@ export class Mind {
     return this._move_node(node, beforeid, parentid, direction);
   }
 
-  _flow_node_direction(node: Node, direction: any) {
+  _flow_node_direction(node: Node, direction: any): void {
     if (typeof direction === "undefined") {
       direction = node.direction;
     } else {
@@ -206,7 +201,7 @@ export class Mind {
     }
   }
 
-  _move_node_internal(node: Node, beforeid: string) {
+  _move_node_internal(node: Node, beforeid: string): Node {
     if (!!node && !!beforeid) {
       if (beforeid === "_last_") {
         node.index = -1;
@@ -215,7 +210,7 @@ export class Mind {
         node.index = 0;
         this._reindex(node.parent);
       } else {
-        const node_before = !!beforeid ? this.get_node(beforeid) : null;
+        const node_before = beforeid ? this.get_node(beforeid) : null;
         if (
           node_before != null &&
           node_before.parent != null &&
@@ -229,7 +224,7 @@ export class Mind {
     return node;
   }
 
-  _move_node(node: Node, beforeid: string, parentid: string, direction: any) {
+  _move_node(node: Node, beforeid: string, parentid: string, direction: any): Node {
     console.log(`_move_node: ${node}, ${beforeid}, ${parentid}, ${direction}`);
     if (!!node && !!parentid) {
       console.assert(node.parent, `node.parent is null: ${node}`);
@@ -306,7 +301,7 @@ export class Mind {
     return true;
   }
 
-  _put_node(node: Node) {
+  _put_node(node: Node): boolean {
     if (node.id in this.nodes) {
       console.warn("the nodeid '" + node.id + "' has been already exist.");
       return false;
@@ -316,7 +311,7 @@ export class Mind {
     }
   }
 
-  _reindex(node: Node) {
+  _reindex(node: Node): void {
     if (node instanceof Node) {
       node.children.sort(Node.compare);
       for (let i = 0; i < node.children.length; i++) {

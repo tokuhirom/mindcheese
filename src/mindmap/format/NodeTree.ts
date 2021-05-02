@@ -23,7 +23,7 @@ const jm = {
 };
 
 export class NodeTree {
-  get_mind(source: any) {
+  get_mind(source: any): Mind {
     const mind = new Mind();
     mind.name = source.meta.name;
     mind.author = source.meta.author;
@@ -32,7 +32,7 @@ export class NodeTree {
     return mind;
   }
 
-  get_data(mind: Mind) {
+  get_data(mind: Mind): Record<string, any> {
     const json: Record<string, any> = {};
     json.meta = {
       name: mind.name,
@@ -44,7 +44,7 @@ export class NodeTree {
     return json;
   }
 
-  private _parse(mind: Mind, node_root: Node) {
+  private _parse(mind: Mind, node_root: Node): void {
     const data = this._extract_data(node_root);
     mind.set_root(node_root.id, node_root.topic, data);
     if ("children" in node_root) {
@@ -73,7 +73,7 @@ export class NodeTree {
     return data;
   }
 
-  private _extract_subnode(mind: Mind, node_parent: Node, node_json: any) {
+  private _extract_subnode(mind: Mind, node_parent: Node, node_json: any): void {
     const data = this._extract_data(node_json);
     let d = null;
     if (node_parent.isroot) {
@@ -91,13 +91,13 @@ export class NodeTree {
     );
     if ("children" in node_json) {
       const children = node_json.children;
-      for (var i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length; i++) {
         this._extract_subnode(mind, node, children[i]);
       }
     }
   }
 
-  private _buildnode(node: Node) {
+  private _buildnode(node: Node): Record<string, any> {
     if (!(node instanceof Node)) {
       return;
     }

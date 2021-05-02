@@ -12,18 +12,18 @@ export default class GraphCanvas {
     this.size = { w: 0, h: 0 };
   }
 
-  element() {
+  element(): HTMLCanvasElement {
     return this.e_canvas;
   }
 
-  set_size(w: number, h: number) {
+  set_size(w: number, h: number): void {
     this.size.w = w;
     this.size.h = h;
     this.e_canvas.width = w;
     this.e_canvas.height = h;
   }
 
-  clear() {
+  clear(): void {
     this.canvas_ctx.clearRect(0, 0, this.size.w, this.size.h);
   }
 
@@ -50,14 +50,14 @@ export default class GraphCanvas {
     }
   }
 
-  _bezier_to(ctx: CanvasRenderingContext2D, x1:number, y1:number, x2:number, y2:number) {
+  _bezier_to(ctx: CanvasRenderingContext2D, x1:number, y1:number, x2:number, y2:number): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.bezierCurveTo(x1 + ((x2 - x1) * 2) / 3, y1, x1, y2, x2, y2);
     ctx.stroke();
   }
 
-  _line_to (ctx:CanvasRenderingContext2D, x1:number, y1:number, x2:number, y2:number) {
+  _line_to (ctx:CanvasRenderingContext2D, x1:number, y1:number, x2:number, y2:number): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);

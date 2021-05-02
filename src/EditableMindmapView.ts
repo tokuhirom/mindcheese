@@ -55,7 +55,7 @@ export class EditableMindmapView extends TextFileView {
     return this.data;
   }
 
-  onMoreOptionsMenu(menu: Menu) {
+  onMoreOptionsMenu(menu: Menu): void {
     // Add a menu item to force the board to markdown view
     menu
       .addItem((item) => {
@@ -122,7 +122,7 @@ export class EditableMindmapView extends TextFileView {
     });
   }
 
-  async jsMindEventListener(eventType: number, params: any) {
+  async jsMindEventListener(eventType: number, params: any): Promise<void> {
     const event_type_map: Record<number, string> = {
       1: "show",
       2: "resize",

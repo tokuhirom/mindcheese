@@ -43,7 +43,7 @@ export class Node {
     this._data = {};
   }
 
-  static compare(node1: Node, node2: Node) {
+  static compare(node1: Node, node2: Node): number {
     // '-1' is alwary the last
     let r = 0;
     const i1 = node1.index;
@@ -63,7 +63,7 @@ export class Node {
     return r;
   }
 
-  static inherited(pnode: Node, node: Node) {
+  static inherited(pnode: Node, node: Node): boolean {
     if (!!pnode && !!node) {
       if (pnode.id === node.id) {
         return true;
@@ -83,7 +83,7 @@ export class Node {
     return false;
   }
 
-  get_location() {
+  get_location(): { x: number; y: number } {
     const vd = this._data.view;
     return {
       x: vd.abs_x,
@@ -91,7 +91,7 @@ export class Node {
     };
   }
 
-  get_size() {
+  get_size(): { w: number; h: number } {
     const vd = this._data.view;
     return {
       w: vd.width,
