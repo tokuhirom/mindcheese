@@ -11,8 +11,11 @@
  * - replace var with let/const.
  */
 
-; (function ($w) {
+const Node = require('./mindmap/Node').Node;
+
+(function ($w) {
     'use strict';
+    console.log(`WTF????  Node=${Node}`)
     // set 'jsMind' as the library name.
     // __name__ should be a const value, Never try to change it easily.
     const __name__ = 'jsMind';
@@ -133,78 +136,78 @@
     jm.event_type = { show: 1, resize: 2, edit: 3, select: 4 };
     jm.key = { meta: 1 << 13, ctrl: 1 << 12, alt: 1 << 11, shift: 1 << 10 };
 
-    jm.node = function (sId, iIndex, sTopic, oData, bIsRoot, oParent, eDirection, bExpanded) {
-        if (!sId) { logger.error('invalid nodeid'); return; }
-        if (typeof iIndex != 'number') { logger.error('invalid node index'); return; }
-        if (typeof bExpanded === 'undefined') { bExpanded = true; }
-        this.id = sId;
-        this.index = iIndex;
-        this.topic = sTopic;
-        this.data = oData || {};
-        this.isroot = bIsRoot;
-        this.parent = oParent;
-        this.direction = eDirection;
-        this.expanded = !!bExpanded;
-        this.children = [];
-        this._data = {};
-    };
-
-    jm.node.compare = function (node1, node2) {
-        // '-1' is alwary the last
-        var r = 0;
-        var i1 = node1.index;
-        var i2 = node2.index;
-        if (i1 >= 0 && i2 >= 0) {
-            r = i1 - i2;
-        } else if (i1 === -1 && i2 === -1) {
-            r = 0;
-        } else if (i1 === -1) {
-            r = 1;
-        } else if (i2 === -1) {
-            r = -1;
-        } else {
-            r = 0;
-        }
-        //logger.debug(i1+' <> '+i2+'  =  '+r);
-        return r;
-    };
-
-    jm.node.inherited = function (pnode, node) {
-        if (!!pnode && !!node) {
-            if (pnode.id === node.id) {
-                return true;
-            }
-            if (pnode.isroot) {
-                return true;
-            }
-            var pid = pnode.id;
-            var p = node;
-            while (!p.isroot) {
-                p = p.parent;
-                if (p.id === pid) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    };
-
-    jm.node.prototype = {
-        get_location: function () {
-            var vd = this._data.view;
-            return {
-                x: vd.abs_x,
-                y: vd.abs_y
-            };
-        },
-        get_size: function () {
-            var vd = this._data.view;
-            return {
-                w: vd.width,
-                h: vd.height
-            }
-        }
-    };
+    // jm.node = function (sId, iIndex, sTopic, oData, bIsRoot, oParent, eDirection, bExpanded) {
+    //     if (!sId) { logger.error('invalid nodeid'); return; }
+    //     if (typeof iIndex != 'number') { logger.error('invalid node index'); return; }
+    //     if (typeof bExpanded === 'undefined') { bExpanded = true; }
+    //     this.id = sId;
+    //     this.index = iIndex;
+    //     this.topic = sTopic;
+    //     this.data = oData || {};
+    //     this.isroot = bIsRoot;
+    //     this.parent = oParent;
+    //     this.direction = eDirection;
+    //     this.expanded = !!bExpanded;
+    //     this.children = [];
+    //     this._data = {};
+    // };
+    //
+    // jm.node.compare = function (node1, node2) {
+    //     // '-1' is alwary the last
+    //     var r = 0;
+    //     var i1 = node1.index;
+    //     var i2 = node2.index;
+    //     if (i1 >= 0 && i2 >= 0) {
+    //         r = i1 - i2;
+    //     } else if (i1 === -1 && i2 === -1) {
+    //         r = 0;
+    //     } else if (i1 === -1) {
+    //         r = 1;
+    //     } else if (i2 === -1) {
+    //         r = -1;
+    //     } else {
+    //         r = 0;
+    //     }
+    //     //logger.debug(i1+' <> '+i2+'  =  '+r);
+    //     return r;
+    // };
+    //
+    // jm.node.inherited = function (pnode, node) {
+    //     if (!!pnode && !!node) {
+    //         if (pnode.id === node.id) {
+    //             return true;
+    //         }
+    //         if (pnode.isroot) {
+    //             return true;
+    //         }
+    //         var pid = pnode.id;
+    //         var p = node;
+    //         while (!p.isroot) {
+    //             p = p.parent;
+    //             if (p.id === pid) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // };
+    //
+    // jm.node.prototype = {
+    //     get_location: function () {
+    //         var vd = this._data.view;
+    //         return {
+    //             x: vd.abs_x,
+    //             y: vd.abs_y
+    //         };
+    //     },
+    //     get_size: function () {
+    //         var vd = this._data.view;
+    //         return {
+    //             w: vd.width,
+    //             h: vd.height
+    //         }
+    //     }
+    // };
 
 
     jm.mind = function () {
@@ -227,8 +230,11 @@
         },
 
         set_root: function (nodeid, topic, data) {
+            console.log('set_root!')
             if (this.root == null) {
-                this.root = new jm.node(nodeid, 0, topic, data, true);
+                console.log('set_root----------');
+                console.log(Node);
+                this.root = new Node(nodeid, 0, topic, data, true);
                 this._put_node(this.root);
             } else {
                 logger.error('root node is already exist');
@@ -258,9 +264,9 @@
                 } else {
                     d = (direction !== jm.direction.left) ? jm.direction.right : jm.direction.left;
                 }
-                node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, d, expanded);
+                node = new Node(nodeid, nodeindex, topic, data, false, parent_node, d, expanded);
             } else {
-                node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, parent_node.direction, expanded);
+                node = new Node(nodeid, nodeindex, topic, data, false, parent_node, parent_node.direction, expanded);
             }
             if (this._put_node(node)) {
                 parent_node.children.push(node);
@@ -478,8 +484,8 @@
         },
 
         _reindex: function (node) {
-            if (node instanceof jm.node) {
-                node.children.sort(jm.node.compare);
+            if (node instanceof Node) {
+                node.children.sort(Node.compare);
                 for (var i = 0; i < node.children.length; i++) {
                     node.children[i].index = i + 1;
                 }
@@ -561,7 +567,7 @@
 
             _buildnode: function (node) {
                 var df = jm.format.node_tree;
-                if (!(node instanceof jm.node)) { return; }
+                if (!(node instanceof Node)) { return; }
                 var o = {
                     id: node.id,
                     topic: node.topic,
@@ -699,7 +705,7 @@
 
             _array_node: function (node, node_array) {
                 var df = jm.format.node_array;
-                if (!(node instanceof jm.node)) { return; }
+                if (!(node instanceof Node)) { return; }
                 var o = {
                     id: node.id,
                     topic: node.topic,
@@ -901,7 +907,7 @@
 
     jm.util = {
         is_node: function (node) {
-            return !!node && node instanceof jm.node;
+            return !!node && node instanceof Node;
         },
         ajax: {
             _xhr: function () {

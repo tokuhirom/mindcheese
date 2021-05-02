@@ -1,14 +1,15 @@
 import {Menu, TextFileView, WorkspaceLeaf} from "obsidian";
+import {initJsMindDrggable} from './jsmind.draggable';
 import jsMind from "./jsmind";
 import {MINDMAP_VIEW_TYPE} from "./Constants";
 import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
-import {initJsMindDrggable} from './jsmind.draggable';
+import {Node} from "./mindmap/Node";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-initJsMindDrggable(jsMind);
+initJsMindDrggable(jsMind, Node);
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;

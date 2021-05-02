@@ -15,7 +15,7 @@
 
 "use strict";
 
-export function initJsMindDrggable(jsMind) {
+export function initJsMindDrggable(jsMind, Node) {
   'use strict';
   if (typeof jsMind.draggable != 'undefined') { throw new Error("You install jsMind.draggable twice!"); }
 
@@ -303,7 +303,7 @@ export function initJsMindDrggable(jsMind) {
 
     move_node: function (src_node, target_node, target_direct) {
       var shadow_h = this.shadow.offsetTop;
-      if (!!target_node && !!src_node && !jsMind.node.inherited(src_node, target_node)) {
+      if (!!target_node && !!src_node && !Node.inherited(src_node, target_node)) {
         // lookup before_node
         var sibling_nodes = target_node.children;
         var sc = sibling_nodes.length;
