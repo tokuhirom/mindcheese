@@ -94,7 +94,6 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
     support_html: true,
 
     view: {
-      engine: "canvas",
       hmargin: 100,
       vmargin: 50,
       line_width: 2,
@@ -373,7 +372,6 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
       var opts_view = {
         container: opts.container,
         support_html: opts.support_html,
-        engine: opts.view.engine,
         hmargin: opts.view.hmargin,
         vmargin: opts.view.vmargin,
         line_width: opts.view.line_width,
@@ -1548,95 +1546,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
       ctx.stroke();
     },
   };
-
-  jm.graph_svg = function (view) {
-    this.view = view;
-    this.opts = view.opts;
-    this.e_svg = jm.graph_svg.c("svg");
-    this.e_svg.setAttribute("class", "jsmind");
-    this.size = { w: 0, h: 0 };
-    this.lines = [];
-  };
-
-  jm.graph_svg.c = function (tag) {
-    return $d.createElementNS("http://www.w3.org/2000/svg", tag);
-  };
-
-  jm.graph_svg.prototype = {
-    element: function () {
-      return this.e_svg;
-    },
-
-    set_size: function (w, h) {
-      this.size.w = w;
-      this.size.h = h;
-      this.e_svg.setAttribute("width", w);
-      this.e_svg.setAttribute("height", h);
-    },
-
-    clear: function () {
-      var len = this.lines.length;
-      while (len--) {
-        this.e_svg.removeChild(this.lines[len]);
-      }
-      this.lines.length = 0;
-    },
-
-    draw_line: function (pout, pin, offset) {
-      var line = jm.graph_svg.c("path");
-      line.setAttribute("stroke", this.opts.line_color);
-      line.setAttribute("stroke-width", this.opts.line_width);
-      line.setAttribute("fill", "transparent");
-      this.lines.push(line);
-      this.e_svg.appendChild(line);
-      this._bezier_to(
-        line,
-        pin.x + offset.x,
-        pin.y + offset.y,
-        pout.x + offset.x,
-        pout.y + offset.y
-      );
-    },
-
-    copy_to: function (dest_canvas_ctx, callback) {
-      var img = new Image();
-      img.onload = function () {
-        dest_canvas_ctx.drawImage(img, 0, 0);
-        !!callback && callback();
-      };
-      img.src =
-        "data:image/svg+xml;base64," +
-        btoa(new XMLSerializer().serializeToString(this.e_svg));
-    },
-
-    _bezier_to: function (path, x1, y1, x2, y2) {
-      path.setAttribute(
-        "d",
-        "M" +
-          x1 +
-          " " +
-          y1 +
-          " C " +
-          (x1 + ((x2 - x1) * 2) / 3) +
-          " " +
-          y1 +
-          ", " +
-          x1 +
-          " " +
-          y2 +
-          ", " +
-          x2 +
-          " " +
-          y2
-      );
-    },
-
-    _line_to: function (path, x1, y1, x2, y2) {
-      path.setAttribute("d", "M " + x1 + " " + y1 + " L " + x2 + " " + y2);
-    },
-  };
-
-  // view provider
+// view provider
   jm.view_provider = function (jm, options) {
     this.opts = options;
     this.jm = jm;
@@ -1669,10 +1579,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider) {
       this.e_nodes = $c("jmnodes");
       this.e_editor = $c("input");
 
-      this.graph =
-        this.opts.engine.toLowerCase() === "svg"
-          ? new jm.graph_svg(this)
-          : new jm.graph_canvas(this);
+      this.graph = new jm.graph_canvas(this);
 
       this.e_panel.className = "jsmind-inner";
       this.e_panel.appendChild(this.graph.element());
