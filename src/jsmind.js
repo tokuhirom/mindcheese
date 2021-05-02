@@ -6,19 +6,25 @@
  *   https://github.com/hizzgdev/jsmind/
  */
 
+/**
+ * Modified by tokuhirom.
+ * - replace var with let/const.
+ */
+
 ; (function ($w) {
     'use strict';
     // set 'jsMind' as the library name.
     // __name__ should be a const value, Never try to change it easily.
-    var __name__ = 'jsMind';
+    const __name__ = 'jsMind';
     // library version
-    var __version__ = '0.4.6';
+    const __version__ = '0.4.6';
     // author
-    var __author__ = 'hizzgdev@163.com';
+    const __author__ = 'hizzgdev@163.com';
 
     // an noop function define
-    var _noop = function () { };
-    var logger = (typeof console === 'undefined') ? {
+    const _noop = function () {
+    };
+    const logger = (typeof console === 'undefined') ? {
         log: _noop, debug: _noop, error: _noop, warn: _noop, info: _noop
     } : console;
 
@@ -31,12 +37,22 @@
     }
 
     // shortcut of methods in dom
-    var $d = $w.document;
-    var $g = function (id) { return $d.getElementById(id); };
-    var $c = function (tag) { return $d.createElement(tag); };
-    var $t = function (n, t) { if (n.hasChildNodes()) { n.firstChild.nodeValue = t; } else { n.appendChild($d.createTextNode(t)); } };
+    const $d = $w.document;
+    const $g = function (id) {
+        return $d.getElementById(id);
+    };
+    const $c = function (tag) {
+        return $d.createElement(tag);
+    };
+    const $t = function (n, t) {
+        if (n.hasChildNodes()) {
+            n.firstChild.nodeValue = t;
+        } else {
+            n.appendChild($d.createTextNode(t));
+        }
+    };
 
-    var $h = function (n, t) {
+    const $h = function (n, t) {
         if (t instanceof HTMLElement) {
             n.innerHTML = '';
             n.appendChild(t);
@@ -45,10 +61,13 @@
         }
     };
     // detect isElement
-    var $i = function (el) { return !!el && (typeof el === 'object') && (el.nodeType === 1) && (typeof el.style === 'object') && (typeof el.ownerDocument === 'object'); };
+    const $i = function (el) {
+        return !!el && (typeof el === 'object') && (el.nodeType === 1) && (typeof el.style === 'object') &&
+               (typeof el.ownerDocument === 'object');
+    };
     if (typeof String.prototype.startsWith != 'function') { String.prototype.startsWith = function (p) { return this.slice(0, p.length) === p; }; }
 
-    var DEFAULT_OPTIONS = {
+    const DEFAULT_OPTIONS = {
         container: '',   // id of the container
         editable: false, // you can change it in your options
         theme: null,
@@ -74,8 +93,7 @@
         },
         shortcut: {
             enable: true,
-            handles: {
-            },
+            handles: {},
             mapping: {
                 addchild: 45, // Insert
                 addbrother: 13, // Enter
@@ -91,7 +109,7 @@
     };
 
     // core object
-    var jm = function (options) {
+    const jm = function (options) {
         jm.current = this;
 
         this.version = __version__;
@@ -138,11 +156,11 @@
         var i2 = node2.index;
         if (i1 >= 0 && i2 >= 0) {
             r = i1 - i2;
-        } else if (i1 == -1 && i2 == -1) {
+        } else if (i1 === -1 && i2 === -1) {
             r = 0;
-        } else if (i1 == -1) {
+        } else if (i1 === -1) {
             r = 1;
-        } else if (i2 == -1) {
+        } else if (i2 === -1) {
             r = -1;
         } else {
             r = 0;
@@ -219,7 +237,7 @@
 
         add_node: function (parent_node, nodeid, topic, data, idx, direction, expanded) {
             if (!jm.util.is_node(parent_node)) {
-                var the_parent_node = this.get_node(parent_node);
+                const the_parent_node = this.get_node(parent_node);
                 if (!the_parent_node) {
                     logger.error('the parent_node[id=' + parent_node + '] can not be found.');
                     return null;
@@ -227,8 +245,8 @@
                     return this.add_node(the_parent_node, nodeid, topic, data, idx, direction, expanded);
                 }
             }
-            var nodeindex = idx || -1;
-            var node = null;
+            const nodeindex = idx || -1;
+            let node = null;
             if (parent_node.isroot) {
                 var d = jm.direction.right;
                 if (isNaN(direction)) {
@@ -238,7 +256,7 @@
                     for (var i = 0; i < children_len; i++) { if (children[i].direction === jm.direction.left) { r--; } else { r++; } }
                     d = (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right;
                 } else {
-                    d = (direction != jm.direction.left) ? jm.direction.right : jm.direction.left;
+                    d = (direction !== jm.direction.left) ? jm.direction.right : jm.direction.left;
                 }
                 node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, d, expanded);
             } else {
@@ -256,7 +274,7 @@
 
         insert_node_before: function (node_before, nodeid, topic, data) {
             if (!jm.util.is_node(node_before)) {
-                var the_node_before = this.get_node(node_before);
+                const the_node_before = this.get_node(node_before);
                 if (!the_node_before) {
                     logger.error('the node_before[id=' + node_before + '] can not be found.');
                     return null;
@@ -264,13 +282,13 @@
                     return this.insert_node_before(the_node_before, nodeid, topic, data);
                 }
             }
-            var node_index = node_before.index - 0.5;
+            const node_index = node_before.index - 0.5;
             return this.add_node(node_before.parent, nodeid, topic, data, node_index);
         },
 
         get_node_before: function (node) {
             if (!jm.util.is_node(node)) {
-                var the_node = this.get_node(node);
+                const the_node = this.get_node(node);
                 if (!the_node) {
                     logger.error('the node[id=' + node + '] can not be found.');
                     return null;
@@ -279,7 +297,7 @@
                 }
             }
             if (node.isroot) { return null; }
-            var idx = node.index - 2;
+            const idx = node.index - 2;
             if (idx >= 0) {
                 return node.parent.children[idx];
             } else {
@@ -289,7 +307,7 @@
 
         insert_node_after: function (node_after, nodeid, topic, data) {
             if (!jm.util.is_node(node_after)) {
-                var the_node_after = this.get_node(node_after);
+                const the_node_after = this.get_node(node_after);
                 if (!the_node_after) {
                     logger.error('the node_after[id=' + node_after + '] can not be found.');
                     return null;
@@ -297,13 +315,13 @@
                     return this.insert_node_after(the_node_after, nodeid, topic, data);
                 }
             }
-            var node_index = node_after.index + 0.5;
+            const node_index = node_after.index + 0.5;
             return this.add_node(node_after.parent, nodeid, topic, data, node_index);
         },
 
         get_node_after: function (node) {
             if (!jm.util.is_node(node)) {
-                var the_node = this.get_node(node);
+                const the_node = this.get_node(node);
                 if (!the_node) {
                     logger.error('the node[id=' + node + '] can not be found.');
                     return null;
@@ -312,8 +330,8 @@
                 }
             }
             if (node.isroot) { return null; }
-            var idx = node.index;
-            var brothers = node.parent.children;
+            const idx = node.index;
+            const brothers = node.parent.children;
             if (brothers.length >= idx) {
                 return node.parent.children[idx];
             } else {
@@ -1684,8 +1702,8 @@
         },
 
         load: function (mind_data) {
-            var df = null;
-            var mind = null;
+            let df = null;
+            let mind = null;
             if (typeof mind_data === 'object') {
                 if (!!mind_data.format) {
                     df = mind_data.format;
@@ -1696,11 +1714,11 @@
                 df = 'freemind';
             }
 
-            if (df == 'node_array') {
+            if (df === 'node_array') {
                 mind = jm.format.node_array.get_mind(mind_data);
-            } else if (df == 'node_tree') {
+            } else if (df === 'node_tree') {
                 mind = jm.format.node_tree.get_mind(mind_data);
-            } else if (df == 'freemind') {
+            } else if (df === 'freemind') {
                 mind = jm.format.freemind.get_mind(mind_data);
             } else {
                 logger.warn('unsupported format');
@@ -1710,11 +1728,11 @@
 
         get_data: function (data_format) {
             var data = null;
-            if (data_format == 'node_array') {
+            if (data_format === 'node_array') {
                 data = jm.format.node_array.get_data(this.jm.mind);
-            } else if (data_format == 'node_tree') {
+            } else if (data_format === 'node_tree') {
                 data = jm.format.node_tree.get_data(this.jm.mind);
-            } else if (data_format == 'freemind') {
+            } else if (data_format === 'freemind') {
                 data = jm.format.freemind.get_data(this.jm.mind);
             } else {
                 logger.error('unsupported ' + data_format + ' format');

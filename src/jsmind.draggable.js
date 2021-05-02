@@ -8,25 +8,21 @@
 
 /**
  * Modified by tokuhirom.
+ * - support npm.
+ * - replace var with let/const.
  * Copyright (C) 2021 Tokuhiro Matsuno.
  */
 
-export function initJsMindDrggable($w) {
+"use strict";
+
+export function initJsMindDrggable(jsMind) {
   'use strict';
-  var $d = $w.document;
-  var __name__ = 'jsMind';
-  var jsMind = $w[__name__];
-  if (!jsMind) { return; }
-  if (typeof jsMind.draggable != 'undefined') { return; }
+  if (typeof jsMind.draggable != 'undefined') { throw new Error("You install jsMind.draggable twice!"); }
 
-  var jdom = jsMind.util.dom;
-  var clear_selection = 'getSelection' in $w ? function () {
-    $w.getSelection().removeAllRanges();
-  } : function () {
-    $d.selection.empty();
-  };
+  const jdom = jsMind.util.dom;
+  const clear_selection = () => window.getSelection().removeAllRanges();
 
-  var options = {
+  const options = {
     line_width: 5,
     lookup_delay: 500,
     lookup_interval: 80
@@ -66,15 +62,15 @@ export function initJsMindDrggable($w) {
     },
 
     _create_canvas: function () {
-      var c = $d.createElement('canvas');
+      const c = document.createElement('canvas');
       this.jm.view.e_panel.appendChild(c);
-      var ctx = c.getContext('2d');
+      const ctx = c.getContext('2d');
       this.e_canvas = c;
       this.canvas_ctx = ctx;
     },
 
     _create_shadow: function () {
-      var s = $d.createElement('jmnode');
+      const s = document.createElement('jmnode');
       s.style.visibility = 'hidden';
       s.style.zIndex = '3';
       s.style.cursor = 'move';
@@ -83,7 +79,7 @@ export function initJsMindDrggable($w) {
     },
 
     reset_shadow: function (el) {
-      var s = this.shadow.style;
+      const s = this.shadow.style;
       this.shadow.innerHTML = el.innerHTML;
       s.left = el.style.left;
       s.top = el.style.top;
@@ -94,7 +90,6 @@ export function initJsMindDrggable($w) {
       s.transform = el.style.transform;
       this.shadow_w = this.shadow.clientWidth;
       this.shadow_h = this.shadow.clientHeight;
-
     },
 
     show_shadow: function () {
@@ -150,7 +145,7 @@ export function initJsMindDrggable($w) {
       var closest_node = null;
       var closest_p = null;
       var shadow_p = null;
-      for (var nodeid in nodes) {
+      for (const nodeid in nodes) {
         var np, sp;
         node = nodes[nodeid];
         if (node.isroot || node.direction == direct) {
@@ -235,7 +230,7 @@ export function initJsMindDrggable($w) {
 
       var jview = this.jm.view;
       var el = e.target || event.srcElement;
-      if (el.tagName.toLowerCase() != 'jmnode') { return; }
+      if (el.tagName.toLowerCase() !== 'jmnode') { return; }
       var nodeid = jview.get_binded_nodeid(el);
       if (!!nodeid) {
         var node = this.jm.get_node(nodeid);
@@ -246,16 +241,16 @@ export function initJsMindDrggable($w) {
           this.offset_y = (e.clientY || e.touches[0].clientY) - el.offsetTop;
           this.client_hw = Math.floor(el.clientWidth / 2);
           this.client_hh = Math.floor(el.clientHeight / 2);
-          if (this.hlookup_delay != 0) {
-            $w.clearTimeout(this.hlookup_delay);
+          if (this.hlookup_delay !== 0) {
+            window.clearTimeout(this.hlookup_delay);
           }
-          if (this.hlookup_timer != 0) {
-            $w.clearInterval(this.hlookup_timer);
+          if (this.hlookup_timer !== 0) {
+            window.clearInterval(this.hlookup_timer);
           }
           var jd = this;
-          this.hlookup_delay = $w.setTimeout(function () {
+          this.hlookup_delay = window.setTimeout(function () {
             jd.hlookup_delay = 0;
-            jd.hlookup_timer = $w.setInterval(function () {
+            jd.hlookup_timer = window.setInterval(function () {
               jd.lookup_close_node.call(jd);
             }, options.lookup_interval);
           }, options.lookup_delay);
@@ -284,13 +279,13 @@ export function initJsMindDrggable($w) {
     dragend: function (e) {
       if (!this.jm.get_editable()) { return; }
       if (this.capture) {
-        if (this.hlookup_delay != 0) {
-          $w.clearTimeout(this.hlookup_delay);
+        if (this.hlookup_delay !== 0) {
+          window.clearTimeout(this.hlookup_delay);
           this.hlookup_delay = 0;
           this._clear_lines();
         }
-        if (this.hlookup_timer != 0) {
-          $w.clearInterval(this.hlookup_timer);
+        if (this.hlookup_timer !== 0) {
+          window.clearInterval(this.hlookup_timer);
           this.hlookup_timer = 0;
           this._clear_lines();
         }
@@ -342,8 +337,8 @@ export function initJsMindDrggable($w) {
     }
   };
 
-  var draggable_plugin = new jsMind.plugin('draggable', function (jm) {
-    var jd = new jsMind.draggable(jm);
+  const draggable_plugin = new jsMind.plugin('draggable', function (jm) {
+    const jd = new jsMind.draggable(jm);
     jd.init();
     jm.add_event_listener(function (type, data) {
       jd.jm_event_handle.call(jd, type, data);

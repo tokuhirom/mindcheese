@@ -8,9 +8,7 @@ import {initJsMindDrggable} from './jsmind.draggable';
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-initJsMindDrggable({
-  jsMind
-});
+initJsMindDrggable(jsMind);
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
@@ -87,7 +85,7 @@ export class EditableMindmapView extends TextFileView {
       console.log(`rendering mindmap: data=${data}, mind=${JSON.stringify(mind)}`)
       const options = {
         container: el,
-        theme: 'asbestos', // TODO customizable
+        theme: 'primary', // TODO customizable
         editable: true,
         shortcut: {
           enable: true, 		// whether to enable shortcut
@@ -112,7 +110,29 @@ export class EditableMindmapView extends TextFileView {
       setTimeout(() => {
         this.mm.show(mind)
       }, 0);
+      this.mm.add_event_listener(
+          this.jsMindEventListener.bind(this)
+      );
     })
+  }
+
+  async jsMindEventListener(eventType: number, params: any) {
+    const event_type_map: Record<number, string> = {
+      1: 'show',
+      2: 'resize',
+      3: 'edit',
+      4: 'select',
+    };
+    console.log(`Got jsMind event: ${event_type_map[eventType]}`)
+
+
+    if (eventType == jsMind.event_type.edit) {
+      setTimeout(async () => {
+        const viewData = this.getViewData();
+        console.log(`Write data by jsMind's event: ${viewData} ${JSON.stringify(params)}`)
+        await this.plugin.app.vault.modify(this.file, viewData);
+      }, 10)
+    }
   }
 
   private parseFrontamtter(md: string): string {
