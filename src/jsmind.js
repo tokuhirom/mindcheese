@@ -13,7 +13,7 @@
 
 "use strict";
 
-function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
+function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas, ShortcutProvider) {
   const $w = window;
   console.log(`WTF????  Node=${Node} Mind=${require("./mindmap/Mind")}`);
   console.log(`WTF????  Node=${Node} Mind==${Object.keys(Mind)}`);
@@ -48,12 +48,6 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
 
   // shortcut of methods in dom
   const $d = $w.document;
-  const $g = function (id) {
-    return $d.getElementById(id);
-  };
-  const $c = function (tag) {
-    return $d.createElement(tag);
-  };
   const $t = function (n, t) {
     if (n.hasChildNodes()) {
       n.firstChild.nodeValue = t;
@@ -272,7 +266,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
         } else {
           var URL = $w.URL || $w.webkitURL;
           var bloburl = URL.createObjectURL(blob);
-          var anchor = $c("a");
+          var anchor = document.createElement("a");
           if ("download" in anchor) {
             anchor.style.visibility = "hidden";
             anchor.href = bloburl;
@@ -335,15 +329,6 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
       },
     },
 
-    uuid: {
-      newid: function () {
-        return (
-          new Date().getTime().toString(16) +
-          Math.random().toString(16).substr(2)
-        ).substr(2, 16);
-      },
-    },
-
     text: {
       is_empty: function (s) {
         if (!s) {
@@ -361,15 +346,15 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
       }
       this.inited = true;
 
-      var opts = this.options;
+      const opts = this.options;
 
-      var opts_layout = {
+      const opts_layout = {
         mode: opts.mode,
         hspace: opts.layout.hspace,
         vspace: opts.layout.vspace,
         pspace: opts.layout.pspace,
       };
-      var opts_view = {
+      const opts_view = {
         container: opts.container,
         support_html: opts.support_html,
         hmargin: opts.view.hmargin,
@@ -381,7 +366,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
       this.data = new DataProvider(this);
       this.layout = new jm.layout_provider(this, opts_layout);
       this.view = new jm.view_provider(this, opts_view);
-      this.shortcut = new jm.shortcut_provider(this, opts.shortcut);
+      this.shortcut = new ShortcutProvider(this, opts.shortcut);
 
       this.layout.init();
       this.view.init();
@@ -1512,14 +1497,14 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
 
       this.container = $i(this.opts.container)
         ? this.opts.container
-        : $g(this.opts.container);
+        : document.getElementById(this.opts.container);
       if (!this.container) {
         logger.error("the options.view.container was not be found in dom");
         return;
       }
-      this.e_panel = $c("div");
-      this.e_nodes = $c("jmnodes");
-      this.e_editor = $c("input");
+      this.e_panel = document.createElement("div");
+      this.e_nodes = document.createElement("jmnodes");
+      this.e_editor = document.createElement("input");
 
       this.graph = new GraphCanvas(this);
 
@@ -1653,11 +1638,11 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
         node._data.view = view_data;
       }
 
-      var d = $c("jmnode");
+      var d = document.createElement("jmnode");
       if (node.isroot) {
         d.className = "root";
       } else {
-        var d_e = $c("jmexpander");
+        var d_e = document.createElement("jmexpander");
         $t(d_e, "-");
         d_e.setAttribute("nodeid", node.id);
         d_e.style.visibility = "hidden";
@@ -1904,7 +1889,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
       var expander_text = "-";
       var view_data = null;
       var _offset = this.get_view_offset();
-      for (var nodeid in nodes) {
+      for (const nodeid in nodes) {
         node = nodes[nodeid];
         view_data = node._data.view;
         node_element = view_data.element;
@@ -1966,21 +1951,21 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
         node_element.style.fontStyle = node_data["font-style"];
       }
       if ("background-image" in node_data) {
-        var backgroundImage = node_data["background-image"];
+        const backgroundImage = node_data["background-image"];
         if (
           backgroundImage.startsWith("data") &&
           node_data["width"] &&
           node_data["height"]
         ) {
-          var img = new Image();
+          const img = new Image();
 
           img.onload = function () {
-            var c = $c("canvas");
+            const c = document.createElement("canvas");
             c.width = node_element.clientWidth;
             c.height = node_element.clientHeight;
-            var img = this;
+            const img = this;
             if (c.getContext) {
-              var ctx = c.getContext("2d");
+              const ctx = c.getContext("2d");
               ctx.drawImage(
                 img,
                 2,
@@ -2007,7 +1992,7 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
     },
 
     clear_node_custom_style: function (node) {
-      var node_element = node._data.view.element;
+      const node_element = node._data.view.element;
       node_element.style.backgroundColor = "";
       node_element.style.color = "";
     },
@@ -2018,12 +2003,12 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
 
     show_lines: function () {
       this.clear_lines();
-      var nodes = this.jm.mind.nodes;
-      var node = null;
-      var pin = null;
-      var pout = null;
-      var _offset = this.get_view_offset();
-      for (var nodeid in nodes) {
+      const nodes = this.jm.mind.nodes;
+      let node = null;
+      let pin = null;
+      let pout = null;
+      const _offset = this.get_view_offset();
+      for (const nodeid in nodes) {
         node = nodes[nodeid];
         if (!!node.isroot) {
           continue;
@@ -2038,192 +2023,6 @@ function initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas) {
     },
   };
 
-  // shortcut provider
-  jm.shortcut_provider = function (jm, options) {
-    this.jm = jm;
-    this.opts = options;
-    this.mapping = options.mapping;
-    this.handles = options.handles;
-    this._newid = null;
-    this._mapping = {};
-  };
-
-  jm.shortcut_provider.prototype = {
-    init: function () {
-      jm.util.dom.add_event($d, "keydown", this.handler.bind(this));
-
-      this.handles["addchild"] = this.handle_addchild;
-      this.handles["addbrother"] = this.handle_addbrother;
-      this.handles["editnode"] = this.handle_editnode;
-      this.handles["delnode"] = this.handle_delnode;
-      this.handles["toggle"] = this.handle_toggle;
-      this.handles["up"] = this.handle_up;
-      this.handles["down"] = this.handle_down;
-      this.handles["left"] = this.handle_left;
-      this.handles["right"] = this.handle_right;
-
-      for (var handle in this.mapping) {
-        if (!!this.mapping[handle] && handle in this.handles) {
-          this._mapping[this.mapping[handle]] = this.handles[handle];
-        }
-      }
-
-      if (typeof this.opts.id_generator === "function") {
-        this._newid = this.opts.id_generator;
-      } else {
-        this._newid = jm.util.uuid.newid;
-      }
-    },
-
-    enable_shortcut: function () {
-      this.opts.enable = true;
-    },
-
-    disable_shortcut: function () {
-      this.opts.enable = false;
-    },
-
-    handler: function (e) {
-      if (e.which == 9) {
-        e.preventDefault();
-      } //prevent tab to change focus in browser
-      if (this.jm.view.is_editing()) {
-        return;
-      }
-      var evt = e || event;
-      if (!this.opts.enable) {
-        return true;
-      }
-      var kc =
-        evt.keyCode +
-        (evt.metaKey << 13) +
-        (evt.ctrlKey << 12) +
-        (evt.altKey << 11) +
-        (evt.shiftKey << 10);
-      if (kc in this._mapping) {
-        this._mapping[kc].call(this, this.jm, e);
-      }
-    },
-
-    handle_addchild: function (_jm, e) {
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node) {
-        var nodeid = this._newid();
-        var node = _jm.add_node(selected_node, nodeid, "New Node");
-        if (!!node) {
-          _jm.select_node(nodeid);
-          _jm.begin_edit(nodeid);
-        }
-      }
-    },
-    handle_addbrother: function (_jm, e) {
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node && !selected_node.isroot) {
-        var nodeid = this._newid();
-        var node = _jm.insert_node_after(selected_node, nodeid, "New Node");
-        if (!!node) {
-          _jm.select_node(nodeid);
-          _jm.begin_edit(nodeid);
-        }
-      }
-    },
-    handle_editnode: function (_jm, e) {
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node) {
-        _jm.begin_edit(selected_node);
-      }
-    },
-    handle_delnode: function (_jm, e) {
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node && !selected_node.isroot) {
-        _jm.select_node(selected_node.parent);
-        _jm.remove_node(selected_node);
-      }
-    },
-    handle_toggle: function (_jm, e) {
-      var evt = e || event;
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node) {
-        _jm.toggle_node(selected_node.id);
-        evt.stopPropagation();
-        evt.preventDefault();
-      }
-    },
-    handle_up: function (_jm, e) {
-      var evt = e || event;
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node) {
-        var up_node = _jm.find_node_before(selected_node);
-        if (!up_node) {
-          var np = _jm.find_node_before(selected_node.parent);
-          if (!!np && np.children.length > 0) {
-            up_node = np.children[np.children.length - 1];
-          }
-        }
-        if (!!up_node) {
-          _jm.select_node(up_node);
-        }
-        evt.stopPropagation();
-        evt.preventDefault();
-      }
-    },
-
-    handle_down: function (_jm, e) {
-      var evt = e || event;
-      var selected_node = _jm.get_selected_node();
-      if (!!selected_node) {
-        var down_node = _jm.find_node_after(selected_node);
-        if (!down_node) {
-          var np = _jm.find_node_after(selected_node.parent);
-          if (!!np && np.children.length > 0) {
-            down_node = np.children[0];
-          }
-        }
-        if (!!down_node) {
-          _jm.select_node(down_node);
-        }
-        evt.stopPropagation();
-        evt.preventDefault();
-      }
-    },
-
-    handle_left: function (_jm, e) {
-      this._handle_direction(_jm, e, jm.direction.left);
-    },
-    handle_right: function (_jm, e) {
-      this._handle_direction(_jm, e, jm.direction.right);
-    },
-    _handle_direction: function (_jm, e, d) {
-      var evt = e || event;
-      var selected_node = _jm.get_selected_node();
-      var node = null;
-      if (!!selected_node) {
-        if (selected_node.isroot) {
-          var c = selected_node.children;
-          var children = [];
-          for (var i = 0; i < c.length; i++) {
-            if (c[i].direction === d) {
-              children.push(i);
-            }
-          }
-          node = c[children[Math.floor((children.length - 1) / 2)]];
-        } else if (selected_node.direction === d) {
-          var children = selected_node.children;
-          var childrencount = children.length;
-          if (childrencount > 0) {
-            node = children[Math.floor((childrencount - 1) / 2)];
-          }
-        } else {
-          node = selected_node.parent;
-        }
-        if (!!node) {
-          _jm.select_node(node);
-        }
-        evt.stopPropagation();
-        evt.preventDefault();
-      }
-    },
-  };
 
   // plugin
   jm.plugin = function (name, init) {
