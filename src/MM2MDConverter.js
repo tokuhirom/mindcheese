@@ -20,6 +20,10 @@ function renderMd(node, level) {
   return result;
 }
 
-export function convertMM2MD(data) {
+ function convertMM2MD(data) {
   return renderMd(data.data, 0);
+}
+
+module.exports = {
+  convertMM2MD
 }
