@@ -15,13 +15,29 @@
 
 "use strict";
 
-export function initJsMindDrggable(jsMind, Node) {
-  "use strict";
-  if (typeof jsMind.draggable != "undefined") {
-    throw new Error("You install jsMind.draggable twice!");
-  }
+const jm = {
+  // TODO remove
+  direction: {
+    left: -1,
+    center: 0,
+    right: 1,
+  },
+  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
+};
 
-  const jdom = jsMind.util.dom;
+export function initJsMindDrggable(Node, pluginManager) {
+  "use strict";
+
+  const jdom = {
+    //target,eventType,handler
+    add_event: function (t, e, h) {
+      if (t.addEventListener) {
+        t.addEventListener(e, h, false);
+      } else {
+        t.attachEvent("on" + e, h);
+      }
+    },
+  };
   const clear_selection = () => window.getSelection().removeAllRanges();
 
   const options = {
@@ -30,7 +46,7 @@ export function initJsMindDrggable(jsMind, Node) {
     lookup_interval: 80,
   };
 
-  jsMind.draggable = function (jm) {
+  const draggable = function (jm) {
     this.jm = jm;
     this.e_canvas = null;
     this.canvas_ctx = null;
@@ -50,7 +66,7 @@ export function initJsMindDrggable(jsMind, Node) {
     this.moved = false;
   };
 
-  jsMind.draggable.prototype = {
+  draggable.prototype = {
     init: function () {
       this._create_canvas();
       this._create_shadow();
@@ -105,7 +121,7 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     _magnet_shadow: function (node) {
-      if (!!node) {
+      if (node) {
         this.canvas_ctx.lineWidth = options.line_width;
         this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
         this.canvas_ctx.lineCap = "round";
@@ -126,20 +142,20 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     _lookup_close_node: function () {
-      var root = this.jm.get_root();
-      var root_location = root.get_location();
-      var root_size = root.get_size();
-      var root_x = root_location.x + root_size.w / 2;
+      const root = this.jm.get_root();
+      const root_location = root.get_location();
+      const root_size = root.get_size();
+      const root_x = root_location.x + root_size.w / 2;
 
-      var sw = this.shadow_w;
-      var sh = this.shadow_h;
-      var sx = this.shadow.offsetLeft;
-      var sy = this.shadow.offsetTop;
+      const sw = this.shadow_w;
+      const sh = this.shadow_h;
+      const sx = this.shadow.offsetLeft;
+      const sy = this.shadow.offsetTop;
 
       var ns, nl;
 
-      var direct =
-        sx + sw / 2 >= root_x ? jsMind.direction.right : jsMind.direction.left;
+      const direct =
+        sx + sw / 2 >= root_x ? jm.direction.right : jm.direction.left;
       var nodes = this.jm.mind.nodes;
       var node = null;
       var min_distance = Number.MAX_VALUE;
@@ -156,7 +172,7 @@ export function initJsMindDrggable(jsMind, Node) {
           }
           ns = node.get_size();
           nl = node.get_location();
-          if (direct == jsMind.direction.right) {
+          if (direct == jm.direction.right) {
             if (sx - nl.x - ns.w <= 0) {
               continue;
             }
@@ -184,7 +200,7 @@ export function initJsMindDrggable(jsMind, Node) {
         }
       }
       var result_node = null;
-      if (!!closest_node) {
+      if (closest_node) {
         result_node = {
           node: closest_node,
           direction: direct,
@@ -197,7 +213,7 @@ export function initJsMindDrggable(jsMind, Node) {
 
     lookup_close_node: function () {
       var node_data = this._lookup_close_node();
-      if (!!node_data) {
+      if (node_data) {
         this._magnet_shadow(node_data);
         this.target_node = node_data.node;
         this.target_direct = node_data.direction;
@@ -248,7 +264,7 @@ export function initJsMindDrggable(jsMind, Node) {
         return;
       }
       var nodeid = jview.get_binded_nodeid(el);
-      if (!!nodeid) {
+      if (nodeid) {
         var node = this.jm.get_node(nodeid);
         if (!node.isroot) {
           this.reset_shadow(el);
@@ -350,13 +366,13 @@ export function initJsMindDrggable(jsMind, Node) {
             }
           }
         }
-        if (!!node_before) {
+        if (node_before) {
           beforeid = node_before.id;
         }
         console.log(
           `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
         );
-        this.jm.move_node(src_node, beforeid, target_node.id, target_direct);
+        this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
         // this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
       }
       this.active_node = null;
@@ -365,19 +381,18 @@ export function initJsMindDrggable(jsMind, Node) {
     },
 
     jm_event_handle: function (type, data) {
-      if (type === jsMind.event_type.resize) {
+      if (type === jm.event_type.resize) {
         this.resize();
       }
     },
   };
 
-  const draggable_plugin = new jsMind.plugin("draggable", function (jm) {
-    const jd = new jsMind.draggable(jm);
+  pluginManager.register((jm) => {
+    const jd = new draggable(jm);
     jd.init();
+
     jm.add_event_listener(function (type, data) {
       jd.jm_event_handle.call(jd, type, data);
     });
   });
-
-  jsMind.register_plugin(draggable_plugin);
 }

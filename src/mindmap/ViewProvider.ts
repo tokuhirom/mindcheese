@@ -1,5 +1,5 @@
-import GraphCanvas from './GraphCanvas';
-import {Node} from './Node';
+import GraphCanvas from "./GraphCanvas";
+import { Node } from "./Node";
 
 const jm = {
   direction: {
@@ -7,17 +7,19 @@ const jm = {
     center: 0,
     right: 1,
   },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 }
+  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
 };
 
-const $t = function (n: any, t: any) { // TODO inlining this.
+const $t = function (n: any, t: any) {
+  // TODO inlining this.
   if (n.hasChildNodes()) {
     n.firstChild.nodeValue = t;
   } else {
     n.appendChild(document.createTextNode(t));
   }
 };
-const $h = function (n: any, t: any) { // TODO inlining this
+const $h = function (n: any, t: any) {
+  // TODO inlining this
   if (t instanceof HTMLElement) {
     n.innerHTML = "";
     n.appendChild(t);
@@ -28,14 +30,15 @@ const $h = function (n: any, t: any) { // TODO inlining this
 // detect isElement
 const $i = function (el: any) {
   return (
-      !!el &&
-      typeof el === "object" &&
-      el.nodeType === 1 &&
-      typeof el.style === "object" &&
-      typeof el.ownerDocument === "object"
+    !!el &&
+    typeof el === "object" &&
+    el.nodeType === 1 &&
+    typeof el.style === "object" &&
+    typeof el.ownerDocument === "object"
   );
 };
-function is_empty(s: string) { // TODO inlining?
+function is_empty(s: string) {
+  // TODO inlining?
   if (!s) {
     return true;
   }
@@ -68,7 +71,7 @@ export default class ViewProvider {
     this.e_panel = null;
     this.e_nodes = null;
 
-    this.size = {w: 0, h: 0};
+    this.size = { w: 0, h: 0 };
 
     this.selected_node = null;
     this.editing_node = null;
@@ -80,8 +83,8 @@ export default class ViewProvider {
     console.debug("view.init");
 
     this.container = $i(this.opts.container)
-        ? this.opts.container
-        : document.getElementById(this.opts.container);
+      ? this.opts.container
+      : document.getElementById(this.opts.container);
     if (!this.container) {
       console.error("the options.view.container was not be found in dom");
       return;
@@ -124,7 +127,7 @@ export default class ViewProvider {
     });
   }
 
-  get_binded_nodeid(element: any): string| null {
+  get_binded_nodeid(element: any): string | null {
     if (element == null) {
       return null;
     }
@@ -160,14 +163,14 @@ export default class ViewProvider {
     }
   }
 
-  reset_custom_style() : void {
+  reset_custom_style(): void {
     const nodes = this.jm.mind.nodes;
     for (const nodeid in nodes) {
       this.reset_node_custom_style(nodes[nodeid]);
     }
   }
 
-  load() :void {
+  load(): void {
     console.debug("view.load");
     this.init_nodes();
   }
@@ -188,13 +191,13 @@ export default class ViewProvider {
     this.size.h = client_h;
   }
 
-  init_nodes_size(node: Node):void {
+  init_nodes_size(node: Node): void {
     const view_data = node._data.view;
     view_data.width = view_data.element.clientWidth;
     view_data.height = view_data.element.clientHeight;
   }
 
-  init_nodes():void {
+  init_nodes(): void {
     const nodes = this.jm.mind.nodes;
     const doc_frag: DocumentFragment = document.createDocumentFragment();
     for (const nodeid in nodes) {
@@ -211,7 +214,7 @@ export default class ViewProvider {
     this.init_nodes_size(node);
   }
 
-  create_node_element(node:Node, parent_node:DocumentFragment): void {
+  create_node_element(node: Node, parent_node: DocumentFragment): void {
     let view_data = null;
     if ("view" in node._data) {
       view_data = node._data.view;
@@ -246,7 +249,7 @@ export default class ViewProvider {
     view_data.element = d;
   }
 
-  remove_node(node:Node) {
+  remove_node(node: Node) {
     if (this.selected_node != null && this.selected_node.id == node.id) {
       this.selected_node = null;
     }
@@ -286,8 +289,8 @@ export default class ViewProvider {
   select_node(node: Node): void {
     if (this.selected_node) {
       this.selected_node._data.view.element.className = this.selected_node._data.view.element.className.replace(
-          /\s*selected\b/i,
-          ""
+        /\s*selected\b/i,
+        ""
       );
       this.reset_node_custom_style(this.selected_node);
     }
@@ -325,10 +328,10 @@ export default class ViewProvider {
     const ncs = getComputedStyle(element);
     this.e_editor.value = topic;
     this.e_editor.style.width =
-        element.clientWidth -
-        parseInt(ncs.getPropertyValue("padding-left")) -
-        parseInt(ncs.getPropertyValue("padding-right")) +
-        "px";
+      element.clientWidth -
+      parseInt(ncs.getPropertyValue("padding-left")) -
+      parseInt(ncs.getPropertyValue("padding-right")) +
+      "px";
     element.innerHTML = "";
     element.appendChild(this.e_editor);
     element.style.zIndex = 5;
@@ -361,7 +364,7 @@ export default class ViewProvider {
     const bounds = this.layout.bounds;
     const _x = (this.size.w - bounds.e - bounds.w) / 2;
     const _y = this.size.h / 2;
-    return {x: _x, y: _y};
+    return { x: _x, y: _y };
   }
 
   resize(): void {
@@ -380,7 +383,7 @@ export default class ViewProvider {
     this.show_nodes();
     this.show_lines();
     //this.layout.cache_valid = true;
-    this.jm.invoke_event_handle(jm.event_type.resize, {data: []});
+    this.jm.invoke_event_handle(jm.event_type.resize, { data: [] });
   }
 
   zoomIn(): boolean {
@@ -441,9 +444,9 @@ export default class ViewProvider {
   restore_location(node: Node): void {
     const vd = node._data.view;
     this.e_panel.scrollLeft =
-        parseInt(vd.element.style.left) - vd._saved_location.x;
+      parseInt(vd.element.style.left) - vd._saved_location.x;
     this.e_panel.scrollTop =
-        parseInt(vd.element.style.top) - vd._saved_location.y;
+      parseInt(vd.element.style.top) - vd._saved_location.y;
   }
 
   clear_nodes(): void {
@@ -535,9 +538,9 @@ export default class ViewProvider {
     if ("background-image" in node_data) {
       const backgroundImage = node_data["background-image"];
       if (
-          backgroundImage.startsWith("data") &&
-          node_data["width"] &&
-          node_data["height"]
+        backgroundImage.startsWith("data") &&
+        node_data["width"] &&
+        node_data["height"]
       ) {
         const img = new Image();
 
@@ -549,15 +552,14 @@ export default class ViewProvider {
           if (c.getContext) {
             const ctx: CanvasRenderingContext2D = c.getContext("2d");
             ctx.drawImage(
-                img,
-                2,
-                2,
-                node_element.clientWidth,
-                node_element.clientHeight
+              img,
+              2,
+              2,
+              node_element.clientWidth,
+              node_element.clientHeight
             );
             const scaledImageData = c.toDataURL();
-            node_element.style.backgroundImage =
-                "url(" + scaledImageData + ")";
+            node_element.style.backgroundImage = "url(" + scaledImageData + ")";
           }
         };
         img.src = backgroundImage;
@@ -568,18 +570,18 @@ export default class ViewProvider {
 
       if ("background-rotation" in node_data) {
         node_element.style.transform =
-            "rotate(" + node_data["background-rotation"] + "deg)";
+          "rotate(" + node_data["background-rotation"] + "deg)";
       }
     }
   }
 
-  clear_node_custom_style(node: Node) : void{
+  clear_node_custom_style(node: Node): void {
     const node_element = node._data.view.element;
     node_element.style.backgroundColor = "";
     node_element.style.color = "";
   }
 
-  clear_lines():void {
+  clear_lines(): void {
     this.graph.clear();
   }
 
@@ -603,6 +605,4 @@ export default class ViewProvider {
       this.graph.draw_line(pout, pin, _offset);
     }
   }
-
 }
-

@@ -15,7 +15,7 @@ export class Mind {
   author: string;
   version: string;
   root: any;
-  private selected: any;
+  selected: any;
   private nodes: any;
 
   constructor() {
@@ -180,7 +180,12 @@ export class Mind {
   }
 
   // XXX jsMind では node に nodeid も受け付けていたっぽい。
-  move_node(node: Node, beforeid: string, parentid: string, direction: any): Node {
+  move_node(
+    node: Node,
+    beforeid: string,
+    parentid: string,
+    direction: any
+  ): Node {
     console.assert(node instanceof Node, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parentid} ${direction}`);
     if (!parentid) {
@@ -224,7 +229,12 @@ export class Mind {
     return node;
   }
 
-  _move_node(node: Node, beforeid: string, parentid: string, direction: any): Node {
+  _move_node(
+    node: Node,
+    beforeid: string,
+    parentid: string,
+    direction: any
+  ): Node {
     console.log(`_move_node: ${node}, ${beforeid}, ${parentid}, ${direction}`);
     if (!!node && !!parentid) {
       console.assert(node.parent, `node.parent is null: ${node}`);

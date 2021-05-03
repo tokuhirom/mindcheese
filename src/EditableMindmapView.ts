@@ -13,16 +13,38 @@ import GraphCanvas from "./mindmap/GraphCanvas";
 import ShortcutProvider from "./ShortcutProvider";
 import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./mindmap/ViewProvider";
+import PluginManager from "./mindmap/PluginManager";
+import JsMind from "./mindmap/JsMind";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
 
-const jsMind = initJsMind(Node, Mind, NodeTree, DataProvider, GraphCanvas, ShortcutProvider, LayoutProvider, ViewProvider);
+const jm = {
+  // TODO remove
+  direction: {
+    left: -1,
+    center: 0,
+    right: 1,
+  },
+  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
+};
 
-initJsMindDrggable(jsMind, Node);
+const pluginManager = new PluginManager();
+initJsMind(
+  Node,
+  Mind,
+  NodeTree,
+  DataProvider,
+  GraphCanvas,
+  ShortcutProvider,
+  LayoutProvider,
+  ViewProvider
+);
+
+initJsMindDrggable(Node, pluginManager);
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
-  private mm: jsMind;
+  private mm: JsMind;
   private yfm: string;
 
   constructor(leaf: WorkspaceLeaf, plugin: MyPlugin) {
@@ -115,8 +137,7 @@ export class EditableMindmapView extends TextFileView {
           },
         },
       };
-      this.mm = new jsMind(options);
-      this.mm.mind = {}; // without this, get_data will fail... XXX
+      this.mm = new JsMind(options, pluginManager);
       // ↓ *quick hack* to avoid the timing issue...
       setTimeout(() => {
         this.mm.show(mind);
@@ -134,7 +155,7 @@ export class EditableMindmapView extends TextFileView {
     };
     console.log(`Got jsMind event: ${event_type_map[eventType]}`);
 
-    if (eventType == jsMind.event_type.edit) {
+    if (eventType == jm.event_type.edit) {
       setTimeout(async () => {
         const viewData = this.getViewData();
         console.log(`Write data by jsMind's event: ${viewData}`);

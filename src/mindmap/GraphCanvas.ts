@@ -28,18 +28,22 @@ export default class GraphCanvas {
   }
 
   // TODO what's the type of **pout**
-  draw_line(pout: any, pin: { x: number; y: number }, offset: { x: number; y: number }) {
+  draw_line(
+    pout: any,
+    pin: { x: number; y: number },
+    offset: { x: number; y: number }
+  ) {
     const ctx = this.canvas_ctx;
     ctx.strokeStyle = this.opts.line_color;
     ctx.lineWidth = this.opts.line_width;
     ctx.lineCap = "round";
 
     this._bezier_to(
-        ctx,
-        pin.x + offset.x,
-        pin.y + offset.y,
-        pout.x + offset.x,
-        pout.y + offset.y
+      ctx,
+      pin.x + offset.x,
+      pin.y + offset.y,
+      pout.x + offset.x,
+      pout.y + offset.y
     );
   }
 
@@ -50,14 +54,26 @@ export default class GraphCanvas {
     }
   }
 
-  _bezier_to(ctx: CanvasRenderingContext2D, x1:number, y1:number, x2:number, y2:number): void {
+  _bezier_to(
+    ctx: CanvasRenderingContext2D,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number
+  ): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.bezierCurveTo(x1 + ((x2 - x1) * 2) / 3, y1, x1, y2, x2, y2);
     ctx.stroke();
   }
 
-  _line_to (ctx:CanvasRenderingContext2D, x1:number, y1:number, x2:number, y2:number): void {
+  _line_to(
+    ctx: CanvasRenderingContext2D,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number
+  ): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);

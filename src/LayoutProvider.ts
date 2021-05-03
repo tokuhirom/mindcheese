@@ -4,16 +4,16 @@ const jm = {
     center: 0,
     right: 1,
   },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 }
+  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
 };
 
-import {Node} from './mindmap/Node';
+import { Node } from "./mindmap/Node";
 
 export default class LayoutProvider {
   private opts: any;
   private jm: any;
   private isside: boolean;
-  private bounds: { n: number, s: number, w: number, e: number };
+  private bounds: { n: number; s: number; w: number; e: number };
   private cache_valid: boolean;
 
   constructor(jm: any, options: any) {
@@ -31,7 +31,7 @@ export default class LayoutProvider {
 
   reset() {
     console.debug("layout.reset");
-    this.bounds = {n: 0, s: 0, w: 0, e: 0};
+    this.bounds = { n: 0, s: 0, w: 0, e: 0 };
   }
 
   layout() {
@@ -128,16 +128,14 @@ export default class LayoutProvider {
     layout_data.left_nodes = left_nodes;
     layout_data.right_nodes = right_nodes;
     layout_data.outer_height_left = this._layout_offset_subnodes(left_nodes);
-    layout_data.outer_height_right = this._layout_offset_subnodes(
-        right_nodes
-    );
+    layout_data.outer_height_right = this._layout_offset_subnodes(right_nodes);
     this.bounds.e = node._data.view.width / 2;
     this.bounds.w = 0 - this.bounds.e;
     //console.debug(this.bounds.w);
     this.bounds.n = 0;
     this.bounds.s = Math.max(
-        layout_data.outer_height_left,
-        layout_data.outer_height_right
+      layout_data.outer_height_left,
+      layout_data.outer_height_right
     );
   }
 
@@ -168,8 +166,8 @@ export default class LayoutProvider {
       layout_data.outer_height = node_outer_height;
       layout_data.offset_y = base_y - node_outer_height / 2;
       layout_data.offset_x =
-          this.opts.hspace * layout_data.direction +
-          (pd.view.width * (pd.layout.direction + layout_data.direction)) / 2;
+        this.opts.hspace * layout_data.direction +
+        (pd.view.width * (pd.layout.direction + layout_data.direction)) / 2;
       if (!node.parent.isroot) {
         layout_data.offset_x += this.opts.pspace * layout_data.direction;
       }
@@ -237,7 +235,7 @@ export default class LayoutProvider {
     if ("_offset_" in layout_data && this.cache_valid) {
       offset_cache = layout_data._offset_;
     } else {
-      offset_cache = {x: -1, y: -1};
+      offset_cache = { x: -1, y: -1 };
       layout_data._offset_ = offset_cache;
     }
     if (offset_cache.x == -1 || offset_cache.y == -1) {
@@ -260,7 +258,7 @@ export default class LayoutProvider {
     //console.debug(offset_p);
     const p: any = {};
     p.x =
-        offset_p.x + (view_data.width * (node._data.layout.direction - 1)) / 2;
+      offset_p.x + (view_data.width * (node._data.layout.direction - 1)) / 2;
     p.y = offset_p.y - view_data.height / 2;
     //console.debug(p);
     return p;
@@ -276,7 +274,7 @@ export default class LayoutProvider {
     if ("_pout_" in layout_data && this.cache_valid) {
       pout_cache = layout_data._pout_;
     } else {
-      pout_cache = {x: -1, y: -1};
+      pout_cache = { x: -1, y: -1 };
       layout_data._pout_ = pout_cache;
     }
     if (pout_cache.x == -1 || pout_cache.y == -1) {
@@ -287,8 +285,8 @@ export default class LayoutProvider {
         const view_data = node._data.view;
         const offset_p = this.get_node_offset(node);
         pout_cache.x =
-            offset_p.x +
-            (view_data.width + this.opts.pspace) * node._data.layout.direction;
+          offset_p.x +
+          (view_data.width + this.opts.pspace) * node._data.layout.direction;
         pout_cache.y = offset_p.y;
         //console.debug('pout');
         //console.debug(pout_cache);
@@ -299,7 +297,7 @@ export default class LayoutProvider {
 
   get_expander_point(node: Node) {
     const p = this.get_node_point_out(node);
-    const ex_p : any = {};
+    const ex_p: any = {};
     if (node._data.layout.direction == jm.direction.right) {
       ex_p.x = p.x - this.opts.pspace;
     } else {
@@ -396,7 +394,11 @@ export default class LayoutProvider {
     }
   }
 
-  expand_to_depth(target_depth: number, curr_nodes: Node[], curr_depth: number): void {
+  expand_to_depth(
+    target_depth: number,
+    curr_nodes: Node[],
+    curr_depth: number
+  ): void {
     if (target_depth < 1) {
       return;
     }
@@ -426,25 +428,25 @@ export default class LayoutProvider {
       const root_layout_data = root._data.layout;
       if (node.isroot) {
         root_layout_data.outer_height_right = this._layout_offset_subnodes_height(
-            root_layout_data.right_nodes
+          root_layout_data.right_nodes
         );
         root_layout_data.outer_height_left = this._layout_offset_subnodes_height(
-            root_layout_data.left_nodes
+          root_layout_data.left_nodes
         );
       } else {
         if (node._data.layout.direction == jm.direction.right) {
           root_layout_data.outer_height_right = this._layout_offset_subnodes_height(
-              root_layout_data.right_nodes
+            root_layout_data.right_nodes
           );
         } else {
           root_layout_data.outer_height_left = this._layout_offset_subnodes_height(
-              root_layout_data.left_nodes
+            root_layout_data.left_nodes
           );
         }
       }
       this.bounds.s = Math.max(
-          root_layout_data.outer_height_left,
-          root_layout_data.outer_height_right
+        root_layout_data.outer_height_left,
+        root_layout_data.outer_height_right
       );
       this.cache_valid = false;
     } else {
@@ -470,7 +472,8 @@ export default class LayoutProvider {
     }
   }
 
-  is_expand(node: Node) { // TODO remove this method
+  is_expand(node: Node) {
+    // TODO remove this method
     return node.expanded;
   }
 

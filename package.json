@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --write .",
+    "eslint": "npx eslint . --ext .ts,.tsx"
   },
   "keywords": [],
   "author": "",

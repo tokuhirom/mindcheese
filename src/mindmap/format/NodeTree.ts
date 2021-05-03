@@ -73,7 +73,11 @@ export class NodeTree {
     return data;
   }
 
-  private _extract_subnode(mind: Mind, node_parent: Node, node_json: any): void {
+  private _extract_subnode(
+    mind: Mind,
+    node_parent: Node,
+    node_json: any
+  ): void {
     const data = this._extract_data(node_json);
     let d = null;
     if (node_parent.isroot) {
