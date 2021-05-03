@@ -12,12 +12,13 @@ export default class DataProvider {
     };
   }
 
-  load(mind_data: any) {
-    return this.format.node_tree.get_mind(mind_data);
+  load(mind_data: any, id: number) {
+    return this.format.node_tree.get_mind(mind_data, id);
   }
 
   get_data(data_format: string) {
     if (data_format === "node_tree") {
+      console.log(this.jm.mind)
       return this.format.node_tree.get_data(this.jm.mind);
     } else {
       throw new Error(`Unknown format: ${data_format}`);

@@ -31,6 +31,8 @@ export default class ShortcutProvider {
 
   init() {
     // TODO do not hook to the global object.
+    // this.jm.options.container.addEventListener('keydown',
+    //     this.handler.bind(this))
     document.addEventListener("keydown", this.handler.bind(this));
 
     this.handles["addchild"] = this.handle_addchild;
@@ -58,7 +60,7 @@ export default class ShortcutProvider {
     this.enable = false;
   }
 
-  handler(e: any): boolean {
+  handler(e: KeyboardEvent): boolean {
     if (e.which == 9) {
       e.preventDefault();
     } //prevent tab to change focus in browser
@@ -70,14 +72,24 @@ export default class ShortcutProvider {
     }
     const kc =
         e.keyCode +
-        (e.metaKey << 13) +
-        (e.ctrlKey << 12) +
-        (e.altKey << 11) +
-        (e.shiftKey << 10);
+        ((e.metaKey ? 1: 0) << 13) +
+        ((e.ctrlKey ? 1: 0) << 12) +
+        ((e.altKey?1:0) << 11) +
+        ((e.shiftKey?1:0) << 10);
     if (kc in this._mapping) {
-      console.log("There is _mapping.");
+      const container = (this.jm.options.container as HTMLElement);
+      const isConnected = container.isConnected
+      // offsetParent=${container.offsetParent}
+      // VISIBILITY=${getComputedStyle(container).visibility}
+      //     TOP=${getComputedStyle(container).top}
+
       // TODO this.jm is redundant handler.
-      this._mapping[kc].call(this, this.jm, e);
+      if (isConnected) {
+        console.log(`Invoking shortcut handler: TIMESTAMP=${this.jm.mind.timestamp}  ID=${this.jm.mind.id}/${this.jm.id} connected=${isConnected}
+      target=${e.target}
+      `);
+        this._mapping[kc].call(this, this.jm, e);
+      }
     }
   }
 

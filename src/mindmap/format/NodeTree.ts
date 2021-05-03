@@ -15,8 +15,8 @@ import MindNode from "../MindNode";
 import {Direction} from "../MindmapConstants";
 
 export class NodeTree {
-  get_mind(source: any): Mind {
-    const mind = new Mind();
+  get_mind(source: any, id: number): Mind {
+    const mind = new Mind(id);
     mind.name = source.meta.name;
     mind.author = source.meta.author;
     mind.version = source.meta.version;

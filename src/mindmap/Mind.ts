@@ -2,6 +2,7 @@
 
 import MindNode from "./MindNode";
 import { Direction } from "./MindmapConstants";
+import {NodeTree} from "./format/NodeTree";
 
 export default class Mind {
   name: string;
@@ -10,14 +11,18 @@ export default class Mind {
   root: MindNode;
   selected: MindNode;
   nodes: Record<string, MindNode>;
+  public timestamp: number;
+  id: number;
 
-  constructor() {
+  constructor(id: number) {
+    this.id = id;
     this.name = null;
     this.author = null;
     this.version = null;
     this.root = null;
     this.selected = null;
     this.nodes = {};
+    this.timestamp = Date.now();
   }
 
   get_node(nodeid: string): MindNode {
@@ -93,13 +98,15 @@ export default class Mind {
     if (this._put_node(node)) {
       parent_node.children.push(node);
       this._reindex(parent_node);
+      console.log(`ADDED NODE!!!!!!!!!---- TIMESTAMP=${this.timestamp} ID=${this.id}`)
+      console.log(new NodeTree().get_data(this))
+      return node;
     } else {
       console.error(
         "fail, the nodeid '" + node.id + "' has been already exist."
       );
-      node = null;
+      return null;
     }
-    return node;
   }
 
   // XXX jsMind では node_before に nodeid も受け付けていたっぽい。

@@ -64,8 +64,9 @@ export default class JsMind {
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
+  id: number;
 
-  constructor(options: any) {
+  constructor(id: number, options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
     opts = Object.assign(opts, options);
     if (!opts.container) {
@@ -74,8 +75,9 @@ export default class JsMind {
     }
     this.options = opts;
     this.inited = false;
-    this.mind = new Mind(); // TODO original では null が入っていた
+    this.mind = null; // TODO original では null が入っていた
     this.event_handles = [];
+    this.id = id;
     this.init();
   }
 
@@ -288,13 +290,14 @@ export default class JsMind {
   }
 
   _show(mind: any) {
-    this.mind = this.data.load(mind);
+    this.mind = this.data.load(mind, this.id);
     if (!this.mind) {
       console.error("data.load error");
       return;
     } else {
       console.debug("data.load ok");
     }
+    console.log(`JsMind.show TIMESTAMP=${this.mind.timestamp}! id=${this.id}`)
 
     this.view.load();
     console.debug("view.load ok");
@@ -426,9 +429,9 @@ export default class JsMind {
         console.error("fail, can not remove root node");
         return false;
       }
-      var nodeid = node.id;
-      var parentid = node.parent.id;
-      var parent_node = this.get_node(parentid);
+      const nodeid = node.id;
+      const parentid = node.parent.id;
+      const parent_node = this.get_node(parentid);
       this.view.save_location(parent_node);
       this.view.remove_node(node);
       this.mind.remove_node(node);
@@ -470,6 +473,8 @@ export default class JsMind {
           data: [nodeid, topic],
           node: nodeid,
         });
+      } else {
+        console.warn(`Unknown node: ${nodeid}`)
       }
     } else {
       console.error("fail, this mind map is not editable");

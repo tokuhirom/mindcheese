@@ -31,10 +31,6 @@ export default class MyPlugin extends Plugin {
 
     await this.loadSettings();
 
-    this.addRibbonIcon("dice", "Sample Plugin", () => {
-      new Notice("This is a notice!");
-    });
-
     this.addSettingTab(new SampleSettingTab(this.app, this));
 
     const self = this; // TODO REMOVE
@@ -69,7 +65,7 @@ export default class MyPlugin extends Plugin {
               const cache = self.app.metadataCache.getCache(state.state.file);
 
               if (cache?.frontmatter && cache.frontmatter[frontMatterKey]) {
-                // If we have it, force the view type to kanban
+                // If we have it, force the view type to MindMap
                 const newState = {
                   ...state,
                   type: MINDMAP_VIEW_TYPE,

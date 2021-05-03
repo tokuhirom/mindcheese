@@ -1,4 +1,4 @@
-import { Menu, TextFileView, WorkspaceLeaf } from "obsidian";
+import {Menu, TextFileView, TFile, WorkspaceLeaf} from "obsidian";
 import { MINDMAP_VIEW_TYPE } from "./Constants";
 import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
@@ -7,6 +7,8 @@ import JsMind from "./mindmap/JsMind";
 import {EventType} from "./mindmap/MindmapConstants";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
+
+let jsMindId = 0;
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
@@ -28,8 +30,9 @@ export class EditableMindmapView extends TextFileView {
   }
 
   clear(): void {
-    console.log('EditableMindmapView: clear')
+    console.log(`EditableMindmapView: clear TIMESTAMP=${this.mm.mind.timestamp}`)
     this.mm.shortcut.disable_shortcut()
+    this.mm.mind = null;
   }
 
   getViewData(): string {
@@ -69,7 +72,7 @@ export class EditableMindmapView extends TextFileView {
   }
 
   setViewData(data: string, clear: boolean): void {
-    console.log(`資格資格資格資格資格 SET VIEW DATA ${clear} ${data}`);
+    console.log(`資格資格資格資格資格 SET VIEW DATA ${clear} ${this.mm} ${data} ID=${jsMindId++} TIMESTAMP`);
     console.log(data);
     console.log(clear);
 
@@ -78,11 +81,20 @@ export class EditableMindmapView extends TextFileView {
     const title = this.file.basename;
     this.data = data;
 
-    this.contentEl.createDiv({}, (el) => {
+    // clear existing container elements.
+    this.contentEl.querySelectorAll('.jsmind-container').forEach(
+        it => {
+          it.remove()
+        }
+    )
+
+    this.contentEl.createDiv({
+      cls: ['jsmind-container', 'jsMind-' + jsMindId]
+    }, (el) => {
       el.setAttribute("id", "jsmind_container");
       const mind = MD2MMConverter.convertMD2MM(title, data);
       console.log(
-        `rendering mindmap: data=${data}, mind=${JSON.stringify(mind)}`
+        `rendering mindmap: data=${data}, mind=${JSON.stringify(mind)} ${this.mm}`
       );
       const options = {
         container: el,
@@ -90,7 +102,8 @@ export class EditableMindmapView extends TextFileView {
         editable: true,
         shortcut: {
           enable: true, // whether to enable shortcut
-          handles: {}, // Named shortcut key event processor
+          handles: {
+          }, // Named shortcut key event processor
           mapping: {
             // shortcut key mapping
             // addchild : 45, 	// <Insert>
@@ -106,7 +119,7 @@ export class EditableMindmapView extends TextFileView {
           },
         },
       };
-      this.mm = new JsMind(options);
+      this.mm = new JsMind(jsMindId, options);
       // ↓ *quick hack* to avoid the timing issue...
       setTimeout(() => {
         this.mm.show(mind);
@@ -125,13 +138,29 @@ export class EditableMindmapView extends TextFileView {
     console.log(`Got jsMind event: ${event_type_map[eventType]}`);
 
     if (eventType == EventType.EDIT) {
-      setTimeout(async () => {
-        const viewData = this.getViewData();
-        console.log(`Write data by jsMind's event: ${viewData}`);
-        console.log(params);
-        await this.plugin.app.vault.modify(this.file, viewData);
-      }, 10);
+      console.log(`EDIT event: TIMESTAMP=${this.mm.mind.timestamp} id=${this.mm.mind.id}`);
+      const viewData = this.getViewData();
+      console.log(`Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`);
+      console.log(params);
+      // await this.plugin.app.vault.modify(this.file, viewData);
+      this.requestSave();
     }
+  }
+
+  // TODO handle onResize
+  onResize() {
+    console.log(`onResize: ${this.mm} TIMESTAMP`)
+    super.onResize();
+  }
+
+  protected async onOpen(): Promise<void> {
+    console.log(`onOpen: ${this.mm} TIMESTAMP`)
+    return super.onOpen()
+  }
+
+  async onLoadFile(file: TFile): Promise<void> {
+    console.log(`onLoadFile: ${this.mm} TIMESTAMP`)
+    return super.onLoadFile(file)
   }
 
   private static parseFrontamtter(md: string): string {
