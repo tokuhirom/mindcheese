@@ -1,5 +1,5 @@
 import GraphCanvas from "./GraphCanvas";
-import MindNode from "./MindNode";
+import MindNode, {ViewData} from "./MindNode";
 import { EventType } from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
@@ -213,19 +213,13 @@ export default class ViewProvider {
   }
 
   create_node_element(node: MindNode, parent_node: DocumentFragment): void {
-    let view_data = null;
-    if ("view" in node._data) {
-      view_data = node._data.view;
-    } else {
-      view_data = {};
-      node._data.view = view_data;
-    }
+    let view_data = node._data.view;
 
-    const d = document.createElement("jmnode");
+    const d: HTMLElement = document.createElement("jmnode");
     if (node.isroot) {
       d.className = "root";
     } else {
-      const d_e = document.createElement("jmexpander");
+      const d_e: HTMLElement = document.createElement("jmexpander");
       $t(d_e, "-");
       d_e.setAttribute("nodeid", node.id);
       d_e.style.visibility = "hidden";
@@ -321,7 +315,7 @@ export default class ViewProvider {
     }
     this.editing_node = node;
     const view_data = node._data.view;
-    const element = view_data.element;
+    const element: HTMLElement = view_data.element;
     const topic = node.topic;
     const ncs = getComputedStyle(element);
     this.e_editor.value = topic;
@@ -335,7 +329,7 @@ export default class ViewProvider {
     this.e_editor.style.width = width + "px";
     element.innerHTML = "";
     element.appendChild(this.e_editor);
-    element.style.zIndex = 5;
+    element.style.zIndex = '5';
     this.e_editor.focus();
     this.e_editor.select();
   }

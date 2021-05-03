@@ -1,6 +1,31 @@
 // TODO convert to typescript
 import {Direction} from "./MindmapConstants";
 
+export class ViewData {
+  element: HTMLElement
+  _saved_location: any
+  expander: HTMLElement
+  abs_x: number
+  abs_y: number
+  width: number
+  height: number
+}
+
+export class LayoutData {
+  direction: Direction
+  visible: boolean
+  offset_x: number;
+  offset_y: number;
+  outer_height: number;
+  left_nodes: MindNode[];
+  right_nodes: MindNode[];
+  outer_height_left: number;
+  outer_height_right: number;
+  _offset_: { x: number; y: number };
+  _pout_: { x: number; y: number };
+  side_index: number;
+}
+
 export default class MindNode {
   // TODO eDirection maybe the ENUM.
   public id: string;
@@ -12,7 +37,10 @@ export default class MindNode {
   public direction: Direction;
   public expanded: boolean;
   public children: MindNode[];
-  public _data: any;
+  public _data: {
+    view: ViewData,
+    layout: LayoutData,
+  };
 
   constructor(
     sId: string,
@@ -42,7 +70,10 @@ export default class MindNode {
     this.direction = eDirection;
     this.expanded = !!bExpanded;
     this.children = [];
-    this._data = {};
+    this._data = {
+      view: new ViewData(),
+      layout: new LayoutData(),
+    };
   }
 
   static compare(node1: MindNode, node2: MindNode): number {

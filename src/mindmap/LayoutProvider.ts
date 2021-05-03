@@ -9,7 +9,7 @@ const jm = {
   event_type: { show: 1, resize: 2, edit: 3, select: 4 },
 };
 
-import MindNode from "./MindNode";
+import MindNode, {LayoutData} from "./MindNode";
 import JsMind from "./JsMind";
 
 export default class LayoutProvider {
@@ -59,14 +59,9 @@ export default class LayoutProvider {
 
   _layout_direction_root() {
     const node = this.jm.mind.root;
+
     // console.debug(node);
-    let layout_data;
-    if ("layout" in node._data) {
-      layout_data = node._data.layout;
-    } else {
-      layout_data = {};
-      node._data.layout = layout_data;
-    }
+    const layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
     layout_data.direction = jm.direction.center;
@@ -105,13 +100,7 @@ export default class LayoutProvider {
     direction: Direction,
     side_index: number
   ) {
-    let layout_data = null;
-    if ("layout" in node._data) {
-      layout_data = node._data.layout;
-    } else {
-      layout_data = {};
-      node._data.layout = layout_data;
-    }
+    let layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
 
@@ -157,7 +146,7 @@ export default class LayoutProvider {
   }
 
   // layout both the x and y axis
-  _layout_offset_subnodes(nodes: MindNode[]) {
+  _layout_offset_subnodes(nodes: MindNode[]): number {
     let total_height = 0;
     const nodes_count = nodes.length;
     let i = nodes_count;
