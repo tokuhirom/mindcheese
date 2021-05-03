@@ -12,7 +12,7 @@
 
 import Mind from "../Mind";
 import MindNode from "../MindNode";
-import {Direction} from "../MindmapConstants";
+import { Direction } from "../MindmapConstants";
 
 export class NodeTree {
   get_mind(source: any, id: number): Mind {
@@ -73,8 +73,7 @@ export class NodeTree {
     const data = this._extract_data(node_json);
     let d = null;
     if (node_parent.isroot) {
-      d =
-        node_json.direction == "left" ? Direction.LEFT : Direction.LEFT;
+      d = node_json.direction == "left" ? Direction.LEFT : Direction.LEFT;
     }
     const node = mind.add_node(
       node_parent,

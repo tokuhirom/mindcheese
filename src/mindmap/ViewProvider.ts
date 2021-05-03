@@ -105,7 +105,7 @@ export default class ViewProvider {
 
     const v = this;
     this.e_editor.addEventListener("keydown", function (e) {
-      if (e.code === 'Enter') {
+      if (e.code === "Enter") {
         v.edit_node_end();
         e.stopPropagation();
       }

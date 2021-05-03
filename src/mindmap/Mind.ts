@@ -2,7 +2,7 @@
 
 import MindNode from "./MindNode";
 import { Direction } from "./MindmapConstants";
-import {NodeTree} from "./format/NodeTree";
+import { NodeTree } from "./format/NodeTree";
 
 export default class Mind {
   name: string;
@@ -98,8 +98,10 @@ export default class Mind {
     if (this._put_node(node)) {
       parent_node.children.push(node);
       this._reindex(parent_node);
-      console.log(`ADDED NODE!!!!!!!!!---- TIMESTAMP=${this.timestamp} ID=${this.id}`)
-      console.log(new NodeTree().get_data(this))
+      console.log(
+        `ADDED NODE!!!!!!!!!---- TIMESTAMP=${this.timestamp} ID=${this.id}`
+      );
+      console.log(new NodeTree().get_data(this));
       return node;
     } else {
       console.error(

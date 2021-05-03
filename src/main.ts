@@ -26,7 +26,7 @@ export default class MyPlugin extends Plugin {
   mindmapFileModes: { [file: string]: string } = {};
   settings: MyPluginSettings;
 
-  async onload() : Promise<void> {
+  async onload(): Promise<void> {
     console.log("loading  obsidian-editable-markdown plugin");
 
     await this.loadSettings();
@@ -159,7 +159,7 @@ export default class MyPlugin extends Plugin {
     await this.saveData(this.settings);
   }
 
-  private newEditableMindmap() :void {
+  private newEditableMindmap(): void {
     throw new Error("TBI");
   }
 }

@@ -18,7 +18,7 @@ export default class DataProvider {
 
   get_data(data_format: string) {
     if (data_format === "node_tree") {
-      console.log(this.jm.mind)
+      console.log(this.jm.mind);
       return this.format.node_tree.get_data(this.jm.mind);
     } else {
       throw new Error(`Unknown format: ${data_format}`);

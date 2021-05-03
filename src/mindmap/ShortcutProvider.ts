@@ -1,10 +1,10 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 import JsMind from "./JsMind";
 
 // Generate new ID of the node
 function generateId(): string {
   return (
-      new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
+    new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
   ).substr(2, 16);
 }
 
@@ -12,15 +12,17 @@ export default class ShortcutProvider {
   private jm: JsMind;
   private mapping: Record<string, number>; // handlerName2keycode
   private handles: Record<string, (arg0: JsMind, arg1: Event) => void>;
-  private _newid: (() => string);
+  private _newid: () => string;
   private _mapping: Record<number, (arg0: JsMind, arg1: Event) => void>; // number2callback
   private enable: boolean;
 
-  constructor(jm: JsMind,
-              enable: boolean,
-              mapping: Record<string, number>,
-              handles: Record<string, (arg0: JsMind, arg1: Event) => void>,
-              newid: () => string =generateId) {
+  constructor(
+    jm: JsMind,
+    enable: boolean,
+    mapping: Record<string, number>,
+    handles: Record<string, (arg0: JsMind, arg1: Event) => void>,
+    newid: () => string = generateId
+  ) {
     this.jm = jm;
     this.enable = enable;
     this.mapping = mapping;
@@ -71,14 +73,14 @@ export default class ShortcutProvider {
       return true;
     }
     const kc =
-        e.keyCode +
-        ((e.metaKey ? 1: 0) << 13) +
-        ((e.ctrlKey ? 1: 0) << 12) +
-        ((e.altKey?1:0) << 11) +
-        ((e.shiftKey?1:0) << 10);
+      e.keyCode +
+      ((e.metaKey ? 1 : 0) << 13) +
+      ((e.ctrlKey ? 1 : 0) << 12) +
+      ((e.altKey ? 1 : 0) << 11) +
+      ((e.shiftKey ? 1 : 0) << 10);
     if (kc in this._mapping) {
-      const container = (this.jm.options.container as HTMLElement);
-      const isConnected = container.isConnected
+      const container = this.jm.options.container as HTMLElement;
+      const isConnected = container.isConnected;
       // offsetParent=${container.offsetParent}
       // VISIBILITY=${getComputedStyle(container).visibility}
       //     TOP=${getComputedStyle(container).top}
@@ -110,10 +112,10 @@ export default class ShortcutProvider {
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
       const node = jm.insert_node_after(
-          selected_node,
-          nodeid,
-          "New Node",
-          null
+        selected_node,
+        nodeid,
+        "New Node",
+        null
       );
       if (node) {
         jm.select_node(node);

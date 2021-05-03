@@ -17,7 +17,7 @@
 
 import JsMind from "./JsMind";
 import MindNode from "./MindNode";
-import { Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 const options = {
   line_width: 5,
@@ -118,7 +118,12 @@ export default class Draggable {
     this.shadow.style.visibility = "hidden";
   }
 
-  _magnet_shadow(node: { node: any; np: any; sp: any; direction: number }): void {
+  _magnet_shadow(node: {
+    node: any;
+    np: any;
+    sp: any;
+    direction: number;
+  }): void {
     if (node) {
       this.canvas_ctx.lineWidth = options.line_width;
       this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
@@ -139,7 +144,12 @@ export default class Draggable {
     this.canvas_ctx.stroke();
   }
 
-  _lookup_close_node(): { node: MindNode; np: any; sp: any; direction: Direction } {
+  _lookup_close_node(): {
+    node: MindNode;
+    np: any;
+    sp: any;
+    direction: Direction;
+  } {
     const root = this.jm.get_root();
     const root_location = root.get_location();
     const root_size = root.get_size();
@@ -361,12 +371,20 @@ export default class Draggable {
     this.capture = false;
   }
 
-  move_node(src_node: MindNode, target_node: MindNode, target_direct: any): void {
+  move_node(
+    src_node: MindNode,
+    target_node: MindNode,
+    target_direct: any
+  ): void {
     console.log(
       `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
     );
     const shadow_h = this.shadow.offsetTop;
-    if (!!target_node && !!src_node && !MindNode.inherited(src_node, target_node)) {
+    if (
+      !!target_node &&
+      !!src_node &&
+      !MindNode.inherited(src_node, target_node)
+    ) {
       console.log(`let's move!`);
       // lookup before_node
       const sibling_nodes = target_node.children;

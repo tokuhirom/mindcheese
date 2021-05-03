@@ -1,4 +1,4 @@
-import {Direction, EventType} from "./MindmapConstants";
+import { Direction, EventType } from "./MindmapConstants";
 
 const jm = {
   direction: {
@@ -21,11 +21,13 @@ export default class LayoutProvider {
   private readonly _vspace: number;
   private readonly _pspace: number;
 
-  constructor(jm: JsMind,
-              mode: string='full' /* 'full' or 'side' */,
-              hspace: number=30,
-              vspace: number=20,
-              pspace: number=13) {
+  constructor(
+    jm: JsMind,
+    mode: string = "full" /* 'full' or 'side' */,
+    hspace: number = 30,
+    vspace: number = 20,
+    pspace: number = 13
+  ) {
     this._hspace = hspace;
     this._vspace = vspace;
     this._pspace = pspace;
@@ -98,7 +100,11 @@ export default class LayoutProvider {
     }
   }
 
-  _layout_direction_side(node: MindNode, direction: Direction, side_index: number) {
+  _layout_direction_side(
+    node: MindNode,
+    direction: Direction,
+    side_index: number
+  ) {
     let layout_data = null;
     if ("layout" in node._data) {
       layout_data = node._data.layout;
@@ -240,7 +246,7 @@ export default class LayoutProvider {
     return total_height;
   }
 
-  get_node_offset(node: MindNode) : {x: number, y: number} {
+  get_node_offset(node: MindNode): { x: number; y: number } {
     const layout_data = node._data.layout;
     let offset_cache = null;
     if ("_offset_" in layout_data && this.cache_valid) {
@@ -263,7 +269,7 @@ export default class LayoutProvider {
     return offset_cache;
   }
 
-  get_node_point(node: MindNode) : {x: number, y: number} {
+  get_node_point(node: MindNode): { x: number; y: number } {
     const view_data = node._data.view;
     const offset_p = this.get_node_offset(node);
     //console.debug(offset_p);

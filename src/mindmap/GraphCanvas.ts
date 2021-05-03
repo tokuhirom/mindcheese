@@ -47,7 +47,10 @@ export default class GraphCanvas {
     );
   }
 
-  copy_to(dest_canvas_ctx: CanvasRenderingContext2D, callback: () => void): void {
+  copy_to(
+    dest_canvas_ctx: CanvasRenderingContext2D,
+    callback: () => void
+  ): void {
     dest_canvas_ctx.drawImage(this.e_canvas, 0, 0);
     if (callback) {
       callback();

@@ -99,18 +99,19 @@ export default class JsMind {
     };
     // create instance of function provider
     this.data = new DataProvider(this);
-    this.layout = new LayoutProvider(this,
-        opts.mode,
-        opts.layout.hspace,
-        opts.layout.vspace,
-        opts.layout.pspace
+    this.layout = new LayoutProvider(
+      this,
+      opts.mode,
+      opts.layout.hspace,
+      opts.layout.vspace,
+      opts.layout.pspace
     );
     this.view = new ViewProvider(this, opts_view);
     this.shortcut = new ShortcutProvider(
-        this,
-        opts.shortcut.enable,
-        opts.shortcut.mapping,
-        opts.shortcut.handles
+      this,
+      opts.shortcut.enable,
+      opts.shortcut.mapping,
+      opts.shortcut.handles
     );
     this.draggable = new Draggable(this);
 
@@ -297,7 +298,7 @@ export default class JsMind {
     } else {
       console.debug("data.load ok");
     }
-    console.log(`JsMind.show TIMESTAMP=${this.mind.timestamp}! id=${this.id}`)
+    console.log(`JsMind.show TIMESTAMP=${this.mind.timestamp}! id=${this.id}`);
 
     this.view.load();
     console.debug("view.load ok");
@@ -474,7 +475,7 @@ export default class JsMind {
           node: nodeid,
         });
       } else {
-        console.warn(`Unknown node: ${nodeid}`)
+        console.warn(`Unknown node: ${nodeid}`);
       }
     } else {
       console.error("fail, this mind map is not editable");
