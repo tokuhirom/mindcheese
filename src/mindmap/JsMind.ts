@@ -447,6 +447,7 @@ export default class JsMind {
     }
   }
 
+  // set topic to the node
   update_node(nodeid: string, topic: string): void {
     if (this.get_editable()) {
       if (is_empty(topic)) {
