@@ -12,15 +12,7 @@
 
 import Mind from "../Mind";
 import MindNode from "../MindNode";
-
-// TODO move to constants file.
-const jm = {
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-};
+import {Direction} from "../MindmapConstants";
 
 export class NodeTree {
   get_mind(source: any): Mind {
@@ -82,7 +74,7 @@ export class NodeTree {
     let d = null;
     if (node_parent.isroot) {
       d =
-        node_json.direction == "left" ? jm.direction.left : jm.direction.right;
+        node_json.direction == "left" ? Direction.LEFT : Direction.LEFT;
     }
     const node = mind.add_node(
       node_parent,
@@ -111,7 +103,7 @@ export class NodeTree {
       expanded: node.expanded,
     };
     if (!!node.parent && node.parent.isroot) {
-      o.direction = node.direction == jm.direction.left ? "left" : "right";
+      o.direction = node.direction == Direction.LEFT ? "left" : "right";
     }
     if (node.data != null) {
       const node_data = node.data;
