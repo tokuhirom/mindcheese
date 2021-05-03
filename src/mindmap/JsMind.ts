@@ -4,7 +4,7 @@ import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
 import { Node } from "./Node";
 import { Mind } from "./Mind";
-import PluginManager from "./PluginManager";
+import Draggable from "./Draggable";
 
 const jm = {
   // TODO remove
@@ -70,11 +70,11 @@ export default class JsMind {
   private event_handles: any[];
   private data: DataProvider;
   private layout: LayoutProvider;
-  private view: ViewProvider;
+  view: ViewProvider;
   private shortcut: ShortcutProvider;
-  private plugin_manager: PluginManager;
+  private draggable: Draggable;
 
-  constructor(options: any, pluginManager: PluginManager) {
+  constructor(options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
     opts = Object.assign(opts, options);
     if (!opts.container) {
@@ -85,7 +85,6 @@ export default class JsMind {
     this.inited = false;
     this.mind = new Mind(); // TODO original では null が入っていた
     this.event_handles = [];
-    this.plugin_manager = pluginManager;
     this.init();
   }
 
@@ -116,14 +115,20 @@ export default class JsMind {
     this.layout = new LayoutProvider(this, opts_layout);
     this.view = new ViewProvider(this, opts_view);
     this.shortcut = new ShortcutProvider(this, opts.shortcut);
+    this.draggable = new Draggable(this);
+
 
     this.layout.init();
     this.view.init();
     this.shortcut.init();
+    this.draggable.init();
 
     this._event_bind();
 
-    this.plugin_manager.init(this);
+    // TODO inlining
+    this.add_event_listener(function (type: any, data: any) {
+      this.draggable.jm_event_handle.call(this.draggable, type, data);
+    });
   }
 
   enable_edit() {

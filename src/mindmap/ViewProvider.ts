@@ -49,10 +49,10 @@ export default class ViewProvider {
   private opts: any;
   private jm: any;
   private layout: any;
-  private container: any;
-  private e_panel: any;
-  private e_nodes: any;
-  private size: { w: number; h: number };
+  container: any;
+  e_panel: any;
+  e_nodes: any;
+  size: { w: number; h: number };
   private selected_node: any;
   private editing_node: any;
   private graph: any;

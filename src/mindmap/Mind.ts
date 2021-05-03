@@ -16,7 +16,7 @@ export class Mind {
   version: string;
   root: any;
   selected: any;
-  private nodes: any;
+  nodes: any;
 
   constructor() {
     this.name = null;

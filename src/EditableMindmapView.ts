@@ -1,11 +1,8 @@
 import { Menu, TextFileView, WorkspaceLeaf } from "obsidian";
-import { initJsMindDrggable } from "./jsmind.draggable";
 import { MINDMAP_VIEW_TYPE } from "./Constants";
 import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
-import { Node } from "./mindmap/Node";
-import PluginManager from "./mindmap/PluginManager";
 import JsMind from "./mindmap/JsMind";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
@@ -19,10 +16,6 @@ const jm = {
   },
   event_type: { show: 1, resize: 2, edit: 3, select: 4 },
 };
-
-const pluginManager = new PluginManager();
-
-initJsMindDrggable(Node, pluginManager);
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
@@ -119,7 +112,7 @@ export class EditableMindmapView extends TextFileView {
           },
         },
       };
-      this.mm = new JsMind(options, pluginManager);
+      this.mm = new JsMind(options);
       // ↓ *quick hack* to avoid the timing issue...
       setTimeout(() => {
         this.mm.show(mind);
