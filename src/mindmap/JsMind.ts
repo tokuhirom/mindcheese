@@ -55,15 +55,15 @@ const DEFAULT_OPTIONS: any = {
 };
 
 export default class JsMind {
-  private options: any;
+  options: any;
   private inited: boolean;
   public mind: Mind;
   private event_handles: any[];
   private data: DataProvider;
-  private layout: LayoutProvider;
+  layout: LayoutProvider;
   view: ViewProvider;
   private shortcut: ShortcutProvider;
-  private draggable: Draggable;
+  draggable: Draggable;
 
   constructor(options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);

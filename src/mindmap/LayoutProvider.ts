@@ -15,7 +15,7 @@ import JsMind from "./JsMind";
 export default class LayoutProvider {
   private readonly jm: JsMind;
   private readonly isside: boolean;
-  private bounds: { n: number; s: number; w: number; e: number };
+  bounds: { n: number; s: number; w: number; e: number };
   private cache_valid: boolean;
   private readonly _hspace: number;
   private readonly _vspace: number;

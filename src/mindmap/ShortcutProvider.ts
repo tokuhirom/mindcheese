@@ -134,7 +134,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_up(_jm: any, e: Event): void {
+  handle_up(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let up_node = _jm.find_node_before(selected_node);

@@ -1,6 +1,8 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
 import { EventType } from "./MindmapConstants";
+import JsMind from "./JsMind";
+import LayoutProvider from "./LayoutProvider";
 
 const $t = function (n: any, t: any) {
   // TODO inlining this.
@@ -41,9 +43,9 @@ function is_empty(s: string) {
 
 export default class ViewProvider {
   private opts: any;
-  private jm: any;
-  private layout: any;
-  container: any;
+  private jm: JsMind;
+  private layout: LayoutProvider;
+  container: HTMLElement;
   e_panel: any;
   e_nodes: any;
   size: { w: number; h: number };
@@ -56,7 +58,7 @@ export default class ViewProvider {
   private minZoom: number;
   private maxZoom: number;
 
-  constructor(jm: any, options: any) {
+  constructor(jm: JsMind, options: any) {
     this.opts = options;
     this.jm = jm;
     this.layout = jm.layout;
