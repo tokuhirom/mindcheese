@@ -1,6 +1,4 @@
-"use strict";
-
-function renderMd(node, level) {
+function renderMd(node: any, level: number):string {
   if (node == null) {
     return "";
   }
@@ -10,7 +8,8 @@ function renderMd(node, level) {
     for (let i = 0; i < level; i++) {
       result += "\t";
     }
-    result += "- " + node.topic + "\n";
+    result += node.direction == 'left' ? '+' : "-";
+    result += " " + node.topic + "\n";
   }
 
   if (node.children) {
@@ -21,7 +20,7 @@ function renderMd(node, level) {
   return result;
 }
 
-function convertMM2MD(data) {
+export function convertMM2MD(data: any): string {
   const p = {
     // Skip the root node。
     children: data.data.children,
@@ -29,6 +28,3 @@ function convertMM2MD(data) {
   return renderMd(p, -1);
 }
 
-module.exports = {
-  convertMM2MD,
-};

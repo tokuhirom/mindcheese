@@ -73,6 +73,7 @@ export default class Mind {
       } else {
         d = direction !== Direction.LEFT ? Direction.RIGHT : Direction.LEFT;
       }
+      console.log(`add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`)
       node = new MindNode(
         nodeid,
         nodeindex,

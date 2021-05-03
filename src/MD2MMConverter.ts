@@ -1,20 +1,18 @@
-"use strict";
-
-function parse(title, md) {
+function parse(title: string, md:string) {
   if (md == null) {
     throw new Error("md should not be null");
   }
 
   const lines = md.split(/\n/);
   let lastSpaces = "";
-  const root = {
+  const root: Record<string, any> = {
     id: "root",
     topic: title,
     children: [],
   };
   let i = 0;
   let lastElement = root;
-  const anchor = {
+  const anchor: Record<number, any> = {
     0: root,
   };
 
@@ -24,15 +22,17 @@ function parse(title, md) {
       continue;
     }
 
-    const match = line.match(/^(\s*)-\s*(.*?)\s*$/);
+    const match = line.match(/^(\s*)([+-])\s*(.*?)\s*$/);
     const leadingSpaces = match[1];
-    const body = match[2];
+    const directionCharacter = match[2];
+    const body = match[3];
 
     // console.log(`lead=${leadingSpaces.length} body=${body} root=${JSON.stringify(root)}`);
 
-    const el = {
+    const el: Record<string, any> = {
       id: ++i,
       topic: body,
+      direction: directionCharacter === '+' ? 'left' : 'right',
       children: [],
     };
 
@@ -53,7 +53,7 @@ function parse(title, md) {
   return root;
 }
 
-function convertMD2MM(title, md) {
+export function convertMD2MM(title: string, md: string): any {
   return {
     meta: {
       name: "jsMind remote",
@@ -65,6 +65,3 @@ function convertMD2MM(title, md) {
   };
 }
 
-module.exports = {
-  convertMD2MM,
-};

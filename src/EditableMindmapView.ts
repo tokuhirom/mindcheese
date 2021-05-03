@@ -1,8 +1,8 @@
-import { Menu, TextFileView, TFile, WorkspaceLeaf } from "obsidian";
+import {Menu, Notice, TextFileView, TFile, WorkspaceLeaf} from "obsidian";
 import { MINDMAP_VIEW_TYPE } from "./Constants";
 import MyPlugin from "./main";
-import MM2MDConverter from "./MM2MDConverter";
-import MD2MMConverter from "./MD2MMConverter";
+import {convertMM2MD} from "./MM2MDConverter";
+import {convertMD2MM} from "./MD2MMConverter";
 import JsMind from "./mindmap/JsMind";
 import { EventType } from "./mindmap/MindmapConstants";
 
@@ -46,7 +46,7 @@ export class EditableMindmapView extends TextFileView {
         return this.data;
       }
       console.log(`getViewData: data=${JSON.stringify(data)}`);
-      const md = MM2MDConverter.convertMM2MD(data) as string;
+      const md = convertMM2MD(data) as string;
       console.log(`getViewData: data=${data} md=${md}`);
 
       return this.yfm + "\n\n" + md + "\n";
@@ -98,7 +98,14 @@ export class EditableMindmapView extends TextFileView {
       },
       (el) => {
         el.setAttribute("id", "jsmind_container");
-        const mind = MD2MMConverter.convertMD2MM(title, data);
+        console.log("CONVERT!")
+        let mind: any;
+        try {
+          mind = convertMD2MM(title, data);
+        } catch (e) {
+          new Notice(`Cannot parse mindmap file: ${title}: ${e}`);
+          console.log(e);
+        }
         console.log(
           `rendering mindmap: data=${data}, mind=${JSON.stringify(mind)} ${
             this.mm

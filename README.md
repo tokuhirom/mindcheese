@@ -8,6 +8,8 @@
 - [x] DnD support
 - [ ] Undo feature
 
+自分でビルドしたら試せます。
+
 ##
 
 This is a sample plugin for Obsidian (https://obsidian.md).
