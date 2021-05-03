@@ -2,7 +2,7 @@ import DataProvider from "./DataProvider";
 import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
-import Node from "./Node";
+import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
 import { EventType } from "./MindmapConstants";
@@ -225,7 +225,7 @@ export default class JsMind {
     }
   }
 
-  begin_edit(node: Node): void {
+  begin_edit(node: MindNode): void {
     if (this.get_editable()) {
       this.view.edit_node_begin(node);
     } else {
@@ -237,7 +237,7 @@ export default class JsMind {
     this.view.edit_node_end();
   }
 
-  toggle_node(node: Node): void {
+  toggle_node(node: MindNode): void {
     if (node.isroot) {
       return;
     }
@@ -247,7 +247,7 @@ export default class JsMind {
     this.view.restore_location(node);
   }
 
-  expand_node(node: Node) {
+  expand_node(node: MindNode) {
     if (node.isroot) {
       return;
     }
@@ -257,7 +257,7 @@ export default class JsMind {
     this.view.restore_location(node);
   }
 
-  collapse_node(node: Node) {
+  collapse_node(node: MindNode) {
     if (node.isroot) {
       return;
     }
@@ -333,7 +333,7 @@ export default class JsMind {
     return this.mind.get_node(nodeid);
   }
 
-  add_node(parent_node: Node, nodeid: string, topic: string, data: any) {
+  add_node(parent_node: MindNode, nodeid: string, topic: string, data: any) {
     if (this.get_editable()) {
       const node = this.mind.add_node(
         parent_node,
@@ -364,7 +364,7 @@ export default class JsMind {
   }
 
   insert_node_before(
-    node_before: Node,
+    node_before: MindNode,
     nodeid: string,
     topic: string,
     data: any
@@ -395,11 +395,11 @@ export default class JsMind {
   }
 
   insert_node_after(
-    node_after: Node,
+    node_after: MindNode,
     nodeid: string,
     topic: string,
     data: any
-  ): Node | null {
+  ): MindNode | null {
     if (this.get_editable()) {
       const afterid = node_after.id;
       const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
@@ -420,7 +420,7 @@ export default class JsMind {
     }
   }
 
-  remove_node(node: Node): boolean {
+  remove_node(node: MindNode): boolean {
     if (this.get_editable()) {
       if (node.isroot) {
         console.error("fail, can not remove root node");
@@ -512,7 +512,7 @@ export default class JsMind {
     }
   }
 
-  select_node(node: Node): void {
+  select_node(node: MindNode): void {
     if (!this.layout.is_visible(node)) {
       return;
     }
@@ -540,11 +540,11 @@ export default class JsMind {
     }
   }
 
-  is_node_visible(node: Node) {
+  is_node_visible(node: MindNode) {
     return this.layout.is_visible(node);
   }
 
-  find_node_before(node: Node) {
+  find_node_before(node: MindNode) {
     if (node.isroot) {
       return null;
     }
@@ -568,7 +568,7 @@ export default class JsMind {
     return n;
   }
 
-  find_node_after(node: Node) {
+  find_node_after(node: MindNode) {
     if (node.isroot) {
       return null;
     }

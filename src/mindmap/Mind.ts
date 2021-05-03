@@ -1,15 +1,15 @@
 "use strict";
 
-import Node from "./Node";
+import MindNode from "./MindNode";
 import { Direction } from "./MindmapConstants";
 
 export default class Mind {
   name: string;
   author: string;
   version: string;
-  root: Node;
+  root: MindNode;
   selected: any;
-  nodes: Record<string, Node>;
+  nodes: Record<string, MindNode>;
 
   constructor() {
     this.name = null;
@@ -20,7 +20,7 @@ export default class Mind {
     this.nodes = {};
   }
 
-  get_node(nodeid: string): Node {
+  get_node(nodeid: string): MindNode {
     if (nodeid in this.nodes) {
       return this.nodes[nodeid];
     } else {
@@ -32,8 +32,8 @@ export default class Mind {
     console.log("set_root!");
     if (this.root == null) {
       console.log("set_root----------");
-      console.log(Node);
-      this.root = new Node(nodeid, 0, topic, data, true, null, null, null);
+      console.log(MindNode);
+      this.root = new MindNode(nodeid, 0, topic, data, true, null, null, null);
       this._put_node(this.root);
     } else {
       console.error("root node is already exist");
@@ -41,14 +41,14 @@ export default class Mind {
   }
 
   add_node(
-    parent_node: Node,
+    parent_node: MindNode,
     nodeid: string,
     topic: string,
     data: any,
     idx: number,
     direction: Direction | null,
     expanded: boolean
-  ): Node {
+  ): MindNode {
     const nodeindex = idx || -1;
     let node;
     if (parent_node.isroot) {
@@ -68,7 +68,7 @@ export default class Mind {
       } else {
         d = direction !== Direction.LEFT ? Direction.RIGHT : Direction.LEFT;
       }
-      node = new Node(
+      node = new MindNode(
         nodeid,
         nodeindex,
         topic,
@@ -79,7 +79,7 @@ export default class Mind {
         expanded
       );
     } else {
-      node = new Node(
+      node = new MindNode(
         nodeid,
         nodeindex,
         topic,
@@ -104,11 +104,11 @@ export default class Mind {
 
   // XXX jsMind では node_before に nodeid も受け付けていたっぽい。
   insert_node_before(
-    node_before: Node,
+    node_before: MindNode,
     nodeid: string,
     topic: string,
     data: any
-  ): Node {
+  ): MindNode {
     const node_index = node_before.index - 0.5;
     return this.add_node(
       node_before.parent,
@@ -122,7 +122,7 @@ export default class Mind {
   }
 
   // XXX jsMind では node に nodeid も受け付けていたっぽい。
-  get_node_before(node: Node) {
+  get_node_before(node: MindNode) {
     if (node.isroot) {
       return null;
     }
@@ -137,11 +137,11 @@ export default class Mind {
 
   // XXX jsMind では node_after に nodeid も受け付けていたっぽい。
   insert_node_after(
-    node_after: Node,
+    node_after: MindNode,
     nodeid: string,
     topic: string,
     data: any
-  ): Node {
+  ): MindNode {
     const node_index = node_after.index + 0.5;
     return this.add_node(
       node_after.parent,
@@ -155,7 +155,7 @@ export default class Mind {
   }
 
   // XXX jsMind では node に nodeid も受け付けていたっぽい。
-  get_node_after(node: Node) {
+  get_node_after(node: MindNode) {
     if (node.isroot) {
       return null;
     }
@@ -170,12 +170,12 @@ export default class Mind {
 
   // XXX jsMind では node に nodeid も受け付けていたっぽい。
   move_node(
-    node: Node,
+    node: MindNode,
     beforeid: string,
     parentid: string,
     direction: any
-  ): Node {
-    console.assert(node instanceof Node, "node should be Node");
+  ): MindNode {
+    console.assert(node instanceof MindNode, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parentid} ${direction}`);
     if (!parentid) {
       parentid = node.parent.id;
@@ -183,7 +183,7 @@ export default class Mind {
     return this._move_node(node, beforeid, parentid, direction);
   }
 
-  _flow_node_direction(node: Node, direction: any): void {
+  _flow_node_direction(node: MindNode, direction: any): void {
     if (typeof direction === "undefined") {
       direction = node.direction;
     } else {
@@ -195,7 +195,7 @@ export default class Mind {
     }
   }
 
-  _move_node_internal(node: Node, beforeid: string): Node {
+  _move_node_internal(node: MindNode, beforeid: string): MindNode {
     if (!!node && !!beforeid) {
       if (beforeid === "_last_") {
         node.index = -1;
@@ -219,11 +219,11 @@ export default class Mind {
   }
 
   _move_node(
-    node: Node,
+    node: MindNode,
     beforeid: string,
     parentid: string,
     direction: any
-  ): Node {
+  ): MindNode {
     console.log(`_move_node: ${node}, ${beforeid}, ${parentid}, ${direction}`);
     if (!!node && !!parentid) {
       console.assert(node.parent, `node.parent is null: ${node}`);
@@ -258,7 +258,7 @@ export default class Mind {
   }
 
   // XXX jsMind では Node ではなく string も受け付けていた。
-  remove_node(node: Node): boolean {
+  remove_node(node: MindNode): boolean {
     if (!node) {
       console.error("fail, the node can not be found");
       return false;
@@ -300,7 +300,7 @@ export default class Mind {
     return true;
   }
 
-  _put_node(node: Node): boolean {
+  _put_node(node: MindNode): boolean {
     if (node.id in this.nodes) {
       console.warn("the nodeid '" + node.id + "' has been already exist.");
       return false;
@@ -310,9 +310,9 @@ export default class Mind {
     }
   }
 
-  _reindex(node: Node): void {
-    if (node instanceof Node) {
-      node.children.sort(Node.compare);
+  _reindex(node: MindNode): void {
+    if (node instanceof MindNode) {
+      node.children.sort(MindNode.compare);
       for (let i = 0; i < node.children.length; i++) {
         node.children[i].index = i + 1;
       }

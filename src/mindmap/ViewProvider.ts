@@ -1,5 +1,5 @@
 import GraphCanvas from "./GraphCanvas";
-import Node from "./Node";
+import MindNode from "./MindNode";
 import { EventType } from "./MindmapConstants";
 
 const $t = function (n: any, t: any) {
@@ -185,7 +185,7 @@ export default class ViewProvider {
     this.size.h = client_h;
   }
 
-  init_nodes_size(node: Node): void {
+  init_nodes_size(node: MindNode): void {
     const view_data = node._data.view;
     view_data.width = view_data.element.clientWidth;
     view_data.height = view_data.element.clientHeight;
@@ -203,12 +203,12 @@ export default class ViewProvider {
     }
   }
 
-  add_node(node: Node): void {
+  add_node(node: MindNode): void {
     this.create_node_element(node, this.e_nodes);
     this.init_nodes_size(node);
   }
 
-  create_node_element(node: Node, parent_node: DocumentFragment): void {
+  create_node_element(node: MindNode, parent_node: DocumentFragment): void {
     let view_data = null;
     if ("view" in node._data) {
       view_data = node._data.view;
@@ -243,7 +243,7 @@ export default class ViewProvider {
     view_data.element = d;
   }
 
-  remove_node(node: Node) {
+  remove_node(node: MindNode) {
     if (this.selected_node != null && this.selected_node.id == node.id) {
       this.selected_node = null;
     }
@@ -266,7 +266,7 @@ export default class ViewProvider {
     }
   }
 
-  update_node(node: Node): void {
+  update_node(node: MindNode): void {
     const view_data = node._data.view;
     const element = view_data.element;
     if (node.topic) {
@@ -280,7 +280,7 @@ export default class ViewProvider {
     view_data.height = element.clientHeight;
   }
 
-  select_node(node: Node): void {
+  select_node(node: MindNode): void {
     if (this.selected_node) {
       this.selected_node._data.view.element.className = this.selected_node._data.view.element.className.replace(
         /\s*selected\b/i,
@@ -307,7 +307,7 @@ export default class ViewProvider {
     return !!this.editing_node;
   }
 
-  edit_node_begin(node: Node): void {
+  edit_node_begin(node: MindNode): void {
     if (!node.topic) {
       console.warn("don't edit image nodes");
       return;
@@ -428,7 +428,7 @@ export default class ViewProvider {
     this._show();
   }
 
-  save_location(node: Node): void {
+  save_location(node: MindNode): void {
     const vd = node._data.view;
     vd._saved_location = {
       x: parseInt(vd.element.style.left) - this.e_panel.scrollLeft,
@@ -436,7 +436,7 @@ export default class ViewProvider {
     };
   }
 
-  restore_location(node: Node): void {
+  restore_location(node: MindNode): void {
     const vd = node._data.view;
     this.e_panel.scrollLeft =
       parseInt(vd.element.style.left) - vd._saved_location.x;
@@ -504,7 +504,7 @@ export default class ViewProvider {
     }
   }
 
-  reset_node_custom_style(node: Node): void {
+  reset_node_custom_style(node: MindNode): void {
     this._reset_node_custom_style(node._data.view.element, node.data);
   }
 
@@ -570,7 +570,7 @@ export default class ViewProvider {
     }
   }
 
-  clear_node_custom_style(node: Node): void {
+  clear_node_custom_style(node: MindNode): void {
     const node_element = node._data.view.element;
     node_element.style.backgroundColor = "";
     node_element.style.color = "";

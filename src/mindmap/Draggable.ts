@@ -16,7 +16,7 @@
 "use strict";
 
 import JsMind from "./JsMind";
-import Node from "./Node";
+import MindNode from "./MindNode";
 import { Direction} from "./MindmapConstants";
 
 const options = {
@@ -32,8 +32,8 @@ export default class Draggable {
   private shadow: HTMLElement;
   private shadow_w: number;
   private shadow_h: number;
-  private active_node: Node;
-  private target_node: Node;
+  private active_node: MindNode;
+  private target_node: MindNode;
   private target_direct: Direction;
   private client_w: number;
   private client_h: number;
@@ -139,7 +139,7 @@ export default class Draggable {
     this.canvas_ctx.stroke();
   }
 
-  _lookup_close_node(): { node: Node; np: any; sp: any; direction: Direction } {
+  _lookup_close_node(): { node: MindNode; np: any; sp: any; direction: Direction } {
     const root = this.jm.get_root();
     const root_location = root.get_location();
     const root_size = root.get_size();
@@ -209,7 +209,7 @@ export default class Draggable {
 
   lookup_close_node(): void {
     const node_data: {
-      node: Node;
+      node: MindNode;
       np: any;
       sp: any;
       direction: Direction;
@@ -361,12 +361,12 @@ export default class Draggable {
     this.capture = false;
   }
 
-  move_node(src_node: Node, target_node: Node, target_direct: any): void {
+  move_node(src_node: MindNode, target_node: MindNode, target_direct: any): void {
     console.log(
       `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
     );
     const shadow_h = this.shadow.offsetTop;
-    if (!!target_node && !!src_node && !Node.inherited(src_node, target_node)) {
+    if (!!target_node && !!src_node && !MindNode.inherited(src_node, target_node)) {
       console.log(`let's move!`);
       // lookup before_node
       const sibling_nodes = target_node.children;

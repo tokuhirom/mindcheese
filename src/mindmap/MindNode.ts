@@ -1,5 +1,5 @@
 // TODO convert to typescript
-export default class Node {
+export default class MindNode {
   // TODO eDirection maybe the ENUM.
   public id: string;
   public index: number;
@@ -43,7 +43,7 @@ export default class Node {
     this._data = {};
   }
 
-  static compare(node1: Node, node2: Node): number {
+  static compare(node1: MindNode, node2: MindNode): number {
     // '-1' is alwary the last
     let r = 0;
     const i1 = node1.index;
@@ -63,7 +63,7 @@ export default class Node {
     return r;
   }
 
-  static inherited(pnode: Node, node: Node): boolean {
+  static inherited(pnode: MindNode, node: MindNode): boolean {
     if (!!pnode && !!node) {
       if (pnode.id === node.id) {
         return true;

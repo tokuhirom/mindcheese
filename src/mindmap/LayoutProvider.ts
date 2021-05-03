@@ -9,7 +9,7 @@ const jm = {
   event_type: { show: 1, resize: 2, edit: 3, select: 4 },
 };
 
-import Node from "./Node";
+import MindNode from "./MindNode";
 import JsMind from "./JsMind";
 
 export default class LayoutProvider {
@@ -98,7 +98,7 @@ export default class LayoutProvider {
     }
   }
 
-  _layout_direction_side(node: Node, direction: Direction, side_index: number) {
+  _layout_direction_side(node: MindNode, direction: Direction, side_index: number) {
     let layout_data = null;
     if ("layout" in node._data) {
       layout_data = node._data.layout;
@@ -151,7 +151,7 @@ export default class LayoutProvider {
   }
 
   // layout both the x and y axis
-  _layout_offset_subnodes(nodes: Node[]) {
+  _layout_offset_subnodes(nodes: MindNode[]) {
     let total_height = 0;
     const nodes_count = nodes.length;
     let i = nodes_count;
@@ -199,7 +199,7 @@ export default class LayoutProvider {
   }
 
   // layout the y axis only, for collapse/expand a node
-  _layout_offset_subnodes_height(nodes: Node[]) {
+  _layout_offset_subnodes_height(nodes: MindNode[]) {
     let total_height = 0;
     const nodes_count = nodes.length;
     let i = nodes_count;
@@ -240,7 +240,7 @@ export default class LayoutProvider {
     return total_height;
   }
 
-  get_node_offset(node: Node) : {x: number, y: number} {
+  get_node_offset(node: MindNode) : {x: number, y: number} {
     const layout_data = node._data.layout;
     let offset_cache = null;
     if ("_offset_" in layout_data && this.cache_valid) {
@@ -263,7 +263,7 @@ export default class LayoutProvider {
     return offset_cache;
   }
 
-  get_node_point(node: Node) : {x: number, y: number} {
+  get_node_point(node: MindNode) : {x: number, y: number} {
     const view_data = node._data.view;
     const offset_p = this.get_node_offset(node);
     //console.debug(offset_p);
@@ -275,11 +275,11 @@ export default class LayoutProvider {
     return p;
   }
 
-  get_node_point_in(node: Node) {
+  get_node_point_in(node: MindNode) {
     return this.get_node_offset(node);
   }
 
-  get_node_point_out(node: Node) {
+  get_node_point_out(node: MindNode) {
     const layout_data = node._data.layout;
     let pout_cache = null;
     if ("_pout_" in layout_data && this.cache_valid) {
@@ -306,7 +306,7 @@ export default class LayoutProvider {
     return pout_cache;
   }
 
-  get_expander_point(node: Node) {
+  get_expander_point(node: MindNode) {
     const p = this.get_node_point_out(node);
     const ex_p: any = {};
     if (node._data.layout.direction == jm.direction.right) {
@@ -337,7 +337,7 @@ export default class LayoutProvider {
     };
   }
 
-  toggle_node(node: Node) {
+  toggle_node(node: MindNode) {
     if (node.isroot) {
       return;
     }
@@ -348,7 +348,7 @@ export default class LayoutProvider {
     }
   }
 
-  expand_node(node: Node) {
+  expand_node(node: MindNode) {
     node.expanded = true;
     this.part_layout(node);
     this.set_visible(node.children, true);
@@ -359,7 +359,7 @@ export default class LayoutProvider {
     });
   }
 
-  collapse_node(node: Node) {
+  collapse_node(node: MindNode) {
     node.expanded = false;
     this.part_layout(node);
     this.set_visible(node.children, false);
@@ -407,7 +407,7 @@ export default class LayoutProvider {
 
   expand_to_depth(
     target_depth: number,
-    curr_nodes: Node[],
+    curr_nodes: MindNode[],
     curr_depth: number
   ): void {
     if (target_depth < 1) {
@@ -433,7 +433,7 @@ export default class LayoutProvider {
     }
   }
 
-  part_layout(node: Node) {
+  part_layout(node: MindNode) {
     const root = this.jm.mind.root;
     if (root) {
       const root_layout_data = root._data.layout;
@@ -465,7 +465,7 @@ export default class LayoutProvider {
     }
   }
 
-  set_visible(nodes: Node[], visible: boolean) {
+  set_visible(nodes: MindNode[], visible: boolean) {
     let i = nodes.length;
     let node = null;
     let layout_data = null;
@@ -483,12 +483,12 @@ export default class LayoutProvider {
     }
   }
 
-  is_expand(node: Node) {
+  is_expand(node: MindNode) {
     // TODO remove this method
     return node.expanded;
   }
 
-  is_visible(node: Node) {
+  is_visible(node: MindNode) {
     const layout_data = node._data.layout;
     return !("visible" in layout_data && !layout_data.visible);
   }

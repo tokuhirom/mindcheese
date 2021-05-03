@@ -11,7 +11,7 @@
  */
 
 import Mind from "../Mind";
-import Node from "../Node";
+import MindNode from "../MindNode";
 
 // TODO move to constants file.
 const jm = {
@@ -44,7 +44,7 @@ export class NodeTree {
     return json;
   }
 
-  private _parse(mind: Mind, node_root: Node): void {
+  private _parse(mind: Mind, node_root: MindNode): void {
     const data = this._extract_data(node_root);
     mind.set_root(node_root.id, node_root.topic, data);
     if ("children" in node_root) {
@@ -75,7 +75,7 @@ export class NodeTree {
 
   private _extract_subnode(
     mind: Mind,
-    node_parent: Node,
+    node_parent: MindNode,
     node_json: any
   ): void {
     const data = this._extract_data(node_json);
@@ -101,8 +101,8 @@ export class NodeTree {
     }
   }
 
-  private _buildnode(node: Node): Record<string, any> {
-    if (!(node instanceof Node)) {
+  private _buildnode(node: MindNode): Record<string, any> {
+    if (!(node instanceof MindNode)) {
       return;
     }
     const o: Record<string, any> = {
