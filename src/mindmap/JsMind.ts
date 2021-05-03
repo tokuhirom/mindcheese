@@ -5,16 +5,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import { Node } from "./Node";
 import { Mind } from "./Mind";
 import Draggable from "./Draggable";
-
-const jm = {
-  // TODO remove
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
-};
+import { EventType } from "./MindmapConstants";
 
 function is_empty(s: string) {
   if (!s) {
@@ -117,7 +108,6 @@ export default class JsMind {
     this.shortcut = new ShortcutProvider(this, opts.shortcut);
     this.draggable = new Draggable(this);
 
-
     this.layout.init();
     this.view.init();
     this.shortcut.init();
@@ -126,8 +116,9 @@ export default class JsMind {
     this._event_bind();
 
     // TODO inlining
+    const self = this;
     this.add_event_listener(function (type: any, data: any) {
-      this.draggable.jm_event_handle.call(this.draggable, type, data);
+      self.draggable.jm_event_handle.call(self.draggable, type, data);
     });
   }
 
@@ -316,7 +307,7 @@ export default class JsMind {
     this.view.show(true);
     console.debug("view.show ok");
 
-    this.invoke_event_handle(jm.event_type.show, { data: [mind] });
+    this.invoke_event_handle(EventType.SHOW, { data: [mind] });
   }
 
   show(mind: any): void {
@@ -361,7 +352,7 @@ export default class JsMind {
         this.view.show(false);
         this.view.reset_node_custom_style(node);
         this.expand_node(parent_node);
-        this.invoke_event_handle(jm.event_type.edit, {
+        this.invoke_event_handle(EventType.EDIT, {
           evt: "add_node",
           data: [parent_node.id, nodeid, topic, data],
           node: nodeid,
@@ -392,7 +383,7 @@ export default class JsMind {
         this.view.add_node(node);
         this.layout.layout();
         this.view.show(false);
-        this.invoke_event_handle(jm.event_type.edit, {
+        this.invoke_event_handle(EventType.EDIT, {
           evt: "insert_node_before",
           data: [beforeid, nodeid, topic, data],
           node: nodeid,
@@ -418,7 +409,7 @@ export default class JsMind {
         this.view.add_node(node);
         this.layout.layout();
         this.view.show(false);
-        this.invoke_event_handle(jm.event_type.edit, {
+        this.invoke_event_handle(EventType.EDIT, {
           evt: "insert_node_after",
           data: [afterid, nodeid, topic, data],
           node: nodeid,
@@ -446,7 +437,7 @@ export default class JsMind {
       this.layout.layout();
       this.view.show(false);
       this.view.restore_location(parent_node);
-      this.invoke_event_handle(jm.event_type.edit, {
+      this.invoke_event_handle(EventType.EDIT, {
         evt: "remove_node",
         data: [nodeid],
         node: parentid,
@@ -475,7 +466,7 @@ export default class JsMind {
         this.view.update_node(node);
         this.layout.layout();
         this.view.show(false);
-        this.invoke_event_handle(jm.event_type.edit, {
+        this.invoke_event_handle(EventType.EDIT, {
           evt: "update_node",
           data: [nodeid, topic],
           node: nodeid,
@@ -510,7 +501,7 @@ export default class JsMind {
           this.view.update_node(node);
           this.layout.layout();
           this.view.show(false);
-          this.invoke_event_handle(jm.event_type.edit, {
+          this.invoke_event_handle(EventType.EDIT, {
             evt: "move_node",
             data: [nodeid, beforeid, parentid, direction],
             node: nodeid,
@@ -529,7 +520,7 @@ export default class JsMind {
     }
     this.mind.selected = node;
     this.view.select_node(node);
-    this.invoke_event_handle(jm.event_type.select, {
+    this.invoke_event_handle(EventType.SELECT, {
       evt: "select_node",
       data: [],
       node: node.id,

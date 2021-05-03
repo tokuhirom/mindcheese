@@ -1,3 +1,5 @@
+import { EventType } from "./MindmapConstants";
+
 const jm = {
   direction: {
     left: -1,
@@ -341,7 +343,7 @@ export default class LayoutProvider {
     node.expanded = true;
     this.part_layout(node);
     this.set_visible(node.children, true);
-    this.jm.invoke_event_handle(jm.event_type.show, {
+    this.jm.invoke_event_handle(EventType.SHOW, {
       evt: "expand_node",
       data: [],
       node: node.id,
@@ -352,7 +354,7 @@ export default class LayoutProvider {
     node.expanded = false;
     this.part_layout(node);
     this.set_visible(node.children, false);
-    this.jm.invoke_event_handle(jm.event_type.show, {
+    this.jm.invoke_event_handle(EventType.SHOW, {
       evt: "collapse_node",
       data: [],
       node: node.id,

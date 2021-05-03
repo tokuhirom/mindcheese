@@ -17,6 +17,7 @@
 
 import JsMind from "./JsMind";
 import { Node } from "./Node";
+import { Direction, EventType } from "./MindmapConstants";
 
 const jm = {
   // TODO remove
@@ -160,8 +161,7 @@ export default class Draggable {
 
     let ns, nl;
 
-    const direct =
-        sx + sw / 2 >= root_x ? jm.direction.right : jm.direction.left;
+    const direct = sx + sw / 2 >= root_x ? Direction.RIGHT : Direction.LEFT;
     const nodes = this.jm.mind.nodes;
     let node = null;
     let min_distance = Number.MAX_VALUE;
@@ -178,13 +178,13 @@ export default class Draggable {
         }
         ns = node.get_size();
         nl = node.get_location();
-        if (direct == jm.direction.right) {
+        if (direct == Direction.RIGHT) {
           if (sx - nl.x - ns.w <= 0) {
             continue;
           }
           distance =
-              Math.abs(sx - nl.x - ns.w) +
-              Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            Math.abs(sx - nl.x - ns.w) +
+            Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
           np = { x: nl.x + ns.w - options.line_width, y: nl.y + ns.h / 2 };
           sp = { x: sx + options.line_width, y: sy + sh / 2 };
         } else {
@@ -192,8 +192,7 @@ export default class Draggable {
             continue;
           }
           distance =
-              Math.abs(sx + sw - nl.x) +
-              Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
           np = { x: nl.x + options.line_width, y: nl.y + ns.h / 2 };
           sp = { x: sx + sw - options.line_width, y: sy + sh / 2 };
         }
@@ -236,46 +235,46 @@ export default class Draggable {
     const jd = this;
     const container = this.jm.view.container;
     container.addEventListener(
-        "mousedown",
-        function (e: Event) {
-          jd.dragstart.call(jd, e);
-        },
-        false
+      "mousedown",
+      function (e: Event) {
+        jd.dragstart.call(jd, e);
+      },
+      false
     );
     container.addEventListener(
-        "mousemove",
-        function (e: Event) {
-          jd.drag.call(jd, e);
-        },
-        false
+      "mousemove",
+      function (e: Event) {
+        jd.drag.call(jd, e);
+      },
+      false
     );
     container.addEventListener(
-        "mouseup",
-        function (e: Event) {
-          jd.dragend.call(jd, e);
-        },
-        false
+      "mouseup",
+      function (e: Event) {
+        jd.dragend.call(jd, e);
+      },
+      false
     );
     container.addEventListener(
-        "touchstart",
-        function (e: Event) {
-          jd.dragstart.call(jd, e);
-        },
-        false
+      "touchstart",
+      function (e: Event) {
+        jd.dragstart.call(jd, e);
+      },
+      false
     );
     container.addEventListener(
-        "touchmove",
-        function (e: Event) {
-          jd.drag.call(jd, e);
-        },
-        false
+      "touchmove",
+      function (e: Event) {
+        jd.drag.call(jd, e);
+      },
+      false
     );
     container.addEventListener(
-        "touchend",
-        function (e: Event) {
-          jd.dragend.call(jd, e);
-        },
-        false
+      "touchend",
+      function (e: Event) {
+        jd.dragend.call(jd, e);
+      },
+      false
     );
   }
 
@@ -373,14 +372,10 @@ export default class Draggable {
 
   move_node(src_node: Node, target_node: Node, target_direct: any) {
     console.log(
-        `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
+      `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
     );
     const shadow_h = this.shadow.offsetTop;
-    if (
-        !!target_node &&
-        !!src_node &&
-        !Node.inherited(src_node, target_node)
-    ) {
+    if (!!target_node && !!src_node && !Node.inherited(src_node, target_node)) {
       console.log(`let's move!`);
       // lookup before_node
       const sibling_nodes = target_node.children;
@@ -404,7 +399,7 @@ export default class Draggable {
         beforeid = node_before.id;
       }
       console.log(
-          `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
+        `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
       );
       this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
       // this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
@@ -415,7 +410,7 @@ export default class Draggable {
   }
 
   jm_event_handle(type: any, data: any) {
-    if (type === jm.event_type.resize) {
+    if (type === EventType.RESIZE) {
       this.resize();
     }
   }

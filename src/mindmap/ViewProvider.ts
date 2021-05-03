@@ -1,14 +1,6 @@
 import GraphCanvas from "./GraphCanvas";
 import { Node } from "./Node";
-
-const jm = {
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
-};
+import { EventType } from "./MindmapConstants";
 
 const $t = function (n: any, t: any) {
   // TODO inlining this.
@@ -27,8 +19,9 @@ const $h = function (n: any, t: any) {
     n.innerHTML = t;
   }
 };
-// detect isElement
-const $i = function (el: any) {
+
+// detect isElemend
+function isElement(el: HTMLElement) {
   return (
     !!el &&
     typeof el === "object" &&
@@ -36,7 +29,8 @@ const $i = function (el: any) {
     typeof el.style === "object" &&
     typeof el.ownerDocument === "object"
   );
-};
+}
+
 function is_empty(s: string) {
   // TODO inlining?
   if (!s) {
@@ -82,7 +76,7 @@ export default class ViewProvider {
   init() {
     console.debug("view.init");
 
-    this.container = $i(this.opts.container)
+    this.container = isElement(this.opts.container)
       ? this.opts.container
       : document.getElementById(this.opts.container);
     if (!this.container) {
@@ -383,7 +377,7 @@ export default class ViewProvider {
     this.show_nodes();
     this.show_lines();
     //this.layout.cache_valid = true;
-    this.jm.invoke_event_handle(jm.event_type.resize, { data: [] });
+    this.jm.invoke_event_handle(EventType.RESIZE, { data: [] });
   }
 
   zoomIn(): boolean {

@@ -1,14 +1,8 @@
 "use strict";
 
 import { Node } from "./Node";
-// TODO move to constants file.
-const jm = {
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-};
+import { Direction } from "./MindmapConstants";
+import { Dir } from "fs";
 
 export class Mind {
   name: string;
@@ -66,18 +60,15 @@ export class Mind {
         const children_len = children.length;
         let r = 0;
         for (let i = 0; i < children_len; i++) {
-          if (children[i].direction === jm.direction.left) {
+          if (children[i].direction === Direction.LEFT) {
             r--;
           } else {
             r++;
           }
         }
-        d = children_len > 1 && r > 0 ? jm.direction.left : jm.direction.right;
+        d = children_len > 1 && r > 0 ? Direction.LEFT : Direction.RIGHT;
       } else {
-        d =
-          direction !== jm.direction.left
-            ? jm.direction.right
-            : jm.direction.left;
+        d = direction !== Direction.LEFT ? Direction.RIGHT : Direction.LEFT;
       }
       node = new Node(
         nodeid,
@@ -254,10 +245,10 @@ export class Mind {
       }
 
       if (node.parent.isroot) {
-        if (direction === jm.direction.left) {
+        if (direction === Direction.LEFT) {
           node.direction = direction;
         } else {
-          node.direction = jm.direction.right;
+          node.direction = Direction.RIGHT;
         }
       } else {
         node.direction = node.parent.direction;

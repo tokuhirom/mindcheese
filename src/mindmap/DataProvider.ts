@@ -1,7 +1,7 @@
 import { NodeTree } from "./format/NodeTree";
 
 export class DataProvider {
-  private format: Record<string, any>;
+  private format: Record<string, NodeTree>;
   private jm: any;
 
   constructor(jm: any) {

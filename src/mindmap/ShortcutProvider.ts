@@ -1,14 +1,7 @@
-// TODO move to constants file.
-const jm = {
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-};
+import { Direction } from "./MindmapConstants";
+import JsMind from "./JsMind";
 
 // Generate new ID of the node
-// TODO move this
 function newid() {
   return (
     new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
@@ -90,11 +83,11 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_addchild(_jm: any, e: any) {
+  handle_addchild(_jm: JsMind, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       const nodeid = this._newid();
-      const node = _jm.add_node(selected_node, nodeid, "New Node");
+      const node = _jm.add_node(selected_node, nodeid, "New Node", null);
       if (node) {
         _jm.select_node(nodeid);
         _jm.begin_edit(nodeid);
@@ -102,11 +95,16 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_addbrother(_jm: any, e: any) {
+  handle_addbrother(_jm: JsMind, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
-      const node = _jm.insert_node_after(selected_node, nodeid, "New Node");
+      const node = _jm.insert_node_after(
+        selected_node,
+        nodeid,
+        "New Node",
+        null
+      );
       if (node) {
         _jm.select_node(nodeid);
         _jm.begin_edit(nodeid);
@@ -114,14 +112,14 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_editnode(_jm: any, e: any) {
+  handle_editnode(_jm: JsMind, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.begin_edit(selected_node);
     }
   }
 
-  handle_delnode(_jm: any, e: any) {
+  handle_delnode(_jm: JsMind, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       _jm.select_node(selected_node.parent);
@@ -129,7 +127,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_toggle(_jm: any, e: any) {
+  handle_toggle(_jm: JsMind, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.toggle_node(selected_node.id);
@@ -138,7 +136,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_up(_jm: any, e: any) {
+  handle_up(_jm: any, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let up_node = _jm.find_node_before(selected_node);
@@ -156,7 +154,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_down(_jm: any, e: any) {
+  handle_down(_jm: JsMind, e: Event) {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let down_node = _jm.find_node_after(selected_node);
@@ -174,15 +172,15 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_left(_jm: any, e: any) {
-    this._handle_direction(_jm, e, jm.direction.left);
+  handle_left(_jm: JsMind, e: Event) {
+    this._handle_direction(_jm, e, Direction.LEFT);
   }
 
-  handle_right(_jm: any, e: any) {
-    this._handle_direction(_jm, e, jm.direction.right);
+  handle_right(_jm: JsMind, e: Event) {
+    this._handle_direction(_jm, e, Direction.RIGHT);
   }
 
-  _handle_direction(_jm: any, e: any, d: any) {
+  _handle_direction(_jm: JsMind, e: Event, d: Direction) {
     let children;
     const selected_node = _jm.get_selected_node();
     let node = null;
