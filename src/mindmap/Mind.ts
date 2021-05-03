@@ -8,7 +8,7 @@ export default class Mind {
   author: string;
   version: string;
   root: MindNode;
-  selected: any;
+  selected: MindNode;
   nodes: Record<string, MindNode>;
 
   constructor() {

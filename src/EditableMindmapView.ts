@@ -27,7 +27,10 @@ export class EditableMindmapView extends TextFileView {
     return MINDMAP_VIEW_TYPE;
   }
 
-  clear(): void {}
+  clear(): void {
+    console.log('EditableMindmapView: clear')
+    this.mm.shortcut.disable_shortcut()
+  }
 
   getViewData(): string {
     console.log(`getViewData: invoked`);

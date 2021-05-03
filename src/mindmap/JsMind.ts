@@ -62,7 +62,7 @@ export default class JsMind {
   private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
-  private shortcut: ShortcutProvider;
+  shortcut: ShortcutProvider;
   draggable: Draggable;
 
   constructor(options: any) {
@@ -144,7 +144,7 @@ export default class JsMind {
     ] = false;
   }
 
-  get_editable() {
+  get_editable(): boolean {
     return this.options.editable;
   }
 
@@ -368,7 +368,7 @@ export default class JsMind {
     nodeid: string,
     topic: string,
     data: any
-  ) {
+  ): null | MindNode {
     if (this.get_editable()) {
       const beforeid = node_before.id;
       const node = this.mind.insert_node_before(
@@ -447,7 +447,7 @@ export default class JsMind {
     }
   }
 
-  update_node(nodeid: string, topic: string) {
+  update_node(nodeid: string, topic: string): void {
     if (this.get_editable()) {
       if (is_empty(topic)) {
         console.warn("fail, topic can not be empty");
@@ -481,7 +481,7 @@ export default class JsMind {
     beforeid: string,
     parentid: string,
     direction: any
-  ) {
+  ): void {
     console.log(`jm.move_node: ${nodeid} ${beforeid} ${parentid} ${direction}`);
     if (this.get_editable()) {
       const the_node = this.get_node(nodeid);
