@@ -1,24 +1,15 @@
 import { NodeTree } from "./format/NodeTree";
+import JsMind from "./JsMind";
 
 export default class DataProvider {
   private format: Record<string, NodeTree>;
-  private jm: any;
+  private jm: JsMind;
 
-  constructor(jm: any) {
+  constructor(jm: JsMind) {
     this.jm = jm;
     this.format = {
       node_tree: new NodeTree(),
     };
-  }
-
-  init() {
-    // TODO remove
-    console.debug("data.init");
-  }
-
-  reset() {
-    // TODO remove
-    console.debug("data.reset");
   }
 
   load(mind_data: any) {

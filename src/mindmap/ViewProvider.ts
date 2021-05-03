@@ -1,6 +1,6 @@
 import GraphCanvas from "./GraphCanvas";
 import Node from "./Node";
-import {EventType} from "./MindmapConstants";
+import { EventType } from "./MindmapConstants";
 
 const $t = function (n: any, t: any) {
   // TODO inlining this.
@@ -508,7 +508,7 @@ export default class ViewProvider {
     this._reset_node_custom_style(node._data.view.element, node.data);
   }
 
-  _reset_node_custom_style(node_element: any, node_data: any): void {
+  _reset_node_custom_style(node_element: HTMLElement, node_data: any): void {
     if ("background-color" in node_data) {
       node_element.style.backgroundColor = node_data["background-color"];
     }

@@ -32,7 +32,7 @@ export default class GraphCanvas {
     pout: any,
     pin: { x: number; y: number },
     offset: { x: number; y: number }
-  ) {
+  ): void {
     const ctx = this.canvas_ctx;
     ctx.strokeStyle = this.opts.line_color;
     ctx.lineWidth = this.opts.line_width;
@@ -47,7 +47,7 @@ export default class GraphCanvas {
     );
   }
 
-  copy_to(dest_canvas_ctx: CanvasRenderingContext2D, callback: () => void) {
+  copy_to(dest_canvas_ctx: CanvasRenderingContext2D, callback: () => void): void {
     dest_canvas_ctx.drawImage(this.e_canvas, 0, 0);
     if (callback) {
       callback();

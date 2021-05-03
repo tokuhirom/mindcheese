@@ -52,15 +52,15 @@ export default class ShortcutProvider {
     }
   }
 
-  enable_shortcut() {
+  enable_shortcut(): void {
     this.opts.enable = true;
   }
 
-  disable_shortcut() {
+  disable_shortcut(): void {
     this.opts.enable = false;
   }
 
-  handler(e: any) {
+  handler(e: any): boolean {
     if (e.which == 9) {
       e.preventDefault();
     } //prevent tab to change focus in browser
@@ -83,7 +83,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_addchild(_jm: JsMind, e: Event) {
+  handle_addchild(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       const nodeid = this._newid();
@@ -95,7 +95,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_addbrother(_jm: JsMind, e: Event) {
+  handle_addbrother(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
@@ -112,14 +112,14 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_editnode(_jm: JsMind, e: Event) {
+  handle_editnode(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.begin_edit(selected_node);
     }
   }
 
-  handle_delnode(_jm: JsMind, e: Event) {
+  handle_delnode(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       _jm.select_node(selected_node.parent);
@@ -127,7 +127,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_toggle(_jm: JsMind, e: Event) {
+  handle_toggle(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.toggle_node(selected_node.id);
@@ -136,7 +136,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_up(_jm: any, e: Event) {
+  handle_up(_jm: any, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let up_node = _jm.find_node_before(selected_node);
@@ -154,7 +154,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_down(_jm: JsMind, e: Event) {
+  handle_down(_jm: JsMind, e: Event): void {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let down_node = _jm.find_node_after(selected_node);
@@ -172,15 +172,15 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_left(_jm: JsMind, e: Event) {
+  handle_left(_jm: JsMind, e: Event): void {
     this._handle_direction(_jm, e, Direction.LEFT);
   }
 
-  handle_right(_jm: JsMind, e: Event) {
+  handle_right(_jm: JsMind, e: Event): void {
     this._handle_direction(_jm, e, Direction.RIGHT);
   }
 
-  _handle_direction(_jm: JsMind, e: Event, d: Direction) {
+  _handle_direction(_jm: JsMind, e: Event, d: Direction): void {
     let children;
     const selected_node = _jm.get_selected_node();
     let node = null;

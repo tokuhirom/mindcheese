@@ -231,7 +231,7 @@ export default class LayoutProvider {
     return total_height;
   }
 
-  get_node_offset(node: Node) {
+  get_node_offset(node: Node) : {x: number, y: number} {
     const layout_data = node._data.layout;
     let offset_cache = null;
     if ("_offset_" in layout_data && this.cache_valid) {
@@ -254,7 +254,7 @@ export default class LayoutProvider {
     return offset_cache;
   }
 
-  get_node_point(node: Node) {
+  get_node_point(node: Node) : {x: number, y: number} {
     const view_data = node._data.view;
     const offset_p = this.get_node_offset(node);
     //console.debug(offset_p);

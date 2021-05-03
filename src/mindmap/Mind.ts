@@ -7,9 +7,9 @@ export default class Mind {
   name: string;
   author: string;
   version: string;
-  root: any;
+  root: Node;
   selected: any;
-  nodes: any;
+  nodes: Record<string, Node>;
 
   constructor() {
     this.name = null;

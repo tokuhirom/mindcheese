@@ -4,18 +4,9 @@ import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
 import JsMind from "./mindmap/JsMind";
+import {EventType} from "./mindmap/MindmapConstants";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
-
-const jm = {
-  // TODO remove
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
-};
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
@@ -130,7 +121,7 @@ export class EditableMindmapView extends TextFileView {
     };
     console.log(`Got jsMind event: ${event_type_map[eventType]}`);
 
-    if (eventType == jm.event_type.edit) {
+    if (eventType == EventType.EDIT) {
       setTimeout(async () => {
         const viewData = this.getViewData();
         console.log(`Write data by jsMind's event: ${viewData}`);

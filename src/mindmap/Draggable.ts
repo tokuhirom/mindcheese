@@ -17,17 +17,8 @@
 
 import JsMind from "./JsMind";
 import Node from "./Node";
-import { Direction, EventType } from "./MindmapConstants";
+import { Direction} from "./MindmapConstants";
 
-const jm = {
-  // TODO remove
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
-};
 const options = {
   line_width: 5,
   lookup_delay: 500,
@@ -36,14 +27,14 @@ const options = {
 
 export default class Draggable {
   private jm: JsMind;
-  private e_canvas: any;
-  private canvas_ctx: any;
-  private shadow: any;
+  private e_canvas: HTMLCanvasElement;
+  private canvas_ctx: CanvasRenderingContext2D;
+  private shadow: HTMLElement;
   private shadow_w: number;
   private shadow_h: number;
-  private active_node: any;
-  private target_node: any;
-  private target_direct: any;
+  private active_node: Node;
+  private target_node: Node;
+  private target_direct: Direction;
   private client_w: number;
   private client_h: number;
   private offset_x: number;
@@ -74,28 +65,28 @@ export default class Draggable {
     this.moved = false;
   }
 
-  init() {
+  init(): void {
     this._create_canvas();
     this._create_shadow();
     this._event_bind();
   }
 
-  resize() {
+  resize(): void {
     this.jm.view.e_nodes.appendChild(this.shadow);
     this.e_canvas.width = this.jm.view.size.w;
     this.e_canvas.height = this.jm.view.size.h;
   }
 
-  _create_canvas() {
-    const c = document.createElement("canvas");
+  _create_canvas(): void {
+    const c: HTMLCanvasElement = document.createElement("canvas");
     this.jm.view.e_panel.appendChild(c);
-    const ctx = c.getContext("2d");
+    const ctx: CanvasRenderingContext2D = c.getContext("2d");
     this.e_canvas = c;
     this.canvas_ctx = ctx;
   }
 
-  _create_shadow() {
-    const s = document.createElement("jmnode");
+  _create_shadow(): void {
+    const s: HTMLElement = document.createElement("jmnode");
     s.style.visibility = "hidden";
     s.style.zIndex = "3";
     s.style.cursor = "move";
@@ -103,7 +94,7 @@ export default class Draggable {
     this.shadow = s;
   }
 
-  reset_shadow(el: HTMLElement) {
+  reset_shadow(el: HTMLElement): void {
     const s = this.shadow.style;
     this.shadow.innerHTML = el.innerHTML;
     s.left = el.style.left;
@@ -117,17 +108,17 @@ export default class Draggable {
     this.shadow_h = this.shadow.clientHeight;
   }
 
-  show_shadow() {
+  show_shadow(): void {
     if (!this.moved) {
       this.shadow.style.visibility = "visible";
     }
   }
 
-  hide_shadow() {
+  hide_shadow(): void {
     this.shadow.style.visibility = "hidden";
   }
 
-  _magnet_shadow(node: { node: any; np: any; sp: any; direction: number }) {
+  _magnet_shadow(node: { node: any; np: any; sp: any; direction: number }): void {
     if (node) {
       this.canvas_ctx.lineWidth = options.line_width;
       this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
@@ -137,18 +128,18 @@ export default class Draggable {
     }
   }
 
-  _clear_lines() {
+  _clear_lines(): void {
     this.canvas_ctx.clearRect(0, 0, this.jm.view.size.w, this.jm.view.size.h);
   }
 
-  _canvas_lineto(x1: number, y1: number, x2: number, y2: number) {
+  _canvas_lineto(x1: number, y1: number, x2: number, y2: number): void {
     this.canvas_ctx.beginPath();
     this.canvas_ctx.moveTo(x1, y1);
     this.canvas_ctx.lineTo(x2, y2);
     this.canvas_ctx.stroke();
   }
 
-  _lookup_close_node(): { node: any; np: any; sp: any; direction: number } {
+  _lookup_close_node(): { node: Node; np: any; sp: any; direction: Direction } {
     const root = this.jm.get_root();
     const root_location = root.get_location();
     const root_size = root.get_size();
@@ -216,12 +207,12 @@ export default class Draggable {
     }
   }
 
-  lookup_close_node() {
+  lookup_close_node(): void {
     const node_data: {
-      node: any;
+      node: Node;
       np: any;
       sp: any;
-      direction: number;
+      direction: Direction;
     } = this._lookup_close_node();
     if (node_data) {
       this._magnet_shadow(node_data);
@@ -230,7 +221,7 @@ export default class Draggable {
     }
   }
 
-  _event_bind() {
+  _event_bind(): void {
     // TODO bind に置換可能っぽい
     const jd = this;
     const container = this.jm.view.container;
@@ -278,7 +269,7 @@ export default class Draggable {
     );
   }
 
-  dragstart(e: DragEvent) {
+  dragstart(e: DragEvent): void {
     if (!this.jm.get_editable()) {
       return;
     }
@@ -322,7 +313,7 @@ export default class Draggable {
     }
   }
 
-  drag(e: DragEvent) {
+  drag(e: DragEvent): void {
     if (!this.jm.get_editable()) {
       return;
     }
@@ -343,7 +334,7 @@ export default class Draggable {
     }
   }
 
-  dragend(e: Event) {
+  dragend(e: Event): void {
     if (!this.jm.get_editable()) {
       return;
     }
@@ -370,7 +361,7 @@ export default class Draggable {
     this.capture = false;
   }
 
-  move_node(src_node: Node, target_node: Node, target_direct: any) {
+  move_node(src_node: Node, target_node: Node, target_direct: any): void {
     console.log(
       `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
     );

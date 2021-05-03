@@ -26,7 +26,7 @@ export default class MyPlugin extends Plugin {
   mindmapFileModes: { [file: string]: string } = {};
   settings: MyPluginSettings;
 
-  async onload() {
+  async onload() : Promise<void> {
     console.log("loading  obsidian-editable-markdown plugin");
 
     await this.loadSettings();
@@ -137,33 +137,33 @@ export default class MyPlugin extends Plugin {
     });
   }
 
-  async setMarkdownView(leaf: WorkspaceLeaf) {
+  async setMarkdownView(leaf: WorkspaceLeaf): Promise<void> {
     await leaf.setViewState({
       type: "markdown",
       state: leaf.view.getState(),
     });
   }
 
-  async setEditableMindmapView(leaf: WorkspaceLeaf) {
+  async setEditableMindmapView(leaf: WorkspaceLeaf): Promise<void> {
     await leaf.setViewState({
       type: "markdown",
       state: leaf.view.getState(),
     });
   }
 
-  onunload() {
+  onunload(): void {
     console.log("unloading plugin");
   }
 
-  async loadSettings() {
+  async loadSettings(): Promise<void> {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
 
-  async saveSettings() {
+  async saveSettings(): Promise<void> {
     await this.saveData(this.settings);
   }
 
-  private newEditableMindmap() {
+  private newEditableMindmap() :void {
     throw new Error("TBI");
   }
 }

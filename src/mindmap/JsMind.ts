@@ -508,7 +508,7 @@ export default class JsMind {
     }
   }
 
-  select_node(node: Node) {
+  select_node(node: Node): void {
     if (!this.layout.is_visible(node)) {
       return;
     }
@@ -521,7 +521,7 @@ export default class JsMind {
     });
   }
 
-  get_selected_node() {
+  get_selected_node(): any {
     if (this.mind) {
       return this.mind.selected;
     } else {
@@ -707,14 +707,14 @@ export default class JsMind {
     this.event_handles = [];
   }
 
-  invoke_event_handle(type: any, data: any) {
+  invoke_event_handle(type: EventType, data: any) {
     const j = this;
     setTimeout(function () {
       j._invoke_event_handle(type, data);
     }, 0);
   }
 
-  _invoke_event_handle(type: any, data: any) {
+  _invoke_event_handle(type: EventType, data: any) {
     const l = this.event_handles.length;
     for (let i = 0; i < l; i++) {
       this.event_handles[i](type, data);
