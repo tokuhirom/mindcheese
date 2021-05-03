@@ -1,4 +1,4 @@
-import { EventType } from "./MindmapConstants";
+import {Direction, EventType} from "./MindmapConstants";
 
 const jm = {
   direction: {
@@ -10,18 +10,27 @@ const jm = {
 };
 
 import Node from "./Node";
+import JsMind from "./JsMind";
 
 export default class LayoutProvider {
-  private opts: any;
-  private jm: any;
-  private isside: boolean;
+  private readonly jm: JsMind;
+  private readonly isside: boolean;
   private bounds: { n: number; s: number; w: number; e: number };
   private cache_valid: boolean;
+  private readonly _hspace: number;
+  private readonly _vspace: number;
+  private readonly _pspace: number;
 
-  constructor(jm: any, options: any) {
-    this.opts = options;
+  constructor(jm: JsMind,
+              mode: string='full' /* 'full' or 'side' */,
+              hspace: number=30,
+              vspace: number=20,
+              pspace: number=13) {
+    this._hspace = hspace;
+    this._vspace = vspace;
+    this._pspace = pspace;
     this.jm = jm;
-    this.isside = this.opts.mode == "side";
+    this.isside = mode == "side";
     this.bounds = null;
     this.cache_valid = false;
   }
@@ -89,7 +98,7 @@ export default class LayoutProvider {
     }
   }
 
-  _layout_direction_side(node: Node, direction: any, side_index: number) {
+  _layout_direction_side(node: Node, direction: Direction, side_index: number) {
     let layout_data = null;
     if ("layout" in node._data) {
       layout_data = node._data.layout;
@@ -168,17 +177,17 @@ export default class LayoutProvider {
       layout_data.outer_height = node_outer_height;
       layout_data.offset_y = base_y - node_outer_height / 2;
       layout_data.offset_x =
-        this.opts.hspace * layout_data.direction +
+        this._hspace * layout_data.direction +
         (pd.view.width * (pd.layout.direction + layout_data.direction)) / 2;
       if (!node.parent.isroot) {
-        layout_data.offset_x += this.opts.pspace * layout_data.direction;
+        layout_data.offset_x += this._pspace * layout_data.direction;
       }
 
-      base_y = base_y - node_outer_height - this.opts.vspace;
+      base_y = base_y - node_outer_height - this._vspace;
       total_height += node_outer_height;
     }
     if (nodes_count > 1) {
-      total_height += this.opts.vspace * (nodes_count - 1);
+      total_height += this._vspace * (nodes_count - 1);
     }
     i = nodes_count;
     const middle_height = total_height / 2;
@@ -214,11 +223,11 @@ export default class LayoutProvider {
 
       layout_data.outer_height = node_outer_height;
       layout_data.offset_y = base_y - node_outer_height / 2;
-      base_y = base_y - node_outer_height - this.opts.vspace;
+      base_y = base_y - node_outer_height - this._vspace;
       total_height += node_outer_height;
     }
     if (nodes_count > 1) {
-      total_height += this.opts.vspace * (nodes_count - 1);
+      total_height += this._vspace * (nodes_count - 1);
     }
     i = nodes_count;
     const middle_height = total_height / 2;
@@ -288,7 +297,7 @@ export default class LayoutProvider {
         const offset_p = this.get_node_offset(node);
         pout_cache.x =
           offset_p.x +
-          (view_data.width + this.opts.pspace) * node._data.layout.direction;
+          (view_data.width + this._pspace) * node._data.layout.direction;
         pout_cache.y = offset_p.y;
         //console.debug('pout');
         //console.debug(pout_cache);
@@ -301,11 +310,11 @@ export default class LayoutProvider {
     const p = this.get_node_point_out(node);
     const ex_p: any = {};
     if (node._data.layout.direction == jm.direction.right) {
-      ex_p.x = p.x - this.opts.pspace;
+      ex_p.x = p.x - this._pspace;
     } else {
       ex_p.x = p.x;
     }
-    ex_p.y = p.y - Math.ceil(this.opts.pspace / 2);
+    ex_p.y = p.y - Math.ceil(this._pspace / 2);
     return ex_p;
   }
 

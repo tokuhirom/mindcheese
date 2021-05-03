@@ -87,12 +87,6 @@ export default class JsMind {
 
     const opts = this.options;
 
-    const opts_layout = {
-      mode: opts.mode,
-      hspace: opts.layout.hspace,
-      vspace: opts.layout.vspace,
-      pspace: opts.layout.pspace,
-    };
     const opts_view = {
       container: opts.container,
       support_html: opts.support_html,
@@ -103,7 +97,12 @@ export default class JsMind {
     };
     // create instance of function provider
     this.data = new DataProvider(this);
-    this.layout = new LayoutProvider(this, opts_layout);
+    this.layout = new LayoutProvider(this,
+        opts.mode,
+        opts.layout.hspace,
+        opts.layout.vspace,
+        opts.layout.pspace
+    );
     this.view = new ViewProvider(this, opts_view);
     this.shortcut = new ShortcutProvider(
         this,
