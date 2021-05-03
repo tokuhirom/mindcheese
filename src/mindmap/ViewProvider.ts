@@ -325,11 +325,14 @@ export default class ViewProvider {
     const topic = node.topic;
     const ncs = getComputedStyle(element);
     this.e_editor.value = topic;
-    this.e_editor.style.width =
-      element.clientWidth -
-      parseInt(ncs.getPropertyValue("padding-left")) -
-      parseInt(ncs.getPropertyValue("padding-right")) +
-      "px";
+    let width = element.clientWidth -
+        parseInt(ncs.getPropertyValue("padding-left")) -
+        parseInt(ncs.getPropertyValue("padding-right"));
+    // width *= 10;
+    console.log(`edit_node_begin: ${width}px clientWidth=${element.clientWidth}
+    padL=${parseInt(ncs.getPropertyValue("padding-left"))}
+    padR=${parseInt(ncs.getPropertyValue("padding-right"))}`);
+    this.e_editor.style.width = width + "px";
     element.innerHTML = "";
     element.appendChild(this.e_editor);
     element.style.zIndex = 5;
