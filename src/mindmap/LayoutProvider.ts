@@ -7,7 +7,7 @@ const jm = {
   event_type: { show: 1, resize: 2, edit: 3, select: 4 },
 };
 
-import { Node } from "./mindmap/Node";
+import { Node } from "./Node";
 
 export default class LayoutProvider {
   private opts: any;

@@ -1,7 +1,7 @@
 import { DataProvider } from "./DataProvider";
-import LayoutProvider from "../LayoutProvider";
+import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
-import ShortcutProvider from "../ShortcutProvider";
+import ShortcutProvider from "./ShortcutProvider";
 import { Node } from "./Node";
 import { Mind } from "./Mind";
 import PluginManager from "./PluginManager";
