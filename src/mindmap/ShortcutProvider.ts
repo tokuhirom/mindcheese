@@ -2,26 +2,30 @@ import {Direction} from "./MindmapConstants";
 import JsMind from "./JsMind";
 
 // Generate new ID of the node
-function newid() {
+function generateId(): string {
   return (
       new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
   ).substr(2, 16);
 }
 
 export default class ShortcutProvider {
-  private jm: any;
-  private opts: any;
+  private jm: JsMind;
   private mapping: Record<string, number>; // handlerName2keycode
   private handles: Record<string, (arg0: JsMind, arg1: Event) => void>;
-  private _newid: any;
+  private _newid: (() => string);
   private _mapping: Record<number, (arg0: JsMind, arg1: Event) => void>; // number2callback
+  private enable: boolean;
 
-  constructor(jm: any, options: any) {
+  constructor(jm: JsMind,
+              enable: boolean,
+              mapping: Record<string, number>,
+              handles: Record<string, (arg0: JsMind, arg1: Event) => void>,
+              newid: () => string =generateId) {
     this.jm = jm;
-    this.opts = options;
-    this.mapping = options.mapping;
-    this.handles = options.handles;
-    this._newid = null;
+    this.enable = enable;
+    this.mapping = mapping;
+    this.handles = handles;
+    this._newid = newid;
     this._mapping = {};
   }
 
@@ -44,20 +48,14 @@ export default class ShortcutProvider {
         this._mapping[this.mapping[handle]] = this.handles[handle];
       }
     }
-
-    if (typeof this.opts.id_generator === "function") {
-      this._newid = this.opts.id_generator;
-    } else {
-      this._newid = newid;
-    }
   }
 
   enable_shortcut(): void {
-    this.opts.enable = true;
+    this.enable = true;
   }
 
   disable_shortcut(): void {
-    this.opts.enable = false;
+    this.enable = false;
   }
 
   handler(e: any): boolean {
@@ -67,7 +65,7 @@ export default class ShortcutProvider {
     if (this.jm.view.is_editing()) {
       return;
     }
-    if (!this.opts.enable) {
+    if (!this.enable) {
       return true;
     }
     const kc =
@@ -89,8 +87,8 @@ export default class ShortcutProvider {
       const nodeid = this._newid();
       const node = _jm.add_node(selected_node, nodeid, "New Node", null);
       if (node) {
-        _jm.select_node(nodeid);
-        _jm.begin_edit(nodeid);
+        _jm.select_node(node);
+        _jm.begin_edit(node);
       }
     }
   }
@@ -106,8 +104,8 @@ export default class ShortcutProvider {
           null
       );
       if (node) {
-        jm.select_node(nodeid);
-        jm.begin_edit(nodeid);
+        jm.select_node(node);
+        jm.begin_edit(node);
       }
     }
   }

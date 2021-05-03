@@ -105,7 +105,12 @@ export default class JsMind {
     this.data = new DataProvider(this);
     this.layout = new LayoutProvider(this, opts_layout);
     this.view = new ViewProvider(this, opts_view);
-    this.shortcut = new ShortcutProvider(this, opts.shortcut);
+    this.shortcut = new ShortcutProvider(
+        this,
+        opts.shortcut.enable,
+        opts.shortcut.mapping,
+        opts.shortcut.handles
+    );
     this.draggable = new Draggable(this);
 
     this.layout.init();
