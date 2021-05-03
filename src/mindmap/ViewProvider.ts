@@ -377,7 +377,7 @@ export default class ViewProvider {
     this.show_nodes();
     this.show_lines();
     //this.layout.cache_valid = true;
-    this.jm.invoke_event_handle(EventType.RESIZE, { data: [] });
+    this.jm.draggable.resize();
   }
 
   zoomIn(): boolean {

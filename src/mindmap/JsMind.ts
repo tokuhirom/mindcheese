@@ -114,12 +114,6 @@ export default class JsMind {
     this.draggable.init();
 
     this._event_bind();
-
-    // TODO inlining
-    const self = this;
-    this.add_event_listener(function (type: any, data: any) {
-      self.draggable.jm_event_handle.call(self.draggable, type, data);
-    });
   }
 
   enable_edit() {

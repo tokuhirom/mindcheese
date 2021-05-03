@@ -408,10 +408,4 @@ export default class Draggable {
     this.target_node = null;
     this.target_direct = null;
   }
-
-  jm_event_handle(type: any, data: any) {
-    if (type === EventType.RESIZE) {
-      this.resize();
-    }
-  }
 }
