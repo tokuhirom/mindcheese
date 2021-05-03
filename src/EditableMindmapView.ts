@@ -1,18 +1,10 @@
 import { Menu, TextFileView, WorkspaceLeaf } from "obsidian";
-import { Mind } from "./mindmap/Mind";
 import { initJsMindDrggable } from "./jsmind.draggable";
-import { initJsMind } from "./jsmind";
 import { MINDMAP_VIEW_TYPE } from "./Constants";
 import MyPlugin from "./main";
 import MM2MDConverter from "./MM2MDConverter";
 import MD2MMConverter from "./MD2MMConverter";
 import { Node } from "./mindmap/Node";
-import { NodeTree } from "./mindmap/format/NodeTree";
-import { DataProvider } from "./mindmap/DataProvider";
-import GraphCanvas from "./mindmap/GraphCanvas";
-import ShortcutProvider from "./ShortcutProvider";
-import LayoutProvider from "./LayoutProvider";
-import ViewProvider from "./mindmap/ViewProvider";
 import PluginManager from "./mindmap/PluginManager";
 import JsMind from "./mindmap/JsMind";
 
@@ -29,16 +21,6 @@ const jm = {
 };
 
 const pluginManager = new PluginManager();
-initJsMind(
-  Node,
-  Mind,
-  NodeTree,
-  DataProvider,
-  GraphCanvas,
-  ShortcutProvider,
-  LayoutProvider,
-  ViewProvider
-);
 
 initJsMindDrggable(Node, pluginManager);
 
