@@ -27,76 +27,62 @@ const jm = {
 
 export function initJsMindDrggable(Node, pluginManager) {
   "use strict";
-
-  const jdom = {
-    //target,eventType,handler
-    add_event: function (t, e, h) {
-      if (t.addEventListener) {
-        t.addEventListener(e, h, false);
-      } else {
-        t.attachEvent("on" + e, h);
-      }
-    },
-  };
-  const clear_selection = () => window.getSelection().removeAllRanges();
-
   const options = {
     line_width: 5,
     lookup_delay: 500,
     lookup_interval: 80,
   };
 
-  const draggable = function (jm) {
-    this.jm = jm;
-    this.e_canvas = null;
-    this.canvas_ctx = null;
-    this.shadow = null;
-    this.shadow_w = 0;
-    this.shadow_h = 0;
-    this.active_node = null;
-    this.target_node = null;
-    this.target_direct = null;
-    this.client_w = 0;
-    this.client_h = 0;
-    this.offset_x = 0;
-    this.offset_y = 0;
-    this.hlookup_delay = 0;
-    this.hlookup_timer = 0;
-    this.capture = false;
-    this.moved = false;
-  };
-
-  draggable.prototype = {
-    init: function () {
+  class Draggable {
+    constructor(jm) {
+      this.jm = jm;
+      this.e_canvas = null;
+      this.canvas_ctx = null;
+      this.shadow = null;
+      this.shadow_w = 0;
+      this.shadow_h = 0;
+      this.active_node = null;
+      this.target_node = null;
+      this.target_direct = null;
+      this.client_w = 0;
+      this.client_h = 0;
+      this.offset_x = 0;
+      this.offset_y = 0;
+      this.hlookup_delay = 0;
+      this.hlookup_timer = 0;
+      this.capture = false;
+      this.moved = false;
+    }
+    init() {
       this._create_canvas();
       this._create_shadow();
       this._event_bind();
-    },
+    }
 
-    resize: function () {
+    resize() {
       this.jm.view.e_nodes.appendChild(this.shadow);
       this.e_canvas.width = this.jm.view.size.w;
       this.e_canvas.height = this.jm.view.size.h;
-    },
+    }
 
-    _create_canvas: function () {
+    _create_canvas() {
       const c = document.createElement("canvas");
       this.jm.view.e_panel.appendChild(c);
       const ctx = c.getContext("2d");
       this.e_canvas = c;
       this.canvas_ctx = ctx;
-    },
+    }
 
-    _create_shadow: function () {
+    _create_shadow() {
       const s = document.createElement("jmnode");
       s.style.visibility = "hidden";
       s.style.zIndex = "3";
       s.style.cursor = "move";
       s.style.opacity = "0.7";
       this.shadow = s;
-    },
+    }
 
-    reset_shadow: function (el) {
+    reset_shadow(el) {
       const s = this.shadow.style;
       this.shadow.innerHTML = el.innerHTML;
       s.left = el.style.left;
@@ -108,19 +94,19 @@ export function initJsMindDrggable(Node, pluginManager) {
       s.transform = el.style.transform;
       this.shadow_w = this.shadow.clientWidth;
       this.shadow_h = this.shadow.clientHeight;
-    },
+    }
 
-    show_shadow: function () {
+    show_shadow() {
       if (!this.moved) {
         this.shadow.style.visibility = "visible";
       }
-    },
+    }
 
-    hide_shadow: function () {
+    hide_shadow() {
       this.shadow.style.visibility = "hidden";
-    },
+    }
 
-    _magnet_shadow: function (node) {
+    _magnet_shadow(node) {
       if (node) {
         this.canvas_ctx.lineWidth = options.line_width;
         this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
@@ -128,20 +114,20 @@ export function initJsMindDrggable(Node, pluginManager) {
         this._clear_lines();
         this._canvas_lineto(node.sp.x, node.sp.y, node.np.x, node.np.y);
       }
-    },
+    }
 
-    _clear_lines: function () {
+    _clear_lines() {
       this.canvas_ctx.clearRect(0, 0, this.jm.view.size.w, this.jm.view.size.h);
-    },
+    }
 
-    _canvas_lineto: function (x1, y1, x2, y2) {
+    _canvas_lineto(x1, y1, x2, y2) {
       this.canvas_ctx.beginPath();
       this.canvas_ctx.moveTo(x1, y1);
       this.canvas_ctx.lineTo(x2, y2);
       this.canvas_ctx.stroke();
-    },
+    }
 
-    _lookup_close_node: function () {
+    _lookup_close_node() {
       const root = this.jm.get_root();
       const root_location = root.get_location();
       const root_size = root.get_size();
@@ -152,17 +138,17 @@ export function initJsMindDrggable(Node, pluginManager) {
       const sx = this.shadow.offsetLeft;
       const sy = this.shadow.offsetTop;
 
-      var ns, nl;
+      let ns, nl;
 
       const direct =
         sx + sw / 2 >= root_x ? jm.direction.right : jm.direction.left;
-      var nodes = this.jm.mind.nodes;
-      var node = null;
-      var min_distance = Number.MAX_VALUE;
-      var distance = 0;
-      var closest_node = null;
-      var closest_p = null;
-      var shadow_p = null;
+      const nodes = this.jm.mind.nodes;
+      let node = null;
+      let min_distance = Number.MAX_VALUE;
+      let distance = 0;
+      let closest_node = null;
+      let closest_p = null;
+      let shadow_p = null;
       for (const nodeid in nodes) {
         var np, sp;
         node = nodes[nodeid];
@@ -199,7 +185,7 @@ export function initJsMindDrggable(Node, pluginManager) {
           }
         }
       }
-      var result_node = null;
+      let result_node = null;
       if (closest_node) {
         result_node = {
           node: closest_node,
@@ -209,47 +195,72 @@ export function initJsMindDrggable(Node, pluginManager) {
         };
       }
       return result_node;
-    },
+    }
 
-    lookup_close_node: function () {
-      var node_data = this._lookup_close_node();
+    lookup_close_node() {
+      const node_data = this._lookup_close_node();
       if (node_data) {
         this._magnet_shadow(node_data);
         this.target_node = node_data.node;
         this.target_direct = node_data.direction;
       }
-    },
+    }
 
-    _event_bind: function () {
-      var jd = this;
-      var container = this.jm.view.container;
-      jdom.add_event(container, "mousedown", function (e) {
-        var evt = e || event;
-        jd.dragstart.call(jd, evt);
-      });
-      jdom.add_event(container, "mousemove", function (e) {
-        var evt = e || event;
-        jd.drag.call(jd, evt);
-      });
-      jdom.add_event(container, "mouseup", function (e) {
-        var evt = e || event;
-        jd.dragend.call(jd, evt);
-      });
-      jdom.add_event(container, "touchstart", function (e) {
-        var evt = e || event;
-        jd.dragstart.call(jd, evt);
-      });
-      jdom.add_event(container, "touchmove", function (e) {
-        var evt = e || event;
-        jd.drag.call(jd, evt);
-      });
-      jdom.add_event(container, "touchend", function (e) {
-        var evt = e || event;
-        jd.dragend.call(jd, evt);
-      });
-    },
+    _event_bind() {
+      // TODO bind に置換可能っぽい
+      const jd = this;
+      const container = this.jm.view.container;
+      container.addEventListener(
+        "mousedown",
+        function (e) {
+          const evt = e || event;
+          jd.dragstart.call(jd, evt);
+        },
+        false
+      );
+      container.addEventListener(
+        "mousemove",
+        function (e) {
+          const evt = e || event;
+          jd.drag.call(jd, evt);
+        },
+        false
+      );
+      container.addEventListener(
+        "mouseup",
+        function (e) {
+          const evt = e || event;
+          jd.dragend.call(jd, evt);
+        },
+        false
+      );
+      container.addEventListener(
+        "touchstart",
+        function (e) {
+          const evt = e || event;
+          jd.dragstart.call(jd, evt);
+        },
+        false
+      );
+      container.addEventListener(
+        "touchmove",
+        function (e) {
+          const evt = e || event;
+          jd.drag.call(jd, evt);
+        },
+        false
+      );
+      container.addEventListener(
+        "touchend",
+        function (e) {
+          const evt = e || event;
+          jd.dragend.call(jd, evt);
+        },
+        false
+      );
+    }
 
-    dragstart: function (e) {
+    dragstart(e) {
       if (!this.jm.get_editable()) {
         return;
       }
@@ -258,14 +269,14 @@ export function initJsMindDrggable(Node, pluginManager) {
       }
       this.active_node = null;
 
-      var jview = this.jm.view;
-      var el = e.target || event.srcElement;
+      const jview = this.jm.view;
+      const el = e.target || event.srcElement;
       if (el.tagName.toLowerCase() !== "jmnode") {
         return;
       }
-      var nodeid = jview.get_binded_nodeid(el);
+      const nodeid = jview.get_binded_nodeid(el);
       if (nodeid) {
-        var node = this.jm.get_node(nodeid);
+        const node = this.jm.get_node(nodeid);
         if (!node.isroot) {
           this.reset_shadow(el);
           this.active_node = node;
@@ -279,7 +290,7 @@ export function initJsMindDrggable(Node, pluginManager) {
           if (this.hlookup_timer !== 0) {
             window.clearInterval(this.hlookup_timer);
           }
-          var jd = this;
+          const jd = this;
           this.hlookup_delay = window.setTimeout(function () {
             jd.hlookup_delay = 0;
             jd.hlookup_timer = window.setInterval(function () {
@@ -289,9 +300,9 @@ export function initJsMindDrggable(Node, pluginManager) {
           this.capture = true;
         }
       }
-    },
+    }
 
-    drag: function (e) {
+    drag(e) {
       if (!this.jm.get_editable()) {
         return;
       }
@@ -299,18 +310,18 @@ export function initJsMindDrggable(Node, pluginManager) {
         e.preventDefault();
         this.show_shadow();
         this.moved = true;
-        clear_selection();
-        var px = (e.clientX || e.touches[0].clientX) - this.offset_x;
-        var py = (e.clientY || e.touches[0].clientY) - this.offset_y;
-        var cx = px + this.client_hw;
-        var cy = py + this.client_hh;
+        window.getSelection().removeAllRanges();
+        const px = (e.clientX || e.touches[0].clientX) - this.offset_x;
+        const py = (e.clientY || e.touches[0].clientY) - this.offset_y;
+        const cx = px + this.client_hw;
+        const cy = py + this.client_hh;
         this.shadow.style.left = px + "px";
         this.shadow.style.top = py + "px";
-        clear_selection();
+        window.getSelection().removeAllRanges();
       }
-    },
+    }
 
-    dragend: function (e) {
+    dragend(e) {
       if (!this.jm.get_editable()) {
         return;
       }
@@ -326,22 +337,22 @@ export function initJsMindDrggable(Node, pluginManager) {
           this._clear_lines();
         }
         if (this.moved) {
-          var src_node = this.active_node;
-          var target_node = this.target_node;
-          var target_direct = this.target_direct;
+          const src_node = this.active_node;
+          const target_node = this.target_node;
+          const target_direct = this.target_direct;
           this.move_node(src_node, target_node, target_direct);
         }
         this.hide_shadow();
       }
       this.moved = false;
       this.capture = false;
-    },
+    }
 
-    move_node: function (src_node, target_node, target_direct) {
+    move_node(src_node, target_node, target_direct) {
       console.log(
         `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
       );
-      var shadow_h = this.shadow.offsetTop;
+      const shadow_h = this.shadow.offsetTop;
       if (
         !!target_node &&
         !!src_node &&
@@ -349,16 +360,16 @@ export function initJsMindDrggable(Node, pluginManager) {
       ) {
         console.log(`let's move!`);
         // lookup before_node
-        var sibling_nodes = target_node.children;
-        var sc = sibling_nodes.length;
-        var node = null;
-        var delta_y = Number.MAX_VALUE;
-        var node_before = null;
-        var beforeid = "_last_";
+        const sibling_nodes = target_node.children;
+        let sc = sibling_nodes.length;
+        let node = null;
+        let delta_y = Number.MAX_VALUE;
+        let node_before = null;
+        let beforeid = "_last_";
         while (sc--) {
           node = sibling_nodes[sc];
           if (node.direction === target_direct && node.id !== src_node.id) {
-            var dy = node.get_location().y - shadow_h;
+            const dy = node.get_location().y - shadow_h;
             if (dy > 0 && dy < delta_y) {
               delta_y = dy;
               node_before = node;
@@ -378,17 +389,17 @@ export function initJsMindDrggable(Node, pluginManager) {
       this.active_node = null;
       this.target_node = null;
       this.target_direct = null;
-    },
+    }
 
-    jm_event_handle: function (type, data) {
+    jm_event_handle(type, data) {
       if (type === jm.event_type.resize) {
         this.resize();
       }
-    },
-  };
+    }
+  }
 
   pluginManager.register((jm) => {
-    const jd = new draggable(jm);
+    const jd = new Draggable(jm);
     jd.init();
 
     jm.add_event_listener(function (type, data) {
