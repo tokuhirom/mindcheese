@@ -33,27 +33,27 @@ export default class LayoutProvider {
     this.cache_valid = false;
   }
 
-  init() {
+  init(): void {
     // TODO remove this
     console.debug("layout.init");
   }
 
-  reset() {
+  reset(): void {
     console.debug("layout.reset");
     this.bounds = { n: 0, s: 0, w: 0, e: 0 };
   }
 
-  layout() {
+  layout(): void {
     console.debug("layout.layout");
     this.layout_direction();
     this.layout_offset();
   }
 
-  layout_direction() {
+  layout_direction(): void {
     this._layout_direction_root();
   }
 
-  _layout_direction_root() {
+  _layout_direction_root(): void {
     const node = this.jm.mind.root;
 
     // console.debug(node);
@@ -95,7 +95,7 @@ export default class LayoutProvider {
     node: MindNode,
     direction: Direction,
     side_index: number
-  ) {
+  ): void {
     let layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
@@ -108,7 +108,7 @@ export default class LayoutProvider {
     }
   }
 
-  layout_offset() {
+  layout_offset(): void {
     const node = this.jm.mind.root;
     const layout_data = node._data.layout;
     layout_data.offset_x = 0;
@@ -190,7 +190,7 @@ export default class LayoutProvider {
   }
 
   // layout the y axis only, for collapse/expand a node
-  _layout_offset_subnodes_height(nodes: MindNode[]) {
+  _layout_offset_subnodes_height(nodes: MindNode[]): number {
     let total_height = 0;
     const nodes_count = nodes.length;
     let i = nodes_count;
@@ -231,7 +231,7 @@ export default class LayoutProvider {
     return total_height;
   }
 
-  get_node_offset(node: MindNode): { x: number; y: number } {
+  get_node_offset(node: MindNode): Point {
     const layout_data = node._data.layout;
     let offset_cache = null;
     if ("_offset_" in layout_data && this.cache_valid) {
@@ -266,13 +266,13 @@ export default class LayoutProvider {
     return p;
   }
 
-  get_node_point_in(node: MindNode) {
+  get_node_point_in(node: MindNode): { x: number; y: number } {
     return this.get_node_offset(node);
   }
 
-  get_node_point_out(node: MindNode) {
+  get_node_point_out(node: MindNode): { x: number; y: number } {
     const layout_data = node._data.layout;
-    let pout_cache = null;
+    let pout_cache: {x:number, y:number}  = null;
     if ("_pout_" in layout_data && this.cache_valid) {
       pout_cache = layout_data._pout_;
     } else {
@@ -297,9 +297,9 @@ export default class LayoutProvider {
     return pout_cache;
   }
 
-  get_expander_point(node: MindNode) {
+  get_expander_point(node: MindNode): Point {
     const p = this.get_node_point_out(node);
-    const ex_p: any = {};
+    const ex_p: Point = new Point();
     if (node._data.layout.direction == Direction.RIGHT) {
       ex_p.x = p.x - this._pspace;
     } else {
@@ -309,12 +309,11 @@ export default class LayoutProvider {
     return ex_p;
   }
 
-  get_min_size() {
+  get_min_size(): { w: number; h: number } {
     const nodes = this.jm.mind.nodes;
-    let pout = null;
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
-      pout = this.get_node_point_out(node);
+      const pout = this.get_node_point_out(node);
       if (pout.x > this.bounds.e) {
         this.bounds.e = pout.x;
       }
@@ -328,7 +327,7 @@ export default class LayoutProvider {
     };
   }
 
-  toggle_node(node: MindNode) {
+  toggle_node(node: MindNode): void {
     if (node.isroot) {
       return;
     }
@@ -339,7 +338,7 @@ export default class LayoutProvider {
     }
   }
 
-  expand_node(node: MindNode) {
+  expand_node(node: MindNode): void {
     node.expanded = true;
     this.part_layout(node);
     this.set_visible(node.children, true);
@@ -350,7 +349,7 @@ export default class LayoutProvider {
     });
   }
 
-  collapse_node(node: MindNode) {
+  collapse_node(node: MindNode): void {
     node.expanded = false;
     this.part_layout(node);
     this.set_visible(node.children, false);
@@ -361,7 +360,7 @@ export default class LayoutProvider {
     });
   }
 
-  expand_all() {
+  expand_all(): void {
     const nodes = this.jm.mind.nodes;
     let c = 0;
     for (const nodeid in nodes) {
@@ -378,7 +377,7 @@ export default class LayoutProvider {
     }
   }
 
-  collapse_all() {
+  collapse_all(): void {
     const nodes = this.jm.mind.nodes;
     let c = 0;
     let node;
@@ -424,7 +423,7 @@ export default class LayoutProvider {
     }
   }
 
-  part_layout(node: MindNode) {
+  part_layout(node: MindNode): void {
     const root = this.jm.mind.root;
     if (root) {
       const root_layout_data = root._data.layout;
@@ -456,7 +455,7 @@ export default class LayoutProvider {
     }
   }
 
-  set_visible(nodes: MindNode[], visible: boolean) {
+  set_visible(nodes: MindNode[], visible: boolean): void {
     let i = nodes.length;
     let node = null;
     let layout_data = null;
@@ -474,12 +473,12 @@ export default class LayoutProvider {
     }
   }
 
-  is_expand(node: MindNode) {
+  is_expand(node: MindNode): boolean {
     // TODO remove this method
     return node.expanded;
   }
 
-  is_visible(node: MindNode) {
+  is_visible(node: MindNode): boolean {
     const layout_data = node._data.layout;
     return !("visible" in layout_data && !layout_data.visible);
   }
