@@ -40,21 +40,20 @@ export default class Mind {
     }
   }
 
-  // XXX jsMind では parent_node に nodeid も受け付けていたっぽい。
   add_node(
     parent_node: Node,
     nodeid: string,
     topic: string,
     data: any,
     idx: number,
-    direction: any,
+    direction: Direction | null,
     expanded: boolean
   ): Node {
     const nodeindex = idx || -1;
     let node;
     if (parent_node.isroot) {
       let d;
-      if (isNaN(direction)) {
+      if (direction == null) {
         const children = parent_node.children;
         const children_len = children.length;
         let r = 0;

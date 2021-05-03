@@ -95,19 +95,19 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_addbrother(_jm: JsMind, e: Event): void {
-    const selected_node = _jm.get_selected_node();
+  handle_addbrother(jm: JsMind, e: Event): void {
+    const selected_node = jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
-      const node = _jm.insert_node_after(
+      const node = jm.insert_node_after(
         selected_node,
         nodeid,
         "New Node",
         null
       );
       if (node) {
-        _jm.select_node(nodeid);
-        _jm.begin_edit(nodeid);
+        jm.select_node(nodeid);
+        jm.begin_edit(nodeid);
       }
     }
   }

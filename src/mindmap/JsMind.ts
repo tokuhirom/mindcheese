@@ -395,7 +395,7 @@ export default class JsMind {
     nodeid: string,
     topic: string,
     data: any
-  ) {
+  ): Node | null {
     if (this.get_editable()) {
       const afterid = node_after.id;
       const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
