@@ -1,10 +1,9 @@
 "use strict";
 
-import { Node } from "./Node";
+import Node from "./Node";
 import { Direction } from "./MindmapConstants";
-import { Dir } from "fs";
 
-export class Mind {
+export default class Mind {
   name: string;
   author: string;
   version: string;

@@ -1,9 +1,9 @@
-import { DataProvider } from "./DataProvider";
+import DataProvider from "./DataProvider";
 import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
-import { Node } from "./Node";
-import { Mind } from "./Mind";
+import Node from "./Node";
+import Mind from "./Mind";
 import Draggable from "./Draggable";
 import { EventType } from "./MindmapConstants";
 

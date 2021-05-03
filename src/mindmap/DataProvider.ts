@@ -1,6 +1,6 @@
 import { NodeTree } from "./format/NodeTree";
 
-export class DataProvider {
+export default class DataProvider {
   private format: Record<string, NodeTree>;
   private jm: any;
 

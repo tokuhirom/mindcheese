@@ -1,5 +1,5 @@
 // TODO convert to typescript
-export class Node {
+export default class Node {
   // TODO eDirection maybe the ENUM.
   public id: string;
   public index: number;

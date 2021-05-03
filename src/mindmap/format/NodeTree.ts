@@ -10,8 +10,8 @@
 }
  */
 
-import { Mind } from "../Mind";
-import { Node } from "../Node";
+import Mind from "../Mind";
+import Node from "../Node";
 
 // TODO move to constants file.
 const jm = {

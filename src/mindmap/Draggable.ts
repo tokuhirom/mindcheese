@@ -16,7 +16,7 @@
 "use strict";
 
 import JsMind from "./JsMind";
-import { Node } from "./Node";
+import Node from "./Node";
 import { Direction, EventType } from "./MindmapConstants";
 
 const jm = {
