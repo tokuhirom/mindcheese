@@ -1,16 +1,12 @@
-import { Direction, EventType } from "./MindmapConstants";
+import {Direction, EventType} from "./MindmapConstants";
 
-const jm = {
-  direction: {
-    left: -1,
-    center: 0,
-    right: 1,
-  },
-  event_type: { show: 1, resize: 2, edit: 3, select: 4 },
-};
-
-import MindNode, {LayoutData} from "./MindNode";
+import MindNode from "./MindNode";
 import JsMind from "./JsMind";
+
+class Point {
+  x: number
+  y: number
+}
 
 export default class LayoutProvider {
   private readonly jm: JsMind;
@@ -64,22 +60,22 @@ export default class LayoutProvider {
     const layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
-    layout_data.direction = jm.direction.center;
+    layout_data.direction = Direction.CENTER;
     layout_data.side_index = 0;
     if (this.isside) {
       let i = children_count;
       while (i--) {
-        this._layout_direction_side(children[i], jm.direction.right, i);
+        this._layout_direction_side(children[i], Direction.RIGHT, i);
       }
     } else {
       let i = children_count;
       let subnode = null;
       while (i--) {
         subnode = children[i];
-        if (subnode.direction == jm.direction.left) {
-          this._layout_direction_side(subnode, jm.direction.left, i);
+        if (subnode.direction == Direction.LEFT) {
+          this._layout_direction_side(subnode, Direction.LEFT, i);
         } else {
-          this._layout_direction_side(subnode, jm.direction.right, i);
+          this._layout_direction_side(subnode, Direction.RIGHT, i);
         }
       }
       /*
@@ -87,9 +83,9 @@ export default class LayoutProvider {
               var i = children_count;
               while(i--){
                   if(i>=boundary){
-                      this._layout_direction_side(children[i],jm.direction.left, children_count-i-1);
+                      this._layout_direction_side(children[i],Direction.LEFT, children_count-i-1);
                   }else{
-                      this._layout_direction_side(children[i],jm.direction.right, i);
+                      this._layout_direction_side(children[i],Direction.RIGHT, i);
                   }
               }*/
     }
@@ -125,7 +121,7 @@ export default class LayoutProvider {
     let subnode = null;
     while (i--) {
       subnode = children[i];
-      if (subnode._data.layout.direction == jm.direction.right) {
+      if (subnode._data.layout.direction == Direction.RIGHT) {
         right_nodes.unshift(subnode);
       } else {
         left_nodes.unshift(subnode);
@@ -258,11 +254,11 @@ export default class LayoutProvider {
     return offset_cache;
   }
 
-  get_node_point(node: MindNode): { x: number; y: number } {
+  get_node_point(node: MindNode): Point {
     const view_data = node._data.view;
     const offset_p = this.get_node_offset(node);
     //console.debug(offset_p);
-    const p: any = {};
+    const p: Point = new Point();
     p.x =
       offset_p.x + (view_data.width * (node._data.layout.direction - 1)) / 2;
     p.y = offset_p.y - view_data.height / 2;
@@ -304,7 +300,7 @@ export default class LayoutProvider {
   get_expander_point(node: MindNode) {
     const p = this.get_node_point_out(node);
     const ex_p: any = {};
-    if (node._data.layout.direction == jm.direction.right) {
+    if (node._data.layout.direction == Direction.RIGHT) {
       ex_p.x = p.x - this._pspace;
     } else {
       ex_p.x = p.x;
@@ -440,7 +436,7 @@ export default class LayoutProvider {
           root_layout_data.left_nodes
         );
       } else {
-        if (node._data.layout.direction == jm.direction.right) {
+        if (node._data.layout.direction == Direction.RIGHT) {
           root_layout_data.outer_height_right = this._layout_offset_subnodes_height(
             root_layout_data.right_nodes
           );

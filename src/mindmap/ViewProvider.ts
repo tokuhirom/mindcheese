@@ -465,7 +465,6 @@ export default class ViewProvider {
     let node = null;
     let node_element = null;
     let expander = null;
-    let p = null;
     let p_expander = null;
     let expander_text = "-";
     let view_data = null;
@@ -481,7 +480,7 @@ export default class ViewProvider {
         continue;
       }
       this.reset_node_custom_style(node);
-      p = this.layout.get_node_point(node);
+      const p = this.layout.get_node_point(node);
       view_data.abs_x = _offset.x + p.x;
       view_data.abs_y = _offset.y + p.y;
       node_element.style.left = _offset.x + p.x + "px";
