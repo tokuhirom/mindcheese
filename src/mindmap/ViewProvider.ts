@@ -105,7 +105,9 @@ export default class ViewProvider {
 
     const v = this;
     this.e_editor.addEventListener("keydown", function (e) {
-      if (e.code === "Enter") {
+      // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
+      // keyCode is deprecated field. But it's a hack for Japanese IME.
+      if (e.keyCode === 13) {
         v.edit_node_end();
         e.stopPropagation();
       }
