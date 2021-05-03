@@ -1,20 +1,20 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 import JsMind from "./JsMind";
 
 // Generate new ID of the node
 function newid() {
   return (
-    new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
+      new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
   ).substr(2, 16);
 }
 
 export default class ShortcutProvider {
   private jm: any;
   private opts: any;
-  private mapping: any;
-  private handles: any;
+  private mapping: Record<string, number>; // handlerName2keycode
+  private handles: Record<string, (arg0: JsMind, arg1: Event) => void>;
   private _newid: any;
-  private _mapping: any;
+  private _mapping: Record<number, (arg0: JsMind, arg1: Event) => void>; // number2callback
 
   constructor(jm: any, options: any) {
     this.jm = jm;
@@ -71,11 +71,11 @@ export default class ShortcutProvider {
       return true;
     }
     const kc =
-      e.keyCode +
-      (e.metaKey << 13) +
-      (e.ctrlKey << 12) +
-      (e.altKey << 11) +
-      (e.shiftKey << 10);
+        e.keyCode +
+        (e.metaKey << 13) +
+        (e.ctrlKey << 12) +
+        (e.altKey << 11) +
+        (e.shiftKey << 10);
     if (kc in this._mapping) {
       console.log("There is _mapping.");
       // TODO this.jm is redundant handler.
@@ -100,10 +100,10 @@ export default class ShortcutProvider {
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
       const node = jm.insert_node_after(
-        selected_node,
-        nodeid,
-        "New Node",
-        null
+          selected_node,
+          nodeid,
+          "New Node",
+          null
       );
       if (node) {
         jm.select_node(nodeid);
