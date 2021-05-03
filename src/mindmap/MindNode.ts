@@ -1,4 +1,6 @@
 // TODO convert to typescript
+import {Direction} from "./MindmapConstants";
+
 export default class MindNode {
   // TODO eDirection maybe the ENUM.
   public id: string;
@@ -7,9 +9,9 @@ export default class MindNode {
   public data: any;
   public isroot: boolean;
   public parent: any;
-  public direction: any;
+  public direction: Direction;
   public expanded: boolean;
-  public children: any[];
+  public children: MindNode[];
   public _data: any;
 
   constructor(
@@ -18,8 +20,8 @@ export default class MindNode {
     sTopic: string,
     oData: any,
     bIsRoot: boolean,
-    oParent: any,
-    eDirection: any,
+    oParent: MindNode,
+    eDirection: Direction,
     bExpanded: boolean
   ) {
     if (!sId) {

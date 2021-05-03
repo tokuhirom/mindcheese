@@ -54,7 +54,7 @@ export default class Mind {
     direction: Direction | null,
     expanded: boolean
   ): MindNode {
-    const nodeindex = idx || -1;
+    const nodeindex: number = idx || -1;
     let node;
     if (parent_node.isroot) {
       let d;
