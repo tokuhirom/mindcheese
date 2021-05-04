@@ -169,7 +169,6 @@ export default class Mind {
     }
   }
 
-  // XXX jsMind では node に nodeid も受け付けていたっぽい。
   move_node(
     node: MindNode,
     beforeid: string,
