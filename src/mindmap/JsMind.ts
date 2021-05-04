@@ -468,6 +468,11 @@ export default class JsMind {
       this.mind.remove_node(node);
       this.layout.layout();
       this.view.show(false);
+      if (parent_node.children.length > 0) {
+        const big_brother = parent_node.children.last();
+        this.mind.selected = big_brother;
+        this.view.select_node(big_brother);
+      }
       this.view.restore_location(parent_node);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "remove_node",
