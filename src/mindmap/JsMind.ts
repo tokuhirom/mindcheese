@@ -59,7 +59,7 @@ export default class JsMind {
   options: any;
   private inited: boolean;
   public mind: Mind;
-  private event_handles: ((arg0: EventType, arg1: any) => void)[];
+  private event_handles_map: Record<EventType, ((data: any) => void)[]>;
   private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
@@ -78,7 +78,13 @@ export default class JsMind {
     this.options = opts;
     this.inited = false;
     this.mind = null; // TODO original では null が入っていた
-    this.event_handles = [];
+    this.event_handles_map = {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+    };
     this.id = id;
     this.init();
   }
@@ -742,14 +748,10 @@ export default class JsMind {
   }
 
   // callback(type ,data)
-  add_event_listener(callback: ((arg0: EventType, arg1: any) => void)): void {
-    if (typeof callback === "function") {
-      this.event_handles.push(callback);
-    }
-  }
-
-  clear_event_listener(): void {
-    this.event_handles = [];
+  add_event_listener(
+      eventType: EventType,
+      callback: ((data: any) => void)): void {
+    this.event_handles_map[eventType].push(callback);
   }
 
   invoke_event_handle(type: EventType, data: any): void {
@@ -764,9 +766,9 @@ export default class JsMind {
   }
 
   _invoke_event_handle(type: EventType, data: any) :void {
-    const l = this.event_handles.length;
+    const l = this.event_handles_map[type].length;
     for (let i = 0; i < l; i++) {
-      this.event_handles[i](type, data);
+      this.event_handles_map[type][i](data);
     }
   }
 

@@ -145,32 +145,25 @@ export class EditableMindmapView extends TextFileView {
         setTimeout(() => {
           this.mm.show(mind);
         }, 0);
-        this.mm.add_event_listener(this.jsMindEventListener.bind(this));
+        this.mm.add_event_listener(EventType.AFTER_EDIT,
+            this.jsMindEventListener.bind(this));
       }
     );
   }
 
   async jsMindEventListener(eventType: number, params: any): Promise<void> {
-    const event_type_map: Record<number, string> = {
-      1: "show",
-      2: "resize",
-      3: "edit",
-      4: "select",
-    };
-    console.log(`Got jsMind event: ${event_type_map[eventType]}`);
+    console.log(`Got jsMind AFTER_EDIT event`);
 
-    if (eventType == EventType.AFTER_EDIT) {
-      // console.log(
-      //   `EDIT event: TIMESTAMP=${this.mm.mind.timestamp} id=${this.mm.mind.id}`
-      // );
-      const viewData = this.getViewData();
-      // console.log(
-      //   `Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`
-      // );
-      console.log(params);
-      // await this.plugin.app.vault.modify(this.file, viewData);
-      this.requestSave();
-    }
+    console.log(
+      `EDIT event: TIMESTAMP=${this.mm.mind.timestamp} id=${this.mm.mind.id}`
+    );
+    // const viewData = this.getViewData();
+    // console.log(
+    //   `Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`
+    // );
+    console.log(params);
+    // await this.plugin.app.vault.modify(this.file, viewData);
+    this.requestSave();
   }
 
   // TODO handle onResize

@@ -9,5 +9,5 @@ export const enum EventType {
   RESIZE = 2,
   AFTER_EDIT = 3,
   SELECT = 4,
-  BEFORE_EDIT = 3,
+  BEFORE_EDIT = 5,
 }

@@ -13,11 +13,7 @@ export default class UndoManager {
   }
 
   init() :void {
-    this._jm.add_event_listener((eventType, data) => {
-      if (eventType != EventType.BEFORE_EDIT) {
-        return;
-      }
-
+    this._jm.add_event_listener(EventType.BEFORE_EDIT, (data) => {
       if (this.undoStack.length > this.undoStackLimit) {
         console.log(`UndoManager: callback event. too much stacks.`)
         this.undoStack.shift();
