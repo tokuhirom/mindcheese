@@ -88,7 +88,7 @@ export default class ShortcutProvider {
 
       // TODO this.jm is redundant handler.
       if (isConnected) {
-        console.log(`Invoking shortcut handler: TIMESTAMP=${this.jm.mind.timestamp}  ID=${this.jm.mind.id}/${this.jm.id} connected=${isConnected}
+        console.log(`Invoking shortcut handler: ID=${this.jm.mind.id}/${this.jm.id} connected=${isConnected}
       target=${e.target}
       `);
         this._mapping[kc].call(this, this.jm, e);

@@ -2,7 +2,6 @@
 
 import MindNode from "./MindNode";
 import { Direction } from "./MindmapConstants";
-import { NodeTree } from "./format/NodeTree";
 
 export default class Mind {
   name: string;
@@ -11,7 +10,6 @@ export default class Mind {
   root: MindNode;
   selected: MindNode;
   nodes: Record<string, MindNode>;
-  public timestamp: number;
   id: number;
 
   constructor(id: number) {
@@ -22,7 +20,6 @@ export default class Mind {
     this.root = null;
     this.selected = null;
     this.nodes = {};
-    this.timestamp = Date.now();
   }
 
   get_node(nodeid: string): MindNode {

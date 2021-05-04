@@ -308,7 +308,7 @@ export default class JsMind {
     } else {
       console.debug("data.load ok");
     }
-    console.log(`JsMind.show TIMESTAMP=${this.mind.timestamp}! id=${this.id}`);
+    console.log(`JsMind.show id=${this.id}`);
 
     this.view.load();
     console.debug("view.load ok");

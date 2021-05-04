@@ -32,7 +32,7 @@ export class EditableMindmapView extends TextFileView {
 
   clear(): void {
     console.log(
-      `EditableMindmapView: clear TIMESTAMP=${this.mm.mind.timestamp}`
+      `EditableMindmapView: clear`
     );
     this.mm.shortcut.disable_shortcut();
     this.mm.mind = null;
@@ -155,7 +155,7 @@ export class EditableMindmapView extends TextFileView {
     console.log(`Got jsMind AFTER_EDIT event`);
 
     console.log(
-      `EDIT event: TIMESTAMP=${this.mm.mind.timestamp} id=${this.mm.mind.id}`
+      `EDIT event: id=${this.mm.mind.id}`
     );
     // const viewData = this.getViewData();
     // console.log(
