@@ -113,6 +113,7 @@ export default class ViewProvider {
       }
     });
     this.e_editor.addEventListener("blur", function (e) {
+      // when the element lost focus.
       v.edit_node_end();
     });
 
@@ -322,7 +323,7 @@ export default class ViewProvider {
     let width = element.clientWidth -
         parseInt(ncs.getPropertyValue("padding-left")) -
         parseInt(ncs.getPropertyValue("padding-right"));
-    // width *= 10;
+    width *= 2; // You can change the initial input form size by this factor.
     console.log(`edit_node_begin: ${width}px clientWidth=${element.clientWidth}
     padL=${parseInt(ncs.getPropertyValue("padding-left"))}
     padR=${parseInt(ncs.getPropertyValue("padding-right"))}`);
@@ -332,6 +333,12 @@ export default class ViewProvider {
     element.style.zIndex = '5';
     this.e_editor.focus();
     this.e_editor.select();
+
+    // layout updaste.
+    // this.update_node(node);
+    view_data.width = element.clientWidth;
+    this.layout.layout();
+    this.show(false);
   }
 
   edit_node_end(): void {
