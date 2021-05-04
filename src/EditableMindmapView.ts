@@ -19,6 +19,7 @@ export class EditableMindmapView extends TextFileView {
     super(leaf);
     this.plugin = plugin;
     console.log("EditableMindmapView constructor");
+    this.allowNoFile = false;
   }
 
   getDisplayText(): string {
@@ -82,6 +83,10 @@ export class EditableMindmapView extends TextFileView {
     console.log(data);
     console.log(clear);
 
+    if (!this.file) {
+      return;
+    }
+
     this.yfm = EditableMindmapView.parseFrontamtter(data);
 
     const title = this.file.basename;
@@ -113,8 +118,9 @@ export class EditableMindmapView extends TextFileView {
         );
         const options = {
           container: el,
-          theme: "primary", // TODO customizable
+          theme: "primary", // TODO make it customizable?
           editable: true,
+          support_html: false, // TODO HTML support
           shortcut: {
             enable: true, // whether to enable shortcut
             handles: {}, // Named shortcut key event processor

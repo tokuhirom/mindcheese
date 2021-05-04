@@ -1,6 +1,6 @@
 import GraphCanvas from "./GraphCanvas";
-import MindNode, {ViewData} from "./MindNode";
-import { EventType } from "./MindmapConstants";
+import MindNode from "./MindNode";
+import {EventType} from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
@@ -111,6 +111,14 @@ export default class ViewProvider {
         v.edit_node_end();
         e.stopPropagation();
       }
+    });
+    this.e_editor.addEventListener("keyup", (e:KeyboardEvent) => {
+      // adjust size dynamically.
+      const topic = this.e_editor.value;
+      this.e_editor.style.width = this.calcEditingNodeWidth(topic);
+      this.editing_node._data.view.width = this.e_editor.clientWidth;
+      this.layout.layout();
+      this.show(false);
     });
     this.e_editor.addEventListener("blur", function (e) {
       // when the element lost focus.
@@ -306,6 +314,11 @@ export default class ViewProvider {
     return !!this.editing_node;
   }
 
+  calcEditingNodeWidth(topic: string) : string {
+    const width = Math.ceil(Math.max(topic.length * 2 + 2, 15));
+    return width + 'ch';
+  }
+
   edit_node_begin(node: MindNode): void {
     if (!node.topic) {
       console.warn("don't edit image nodes");
@@ -318,16 +331,8 @@ export default class ViewProvider {
     const view_data = node._data.view;
     const element: HTMLElement = view_data.element;
     const topic = node.topic;
-    const ncs = getComputedStyle(element);
     this.e_editor.value = topic;
-    let width = element.clientWidth -
-        parseInt(ncs.getPropertyValue("padding-left")) -
-        parseInt(ncs.getPropertyValue("padding-right"));
-    width *= 2; // You can change the initial input form size by this factor.
-    console.log(`edit_node_begin: ${width}px clientWidth=${element.clientWidth}
-    padL=${parseInt(ncs.getPropertyValue("padding-left"))}
-    padR=${parseInt(ncs.getPropertyValue("padding-right"))}`);
-    this.e_editor.style.width = width + "px";
+    this.e_editor.style.width = this.calcEditingNodeWidth(topic);
     element.innerHTML = "";
     element.appendChild(this.e_editor);
     element.style.zIndex = '5';
@@ -335,7 +340,6 @@ export default class ViewProvider {
     this.e_editor.select();
 
     // layout updaste.
-    // this.update_node(node);
     view_data.width = element.clientWidth;
     this.layout.layout();
     this.show(false);
