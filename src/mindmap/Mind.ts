@@ -145,7 +145,7 @@ export default class Mind {
     }
   }
 
-  // XXX jsMind では node_after に nodeid も受け付けていたっぽい。
+  // add little brother node.
   insert_node_after(
     node_after: MindNode,
     nodeid: string,
@@ -153,13 +153,14 @@ export default class Mind {
     data: any
   ): MindNode {
     const node_index = node_after.index + 0.5;
+    // follow current direction.
     return this.add_node(
       node_after.parent,
       nodeid,
       topic,
       data,
       node_index,
-      null,
+      node_after.direction,
       null
     );
   }
