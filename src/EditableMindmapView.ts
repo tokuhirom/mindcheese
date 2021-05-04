@@ -39,16 +39,16 @@ export class EditableMindmapView extends TextFileView {
   }
 
   getViewData(): string {
-    console.log(`getViewData: invoked`);
+    // console.log(`getViewData: invoked`);
     if (this.mm && this.mm.mind) {
       const data = this.mm.get_data("node_tree");
       if (!data.data) {
         // mindmap is not available, yet.
         return this.data;
       }
-      console.log(`getViewData: data=${JSON.stringify(data)}`);
+      // console.log(`getViewData: data=${JSON.stringify(data)}`);
       const md = convertMM2MD(data) as string;
-      console.log(`getViewData: data=${data} md=${md}`);
+      // console.log(`getViewData: data=${data} md=${md}`);
 
       return this.yfm + "\n\n" + md + "\n";
     }
@@ -136,6 +136,7 @@ export class EditableMindmapView extends TextFileView {
               up: 38, // <Up>
               right: 39, // <Right>
               down: 40, // <Down>
+              undo: 90 + (1<<12), // C-z
             },
           },
         };
@@ -158,14 +159,14 @@ export class EditableMindmapView extends TextFileView {
     };
     console.log(`Got jsMind event: ${event_type_map[eventType]}`);
 
-    if (eventType == EventType.EDIT) {
-      console.log(
-        `EDIT event: TIMESTAMP=${this.mm.mind.timestamp} id=${this.mm.mind.id}`
-      );
+    if (eventType == EventType.AFTER_EDIT) {
+      // console.log(
+      //   `EDIT event: TIMESTAMP=${this.mm.mind.timestamp} id=${this.mm.mind.id}`
+      // );
       const viewData = this.getViewData();
-      console.log(
-        `Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`
-      );
+      // console.log(
+      //   `Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`
+      // );
       console.log(params);
       // await this.plugin.app.vault.modify(this.file, viewData);
       this.requestSave();

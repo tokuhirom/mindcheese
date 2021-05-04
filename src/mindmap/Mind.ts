@@ -34,10 +34,7 @@ export default class Mind {
   }
 
   set_root(nodeid: string, topic: string, data: any): void {
-    console.log("set_root!");
     if (this.root == null) {
-      console.log("set_root----------");
-      console.log(MindNode);
       this.root = new MindNode(nodeid, 0, topic, data, true, null, null, null);
       this._put_node(this.root);
     } else {
@@ -99,10 +96,6 @@ export default class Mind {
     if (this._put_node(node)) {
       parent_node.children.push(node);
       this._reindex(parent_node);
-      console.log(
-        `ADDED NODE!!!!!!!!!---- TIMESTAMP=${this.timestamp} ID=${this.id}`
-      );
-      console.log(new NodeTree().get_data(this));
       return node;
     } else {
       console.error(

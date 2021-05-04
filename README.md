@@ -10,6 +10,10 @@
 
 自分でビルドしたら試せます。
 
+## Difference between original jsmind
+
+- add BEFORE_EDIT event.
+
 ##
 
 This is a sample plugin for Obsidian (https://obsidian.md).

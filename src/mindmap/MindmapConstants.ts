@@ -7,6 +7,7 @@ export const enum Direction {
 export const enum EventType {
   SHOW = 1,
   RESIZE = 2,
-  EDIT = 3,
+  AFTER_EDIT = 3,
   SELECT = 4,
+  BEFORE_EDIT = 3,
 }

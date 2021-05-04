@@ -46,6 +46,7 @@ export default class ShortcutProvider {
     this.handles["down"] = this.handle_down;
     this.handles["left"] = this.handle_left;
     this.handles["right"] = this.handle_right;
+    this.handles["undo"] = this.handle_undo;
 
     for (const handle in this.mapping) {
       if (!!this.mapping[handle] && handle in this.handles) {
@@ -221,5 +222,10 @@ export default class ShortcutProvider {
       e.stopPropagation();
       e.preventDefault();
     }
+  }
+
+  handle_undo(_jm: JsMind, e: Event): void {
+    console.log("UNDO!")
+    _jm.undo();
   }
 }

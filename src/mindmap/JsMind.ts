@@ -5,7 +5,8 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { EventType } from "./MindmapConstants";
+import {EventType} from "./MindmapConstants";
+import UndoManager from "./UndoManager";
 
 function is_empty(s: string) {
   if (!s) {
@@ -58,13 +59,14 @@ export default class JsMind {
   options: any;
   private inited: boolean;
   public mind: Mind;
-  private event_handles: any[];
+  private event_handles: ((arg0: EventType, arg1: any) => void)[];
   private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
   id: number;
+  private undo_manager: UndoManager;
 
   constructor(id: number, options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
@@ -114,11 +116,13 @@ export default class JsMind {
       opts.shortcut.handles
     );
     this.draggable = new Draggable(this);
+    this.undo_manager = new UndoManager(this);
 
     this.layout.init();
     this.view.init();
     this.shortcut.init();
     this.draggable.init();
+    this.undo_manager.init();
 
     this._event_bind();
   }
@@ -339,6 +343,11 @@ export default class JsMind {
 
   add_node(parent_node: MindNode, nodeid: string, topic: string, data: any) {
     if (this.get_editable()) {
+      this.invoke_event_handle(EventType.BEFORE_EDIT, {
+        evt: "add_node",
+        data: [parent_node.id, nodeid, topic, data],
+        node: nodeid,
+      });
       const node = this.mind.add_node(
         parent_node,
         nodeid,
@@ -354,7 +363,7 @@ export default class JsMind {
         this.view.show(false);
         this.view.reset_node_custom_style(node);
         this.expand_node(parent_node);
-        this.invoke_event_handle(EventType.EDIT, {
+        this.invoke_event_handle(EventType.AFTER_EDIT, {
           evt: "add_node",
           data: [parent_node.id, nodeid, topic, data],
           node: nodeid,
@@ -375,6 +384,11 @@ export default class JsMind {
   ): null | MindNode {
     if (this.get_editable()) {
       const beforeid = node_before.id;
+      this.invoke_event_handle(EventType.BEFORE_EDIT, {
+        evt: "insert_node_before",
+        data: [beforeid, nodeid, topic, data],
+        node: nodeid,
+      });
       const node = this.mind.insert_node_before(
         node_before,
         nodeid,
@@ -385,7 +399,7 @@ export default class JsMind {
         this.view.add_node(node);
         this.layout.layout();
         this.view.show(false);
-        this.invoke_event_handle(EventType.EDIT, {
+        this.invoke_event_handle(EventType.AFTER_EDIT, {
           evt: "insert_node_before",
           data: [beforeid, nodeid, topic, data],
           node: nodeid,
@@ -408,10 +422,15 @@ export default class JsMind {
       const afterid = node_after.id;
       const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
       if (node) {
+        this.invoke_event_handle(EventType.BEFORE_EDIT, {
+          evt: "insert_node_after",
+          data: [afterid, nodeid, topic, data],
+          node: nodeid,
+        });
         this.view.add_node(node);
         this.layout.layout();
         this.view.show(false);
-        this.invoke_event_handle(EventType.EDIT, {
+        this.invoke_event_handle(EventType.AFTER_EDIT, {
           evt: "insert_node_after",
           data: [afterid, nodeid, topic, data],
           node: nodeid,
@@ -432,6 +451,11 @@ export default class JsMind {
       }
       const nodeid = node.id;
       const parentid = node.parent.id;
+      this.invoke_event_handle(EventType.BEFORE_EDIT, {
+        evt: "remove_node",
+        data: [nodeid],
+        node: parentid,
+      });
       const parent_node = this.get_node(parentid);
       this.view.save_location(parent_node);
       this.view.remove_node(node);
@@ -439,7 +463,7 @@ export default class JsMind {
       this.layout.layout();
       this.view.show(false);
       this.view.restore_location(parent_node);
-      this.invoke_event_handle(EventType.EDIT, {
+      this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "remove_node",
         data: [nodeid],
         node: parentid,
@@ -460,6 +484,11 @@ export default class JsMind {
       }
       const node = this.get_node(nodeid);
       if (node) {
+        this.invoke_event_handle(EventType.BEFORE_EDIT, {
+          evt: "update_node",
+          data: [nodeid, topic],
+          node: nodeid,
+        });
         if (node.topic === topic) {
           console.info("nothing changed");
           this.view.update_node(node);
@@ -469,7 +498,7 @@ export default class JsMind {
         this.view.update_node(node);
         this.layout.layout();
         this.view.show(false);
-        this.invoke_event_handle(EventType.EDIT, {
+        this.invoke_event_handle(EventType.AFTER_EDIT, {
           evt: "update_node",
           data: [nodeid, topic],
           node: nodeid,
@@ -496,6 +525,11 @@ export default class JsMind {
         console.error("the node[id=" + nodeid + "] can not be found.");
         return;
       } else {
+        this.invoke_event_handle(EventType.BEFORE_EDIT, {
+          evt: "move_node",
+          data: [nodeid, beforeid, parentid, direction],
+          node: nodeid,
+        });
         const node = this.mind.move_node(
           the_node,
           beforeid,
@@ -506,7 +540,7 @@ export default class JsMind {
           this.view.update_node(node);
           this.layout.layout();
           this.view.show(false);
-          this.invoke_event_handle(EventType.EDIT, {
+          this.invoke_event_handle(EventType.AFTER_EDIT, {
             evt: "move_node",
             data: [nodeid, beforeid, parentid, direction],
             node: nodeid,
@@ -708,27 +742,35 @@ export default class JsMind {
   }
 
   // callback(type ,data)
-  add_event_listener(callback: any) {
+  add_event_listener(callback: ((arg0: EventType, arg1: any) => void)): void {
     if (typeof callback === "function") {
       this.event_handles.push(callback);
     }
   }
 
-  clear_event_listener() {
+  clear_event_listener(): void {
     this.event_handles = [];
   }
 
-  invoke_event_handle(type: EventType, data: any) {
+  invoke_event_handle(type: EventType, data: any): void {
     const j = this;
-    setTimeout(function () {
+    if (type === EventType.BEFORE_EDIT) {
       j._invoke_event_handle(type, data);
-    }, 0);
+    } else {
+      setTimeout(function () {
+        j._invoke_event_handle(type, data);
+      }, 0);
+    }
   }
 
-  _invoke_event_handle(type: EventType, data: any) {
+  _invoke_event_handle(type: EventType, data: any) :void {
     const l = this.event_handles.length;
     for (let i = 0; i < l; i++) {
       this.event_handles[i](type, data);
     }
+  }
+
+  undo() : void {
+    this.undo_manager.undo();
   }
 }
