@@ -7,7 +7,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {EventType} from "./MindmapConstants";
+import { EventType } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 
 function is_empty(s: string) {
@@ -61,7 +61,10 @@ export default class JsMind {
   options: any;
   private inited: boolean;
   public mind: Mind;
-  private readonly event_handles_map: Record<EventType, ((data: any) => void)[]>;
+  private readonly event_handles_map: Record<
+    EventType,
+    ((data: any) => void)[]
+  >;
   private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
@@ -349,7 +352,12 @@ export default class JsMind {
     return this.mind.get_node(nodeid);
   }
 
-  add_node(parent_node: MindNode, nodeid: string, topic: string, data: any): null | MindNode {
+  add_node(
+    parent_node: MindNode,
+    nodeid: string,
+    topic: string,
+    data: any
+  ): null | MindNode {
     if (this.get_editable()) {
       this.invoke_event_handle(EventType.BEFORE_EDIT, {
         evt: "add_node",
@@ -602,7 +610,7 @@ export default class JsMind {
     if (node.isroot) {
       return null;
     }
-    let n:MindNode = null;
+    let n: MindNode = null;
     if (node.parent.isroot) {
       const c = node.parent.children;
       let prev = null;
@@ -626,7 +634,7 @@ export default class JsMind {
     if (node.isroot) {
       return null;
     }
-    let n:MindNode = null;
+    let n: MindNode = null;
     if (node.parent.isroot) {
       const c = node.parent.children;
       let getthis = false;
@@ -655,8 +663,9 @@ export default class JsMind {
 
   // callback(type ,data)
   add_event_listener(
-      eventType: EventType,
-      callback: ((data: any) => void)): void {
+    eventType: EventType,
+    callback: (data: any) => void
+  ): void {
     this.event_handles_map[eventType].push(callback);
   }
 
@@ -671,14 +680,14 @@ export default class JsMind {
     }
   }
 
-  _invoke_event_handle(type: EventType, data: any) :void {
+  _invoke_event_handle(type: EventType, data: any): void {
     const l = this.event_handles_map[type].length;
     for (let i = 0; i < l; i++) {
       this.event_handles_map[type][i](data);
     }
   }
 
-  undo() : void {
+  undo(): void {
     this.undo_manager.undo();
   }
 }

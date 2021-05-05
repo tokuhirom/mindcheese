@@ -38,35 +38,35 @@ test("complex", () => {
         {
           id: 1,
           topic: "jsMind",
-          direction: 'right',
+          direction: "right",
           children: [
             {
               id: 2,
               topic: "Easy",
-              direction: 'right',
+              direction: "right",
               children: [
                 {
                   id: 3,
                   topic: "Easy to show",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 4,
                   topic: "Easy to edit",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 5,
                   topic: "Easy to store",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 6,
                   topic: "Easy to embed",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
               ],
@@ -74,18 +74,18 @@ test("complex", () => {
             {
               id: 7,
               topic: "Open Source",
-              direction: 'right',
+              direction: "right",
               children: [
                 {
                   id: 8,
                   topic: "on GitHub",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 9,
                   topic: "BSD License",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
               ],
@@ -93,24 +93,24 @@ test("complex", () => {
             {
               id: 10,
               topic: "Powerful",
-              direction: 'right',
+              direction: "right",
               children: [
                 {
                   id: 11,
                   topic: "Base on Javascript",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 12,
                   topic: "Base on HTML5",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 13,
                   topic: "Depends on you",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
               ],
@@ -118,18 +118,18 @@ test("complex", () => {
             {
               id: 14,
               topic: "test node",
-              direction: 'right',
+              direction: "right",
               children: [
                 {
                   id: 15,
                   topic: "I'm from local variable",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
                 {
                   id: 16,
                   topic: "I can do everything",
-                  direction: 'right',
+                  direction: "right",
                   children: [],
                 },
               ],
@@ -152,8 +152,13 @@ test("basic", () => {
       id: "root",
       topic: "top",
       children: [
-        { id: 1, topic: "A", direction: 'right', children: [{ id: 2, topic: "B", direction: 'right', children: [] }] },
-        { id: 3, topic: "C", direction: 'right', children: [] },
+        {
+          id: 1,
+          topic: "A",
+          direction: "right",
+          children: [{ id: 2, topic: "B", direction: "right", children: [] }],
+        },
+        { id: 3, topic: "C", direction: "right", children: [] },
       ],
     },
   });
@@ -170,8 +175,13 @@ test("left", () => {
       id: "root",
       topic: "top",
       children: [
-        { id: 1, topic: "A", direction: 'right', children: [{ id: 2, topic: "B", direction: 'right', children: [] }] },
-        { id: 3, topic: "C", direction: 'left', children: [] },
+        {
+          id: 1,
+          topic: "A",
+          direction: "right",
+          children: [{ id: 2, topic: "B", direction: "right", children: [] }],
+        },
+        { id: 3, topic: "C", direction: "left", children: [] },
       ],
     },
   });
@@ -187,7 +197,7 @@ test("ignore yfm", () => {
     data: {
       id: "root",
       topic: "top",
-      children: [{ id: 1, topic: "A", direction: 'right', children: [] }],
+      children: [{ id: 1, topic: "A", direction: "right", children: [] }],
     },
   });
 });
@@ -211,25 +221,25 @@ test("dedent 2 step", () => {
       id: "root",
       topic: "top",
       children: [
-        { id: 1, topic: "A1", direction: 'right',children: [] },
+        { id: 1, topic: "A1", direction: "right", children: [] },
         {
           id: 2,
           topic: "A2",
-          direction: 'right',
+          direction: "right",
           children: [
-            { id: 3, topic: "B1",direction: 'right', children: [] },
+            { id: 3, topic: "B1", direction: "right", children: [] },
             {
               id: 4,
               topic: "B2",
-              direction: 'right',
+              direction: "right",
               children: [
-                { id: 5, topic: "C1", direction: 'right', children: [] },
-                { id: 6, topic: "C2", direction: 'right', children: [] },
+                { id: 5, topic: "C1", direction: "right", children: [] },
+                { id: 6, topic: "C2", direction: "right", children: [] },
               ],
             },
           ],
         },
-        { id: 7, topic: "A3", direction: 'right', children: [] },
+        { id: 7, topic: "A3", direction: "right", children: [] },
       ],
     },
   });
@@ -256,46 +266,40 @@ test("dedent 3 step", () => {
       id: "root",
       topic: "top",
       children: [
-        { id: 1, topic: "A1", direction: 'right', children: [] },
+        { id: 1, topic: "A1", direction: "right", children: [] },
         {
           id: 2,
           topic: "A2",
-          direction: 'right',
+          direction: "right",
           children: [
-            { id: 3, topic: "B1", direction: 'right',children: [] },
+            { id: 3, topic: "B1", direction: "right", children: [] },
             {
               id: 4,
               topic: "B2",
-              direction: 'right',
+              direction: "right",
               children: [
-                { id: 5, topic: "C1", direction: 'right', children: [] },
+                { id: 5, topic: "C1", direction: "right", children: [] },
                 {
                   id: 6,
                   topic: "C2",
-                  direction: 'right',
+                  direction: "right",
                   children: [
-                    { id: 7, topic: "D1", direction: 'right',children: [] },
-                    { id: 8, topic: "D2", direction: 'right',children: [] },
+                    { id: 7, topic: "D1", direction: "right", children: [] },
+                    { id: 8, topic: "D2", direction: "right", children: [] },
                   ],
                 },
               ],
             },
           ],
         },
-        { id: 9, topic: "A3", direction: 'right', children: [] },
+        { id: 9, topic: "A3", direction: "right", children: [] },
       ],
     },
   });
 });
 
 test("Multiline", () => {
-  const md = [
-    "- A1 \\",
-    "  A2",
-    "\t- B1 \\",
-    "\t  B2 \\",
-    "\t  B3",
-  ].join("\n");
+  const md = ["- A1 \\", "  A2", "\t- B1 \\", "\t  B2 \\", "\t  B3"].join("\n");
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
@@ -305,9 +309,13 @@ test("Multiline", () => {
       id: "root",
       topic: "top",
       children: [
-        { id: 1, topic: "A1\nA2", direction: 'right', children: [
-            { id: 2, topic: "B1\nB2\nB3", direction: 'right',children: [] },
-          ]
+        {
+          id: 1,
+          topic: "A1\nA2",
+          direction: "right",
+          children: [
+            { id: 2, topic: "B1\nB2\nB3", direction: "right", children: [] },
+          ],
         },
       ],
     },

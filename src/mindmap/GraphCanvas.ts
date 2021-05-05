@@ -1,5 +1,5 @@
 export default class GraphCanvas {
-  private opts: { line_color: any, line_width: number };
+  private opts: { line_color: any; line_width: number };
   private readonly e_canvas: HTMLCanvasElement;
   private readonly canvas_ctx: CanvasRenderingContext2D;
   private size: { w: number; h: number };
@@ -28,7 +28,7 @@ export default class GraphCanvas {
   }
 
   draw_line(
-    pout: { x: number, y: number },
+    pout: { x: number; y: number },
     pin: { x: number; y: number },
     offset: { x: number; y: number }
   ): void {

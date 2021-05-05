@@ -69,7 +69,9 @@ export default class Mind {
       } else {
         d = direction !== Direction.LEFT ? Direction.RIGHT : Direction.LEFT;
       }
-      console.log(`add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`)
+      console.log(
+        `add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`
+      );
       node = new MindNode(
         nodeid,
         nodeindex,
@@ -155,7 +157,7 @@ export default class Mind {
     );
   }
 
-  get_node_after(node: MindNode):MindNode {
+  get_node_after(node: MindNode): MindNode {
     if (node.isroot) {
       return null;
     }

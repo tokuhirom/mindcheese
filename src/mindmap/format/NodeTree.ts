@@ -77,7 +77,9 @@ export class NodeTree {
     if (node_parent.isroot) {
       d = node_json.direction == "left" ? Direction.LEFT : Direction.RIGHT;
     }
-    console.log(`_extract_subnode node_json.direction DIRECTION=${node_json.direction} d=${d} ${node_json.topic}`)
+    console.log(
+      `_extract_subnode node_json.direction DIRECTION=${node_json.direction} d=${d} ${node_json.topic}`
+    );
     const node = mind.add_node(
       node_parent,
       node_json.id,

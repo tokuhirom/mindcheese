@@ -1,13 +1,13 @@
 // noinspection JSUnfilteredForInLoop
 
-import {Direction, EventType} from "./MindmapConstants";
+import { Direction, EventType } from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import JsMind from "./JsMind";
 
 class Point {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
 export default class LayoutProvider {
@@ -277,7 +277,7 @@ export default class LayoutProvider {
 
   get_node_point_out(node: MindNode): { x: number; y: number } {
     const layout_data = node._data.layout;
-    let pout_cache: {x:number, y:number};
+    let pout_cache: { x: number; y: number };
     if ("_pout_" in layout_data && this.cache_valid) {
       pout_cache = layout_data._pout_;
     } else {

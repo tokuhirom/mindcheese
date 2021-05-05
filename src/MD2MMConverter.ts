@@ -1,4 +1,4 @@
-function parse(title: string, md:string) {
+function parse(title: string, md: string) {
   if (md == null) {
     throw new Error("md should not be null");
   }
@@ -27,19 +27,19 @@ function parse(title: string, md:string) {
       let body = line;
       if (body.match(/ [\\ ]$/)) {
         // multi-line bullet list.
-        body = body.replace(/ [\\ ]$/, '');
+        body = body.replace(/ [\\ ]$/, "");
         isContinuous = true;
       } else {
         isContinuous = false;
       }
-      for (let j=0; j<lastSpaces.length+2; j++) {
-        body = body.replace(/^\s/, '');
+      for (let j = 0; j < lastSpaces.length + 2; j++) {
+        body = body.replace(/^\s/, "");
       }
       lastElement.topic += "\n" + body;
     } else {
       const match = line.match(/^(\s*)([+-])\s*(.*?)$/);
       if (!match) {
-        console.log(`'${line}' is not a bullet list.`)
+        console.log(`'${line}' is not a bullet list.`);
         continue;
       }
       const leadingSpaces = match[1];
@@ -47,7 +47,7 @@ function parse(title: string, md:string) {
       let body = match[3];
       if (body.match(/ [\\ ]$/)) {
         // multi-line bullet list.
-        body = body.replace(/ [\\ ]$/, '');
+        body = body.replace(/ [\\ ]$/, "");
         isContinuous = true;
       } else {
         isContinuous = false;
@@ -58,7 +58,7 @@ function parse(title: string, md:string) {
       const el: Record<string, any> = {
         id: ++i,
         topic: body,
-        direction: directionCharacter === '+' ? 'left' : 'right',
+        direction: directionCharacter === "+" ? "left" : "right",
         children: [],
       };
 
@@ -91,4 +91,3 @@ export function convertMD2MM(title: string, md: string): any {
     data: parse(title, md.replace(/^---$.*^---$/ms, "")),
   };
 }
-

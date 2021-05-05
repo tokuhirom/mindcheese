@@ -98,8 +98,8 @@ test("multiline", () => {
               id: "abc",
               topic: "Abc 1\nAbc 2\nAbc 3",
               direction: "left",
-            }
-          ]
+            },
+          ],
         },
       ],
     },

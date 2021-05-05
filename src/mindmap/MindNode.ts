@@ -1,21 +1,21 @@
 // TODO convert to typescript
 // noinspection JSUnusedGlobalSymbols
 
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 export class ViewData {
-  element: HTMLElement
-  _saved_location: any
-  expander: HTMLElement
-  abs_x: number
-  abs_y: number
-  width: number
-  height: number
+  element: HTMLElement;
+  _saved_location: any;
+  expander: HTMLElement;
+  abs_x: number;
+  abs_y: number;
+  width: number;
+  height: number;
 }
 
 export class LayoutData {
-  direction: Direction
-  visible: boolean
+  direction: Direction;
+  visible: boolean;
   offset_x: number;
   offset_y: number;
   outer_height: number;
@@ -33,15 +33,15 @@ export default class MindNode {
   public id: string;
   public index: number;
   public topic: string;
-  public data: { view: ViewData, layout: LayoutData };
+  public data: { view: ViewData; layout: LayoutData };
   public isroot: boolean;
   public parent: MindNode;
   public direction: Direction;
   public expanded: boolean;
   public children: MindNode[];
   public _data: {
-    view: ViewData,
-    layout: LayoutData,
+    view: ViewData;
+    layout: LayoutData;
   };
 
   constructor(

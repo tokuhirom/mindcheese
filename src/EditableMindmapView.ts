@@ -1,8 +1,8 @@
-import {Menu, Notice, TextFileView, TFile, WorkspaceLeaf} from "obsidian";
+import { Menu, Notice, TextFileView, TFile, WorkspaceLeaf } from "obsidian";
 import { MINDMAP_VIEW_TYPE } from "./Constants";
 import MyPlugin from "./main";
-import {convertMM2MD} from "./MM2MDConverter";
-import {convertMD2MM} from "./MD2MMConverter";
+import { convertMM2MD } from "./MM2MDConverter";
+import { convertMD2MM } from "./MD2MMConverter";
 import JsMind from "./mindmap/JsMind";
 import { EventType } from "./mindmap/MindmapConstants";
 
@@ -31,9 +31,7 @@ export class EditableMindmapView extends TextFileView {
   }
 
   clear(): void {
-    console.log(
-      `EditableMindmapView: clear`
-    );
+    console.log(`EditableMindmapView: clear`);
     this.mm.shortcut.disable_shortcut();
     this.mm.mind = null;
   }
@@ -103,7 +101,7 @@ export class EditableMindmapView extends TextFileView {
       },
       (el) => {
         el.setAttribute("id", "jsmind_container");
-        console.log("CONVERT!")
+        console.log("CONVERT!");
         let mind: any;
         try {
           mind = convertMD2MM(title, data);
@@ -136,7 +134,7 @@ export class EditableMindmapView extends TextFileView {
               up: 38, // <Up>
               right: 39, // <Right>
               down: 40, // <Down>
-              undo: 90 + (1<<12), // C-z
+              undo: 90 + (1 << 12), // C-z
             },
           },
         };
@@ -145,8 +143,10 @@ export class EditableMindmapView extends TextFileView {
         setTimeout(() => {
           this.mm.show(mind);
         }, 0);
-        this.mm.add_event_listener(EventType.AFTER_EDIT,
-            this.jsMindEventListener.bind(this));
+        this.mm.add_event_listener(
+          EventType.AFTER_EDIT,
+          this.jsMindEventListener.bind(this)
+        );
       }
     );
   }
@@ -154,9 +154,7 @@ export class EditableMindmapView extends TextFileView {
   async jsMindEventListener(eventType: number, params: any): Promise<void> {
     console.log(`Got jsMind AFTER_EDIT event`);
 
-    console.log(
-      `EDIT event: id=${this.mm.mind.id}`
-    );
+    console.log(`EDIT event: id=${this.mm.mind.id}`);
     // const viewData = this.getViewData();
     // console.log(
     //   `Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`

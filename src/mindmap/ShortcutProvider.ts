@@ -13,9 +13,15 @@ function generateId(): string {
 export default class ShortcutProvider {
   private readonly jm: JsMind;
   private readonly mapping: Record<string, number>; // handlerName2keycode
-  private readonly handles: Record<string, (arg0: JsMind, arg1: Event) => boolean>;
+  private readonly handles: Record<
+    string,
+    (arg0: JsMind, arg1: Event) => boolean
+  >;
   private readonly _newid: () => string;
-  private readonly _mapping: Record<number, (arg0: JsMind, arg1: Event) => boolean>; // number2callback
+  private readonly _mapping: Record<
+    number,
+    (arg0: JsMind, arg1: Event) => boolean
+  >; // number2callback
   private enable: boolean;
 
   constructor(
@@ -240,7 +246,7 @@ export default class ShortcutProvider {
   }
 
   handle_undo(_jm: JsMind, e: Event): boolean {
-    console.log("UNDO!")
+    console.log("UNDO!");
     _jm.undo();
     e.stopPropagation();
     e.preventDefault();
