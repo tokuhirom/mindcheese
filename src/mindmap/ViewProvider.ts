@@ -318,7 +318,8 @@ export default class ViewProvider {
   }
 
   calcEditingNodeWidth(topic: string) : string {
-    const width = Math.ceil(Math.max(topic.length * 2 + 2, 15));
+    const max = Math.max(...topic.split(/\n/).map(it => it.length))
+    const width = Math.ceil(Math.max(max * 2 + 2, 15));
     return width + 'ch';
   }
 

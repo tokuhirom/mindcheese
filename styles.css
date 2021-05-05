@@ -5,19 +5,19 @@
   height: 100%;
 }
 
-#jsmind_container .jsmind-inner {
-  border: 4px solid red;
-}
-#jsmind_container canvas {
-  border: 4px solid darkgreen;
-}
-#jsmind_container jmnodes {
-  border: 4px solid orchid;
-}
+/*#jsmind_container .jsmind-inner {*/
+/*  border: 4px solid red;*/
+/*}*/
+/*#jsmind_container canvas {*/
+/*  border: 4px solid darkgreen;*/
+/*}*/
+/*#jsmind_container jmnodes {*/
+/*  border: 4px solid orchid;*/
+/*}*/
 
-textarea.jsmind-editor {
-  /*padding: 0;*/
-}
+/*textarea.jsmind-editor {*/
+/*  !*padding: 0;*!*/
+/*}*/
 
 /*
  * Released under BSD License
