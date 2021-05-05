@@ -52,7 +52,7 @@ export default class ViewProvider {
   private selected_node: any;
   private editing_node: any;
   private graph: any;
-  private e_editor: HTMLInputElement;
+  private e_editor: HTMLTextAreaElement;
   private actualZoom: number;
   private zoomStep: number;
   private minZoom: number;
@@ -87,7 +87,7 @@ export default class ViewProvider {
     }
     this.e_panel = document.createElement("div");
     this.e_nodes = document.createElement("jmnodes");
-    this.e_editor = document.createElement("input");
+    this.e_editor = document.createElement("textarea");
 
     this.graph = new GraphCanvas(this);
 
@@ -96,7 +96,6 @@ export default class ViewProvider {
     this.e_panel.appendChild(this.e_nodes);
 
     this.e_editor.className = "jsmind-editor";
-    this.e_editor.type = "text";
 
     this.actualZoom = 1;
     this.zoomStep = 0.1;
@@ -107,7 +106,7 @@ export default class ViewProvider {
     this.e_editor.addEventListener("keydown", function (e) {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
-      if (e.keyCode === 13) {
+      if (e.keyCode === 13 && !e.shiftKey) {
         v.edit_node_end();
         e.stopPropagation();
       }
