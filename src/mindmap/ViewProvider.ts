@@ -154,7 +154,7 @@ export default class ViewProvider {
     });
   }
 
-  get_binded_nodeid(element: any): string | null {
+  get_binded_nodeid(element: HTMLElement): string | null {
     if (element == null) {
       return null;
     }

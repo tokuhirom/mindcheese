@@ -227,7 +227,7 @@ export default class JsMind {
       return;
     }
     if (this.get_editable()) {
-      const element = e.target;
+      const element = e.target as HTMLElement;
       const nodeid = this.view.get_binded_nodeid(element);
       if (nodeid) {
         if (nodeid) {
