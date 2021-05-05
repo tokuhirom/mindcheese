@@ -473,15 +473,15 @@ export default class JsMind {
         node: parentid,
       });
       const parent_node = this.get_node(parentid);
+      const nextSelectedNode = this.findUpperBrotherOrParentNode(parent_node, nodeid);
       this.view.save_location(parent_node);
       this.view.remove_node(node);
       this.mind.remove_node(node);
       this.layout.layout();
       this.view.show(false);
       if (parent_node.children.length > 0) {
-        const big_brother = parent_node.children.last();
-        this.mind.selected = big_brother;
-        this.view.select_node(big_brother);
+        this.mind.selected = nextSelectedNode;
+        this.view.select_node(nextSelectedNode);
       }
       this.view.restore_location(parent_node);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
@@ -494,6 +494,20 @@ export default class JsMind {
       console.error("fail, this mind map is not editable");
       return false;
     }
+  }
+
+  private findUpperBrotherOrParentNode(parent_node: MindNode, target_node_id: string) {
+    const children = parent_node.children;
+    for (let i=0; i<children.length; i++) {
+      if (children[i].id == target_node_id) {
+        if (i==0) {
+          return parent_node;
+        } else {
+          return children[i-1];
+        }
+      }
+    }
+    return parent_node; // return
   }
 
   // set topic to the node
