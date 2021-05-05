@@ -13,3 +13,5 @@ export const enum EventType {
   SELECT = 4,
   BEFORE_EDIT = 5,
 }
+
+export const KEYCODE_ENTER = 13;

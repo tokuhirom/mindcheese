@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import {EventType} from "./MindmapConstants";
+import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
@@ -102,29 +102,43 @@ export default class ViewProvider {
     this.e_editor.addEventListener("keydown", e => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
-      if (e.keyCode === 13 && !e.shiftKey) {
+      if (e.keyCode === KEYCODE_ENTER && !e.shiftKey) {
         v.edit_node_end();
         e.stopPropagation();
       }
     });
     this.e_editor.addEventListener("keyup", () => {
       // adjust size dynamically.
-      const topic = this.e_editor.value;
-      this.e_editor.style.width = this.calcEditingNodeWidth(topic);
-      this.editing_node._data.view.width = this.e_editor.clientWidth;
-      this.layout.layout();
-      this.show(false);
+      this.adjustEditorElementSize();
     });
     this.e_editor.addEventListener("blur", () => {
       // when the element lost focus.
+      // TODO revert this↓
       v.edit_node_end();
+    });
+    this.e_editor.addEventListener("input", (e) => {
+      console.log('textarea.oninput')
+      this.adjustEditorElementSize();
+      return false;
     });
 
     this.container.appendChild(this.e_panel);
   }
 
+  adjustEditorElementSize() {
+    const el = this.e_editor;
+    el.style.width = '';
+    el.style.height = '';
+    el.style.width = el.scrollWidth + 'px';
+    el.style.height = el.scrollHeight + 'px';
+    this.editing_node._data.view.width = this.e_editor.clientWidth;
+    this.editing_node._data.view.height = this.e_editor.clientHeight;
+    this.layout.layout();
+    this.show(false);
+  }
+
   setTextToElement(element: HTMLElement, topic: string) {
-    element.innerHTML = ViewProvider.escapeHTML(topic).replace(/\n/, '<br>');
+    element.innerHTML = ViewProvider.escapeHTML(topic).replace(/\n/g, '<br>');
   }
 
   private static escapeHTML(src: string ) {
@@ -335,17 +349,15 @@ export default class ViewProvider {
     const element: HTMLElement = view_data.element;
     const topic = node.topic;
     this.e_editor.value = topic;
-    this.e_editor.style.width = this.calcEditingNodeWidth(topic);
+    this.e_editor.style.width = '380px';
+    this.e_editor.style.height = topic.split(/\n/).length + 'em';
     element.innerHTML = "";
     element.appendChild(this.e_editor);
     element.style.zIndex = '5';
     this.e_editor.focus();
     this.e_editor.select();
 
-    // layout updaste.
-    view_data.width = element.clientWidth;
-    this.layout.layout();
-    this.show(false);
+    setTimeout(this.adjustEditorElementSize.bind(this), 0);
   }
 
   edit_node_end(): void {

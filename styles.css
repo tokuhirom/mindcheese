@@ -19,6 +19,13 @@
 /*  !*padding: 0;*!*/
 /*}*/
 
+textarea.jsmind-editor {
+  max-width: 380px;
+}
+jmnode {
+  max-width: 400px;
+}
+
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
