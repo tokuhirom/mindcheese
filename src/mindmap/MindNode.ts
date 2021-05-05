@@ -29,7 +29,6 @@ export class LayoutData {
 }
 
 export default class MindNode {
-  // TODO eDirection maybe the ENUM.
   public id: string;
   public index: number;
   public topic: string;

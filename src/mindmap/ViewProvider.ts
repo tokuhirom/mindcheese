@@ -375,6 +375,12 @@ export default class ViewProvider {
         } else {
           this.setTextToElement(element, node.topic);
         }
+        setTimeout(() => {
+          view_data.width = element.clientWidth;
+          view_data.height = element.clientHeight;
+          this.layout.layout();
+          this.show(false);
+        }, 0);
       } else {
         this.jm.update_node(node.id, topic);
       }
