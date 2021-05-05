@@ -2,9 +2,9 @@ import JsMind from "./JsMind";
 import {EventType} from "./MindmapConstants";
 
 export default class UndoManager {
-  private _jm: JsMind;
+  private readonly _jm: JsMind;
   private undoStack: [string, any][];
-  private undoStackLimit: number;
+  private readonly undoStackLimit: number;
 
   constructor(jm: JsMind, undoStackLimit: number = 10000) {
     this._jm = jm;

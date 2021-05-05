@@ -1,3 +1,5 @@
+// noinspection JSUnfilteredForInLoop
+
 /*
  * Released under BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
@@ -336,15 +338,13 @@ export default class Draggable {
       const py = e.clientY - this.offset_y;
       // const px = (e.clientX || e.touches[0].clientX) - this.offset_x;
       // const py = (e.clientY || e.touches[0].clientY) - this.offset_y;
-      const cx = px + this.client_hw;
-      const cy = py + this.client_hh;
       this.shadow.style.left = px + "px";
       this.shadow.style.top = py + "px";
       window.getSelection().removeAllRanges();
     }
   }
 
-  dragend(e: Event): void {
+  dragend(): void {
     if (!this.jm.get_editable()) {
       return;
     }

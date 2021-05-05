@@ -1,3 +1,5 @@
+// noinspection JSUnfilteredForInLoop
+
 "use strict";
 
 import MindNode from "./MindNode";
@@ -102,7 +104,6 @@ export default class Mind {
     }
   }
 
-  // XXX jsMind では node_before に nodeid も受け付けていたっぽい。
   insert_node_before(
     node_before: MindNode,
     nodeid: string,
@@ -121,8 +122,7 @@ export default class Mind {
     );
   }
 
-  // XXX jsMind では node に nodeid も受け付けていたっぽい。
-  get_node_before(node: MindNode) {
+  get_node_before(node: MindNode): MindNode {
     if (node.isroot) {
       return null;
     }
@@ -155,8 +155,7 @@ export default class Mind {
     );
   }
 
-  // XXX jsMind では node に nodeid も受け付けていたっぽい。
-  get_node_after(node: MindNode) {
+  get_node_after(node: MindNode):MindNode {
     if (node.isroot) {
       return null;
     }

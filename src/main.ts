@@ -2,7 +2,6 @@ import {
   App,
   MarkdownView,
   Menu,
-  Notice,
   Plugin,
   PluginSettingTab,
   Setting,
@@ -10,7 +9,7 @@ import {
   WorkspaceLeaf,
 } from "obsidian";
 import { around } from "monkey-around";
-import { frontMatterKey } from "./parser";
+import { FRONT_MATTER_KEY } from "./parser";
 import { EDITABLE_MARKDOWN_ICON, MINDMAP_VIEW_TYPE } from "./Constants";
 import { EditableMindmapView } from "./EditableMindmapView";
 
@@ -64,7 +63,7 @@ export default class MyPlugin extends Plugin {
               // Then check for the mindmap frontMatterKey
               const cache = self.app.metadataCache.getCache(state.state.file);
 
-              if (cache?.frontmatter && cache.frontmatter[frontMatterKey]) {
+              if (cache?.frontmatter && cache.frontmatter[FRONT_MATTER_KEY]) {
                 // If we have it, force the view type to MindMap
                 const newState = {
                   ...state,
@@ -96,7 +95,7 @@ export default class MyPlugin extends Plugin {
             if (
               !file ||
               !cache?.frontmatter ||
-              !cache.frontmatter[frontMatterKey]
+              !cache.frontmatter[FRONT_MATTER_KEY]
             ) {
               return next.call(this, menu);
             }

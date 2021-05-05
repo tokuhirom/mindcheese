@@ -1,3 +1,5 @@
+// noinspection JSUnfilteredForInLoop
+
 import {Direction, EventType} from "./MindmapConstants";
 
 import MindNode from "./MindNode";
@@ -156,6 +158,9 @@ export default class LayoutProvider {
       layout_data = node._data.layout;
       if (pd == null) {
         pd = node.parent._data;
+        if (pd == null) {
+          throw new Error("Cannot get parent's data");
+        }
       }
 
       node_outer_height = this._layout_offset_subnodes(node.children);
@@ -233,7 +238,7 @@ export default class LayoutProvider {
 
   get_node_offset(node: MindNode): Point {
     const layout_data = node._data.layout;
-    let offset_cache = null;
+    let offset_cache;
     if ("_offset_" in layout_data && this.cache_valid) {
       offset_cache = layout_data._offset_;
     } else {
@@ -272,7 +277,7 @@ export default class LayoutProvider {
 
   get_node_point_out(node: MindNode): { x: number; y: number } {
     const layout_data = node._data.layout;
-    let pout_cache: {x:number, y:number}  = null;
+    let pout_cache: {x:number, y:number};
     if ("_pout_" in layout_data && this.cache_valid) {
       pout_cache = layout_data._pout_;
     } else {
@@ -471,11 +476,6 @@ export default class LayoutProvider {
         node._data.layout.visible = visible;
       }
     }
-  }
-
-  is_expand(node: MindNode): boolean {
-    // TODO remove this method
-    return node.expanded;
   }
 
   is_visible(node: MindNode): boolean {

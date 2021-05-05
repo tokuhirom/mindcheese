@@ -24,13 +24,7 @@ function parse(title: string, md:string) {
     }
 
     if (isContinuous) {
-      const match = line.match(/^(\s+)(.*?)\s*$/);
-      if (!match) {
-        console.log(`'${line}' is not a bullet list(cont.).`)
-        continue;
-      }
-      const leadingSpaces = match[1];
-      let body = match[2];
+      let body = line;
       if (body.match(/ [\\ ]$/)) {
         // multi-line bullet list.
         body = body.replace(/ [\\ ]$/, '');
@@ -38,7 +32,7 @@ function parse(title: string, md:string) {
       } else {
         isContinuous = false;
       }
-      for (let j=0; j<lastSpaces.length; j++) {
+      for (let j=0; j<lastSpaces.length+2; j++) {
         body = body.replace(/^\s/, '');
       }
       lastElement.topic += "\n" + body;

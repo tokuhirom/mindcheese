@@ -1,4 +1,6 @@
 // TODO convert to typescript
+// noinspection JSUnusedGlobalSymbols
+
 import {Direction} from "./MindmapConstants";
 
 export class ViewData {
@@ -31,9 +33,9 @@ export default class MindNode {
   public id: string;
   public index: number;
   public topic: string;
-  public data: any;
+  public data: { view: ViewData, layout: LayoutData };
   public isroot: boolean;
-  public parent: any;
+  public parent: MindNode;
   public direction: Direction;
   public expanded: boolean;
   public children: MindNode[];
@@ -78,7 +80,7 @@ export default class MindNode {
 
   static compare(node1: MindNode, node2: MindNode): number {
     // '-1' is alwary the last
-    let r = 0;
+    let r: number;
     const i1 = node1.index;
     const i2 = node2.index;
     if (i1 >= 0 && i2 >= 0) {

@@ -1,7 +1,7 @@
 export default class GraphCanvas {
-  private opts: any; // FIXME don't use any
-  private e_canvas: HTMLCanvasElement;
-  private canvas_ctx: CanvasRenderingContext2D;
+  private opts: { line_color: any, line_width: number };
+  private readonly e_canvas: HTMLCanvasElement;
+  private readonly canvas_ctx: CanvasRenderingContext2D;
   private size: { w: number; h: number };
 
   constructor(view: any) {
@@ -27,9 +27,8 @@ export default class GraphCanvas {
     this.canvas_ctx.clearRect(0, 0, this.size.w, this.size.h);
   }
 
-  // TODO what's the type of **pout**
   draw_line(
-    pout: any,
+    pout: { x: number, y: number },
     pin: { x: number; y: number },
     offset: { x: number; y: number }
   ): void {
@@ -47,16 +46,6 @@ export default class GraphCanvas {
     );
   }
 
-  copy_to(
-    dest_canvas_ctx: CanvasRenderingContext2D,
-    callback: () => void
-  ): void {
-    dest_canvas_ctx.drawImage(this.e_canvas, 0, 0);
-    if (callback) {
-      callback();
-    }
-  }
-
   _bezier_to(
     ctx: CanvasRenderingContext2D,
     x1: number,
@@ -67,19 +56,6 @@ export default class GraphCanvas {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.bezierCurveTo(x1 + ((x2 - x1) * 2) / 3, y1, x1, y2, x2, y2);
-    ctx.stroke();
-  }
-
-  _line_to(
-    ctx: CanvasRenderingContext2D,
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
-  ): void {
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
     ctx.stroke();
   }
 }

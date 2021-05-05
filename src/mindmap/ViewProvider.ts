@@ -1,3 +1,5 @@
+// noinspection JSUnfilteredForInLoop,JSUnusedGlobalSymbols,JSUnusedGlobalSymbols
+
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
 import {EventType} from "./MindmapConstants";
@@ -15,6 +17,7 @@ const $h = function (n: any, t: any) {
 };
 
 // detect isElemend
+// TODO remove this.
 function isElement(el: HTMLElement) {
   return (
     !!el &&
@@ -33,6 +36,7 @@ function is_empty(s: string) {
   return s.replace(/\s*/, "").length == 0;
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
   private opts: any;
   private jm: JsMind;
@@ -94,8 +98,8 @@ export default class ViewProvider {
     this.minZoom = 0.5;
     this.maxZoom = 2;
 
-    const v = this;
-    this.e_editor.addEventListener("keydown", function (e) {
+    const v = this; // TODO remove this.
+    this.e_editor.addEventListener("keydown", e => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
       if (e.keyCode === 13 && !e.shiftKey) {
@@ -103,7 +107,7 @@ export default class ViewProvider {
         e.stopPropagation();
       }
     });
-    this.e_editor.addEventListener("keyup", (e:KeyboardEvent) => {
+    this.e_editor.addEventListener("keyup", () => {
       // adjust size dynamically.
       const topic = this.e_editor.value;
       this.e_editor.style.width = this.calcEditingNodeWidth(topic);
@@ -111,7 +115,7 @@ export default class ViewProvider {
       this.layout.layout();
       this.show(false);
     });
-    this.e_editor.addEventListener("blur", function (e) {
+    this.e_editor.addEventListener("blur", () => {
       // when the element lost focus.
       v.edit_node_end();
     });
@@ -120,8 +124,7 @@ export default class ViewProvider {
   }
 
   setTextToElement(element: HTMLElement, topic: string) {
-    const html = ViewProvider.escapeHTML(topic).replace(/\n/, '<br>');
-    element.innerHTML = html;
+    element.innerHTML = ViewProvider.escapeHTML(topic).replace(/\n/, '<br>');
   }
 
   private static escapeHTML(src: string ) {
@@ -307,10 +310,6 @@ export default class ViewProvider {
 
   select_clear(): void {
     this.select_node(null);
-  }
-
-  get_editing_node(): any {
-    return this.editing_node;
   }
 
   is_editing(): boolean {

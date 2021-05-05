@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import DataProvider from "./DataProvider";
 import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
@@ -59,7 +61,7 @@ export default class JsMind {
   options: any;
   private inited: boolean;
   public mind: Mind;
-  private event_handles_map: Record<EventType, ((data: any) => void)[]>;
+  private readonly event_handles_map: Record<EventType, ((data: any) => void)[]>;
   private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
@@ -280,27 +282,27 @@ export default class JsMind {
     this.view.restore_location(node);
   }
 
-  expand_all() {
+  expand_all(): void {
     this.layout.expand_all();
     this.view.relayout();
   }
 
-  collapse_all() {
+  collapse_all(): void {
     this.layout.collapse_all();
     this.view.relayout();
   }
 
-  expand_to_depth(depth: number) {
+  expand_to_depth(depth: number): void {
     this.layout.expand_to_depth(depth, null, null);
     this.view.relayout();
   }
 
-  _reset() {
+  _reset(): void {
     this.view.reset();
     this.layout.reset();
   }
 
-  _show(mind: any) {
+  _show(mind: any): void {
     this.mind = this.data.load(mind, this.id);
     if (!this.mind) {
       console.error("data.load error");
@@ -327,7 +329,7 @@ export default class JsMind {
     this._show(mind);
   }
 
-  get_meta() {
+  get_meta(): { author: string; name: string; version: string } {
     return {
       name: this.mind.name,
       author: this.mind.author,
@@ -335,19 +337,19 @@ export default class JsMind {
     };
   }
 
-  get_data(data_format: string) {
+  get_data(data_format: string): Record<string, any> {
     return this.data.get_data(data_format);
   }
 
-  get_root() {
+  get_root(): MindNode {
     return this.mind.root;
   }
 
-  get_node(nodeid: string) {
+  get_node(nodeid: string): MindNode {
     return this.mind.get_node(nodeid);
   }
 
-  add_node(parent_node: MindNode, nodeid: string, topic: string, data: any) {
+  add_node(parent_node: MindNode, nodeid: string, topic: string, data: any): null | MindNode {
     if (this.get_editable()) {
       this.invoke_event_handle(EventType.BEFORE_EDIT, {
         evt: "add_node",
@@ -577,7 +579,7 @@ export default class JsMind {
     });
   }
 
-  get_selected_node(): any {
+  get_selected_node(): MindNode {
     if (this.mind) {
       return this.mind.selected;
     } else {
@@ -585,22 +587,22 @@ export default class JsMind {
     }
   }
 
-  select_clear() {
+  select_clear(): void {
     if (this.mind) {
       this.mind.selected = null;
       this.view.select_clear();
     }
   }
 
-  is_node_visible(node: MindNode) {
+  is_node_visible(node: MindNode): boolean {
     return this.layout.is_visible(node);
   }
 
-  find_node_before(node: MindNode) {
+  find_node_before(node: MindNode): null | MindNode {
     if (node.isroot) {
       return null;
     }
-    let n = null;
+    let n:MindNode = null;
     if (node.parent.isroot) {
       const c = node.parent.children;
       let prev = null;
@@ -620,11 +622,11 @@ export default class JsMind {
     return n;
   }
 
-  find_node_after(node: MindNode) {
+  find_node_after(node: MindNode): null | MindNode {
     if (node.isroot) {
       return null;
     }
-    let n = null;
+    let n:MindNode = null;
     if (node.parent.isroot) {
       const c = node.parent.children;
       let getthis = false;
@@ -645,107 +647,6 @@ export default class JsMind {
       n = this.mind.get_node_after(node);
     }
     return n;
-  }
-
-  set_node_color(nodeid: string, bgcolor: any, fgcolor: any): void {
-    if (this.get_editable()) {
-      const node = this.mind.get_node(nodeid);
-      if (node) {
-        if (bgcolor) {
-          node.data["background-color"] = bgcolor;
-        }
-        if (fgcolor) {
-          node.data["foreground-color"] = fgcolor;
-        }
-        this.view.reset_node_custom_style(node);
-      }
-    } else {
-      console.error("fail, this mind map is not editable");
-    }
-  }
-
-  set_node_font_style(
-    nodeid: string,
-    size: any,
-    weight: any,
-    style: any
-  ): void {
-    if (this.get_editable()) {
-      const node = this.mind.get_node(nodeid);
-      if (node) {
-        if (size) {
-          node.data["font-size"] = size;
-        }
-        if (weight) {
-          node.data["font-weight"] = weight;
-        }
-        if (style) {
-          node.data["font-style"] = style;
-        }
-        this.view.reset_node_custom_style(node);
-        this.view.update_node(node);
-        this.layout.layout();
-        this.view.show(false);
-      }
-    } else {
-      console.error("fail, this mind map is not editable");
-      return null;
-    }
-  }
-
-  set_node_background_image(
-    nodeid: string,
-    image: any,
-    width: any,
-    height: number,
-    rotation: any
-  ): void {
-    if (this.get_editable()) {
-      const node = this.mind.get_node(nodeid);
-      if (node) {
-        if (image) {
-          node.data["background-image"] = image;
-        }
-        if (width) {
-          node.data["width"] = width;
-        }
-        if (height) {
-          node.data["height"] = height;
-        }
-        if (rotation) {
-          node.data["background-rotation"] = rotation;
-        }
-        this.view.reset_node_custom_style(node);
-        this.view.update_node(node);
-        this.layout.layout();
-        this.view.show(false);
-      }
-    } else {
-      console.error("fail, this mind map is not editable");
-      return null;
-    }
-  }
-
-  set_node_background_rotation(nodeid: string, rotation: any): void {
-    if (this.get_editable()) {
-      const node = this.mind.get_node(nodeid);
-      if (node) {
-        if (!node.data["background-image"]) {
-          console.error(
-            "fail, only can change rotation angle of node with background image"
-          );
-          return null;
-        }
-        node.data["background-rotation"] = rotation;
-        this.view.reset_node_custom_style(node);
-        this.view.update_node(node);
-        this.layout.layout();
-        this.view.show(false);
-      }
-    } else {
-      console.error("fail, this mind map is not editable");
-      return null;
-    }
   }
 
   resize() {

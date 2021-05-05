@@ -1,3 +1,5 @@
+// noinspection JSUnfilteredForInLoop
+
 /*
 {
     "meta": {
@@ -108,6 +110,7 @@ export class NodeTree {
     if (node.data != null) {
       const node_data = node.data;
       for (const k in node_data) {
+        // @ts-ignore
         o[k] = node_data[k];
       }
     }

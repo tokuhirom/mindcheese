@@ -1,3 +1,5 @@
+// noinspection JSUnfilteredForInLoop,JSUnusedGlobalSymbols
+
 import { Direction } from "./MindmapConstants";
 import JsMind from "./JsMind";
 
@@ -9,11 +11,11 @@ function generateId(): string {
 }
 
 export default class ShortcutProvider {
-  private jm: JsMind;
-  private mapping: Record<string, number>; // handlerName2keycode
-  private handles: Record<string, (arg0: JsMind, arg1: Event) => boolean>;
-  private _newid: () => string;
-  private _mapping: Record<number, (arg0: JsMind, arg1: Event) => boolean>; // number2callback
+  private readonly jm: JsMind;
+  private readonly mapping: Record<string, number>; // handlerName2keycode
+  private readonly handles: Record<string, (arg0: JsMind, arg1: Event) => boolean>;
+  private readonly _newid: () => string;
+  private readonly _mapping: Record<number, (arg0: JsMind, arg1: Event) => boolean>; // number2callback
   private enable: boolean;
 
   constructor(
@@ -64,6 +66,7 @@ export default class ShortcutProvider {
   }
 
   handler(e: KeyboardEvent): boolean {
+    // noinspection JSDeprecatedSymbols
     if (e.which == 9) {
       e.preventDefault();
     } //prevent tab to change focus in browser
@@ -73,6 +76,7 @@ export default class ShortcutProvider {
     if (!this.enable) {
       return true;
     }
+    // noinspection JSDeprecatedSymbols
     const kc =
       e.keyCode +
       ((e.metaKey ? 1 : 0) << 13) +
@@ -86,7 +90,6 @@ export default class ShortcutProvider {
       // VISIBILITY=${getComputedStyle(container).visibility}
       //     TOP=${getComputedStyle(container).top}
 
-      // TODO this.jm is redundant handler.
       if (isConnected) {
         console.log(`Invoking shortcut handler: ID=${this.jm.mind.id}/${this.jm.id} connected=${isConnected}
       target=${e.target}
@@ -97,7 +100,7 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_addchild(_jm: JsMind, e: Event): boolean {
+  handle_addchild(_jm: JsMind): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       const nodeid = this._newid();
@@ -130,7 +133,7 @@ export default class ShortcutProvider {
     return false;
   }
 
-  handle_editnode(_jm: JsMind, e: Event): boolean {
+  handle_editnode(_jm: JsMind): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.begin_edit(selected_node);
@@ -138,7 +141,7 @@ export default class ShortcutProvider {
     return false;
   }
 
-  handle_delnode(_jm: JsMind, e: Event): boolean {
+  handle_delnode(_jm: JsMind): boolean {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       _jm.select_node(selected_node.parent);
@@ -150,7 +153,7 @@ export default class ShortcutProvider {
   handle_toggle(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
-      _jm.toggle_node(selected_node.id);
+      _jm.toggle_node(selected_node);
       e.stopPropagation();
       e.preventDefault();
     }
