@@ -4,14 +4,6 @@ import {EventType} from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
-function $t(element: HTMLElement, topic: string) {
-  // TODO inlining this.
-  if (element.hasChildNodes()) {
-    element.firstChild.nodeValue = topic;
-  } else {
-    element.appendChild(document.createTextNode(topic));
-  }
-}
 const $h = function (n: any, t: any) {
   // TODO inlining this
   if (t instanceof HTMLElement) {
@@ -127,6 +119,18 @@ export default class ViewProvider {
     this.container.appendChild(this.e_panel);
   }
 
+  setTextToElement(element: HTMLElement, topic: string) {
+    const html = ViewProvider.escapeHTML(topic).replace(/\n/, '<br>');
+    element.innerHTML = html;
+  }
+
+  private static escapeHTML(src: string ) {
+    const pre = document.createElement('pre');
+    const text = document.createTextNode(src);
+    pre.appendChild(text);
+    return pre.innerHTML;
+  }
+
   add_event(obj: any, event_name: string, event_handle: () => void) {
     this.e_nodes.addEventListener(event_name, function (e: Event) {
       event_handle.call(obj, e);
@@ -228,7 +232,7 @@ export default class ViewProvider {
       d.className = "root";
     } else {
       const d_e: HTMLElement = document.createElement("jmexpander");
-      $t(d_e, "-");
+      this.setTextToElement(d_e, "-");
       d_e.setAttribute("nodeid", node.id);
       d_e.style.visibility = "hidden";
       parent_node.appendChild(d_e);
@@ -238,7 +242,7 @@ export default class ViewProvider {
       if (this.opts.support_html) {
         $h(d, node.topic);
       } else {
-        $t(d, node.topic);
+        this.setTextToElement(d, node.topic);
       }
     }
     d.setAttribute("nodeid", node.id);
@@ -279,7 +283,7 @@ export default class ViewProvider {
       if (this.opts.support_html) {
         $h(element, node.topic);
       } else {
-        $t(element, node.topic);
+        this.setTextToElement(element, node.topic);
       }
     }
     view_data.width = element.clientWidth;
@@ -357,7 +361,7 @@ export default class ViewProvider {
         if (this.opts.support_html) {
           $h(element, node.topic);
         } else {
-          $t(element, node.topic);
+          this.setTextToElement(element, node.topic);
         }
       } else {
         this.jm.update_node(node.id, topic);
@@ -504,7 +508,7 @@ export default class ViewProvider {
         expander.style.top = _offset.y + p_expander.y + "px";
         expander.style.display = "";
         expander.style.visibility = "visible";
-        $t(expander, expander_text);
+        this.setTextToElement(expander, expander_text);
       }
       // hide expander while all children have been removed
       if (!node.isroot && node.children.length == 0) {
