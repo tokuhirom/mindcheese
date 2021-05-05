@@ -4,14 +4,14 @@ import {EventType} from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
-const $t = function (n: any, t: any) {
+function $t(element: HTMLElement, topic: string) {
   // TODO inlining this.
-  if (n.hasChildNodes()) {
-    n.firstChild.nodeValue = t;
+  if (element.hasChildNodes()) {
+    element.firstChild.nodeValue = topic;
   } else {
-    n.appendChild(document.createTextNode(t));
+    element.appendChild(document.createTextNode(topic));
   }
-};
+}
 const $h = function (n: any, t: any) {
   // TODO inlining this
   if (t instanceof HTMLElement) {
