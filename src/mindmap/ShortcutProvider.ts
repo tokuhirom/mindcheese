@@ -11,16 +11,16 @@ function generateId(): string {
 export default class ShortcutProvider {
   private jm: JsMind;
   private mapping: Record<string, number>; // handlerName2keycode
-  private handles: Record<string, (arg0: JsMind, arg1: Event) => void>;
+  private handles: Record<string, (arg0: JsMind, arg1: Event) => boolean>;
   private _newid: () => string;
-  private _mapping: Record<number, (arg0: JsMind, arg1: Event) => void>; // number2callback
+  private _mapping: Record<number, (arg0: JsMind, arg1: Event) => boolean>; // number2callback
   private enable: boolean;
 
   constructor(
     jm: JsMind,
     enable: boolean,
     mapping: Record<string, number>,
-    handles: Record<string, (arg0: JsMind, arg1: Event) => void>,
+    handles: Record<string, (arg0: JsMind, arg1: Event) => boolean>,
     newid: () => string = generateId
   ) {
     this.jm = jm;
@@ -92,11 +92,12 @@ export default class ShortcutProvider {
       target=${e.target}
       `);
         this._mapping[kc].call(this, this.jm, e);
+        return false;
       }
     }
   }
 
-  handle_addchild(_jm: JsMind, e: Event): void {
+  handle_addchild(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       const nodeid = this._newid();
@@ -106,9 +107,12 @@ export default class ShortcutProvider {
         _jm.begin_edit(node);
       }
     }
+    return false;
   }
 
-  handle_addbrother(jm: JsMind, e: Event): void {
+  handle_addbrother(jm: JsMind, e: Event): boolean {
+    e.preventDefault();
+
     const selected_node = jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       const nodeid = this._newid();
@@ -123,33 +127,37 @@ export default class ShortcutProvider {
         jm.begin_edit(node);
       }
     }
+    return false;
   }
 
-  handle_editnode(_jm: JsMind, e: Event): void {
+  handle_editnode(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.begin_edit(selected_node);
     }
+    return false;
   }
 
-  handle_delnode(_jm: JsMind, e: Event): void {
+  handle_delnode(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       _jm.select_node(selected_node.parent);
       _jm.remove_node(selected_node);
     }
+    return false;
   }
 
-  handle_toggle(_jm: JsMind, e: Event): void {
+  handle_toggle(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       _jm.toggle_node(selected_node.id);
       e.stopPropagation();
       e.preventDefault();
     }
+    return false;
   }
 
-  handle_up(_jm: JsMind, e: Event): void {
+  handle_up(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let up_node = _jm.find_node_before(selected_node);
@@ -165,9 +173,10 @@ export default class ShortcutProvider {
       e.stopPropagation();
       e.preventDefault();
     }
+    return false;
   }
 
-  handle_down(_jm: JsMind, e: Event): void {
+  handle_down(_jm: JsMind, e: Event): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       let down_node = _jm.find_node_after(selected_node);
@@ -183,14 +192,17 @@ export default class ShortcutProvider {
       e.stopPropagation();
       e.preventDefault();
     }
+    return false;
   }
 
-  handle_left(_jm: JsMind, e: Event): void {
+  handle_left(_jm: JsMind, e: Event): boolean {
     this._handle_direction(_jm, e, Direction.LEFT);
+    return false;
   }
 
-  handle_right(_jm: JsMind, e: Event): void {
+  handle_right(_jm: JsMind, e: Event): boolean {
     this._handle_direction(_jm, e, Direction.RIGHT);
+    return false;
   }
 
   _handle_direction(_jm: JsMind, e: Event, d: Direction): void {
@@ -224,8 +236,11 @@ export default class ShortcutProvider {
     }
   }
 
-  handle_undo(_jm: JsMind, e: Event): void {
+  handle_undo(_jm: JsMind, e: Event): boolean {
     console.log("UNDO!")
     _jm.undo();
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
   }
 }

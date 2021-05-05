@@ -57,7 +57,7 @@ test("basic", () => {
   const md = MM2MDConverter.convertMM2MD(mind);
   expect(md).toBe(
     [
-      "- Easy",
+      "+ Easy",
       "\t- Easy to show",
       "\t- Easy to edit",
       "\t- Easy to store",
@@ -69,9 +69,50 @@ test("basic", () => {
       "\t- Base on Javascript",
       "\t- Base on HTML5",
       "\t- Depends on you",
-      "- test node",
+      "+ test node",
       "\t- I'm from local variable",
       "\t- I can do everything",
+      "",
+    ].join("\n")
+  );
+});
+
+test("multiline", () => {
+  const mind = {
+    meta: {
+      name: "jsMind remote",
+      author: "hizzgdev@163.com",
+      version: "0.2",
+    },
+    format: "node_tree",
+    data: {
+      id: "root",
+      topic: "jsMind",
+      children: [
+        {
+          id: "easy",
+          topic: "Easy 1\nEasy 2\nEasy 3",
+          direction: "left",
+          children: [
+            {
+              id: "abc",
+              topic: "Abc 1\nAbc 2\nAbc 3",
+              direction: "left",
+            }
+          ]
+        },
+      ],
+    },
+  };
+  const md = MM2MDConverter.convertMM2MD(mind);
+  expect(md).toBe(
+    [
+      "+ Easy 1 \\",
+      "  Easy 2 \\",
+      "  Easy 3",
+      "\t+ Abc 1 \\",
+      "\t  Abc 2 \\",
+      "\t  Abc 3",
       "",
     ].join("\n")
   );

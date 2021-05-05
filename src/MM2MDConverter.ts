@@ -5,11 +5,22 @@ function renderMd(node: any, level: number):string {
 
   let result = "";
   if (node.topic) {
-    for (let i = 0; i < level; i++) {
-      result += "\t";
+    const lines = node.topic.split("\n");
+    for (let i=0; i<lines.length; i++) {
+        for (let j = 0; j < level; j++) {
+          result += "\t";
+        }
+        if (i===0) {
+            result += node.direction == 'left' ? '+ ' : "- ";
+        } else {
+            result += "  ";
+        }
+        result += lines[i];
+        if (i+1 < lines.length) {
+            result += " \\";
+        }
+        result += "\n";
     }
-    result += node.direction == 'left' ? '+' : "-";
-    result += " " + node.topic + "\n";
   }
 
   if (node.children) {

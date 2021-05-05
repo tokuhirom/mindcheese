@@ -287,3 +287,29 @@ test("dedent 3 step", () => {
     },
   });
 });
+
+test("Multiline", () => {
+  const md = [
+    "- A1 \\",
+    "  A2",
+    "\t- B1 \\",
+    "\t  B2 \\",
+    "\t  B3",
+  ].join("\n");
+  const mm = MD2MMConverter.convertMD2MM("top", md);
+  console.log(JSON.stringify(mm, null, 2));
+  expect(mm).toStrictEqual({
+    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
+    format: "node_tree",
+    data: {
+      id: "root",
+      topic: "top",
+      children: [
+        { id: 1, topic: "A1\nA2", direction: 'right', children: [
+            { id: 2, topic: "B1\nB2\nB3", direction: 'right',children: [] },
+          ]
+        },
+      ],
+    },
+  });
+});
