@@ -1,4 +1,4 @@
-import JsMind from '../src/mindmap/jsmind';
+import JsMind from '../src/mindmap/JsMind';
 
 export default JsMind;
 console.log("Loaded browser.ts");
