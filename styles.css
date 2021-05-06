@@ -19,6 +19,10 @@
 /*  !*padding: 0;*!*/
 /*}*/
 
+canvas.jsmind-draggable {
+  vertical-align:top
+}
+
 textarea.jsmind-editor {
   max-width: 380px;
 }
@@ -39,7 +43,7 @@ jmnode {
   position: relative;
   overflow: auto;
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 } /*box-shadow:0 0 2px #000;*/
 .jsmind-inner {
   moz-user-select: -moz-none;

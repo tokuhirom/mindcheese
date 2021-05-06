@@ -5,8 +5,15 @@
   <link href="../styles.css" rel="stylesheet">
 </head>
 <body>
+<div>
+  <button id="layout">layout.layout()</button>
+  <button id="viewShow">view.show()</button>
+  <button id="expandSize">view.expand_size()</button>
+  <button id="view_show">view._show()</button>
+</div>
 <div id="container">
 </div>
+
 <script>
   const container = document.getElementById('container');
   console.log(container);
@@ -88,6 +95,27 @@
     },
   });
   console.log(window.JsMind)
+
+  document.getElementById('layout').addEventListener('click', () => {
+    console.log('layout.layout');
+    jsmind.layout.layout();
+    return false;
+  });
+  document.getElementById('viewShow').addEventListener('click', () => {
+    console.log('viewShow');
+    jsmind.view.show(false);
+    return false;
+  });
+  document.getElementById('expandSize').addEventListener('click', () => {
+    console.log('viewShow');
+    jsmind.view.expand_size();
+    return false;
+  });
+  document.getElementById('view_show').addEventListener('click', () => {
+    console.log('view_show');
+    jsmind.view._show();
+    return false;
+  });
 </script>
 </body>
 </html>

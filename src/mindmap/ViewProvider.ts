@@ -42,8 +42,8 @@ export default class ViewProvider {
   private jm: JsMind;
   private layout: LayoutProvider;
   container: HTMLElement;
-  e_panel: any;
-  e_nodes: any;
+  e_panel: any; // div.jsmind-inner
+  e_nodes: HTMLElement; // <jmnodes>
   size: { w: number; h: number };
   private selected_node: any;
   private editing_node: any;
@@ -208,6 +208,11 @@ export default class ViewProvider {
     const min_height = min_size.h + this.opts.vmargin * 2;
     let client_w = this.e_panel.clientWidth;
     let client_h = this.e_panel.clientHeight;
+    console.debug(`ViewProvider.expand_size:
+    min_width=${min_width}
+    min_height=${min_height}
+    client_w=${client_w}
+    client_h=${client_h}`)
     if (client_w < min_width) {
       client_w = min_width;
     }
@@ -241,7 +246,7 @@ export default class ViewProvider {
     this.init_nodes_size(node);
   }
 
-  create_node_element(node: MindNode, parent_node: DocumentFragment): void {
+  create_node_element(node: MindNode, parent_node: Node): void {
     let view_data = node._data.view;
 
     const d: HTMLElement = document.createElement("jmnode");

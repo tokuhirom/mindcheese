@@ -81,6 +81,7 @@ export default class Draggable {
 
   _create_canvas(): void {
     const c: HTMLCanvasElement = document.createElement("canvas");
+    c.className = 'jsmind-draggable';
     this.jm.view.e_panel.appendChild(c);
     const ctx: CanvasRenderingContext2D = c.getContext("2d");
     this.e_canvas = c;
