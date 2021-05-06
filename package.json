@@ -7,6 +7,7 @@
     "dev": "rollup --config rollup.config.js -w",
     "browserDev": "rollup --config browser/rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
+    "build-browser": "rollup --config browser/rollup.config.js --environment BUILD:production",
     "test": "jest",
     "prettier": "prettier --write .",
     "eslint": "npx eslint . --ext .ts,.tsx"
