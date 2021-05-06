@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
+    "browserDev": "rollup --config browser/rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
     "test": "jest",
     "prettier": "prettier --write .",
