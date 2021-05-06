@@ -473,7 +473,10 @@ export default class JsMind {
         node: parentid,
       });
       const parent_node = this.get_node(parentid);
-      const nextSelectedNode = this.findUpperBrotherOrParentNode(parent_node, nodeid);
+      const nextSelectedNode = this.findUpperBrotherOrParentNode(
+        parent_node,
+        nodeid
+      );
       this.view.save_location(parent_node);
       this.view.remove_node(node);
       this.mind.remove_node(node);
@@ -496,14 +499,17 @@ export default class JsMind {
     }
   }
 
-  private findUpperBrotherOrParentNode(parent_node: MindNode, target_node_id: string) {
+  private findUpperBrotherOrParentNode(
+    parent_node: MindNode,
+    target_node_id: string
+  ) {
     const children = parent_node.children;
-    for (let i=0; i<children.length; i++) {
+    for (let i = 0; i < children.length; i++) {
       if (children[i].id == target_node_id) {
-        if (i==0) {
+        if (i == 0) {
           return parent_node;
         } else {
-          return children[i-1];
+          return children[i - 1];
         }
       }
     }

@@ -211,7 +211,7 @@ export default class ViewProvider {
     min_width=${min_width}
     min_height=${min_height}
     client_w=${client_w}
-    client_h=${client_h}`)
+    client_h=${client_h}`);
     if (client_w < min_width) {
       client_w = min_width;
     }
