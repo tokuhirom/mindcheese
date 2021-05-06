@@ -39,7 +39,7 @@ export default class ShortcutProvider {
     this._mapping = {};
   }
 
-  init() {
+  init(): void {
     // TODO do not hook to the global object.
     // this.jm.options.container.addEventListener('keydown',
     //     this.handler.bind(this))

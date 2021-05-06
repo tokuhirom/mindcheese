@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
+import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
@@ -71,7 +71,7 @@ export default class ViewProvider {
     this.graph = null;
   }
 
-  init() {
+  init(): void {
     console.debug("view.init");
 
     this.container = isElement(this.opts.container)
@@ -98,12 +98,12 @@ export default class ViewProvider {
     this.minZoom = 0.5;
     this.maxZoom = 2;
 
-    const v = this; // TODO remove this.
+
     this.e_editor.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
       if (e.keyCode === KEYCODE_ENTER && !e.shiftKey) {
-        v.edit_node_end();
+        this.edit_node_end();
         e.stopPropagation();
       }
     });
@@ -113,9 +113,9 @@ export default class ViewProvider {
     });
     this.e_editor.addEventListener("blur", () => {
       // when the element lost focus.
-      v.edit_node_end();
+      this.edit_node_end();
     });
-    this.e_editor.addEventListener("input", (e) => {
+    this.e_editor.addEventListener("input", () => {
       console.log("textarea.oninput");
       this.adjustEditorElementSize();
       return false;
@@ -136,7 +136,7 @@ export default class ViewProvider {
     this.show(false);
   }
 
-  setTextToElement(element: HTMLElement, topic: string) {
+  setTextToElement(element: HTMLElement, topic: string): void {
     element.innerHTML = ViewProvider.escapeHTML(topic).replace(/\n/g, "<br>");
   }
 
@@ -145,12 +145,6 @@ export default class ViewProvider {
     const text = document.createTextNode(src);
     pre.appendChild(text);
     return pre.innerHTML;
-  }
-
-  add_event(obj: any, event_name: string, event_handle: () => void) {
-    this.e_nodes.addEventListener(event_name, function (e: Event) {
-      event_handle.call(obj, e);
-    });
   }
 
   get_binded_nodeid(element: HTMLElement): string | null {
@@ -172,7 +166,7 @@ export default class ViewProvider {
     return element.tagName.toLowerCase() === "jmexpander";
   }
 
-  reset() {
+  reset(): void {
     console.debug("view.reset");
     this.selected_node = null;
     this.clear_lines();
@@ -274,7 +268,7 @@ export default class ViewProvider {
     view_data.element = d;
   }
 
-  remove_node(node: MindNode) {
+  remove_node(node: MindNode): void {
     if (this.selected_node != null && this.selected_node.id == node.id) {
       this.selected_node = null;
     }
@@ -420,7 +414,7 @@ export default class ViewProvider {
     return this.setZoom(this.actualZoom - this.zoomStep);
   }
 
-  setZoom(zoom: any): boolean {
+  setZoom(zoom: number): boolean {
     if (zoom < this.minZoom || zoom > this.maxZoom) {
       return false;
     }

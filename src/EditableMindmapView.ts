@@ -165,7 +165,7 @@ export class EditableMindmapView extends TextFileView {
   }
 
   // TODO handle onResize
-  onResize() {
+  onResize(): void {
     console.log(`onResize: ${this.mm} TIMESTAMP`);
     super.onResize();
   }

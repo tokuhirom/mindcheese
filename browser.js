@@ -2123,9 +2123,15 @@ this['browser/browser'].bundled.js = (function () {
             }
         }
         _event_bind() {
-            this.view.add_event(this, "mousedown", this.mousedown_handle.bind(this));
-            this.view.add_event(this, "click", this.click_handle.bind(this));
-            this.view.add_event(this, "dblclick", this.dblclick_handle.bind(this));
+            this.view.e_nodes.addEventListener("mousedown", (e: Event) => {
+                this.mousedown_handle.bind(this).call(this, e);
+            });
+            this.view.e_nodes.addEventListener("click", (e: Event) => {
+                this.click_handle.bind(this).call(this, e);
+            });
+            this.view.e_nodes.addEventListener("dblclick", (e: Event) => {
+                this.dblclick_handle.bind(this).call(this, e);
+            });
         }
         mousedown_handle(e) {
             if (!this.options.default_event_handle["enable_mousedown_handle"]) {

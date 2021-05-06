@@ -7,7 +7,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { EventType } from "./MindmapConstants";
+import {Direction, EventType} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 
 function is_empty(s: string) {
@@ -94,7 +94,7 @@ export default class JsMind {
     this.init();
   }
 
-  init() {
+  init(): void {
     if (this.inited) {
       return;
     }
@@ -138,17 +138,17 @@ export default class JsMind {
     this._event_bind();
   }
 
-  enable_edit() {
+  enable_edit(): void {
     this.options.editable = true;
   }
 
-  disable_edit() {
+  disable_edit(): void {
     this.options.editable = false;
   }
 
   // call enable_event_handle('dblclick')
   // options are 'mousedown', 'click', 'dblclick'
-  enable_event_handle(event_handle: any) {
+  enable_event_handle(event_handle: string): void {
     this.options.default_event_handle[
       "enable_" + event_handle + "_handle"
     ] = true;
@@ -156,7 +156,7 @@ export default class JsMind {
 
   // call disable_event_handle('dblclick')
   // options are 'mousedown', 'click', 'dblclick'
-  disable_event_handle(event_handle: any) {
+  disable_event_handle(event_handle: string): void {
     this.options.default_event_handle[
       "enable_" + event_handle + "_handle"
     ] = false;
@@ -166,7 +166,7 @@ export default class JsMind {
     return this.options.editable;
   }
 
-  set_theme(theme: string) {
+  set_theme(theme: string): void {
     const theme_old = this.options.theme;
     this.options.theme = theme ? theme : null;
     if (theme_old !== this.options.theme) {
@@ -175,10 +175,10 @@ export default class JsMind {
     }
   }
 
-  _event_bind() {
-    this.view.add_event(this, "mousedown", this.mousedown_handle.bind(this));
-    this.view.add_event(this, "click", this.click_handle.bind(this));
-    this.view.add_event(this, "dblclick", this.dblclick_handle.bind(this));
+  _event_bind(): void {
+    this.view.e_nodes.addEventListener("mousedown", this.mousedown_handle.bind(this));
+    this.view.e_nodes.addEventListener("click",   this.click_handle.bind(this));
+    this.view.e_nodes.addEventListener("dblclick", this.dblclick_handle.bind(this));
   }
 
   mousedown_handle(e: Event): void {
@@ -251,7 +251,7 @@ export default class JsMind {
     }
   }
 
-  end_edit() {
+  end_edit(): void {
     this.view.edit_node_end();
   }
 
@@ -265,7 +265,7 @@ export default class JsMind {
     this.view.restore_location(node);
   }
 
-  expand_node(node: MindNode) {
+  expand_node(node: MindNode): void {
     if (node.isroot) {
       return;
     }
@@ -275,7 +275,7 @@ export default class JsMind {
     this.view.restore_location(node);
   }
 
-  collapse_node(node: MindNode) {
+  collapse_node(node: MindNode): void {
     if (node.isroot) {
       return;
     }
@@ -557,7 +557,7 @@ export default class JsMind {
     nodeid: string,
     beforeid: string,
     parentid: string,
-    direction: any
+    direction: Direction
   ): void {
     console.log(`jm.move_node: ${nodeid} ${beforeid} ${parentid} ${direction}`);
     if (this.get_editable()) {
@@ -677,7 +677,7 @@ export default class JsMind {
     return n;
   }
 
-  resize() {
+  resize(): void {
     this.view.resize();
   }
 
@@ -690,12 +690,11 @@ export default class JsMind {
   }
 
   invoke_event_handle(type: EventType, data: any): void {
-    const j = this;
     if (type === EventType.BEFORE_EDIT) {
-      j._invoke_event_handle(type, data);
+      this._invoke_event_handle(type, data);
     } else {
-      setTimeout(function () {
-        j._invoke_event_handle(type, data);
+      setTimeout(() => {
+        this._invoke_event_handle(type, data);
       }, 0);
     }
   }

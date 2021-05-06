@@ -19,7 +19,7 @@
 
 import JsMind from "./JsMind";
 import MindNode from "./MindNode";
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 const options = {
   line_width: 5,
@@ -236,47 +236,46 @@ export default class Draggable {
 
   _event_bind(): void {
     // TODO bind に置換可能っぽい
-    const jd = this;
     const container = this.jm.view.container;
     container.addEventListener(
       "mousedown",
-      function (e: Event) {
-        jd.dragstart.call(jd, e);
+        (e: Event) => {
+        this.dragstart.call(this, e);
       },
       false
     );
     container.addEventListener(
       "mousemove",
-      function (e: Event) {
-        jd.drag.call(jd, e);
+        (e: Event) => {
+        this.drag.call(this, e);
       },
       false
     );
     container.addEventListener(
       "mouseup",
-      function (e: Event) {
-        jd.dragend.call(jd, e);
+        (e: Event) => {
+        this.dragend.call(this, e);
       },
       false
     );
     container.addEventListener(
       "touchstart",
-      function (e: Event) {
-        jd.dragstart.call(jd, e);
+        (e: Event) => {
+        this.dragstart.call(this, e);
       },
       false
     );
     container.addEventListener(
       "touchmove",
-      function (e: Event) {
-        jd.drag.call(jd, e);
+        (e: Event) => {
+        this.drag.call(this, e);
       },
       false
     );
     container.addEventListener(
       "touchend",
-      function (e: Event) {
-        jd.dragend.call(jd, e);
+        (e: Event) => {
+        this.dragend.call(this, e);
       },
       false
     );
@@ -315,9 +314,9 @@ export default class Draggable {
           window.clearInterval(this.hlookup_timer);
         }
         const jd = this;
-        this.hlookup_delay = window.setTimeout(function () {
+        this.hlookup_delay = window.setTimeout(() => {
           jd.hlookup_delay = 0;
-          jd.hlookup_timer = window.setInterval(function () {
+          jd.hlookup_timer = window.setInterval(() => {
             jd.lookup_close_node.call(jd);
           }, options.lookup_interval);
         }, options.lookup_delay);
@@ -375,7 +374,7 @@ export default class Draggable {
   move_node(
     src_node: MindNode,
     target_node: MindNode,
-    target_direct: any
+    target_direct: Direction
   ): void {
     console.log(
       `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`

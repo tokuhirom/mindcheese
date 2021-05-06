@@ -174,7 +174,7 @@ export default class Mind {
     node: MindNode,
     beforeid: string,
     parentid: string,
-    direction: any
+    direction: Direction
   ): MindNode {
     console.assert(node instanceof MindNode, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parentid} ${direction}`);
@@ -184,7 +184,7 @@ export default class Mind {
     return this._move_node(node, beforeid, parentid, direction);
   }
 
-  _flow_node_direction(node: MindNode, direction: any): void {
+  _flow_node_direction(node: MindNode, direction: Direction): void {
     if (typeof direction === "undefined") {
       direction = node.direction;
     } else {
@@ -223,7 +223,7 @@ export default class Mind {
     node: MindNode,
     beforeid: string,
     parentid: string,
-    direction: any
+    direction: Direction
   ): MindNode {
     console.log(`_move_node: ${node}, ${beforeid}, ${parentid}, ${direction}`);
     if (!!node && !!parentid) {
