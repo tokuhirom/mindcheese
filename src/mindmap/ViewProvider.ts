@@ -330,12 +330,6 @@ export default class ViewProvider {
     return !!this.editing_node;
   }
 
-  calcEditingNodeWidth(topic: string): string {
-    const max = Math.max(...topic.split(/\n/).map((it) => it.length));
-    const width = Math.ceil(Math.max(max * 2 + 2, 15));
-    return width + "ch";
-  }
-
   edit_node_begin(node: MindNode): void {
     if (!node.topic) {
       console.warn("don't edit image nodes");
