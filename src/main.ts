@@ -32,6 +32,7 @@ export default class MyPlugin extends Plugin {
 
     this.addSettingTab(new SampleSettingTab(this.app, this));
 
+    /* eslint @typescript-eslint/no-this-alias: 0 */
     const self = this; // TODO REMOVE
 
     // Monkey patch WorkspaceLeaf to open Mindmap with KanbanView by default

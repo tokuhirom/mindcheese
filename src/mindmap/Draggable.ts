@@ -19,7 +19,7 @@
 
 import JsMind from "./JsMind";
 import MindNode from "./MindNode";
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 const options = {
   line_width: 5,
@@ -47,6 +47,7 @@ export default class Draggable {
   private moved: boolean;
   private client_hw: number;
   private client_hh: number;
+
   constructor(jm: JsMind) {
     this.jm = jm;
     this.e_canvas = null;
@@ -187,18 +188,18 @@ export default class Draggable {
             continue;
           }
           distance =
-            Math.abs(sx - nl.x - ns.w) +
-            Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + ns.w - options.line_width, y: nl.y + ns.h / 2 };
-          sp = { x: sx + options.line_width, y: sy + sh / 2 };
+              Math.abs(sx - nl.x - ns.w) +
+              Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+          np = {x: nl.x + ns.w - options.line_width, y: nl.y + ns.h / 2};
+          sp = {x: sx + options.line_width, y: sy + sh / 2};
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
           }
           distance =
-            Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + options.line_width, y: nl.y + ns.h / 2 };
-          sp = { x: sx + sw - options.line_width, y: sy + sh / 2 };
+              Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+          np = {x: nl.x + options.line_width, y: nl.y + ns.h / 2};
+          sp = {x: sx + sw - options.line_width, y: sy + sh / 2};
         }
         if (distance < min_distance) {
           closest_node = node;
@@ -238,46 +239,46 @@ export default class Draggable {
     // TODO bind に置換可能っぽい
     const container = this.jm.view.container;
     container.addEventListener(
-      "mousedown",
-      (e: Event) => {
-        this.dragstart.call(this, e);
-      },
-      false
+        "mousedown",
+        (e: Event) => {
+          this.dragstart.call(this, e);
+        },
+        false
     );
     container.addEventListener(
-      "mousemove",
-      (e: Event) => {
-        this.drag.call(this, e);
-      },
-      false
+        "mousemove",
+        (e: Event) => {
+          this.drag.call(this, e);
+        },
+        false
     );
     container.addEventListener(
-      "mouseup",
-      (e: Event) => {
-        this.dragend.call(this, e);
-      },
-      false
+        "mouseup",
+        (e: Event) => {
+          this.dragend.call(this, e);
+        },
+        false
     );
     container.addEventListener(
-      "touchstart",
-      (e: Event) => {
-        this.dragstart.call(this, e);
-      },
-      false
+        "touchstart",
+        (e: Event) => {
+          this.dragstart.call(this, e);
+        },
+        false
     );
     container.addEventListener(
-      "touchmove",
-      (e: Event) => {
-        this.drag.call(this, e);
-      },
-      false
+        "touchmove",
+        (e: Event) => {
+          this.drag.call(this, e);
+        },
+        false
     );
     container.addEventListener(
-      "touchend",
-      (e: Event) => {
-        this.dragend.call(this, e);
-      },
-      false
+        "touchend",
+        (e: Event) => {
+          this.dragend.call(this, e);
+        },
+        false
     );
   }
 
@@ -313,12 +314,11 @@ export default class Draggable {
         if (this.hlookup_timer !== 0) {
           window.clearInterval(this.hlookup_timer);
         }
-        const jd = this;
         this.hlookup_delay = window.setTimeout(() => {
-          jd.hlookup_delay = 0;
-          jd.hlookup_timer = window.setInterval(() => {
-            jd.lookup_close_node.call(jd);
-          }, options.lookup_interval);
+          this.hlookup_delay = 0;
+          this.hlookup_timer = window.setInterval(
+              this.lookup_close_node.bind(this),
+              options.lookup_interval);
         }, options.lookup_delay);
         this.capture = true;
       }
@@ -372,18 +372,18 @@ export default class Draggable {
   }
 
   move_node(
-    src_node: MindNode,
-    target_node: MindNode,
-    target_direct: Direction
+      src_node: MindNode,
+      target_node: MindNode,
+      target_direct: Direction
   ): void {
     console.log(
-      `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
+        `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
     );
     const shadow_h = this.shadow.offsetTop;
     if (
-      !!target_node &&
-      !!src_node &&
-      !MindNode.inherited(src_node, target_node)
+        !!target_node &&
+        !!src_node &&
+        !MindNode.inherited(src_node, target_node)
     ) {
       console.log(`let's move!`);
       // lookup before_node
@@ -408,7 +408,7 @@ export default class Draggable {
         beforeid = node_before.id;
       }
       console.log(
-        `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
+          `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
       );
       this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
       // this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);

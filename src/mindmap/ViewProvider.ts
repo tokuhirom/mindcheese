@@ -566,11 +566,10 @@ export default class ViewProvider {
           const c = document.createElement("canvas");
           c.width = node_element.clientWidth;
           c.height = node_element.clientHeight;
-          const img: any = this;
           if (c.getContext) {
             const ctx: CanvasRenderingContext2D = c.getContext("2d");
             ctx.drawImage(
-              img,
+              img as HTMLImageElement,
               2,
               2,
               node_element.clientWidth,
