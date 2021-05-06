@@ -93,7 +93,7 @@ export default class MindNode {
     } else {
       r = 0;
     }
-    //logger.debug(i1+' <> '+i2+'  =  '+r);
+    // console.debug(`MindNode.compare: ${i1} <> ${i2}  =  ${r}`);
     return r;
   }
 

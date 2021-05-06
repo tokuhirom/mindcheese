@@ -119,24 +119,6 @@ export class EditableMindmapView extends TextFileView {
           theme: "primary", // TODO make it customizable?
           editable: true,
           support_html: false, // TODO HTML support
-          shortcut: {
-            enable: true, // whether to enable shortcut
-            handles: {}, // Named shortcut key event processor
-            mapping: {
-              // shortcut key mapping
-              // addchild : 45, 	// <Insert>
-              addchild: 9, // <Tab>
-              addbrother: 13, // <Enter>
-              editnode: 113, // <F2>
-              delnode: 46, // <Delete>
-              toggle: 32, // <Space>
-              left: 37, // <Left>
-              up: 38, // <Up>
-              right: 39, // <Right>
-              down: 40, // <Down>
-              undo: 90 + (1 << 12), // C-z
-            },
-          },
         };
         this.mm = new JsMind(jsMindId, options);
         // ↓ *quick hack* to avoid the timing issue...

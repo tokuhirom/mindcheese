@@ -7,7 +7,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { Direction, EventType } from "./MindmapConstants";
+import {
+  BEFOREID_LAST,
+  Direction,
+  EventType,
+  KEYCODE_DOWN,
+  KEYCODE_SHIFT_KEY,
+  KEYCODE_UP,
+} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 
 function is_empty(s: string) {
@@ -44,15 +51,19 @@ const DEFAULT_OPTIONS: any = {
     enable: true,
     handles: {},
     mapping: {
-      addchild: 45, // Insert
-      addbrother: 13, // Enter
-      editnode: 113, // F2
-      delnode: 46, // Delete
-      toggle: 32, // Space
-      left: 37, // Left
-      up: 38, // Up
-      right: 39, // Right
-      down: 40, // Down
+      // shortcut key mapping
+      addchild: 9, // <Tab>
+      addbrother: 13, // <Enter>
+      editnode: 113, // <F2>
+      delnode: 46, // <Delete>
+      toggle: 32, // <Space>
+      left: 37, // <Left>
+      up: 38, // <Up>
+      right: 39, // <Right>
+      down: 40, // <Down>
+      undo: 90 + (1 << 12), // C-z
+      move_up: KEYCODE_UP + KEYCODE_SHIFT_KEY, // S-↑
+      move_down: KEYCODE_DOWN + KEYCODE_SHIFT_KEY, // S-↓
     },
   },
 };
@@ -559,6 +570,12 @@ export default class JsMind {
     }
   }
 
+  /**
+   * @param nodeid
+   * @param beforeid Move nodeid's node to above of the *beforeid*. You can use BEFOREID_* constants.
+   * @param parentid
+   * @param direction
+   */
   move_node(
     nodeid: string,
     beforeid: string,
@@ -714,5 +731,96 @@ export default class JsMind {
 
   undo(): void {
     this.undo_manager.undo();
+  }
+
+  move_up(node: MindNode): void {
+    /*
+    as-is:
+      - a
+       - foo
+       - bar      ← selected node.
+
+    after:
+      - a
+        - bar      ← target node
+        - foo
+     */
+
+    const children = node.parent.children;
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].id == node.id) {
+        if (i == 0) {
+          // do nothing
+          return;
+        } else {
+          this.move_node(
+            node.id,
+            children[i - 1].id,
+            node.parent.id,
+            node.direction
+          );
+          return;
+        }
+      }
+    }
+  }
+
+  move_down(node: MindNode) {
+    const children = node.parent.children;
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].id == node.id) {
+        if (i === children.length - 1) {
+          // already in the last.
+          return; // do nothing
+        } else if (i === children.length - 2) {
+          // already in the above of the last one.
+          /*
+           * before:
+           *   - a
+           *     - b = 1
+           *     - c = 2
+           *
+           * after:
+           *   - a
+           *     - c = 2
+           *     - b = LAST
+           */
+          this.move_node(
+            node.id,
+            BEFOREID_LAST,
+            node.parent.id,
+            node.direction
+          );
+          return; // Put on last element.
+        } else {
+          /*
+           * before:
+           *   - a
+           *     - b = 1 ← node.id
+           *     - c = 2
+           *     - d = 3 ← beforeid
+           *
+           * after:
+           *   - a
+           *     - c = 2
+           *     - b = 3-0.5=2.5
+           *     - d = 3
+           */
+          console.debug(
+            `JsMind.move_down: topic=${node.topic} before.topic=${
+              children[i + 1].topic
+            } direction=${node.direction}`
+          );
+          this.move_node(
+            node.id,
+            children[i + 2].id,
+            node.parent.id,
+            node.direction
+          );
+          console.log(this.mind);
+          return;
+        }
+      }
+    }
   }
 }

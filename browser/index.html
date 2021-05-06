@@ -10,6 +10,7 @@
       <button id="viewShow">view.show()</button>
       <button id="expandSize">view.expand_size()</button>
       <button id="view_show">view._show()</button>
+      <button id="dump_to_console">dump_to_console()</button>
     </div>
     <div id="container"></div>
 
@@ -21,24 +22,6 @@
         theme: "primary", // TODO make it customizable?
         editable: true,
         support_html: false, // TODO HTML support
-        shortcut: {
-          enable: true, // whether to enable shortcut
-          handles: {}, // Named shortcut key event processor
-          mapping: {
-            // shortcut key mapping
-            // addchild : 45, 	// <Insert>
-            addchild: 9, // <Tab>
-            addbrother: 13, // <Enter>
-            editnode: 113, // <F2>
-            delnode: 46, // <Delete>
-            toggle: 32, // <Space>
-            left: 37, // <Left>
-            up: 38, // <Up>
-            right: 39, // <Right>
-            down: 40, // <Down>
-            undo: 90 + (1 << 12), // C-z
-          },
-        },
       });
       jsmind.show({
         meta: {
@@ -115,6 +98,13 @@
         jsmind.view._show();
         return false;
       });
+      document
+        .getElementById("dump_to_console")
+        .addEventListener("click", () => {
+          const data = jsmind.get_data("node_tree");
+          console.log(data);
+          return false;
+        });
     </script>
   </body>
 </html>

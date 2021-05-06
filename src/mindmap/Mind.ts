@@ -3,7 +3,7 @@
 "use strict";
 
 import MindNode from "./MindNode";
-import { Direction } from "./MindmapConstants";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
 export default class Mind {
   name: string;
@@ -198,13 +198,22 @@ export default class Mind {
 
   _move_node_internal(node: MindNode, beforeid: string): MindNode {
     if (!!node && !!beforeid) {
-      if (beforeid === "_last_") {
+      if (beforeid === BEFOREID_LAST) {
         node.index = -1;
         this._reindex(node.parent);
-      } else if (beforeid === "_first_") {
+      } else if (beforeid === BEFOREID_FIRST) {
         node.index = 0;
         this._reindex(node.parent);
       } else {
+        /*
+         * Before:
+         *   - B <- beforeid = 3
+         *   - A <- node     = 4
+         *
+         * After:
+         *   - A <- node     = 3-0.5=2.5
+         *   - B <- beforeid = 3
+         */
         const node_before = beforeid ? this.get_node(beforeid) : null;
         if (
           node_before != null &&
@@ -213,6 +222,8 @@ export default class Mind {
         ) {
           node.index = node_before.index - 0.5;
           this._reindex(node.parent);
+        } else {
+          console.error(`Missing node_before: ${beforeid}`);
         }
       }
     }
@@ -312,12 +323,18 @@ export default class Mind {
   }
 
   _reindex(node: MindNode): void {
-    if (node instanceof MindNode) {
-      node.children.sort(MindNode.compare);
-      for (let i = 0; i < node.children.length; i++) {
-        node.children[i].index = i + 1;
-      }
+    console.debug(
+      `Before Mind._reindex: ` +
+        node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
+    );
+    node.children.sort(MindNode.compare);
+    for (let i = 0; i < node.children.length; i++) {
+      node.children[i].index = i + 1;
     }
+    console.debug(
+      `After Mind._reindex: ` +
+        node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
+    );
   }
 }
 

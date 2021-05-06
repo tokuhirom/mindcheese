@@ -19,7 +19,7 @@
 
 import JsMind from "./JsMind";
 import MindNode from "./MindNode";
-import { Direction } from "./MindmapConstants";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
 const options = {
   line_width: 5,
@@ -393,7 +393,7 @@ export default class Draggable {
       let node = null;
       let delta_y = Number.MAX_VALUE;
       let node_before = null;
-      let beforeid = "_last_";
+      let beforeid = BEFOREID_LAST;
       while (sc--) {
         node = sibling_nodes[sc];
         if (node.direction === target_direct && node.id !== src_node.id) {
@@ -401,7 +401,7 @@ export default class Draggable {
           if (dy > 0 && dy < delta_y) {
             delta_y = dy;
             node_before = node;
-            beforeid = "_first_";
+            beforeid = BEFOREID_FIRST;
           }
         }
       }

@@ -55,6 +55,8 @@ export default class ShortcutProvider {
     this.handles["left"] = this.handle_left;
     this.handles["right"] = this.handle_right;
     this.handles["undo"] = this.handle_undo;
+    this.handles["move_up"] = this.handle_move_up;
+    this.handles["move_down"] = this.handle_move_down;
 
     for (const handle in this.mapping) {
       if (!!this.mapping[handle] && handle in this.handles) {
@@ -162,6 +164,23 @@ export default class ShortcutProvider {
       _jm.toggle_node(selected_node);
       e.stopPropagation();
       e.preventDefault();
+    }
+    return false;
+  }
+
+  handle_move_up(_jm: JsMind): boolean {
+    console.debug(`ShortcutProvider.handle_move_up`);
+    const selected_node = _jm.get_selected_node();
+    if (selected_node) {
+      _jm.move_up(selected_node);
+    }
+    return false;
+  }
+
+  private handle_move_down(_jm: JsMind): boolean {
+    const selected_node = _jm.get_selected_node();
+    if (selected_node) {
+      _jm.move_down(selected_node);
     }
     return false;
   }
