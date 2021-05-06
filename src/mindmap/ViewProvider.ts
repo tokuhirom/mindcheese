@@ -113,7 +113,6 @@ export default class ViewProvider {
     });
     this.e_editor.addEventListener("blur", () => {
       // when the element lost focus.
-      // TODO revert this↓
       v.edit_node_end();
     });
     this.e_editor.addEventListener("input", (e) => {
