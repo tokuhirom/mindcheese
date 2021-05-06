@@ -15,7 +15,7 @@ export default class Mind {
   id: number;
 
   constructor(id: number) {
-    this.id = id;
+    this.id = id; // TODO remove ID
     this.name = null;
     this.author = null;
     this.version = null;

@@ -1,26 +1,46 @@
-import { NodeTree } from "./format/NodeTree";
 import JsMind from "./JsMind";
 import Mind from "./Mind";
+import MindmapExporter from "./format/MindmapExporter";
+import MindmapImporter from "./format/MindmapImporter";
+import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
+import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
+
+class DataFormat {
+  importer: MindmapImporter;
+  exporter: MindmapExporter;
+
+  constructor(importer: MindmapImporter, exporter: MindmapExporter) {
+    this.importer = importer;
+    this.exporter = exporter;
+  }
+  get_data(mind: Mind): Record<string, any> {
+    return this.exporter.get_data(mind);
+  }
+  get_mind(source: any, id: number): Mind {
+    return this.importer.get_mind(source, id);
+  }
+}
 
 export default class DataProvider {
-  private format: Record<string, NodeTree>;
+  private readonly format_map: Record<string, DataFormat>;
   private jm: JsMind;
 
   constructor(jm: JsMind) {
     this.jm = jm;
-    this.format = {
-      node_tree: new NodeTree(),
+    this.format_map = {
+      node_tree: new DataFormat(new NodeTreeImporter(), new NodeTreeExporter()),
     };
   }
 
-  load(mind_data: any, id: number): Mind {
-    return this.format.node_tree.get_mind(mind_data, id);
+  load(format: string, mind_data: any, id: number): Mind {
+    const data_format = this.format_map[format];
+    return data_format.get_mind(mind_data, id);
   }
 
-  get_data(data_format: string): Record<string, any> {
-    if (data_format === "node_tree") {
-      console.log(this.jm.mind);
-      return this.format.node_tree.get_data(this.jm.mind);
+  get_data(format: string): Record<string, any> {
+    const data_format = this.format_map[format];
+    if (data_format) {
+      return data_format.get_data(this.jm.mind);
     } else {
       throw new Error(`Unknown format: ${data_format}`);
     }

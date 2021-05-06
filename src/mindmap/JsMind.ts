@@ -322,8 +322,8 @@ export default class JsMind {
     this.layout.reset();
   }
 
-  _show(mind: any): void {
-    this.mind = this.data.load(mind, this.id);
+  _show(format: string, mind: any): void {
+    this.mind = this.data.load(format, mind, this.id);
     if (!this.mind) {
       console.error("data.load error");
       return;
@@ -346,7 +346,7 @@ export default class JsMind {
 
   show(mind: any): void {
     this._reset();
-    this._show(mind);
+    this._show("node_tree", mind);
   }
 
   get_meta(): { author: string; name: string; version: string } {
