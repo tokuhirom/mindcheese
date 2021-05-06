@@ -28,5 +28,5 @@ jobs:
 
       - run: npm install
       - run: npm build
-      - run: npm build-browser
+      - run: npm run build-browser
       - run: npx eslint . --ext .js,.jsx,.ts,.tsx
