@@ -246,7 +246,7 @@ export default class ViewProvider {
   }
 
   create_node_element(node: MindNode, parent_node: Node): void {
-    let view_data = node._data.view;
+    const view_data = node._data.view;
 
     const d: HTMLElement = document.createElement("jmnode");
     if (node.isroot) {

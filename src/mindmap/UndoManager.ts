@@ -6,7 +6,7 @@ export default class UndoManager {
   private undoStack: [string, any][];
   private readonly undoStackLimit: number;
 
-  constructor(jm: JsMind, undoStackLimit: number = 10000) {
+  constructor(jm: JsMind, undoStackLimit = 10000) {
     this._jm = jm;
     this.undoStack = [];
     this.undoStackLimit = undoStackLimit;

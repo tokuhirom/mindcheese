@@ -21,10 +21,10 @@ export default class LayoutProvider {
 
   constructor(
     jm: JsMind,
-    mode: string = "full" /* 'full' or 'side' */,
-    hspace: number = 30,
-    vspace: number = 20,
-    pspace: number = 13
+    mode = "full" /* 'full' or 'side' */,
+    hspace = 30,
+    vspace = 20,
+    pspace = 13
   ) {
     this._hspace = hspace;
     this._vspace = vspace;
@@ -98,7 +98,7 @@ export default class LayoutProvider {
     direction: Direction,
     side_index: number
   ): void {
-    let layout_data = node._data.layout;
+    const layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
 

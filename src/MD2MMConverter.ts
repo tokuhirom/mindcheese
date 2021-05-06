@@ -16,7 +16,7 @@ function parse(title: string, md: string) {
     0: root,
   };
 
-  let isContinuous: boolean = false;
+  let isContinuous = false;
   for (const line of lines) {
     // skip empty line
     if (!line.match(/\S/)) {
