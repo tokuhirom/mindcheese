@@ -7,7 +7,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {Direction, EventType} from "./MindmapConstants";
+import { Direction, EventType } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 
 function is_empty(s: string) {
@@ -176,9 +176,15 @@ export default class JsMind {
   }
 
   _event_bind(): void {
-    this.view.e_nodes.addEventListener("mousedown", this.mousedown_handle.bind(this));
-    this.view.e_nodes.addEventListener("click",   this.click_handle.bind(this));
-    this.view.e_nodes.addEventListener("dblclick", this.dblclick_handle.bind(this));
+    this.view.e_nodes.addEventListener(
+      "mousedown",
+      this.mousedown_handle.bind(this)
+    );
+    this.view.e_nodes.addEventListener("click", this.click_handle.bind(this));
+    this.view.e_nodes.addEventListener(
+      "dblclick",
+      this.dblclick_handle.bind(this)
+    );
   }
 
   mousedown_handle(e: Event): void {
