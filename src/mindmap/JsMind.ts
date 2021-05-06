@@ -344,9 +344,9 @@ export default class JsMind {
     this.invoke_event_handle(EventType.SHOW, { data: [mind] });
   }
 
-  show(mind: any): void {
+  show(format: string, mind: any): void {
     this._reset();
-    this._show("node_tree", mind);
+    this._show(format, mind);
   }
 
   get_meta(): { author: string; name: string; version: string } {
@@ -357,7 +357,7 @@ export default class JsMind {
     };
   }
 
-  get_data(data_format: string): Record<string, any> {
+  get_data(data_format: string): any {
     return this.data.get_data(data_format);
   }
 

@@ -123,7 +123,7 @@ export class EditableMindmapView extends TextFileView {
         this.mm = new JsMind(jsMindId, options);
         // ↓ *quick hack* to avoid the timing issue...
         setTimeout(() => {
-          this.mm.show(mind);
+          this.mm.show("node_tree", mind);
         }, 0);
         this.mm.add_event_listener(
           EventType.AFTER_EDIT,

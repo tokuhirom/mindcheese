@@ -28,7 +28,7 @@ export default class UndoManager {
     if (item) {
       const [evt, data] = item;
       console.log(`UndoManager: undo. evt=${evt} data=${data}`);
-      this._jm.show(data);
+      this._jm.show("node_tree", data);
     } else {
       console.log(`UndoManager: undo. stack is empty.`);
     }

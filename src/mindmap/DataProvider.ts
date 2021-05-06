@@ -4,6 +4,8 @@ import MindmapExporter from "./format/MindmapExporter";
 import MindmapImporter from "./format/MindmapImporter";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
+import MarkdownImporter from "./format/markdown/MarkdownImporter";
+import MarkdownExporter from "./format/markdown/MarkdownExporter";
 
 class DataFormat {
   importer: MindmapImporter;
@@ -13,7 +15,7 @@ class DataFormat {
     this.importer = importer;
     this.exporter = exporter;
   }
-  get_data(mind: Mind): Record<string, any> {
+  get_data(mind: Mind): any {
     return this.exporter.get_data(mind);
   }
   get_mind(source: any, id: number): Mind {
@@ -29,6 +31,7 @@ export default class DataProvider {
     this.jm = jm;
     this.format_map = {
       node_tree: new DataFormat(new NodeTreeImporter(), new NodeTreeExporter()),
+      markdown: new DataFormat(new MarkdownImporter(), new MarkdownExporter()),
     };
   }
 
@@ -37,7 +40,7 @@ export default class DataProvider {
     return data_format.get_mind(mind_data, id);
   }
 
-  get_data(format: string): Record<string, any> {
+  get_data(format: string): any {
     const data_format = this.format_map[format];
     if (data_format) {
       return data_format.get_data(this.jm.mind);

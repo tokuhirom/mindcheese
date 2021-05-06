@@ -11,6 +11,8 @@
       <button id="expandSize">view.expand_size()</button>
       <button id="view_show">view._show()</button>
       <button id="dump_to_console">dump_to_console()</button>
+      <button id="dump_to_console_markdown">dump_to_console_markdown()</button>
+      <button id="load_markdown">load_markdown()</button>
     </div>
     <div id="container"></div>
 
@@ -23,7 +25,7 @@
         editable: true,
         support_html: false, // TODO HTML support
       });
-      jsmind.show({
+      jsmind.show("node_tree", {
         meta: {
           name: "jsMind remote",
           author: "hizzgdev@163.com",
@@ -105,6 +107,28 @@
           console.log(data);
           return false;
         });
+      document
+        .getElementById("dump_to_console_markdown")
+        .addEventListener("click", () => {
+          const data = jsmind.get_data("markdown");
+          console.log(data);
+          return false;
+        });
+      document.getElementById("load_markdown").addEventListener("click", () => {
+        jsmind.show("markdown", {
+          title: "マークダウンのテスト",
+          markdown: `
+- a1
+  - b1
+  - b2
+  - b3
+    - c1
+    - c2
++ a2
+          `,
+        });
+        return false;
+      });
     </script>
   </body>
 </html>
