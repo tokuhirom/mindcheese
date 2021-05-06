@@ -19,7 +19,7 @@
 
 import JsMind from "./JsMind";
 import MindNode from "./MindNode";
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 const options = {
   line_width: 5,
@@ -239,42 +239,42 @@ export default class Draggable {
     const container = this.jm.view.container;
     container.addEventListener(
       "mousedown",
-        (e: Event) => {
+      (e: Event) => {
         this.dragstart.call(this, e);
       },
       false
     );
     container.addEventListener(
       "mousemove",
-        (e: Event) => {
+      (e: Event) => {
         this.drag.call(this, e);
       },
       false
     );
     container.addEventListener(
       "mouseup",
-        (e: Event) => {
+      (e: Event) => {
         this.dragend.call(this, e);
       },
       false
     );
     container.addEventListener(
       "touchstart",
-        (e: Event) => {
+      (e: Event) => {
         this.dragstart.call(this, e);
       },
       false
     );
     container.addEventListener(
       "touchmove",
-        (e: Event) => {
+      (e: Event) => {
         this.drag.call(this, e);
       },
       false
     );
     container.addEventListener(
       "touchend",
-        (e: Event) => {
+      (e: Event) => {
         this.dragend.call(this, e);
       },
       false

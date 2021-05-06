@@ -1,121 +1,120 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <script src="browser.js"></script>
-  <link href="../styles.css" rel="stylesheet">
-</head>
-<body>
-<div>
-  <button id="layout">layout.layout()</button>
-  <button id="viewShow">view.show()</button>
-  <button id="expandSize">view.expand_size()</button>
-  <button id="view_show">view._show()</button>
-</div>
-<div id="container">
-</div>
+  <head>
+    <script src="browser.js"></script>
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div>
+      <button id="layout">layout.layout()</button>
+      <button id="viewShow">view.show()</button>
+      <button id="expandSize">view.expand_size()</button>
+      <button id="view_show">view._show()</button>
+    </div>
+    <div id="container"></div>
 
-<script>
-  const container = document.getElementById('container');
-  console.log(container);
-  const jsmind = new window.JsMind(1, {
-    container: container,
-    theme: "primary", // TODO make it customizable?
-    editable: true,
-    support_html: false, // TODO HTML support
-    shortcut: {
-      enable: true, // whether to enable shortcut
-      handles: {}, // Named shortcut key event processor
-      mapping: {
-        // shortcut key mapping
-        // addchild : 45, 	// <Insert>
-        addchild: 9, // <Tab>
-        addbrother: 13, // <Enter>
-        editnode: 113, // <F2>
-        delnode: 46, // <Delete>
-        toggle: 32, // <Space>
-        left: 37, // <Left>
-        up: 38, // <Up>
-        right: 39, // <Right>
-        down: 40, // <Down>
-        undo: 90 + (1 << 12), // C-z
-      },
-    },
-  });
-  jsmind.show({
-    meta: {
-      name: "jsMind remote",
-      author: "hizzgdev@163.com",
-      version: "0.2",
-    },
-    format: "node_tree",
-    data: {
-      id: "root",
-      topic: "jsMind",
-      children: [
-        {
-          id: "easy",
-          topic: "Easy",
-          direction: "left",
+    <script>
+      const container = document.getElementById("container");
+      console.log(container);
+      const jsmind = new window.JsMind(1, {
+        container: container,
+        theme: "primary", // TODO make it customizable?
+        editable: true,
+        support_html: false, // TODO HTML support
+        shortcut: {
+          enable: true, // whether to enable shortcut
+          handles: {}, // Named shortcut key event processor
+          mapping: {
+            // shortcut key mapping
+            // addchild : 45, 	// <Insert>
+            addchild: 9, // <Tab>
+            addbrother: 13, // <Enter>
+            editnode: 113, // <F2>
+            delnode: 46, // <Delete>
+            toggle: 32, // <Space>
+            left: 37, // <Left>
+            up: 38, // <Up>
+            right: 39, // <Right>
+            down: 40, // <Down>
+            undo: 90 + (1 << 12), // C-z
+          },
+        },
+      });
+      jsmind.show({
+        meta: {
+          name: "jsMind remote",
+          author: "hizzgdev@163.com",
+          version: "0.2",
+        },
+        format: "node_tree",
+        data: {
+          id: "root",
+          topic: "jsMind",
           children: [
-            { id: "easy1", topic: "Easy to show" },
-            { id: "easy2", topic: "Easy to edit" },
-            { id: "easy3", topic: "Easy to store" },
-            { id: "easy4", topic: "Easy to embed" },
+            {
+              id: "easy",
+              topic: "Easy",
+              direction: "left",
+              children: [
+                { id: "easy1", topic: "Easy to show" },
+                { id: "easy2", topic: "Easy to edit" },
+                { id: "easy3", topic: "Easy to store" },
+                { id: "easy4", topic: "Easy to embed" },
+              ],
+            },
+            {
+              id: "open",
+              topic: "Open Source",
+              direction: "right",
+              children: [
+                { id: "open1", topic: "on GitHub" },
+                { id: "open2", topic: "BSD License" },
+              ],
+            },
+            {
+              id: "powerful",
+              topic: "Powerful",
+              direction: "right",
+              children: [
+                { id: "powerful1", topic: "Base on Javascript" },
+                { id: "powerful2", topic: "Base on HTML5" },
+                { id: "powerful3", topic: "Depends on you" },
+              ],
+            },
+            {
+              id: "other",
+              topic: "test node",
+              direction: "left",
+              children: [
+                { id: "other1", topic: "I'm from local variable" },
+                { id: "other2", topic: "I can do everything" },
+              ],
+            },
           ],
         },
-        {
-          id: "open",
-          topic: "Open Source",
-          direction: "right",
-          children: [
-            { id: "open1", topic: "on GitHub" },
-            { id: "open2", topic: "BSD License" },
-          ],
-        },
-        {
-          id: "powerful",
-          topic: "Powerful",
-          direction: "right",
-          children: [
-            { id: "powerful1", topic: "Base on Javascript" },
-            { id: "powerful2", topic: "Base on HTML5" },
-            { id: "powerful3", topic: "Depends on you" },
-          ],
-        },
-        {
-          id: "other",
-          topic: "test node",
-          direction: "left",
-          children: [
-            { id: "other1", topic: "I'm from local variable" },
-            { id: "other2", topic: "I can do everything" },
-          ],
-        },
-      ],
-    },
-  });
-  console.log(window.JsMind)
+      });
+      console.log(window.JsMind);
 
-  document.getElementById('layout').addEventListener('click', () => {
-    console.log('layout.layout');
-    jsmind.layout.layout();
-    return false;
-  });
-  document.getElementById('viewShow').addEventListener('click', () => {
-    console.log('viewShow');
-    jsmind.view.show(false);
-    return false;
-  });
-  document.getElementById('expandSize').addEventListener('click', () => {
-    console.log('viewShow');
-    jsmind.view.expand_size();
-    return false;
-  });
-  document.getElementById('view_show').addEventListener('click', () => {
-    console.log('view_show');
-    jsmind.view._show();
-    return false;
-  });
-</script>
-</body>
+      document.getElementById("layout").addEventListener("click", () => {
+        console.log("layout.layout");
+        jsmind.layout.layout();
+        return false;
+      });
+      document.getElementById("viewShow").addEventListener("click", () => {
+        console.log("viewShow");
+        jsmind.view.show(false);
+        return false;
+      });
+      document.getElementById("expandSize").addEventListener("click", () => {
+        console.log("viewShow");
+        jsmind.view.expand_size();
+        return false;
+      });
+      document.getElementById("view_show").addEventListener("click", () => {
+        console.log("view_show");
+        jsmind.view._show();
+        return false;
+      });
+    </script>
+  </body>
 </html>

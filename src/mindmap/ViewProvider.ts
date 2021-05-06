@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
+import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
@@ -97,7 +97,6 @@ export default class ViewProvider {
     this.zoomStep = 0.1;
     this.minZoom = 0.5;
     this.maxZoom = 2;
-
 
     this.e_editor.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e

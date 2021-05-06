@@ -13,7 +13,7 @@ if you want to view the source visit the plugins github repository
 export default {
   input: "browser/browser.ts",
   output: {
-    name: 'browser',
+    name: "browser",
     dir: "browser/",
     sourcemap: "inline",
     sourcemapExcludeSources: isProd,
