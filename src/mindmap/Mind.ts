@@ -236,10 +236,13 @@ export default class Mind {
     parentid: string,
     direction: Direction
   ): MindNode {
-    console.log(`_move_node: ${node}, ${beforeid}, ${parentid}, ${direction}`);
+    console.log(
+      `_move_node: node=${node}, ${beforeid}, parentid=${parentid}, ${direction}`
+    );
     if (!!node && !!parentid) {
       console.assert(node.parent, `node.parent is null: ${node}`);
       if (node.parent.id !== parentid) {
+        console.log(`_move_node: node.parent.id!==parentid`);
         // remove from parent's children
         const sibling = node.parent.children;
         let si = sibling.length;
@@ -264,7 +267,7 @@ export default class Mind {
         node.direction = node.parent.direction;
       }
       this._move_node_internal(node, beforeid);
-      this._flow_node_direction(node, null);
+      this._flow_node_direction(node, direction);
     }
     return node;
   }
@@ -337,5 +340,3 @@ export default class Mind {
     );
   }
 }
-
-// module.exports.Mind = Mind;

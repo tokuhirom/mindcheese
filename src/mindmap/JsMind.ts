@@ -746,7 +746,9 @@ export default class JsMind {
         - foo
      */
 
-    const children = node.parent.children;
+    const children = node.parent.children.filter(
+      (it) => it.direction == node.direction
+    );
     for (let i = 0; i < children.length; i++) {
       if (children[i].id == node.id) {
         if (i == 0) {
@@ -766,7 +768,9 @@ export default class JsMind {
   }
 
   move_down(node: MindNode) {
-    const children = node.parent.children;
+    const children = node.parent.children.filter(
+      (it) => it.direction === node.direction
+    );
     for (let i = 0; i < children.length; i++) {
       if (children[i].id == node.id) {
         if (i === children.length - 1) {
