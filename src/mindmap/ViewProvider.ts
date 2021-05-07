@@ -349,14 +349,19 @@ export default class ViewProvider {
         console.debug(`select_node! left adjust`);
         panelEl.scrollLeft = Math.max(nodeEl.offsetLeft - 10, 0);
       }
-      if (nodeEl.offsetLeft + nodeEl.clientWidth >= panelEl.scrollLeft + panelEl.clientWidth) {
+      if (
+        nodeEl.offsetLeft + nodeEl.clientWidth >=
+        panelEl.scrollLeft + panelEl.clientWidth
+      ) {
         console.debug("select_node! right adjust");
         panelEl.scrollLeft = Math.max(
-            panelEl.scrollLeft + (
-                (nodeEl.offsetLeft + nodeEl.clientWidth + 30)
-            - (panelEl.scrollLeft + panelEl.clientWidth)
-            ),
-            0);
+          panelEl.scrollLeft +
+            (nodeEl.offsetLeft +
+              nodeEl.clientWidth +
+              30 -
+              (panelEl.scrollLeft + panelEl.clientWidth)),
+          0
+        );
       }
       // ↓ this routine doesn't work well.
 
