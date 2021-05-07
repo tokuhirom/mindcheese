@@ -109,15 +109,13 @@
           return false;
         });
       document
-      .getElementById("dump_to_console_markdown")
-       .addEventListener("click", () => {
-        const data = jsmind.get_data("markdown");
-        console.log(data);
-        return false;
-      });
-      document
-      .getElementById("resize")
-       .addEventListener("click", () => {
+        .getElementById("dump_to_console_markdown")
+        .addEventListener("click", () => {
+          const data = jsmind.get_data("markdown");
+          console.log(data);
+          return false;
+        });
+      document.getElementById("resize").addEventListener("click", () => {
         jsmind.resize();
         return false;
       });

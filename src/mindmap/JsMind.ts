@@ -196,7 +196,7 @@ export default class JsMind {
       "dblclick",
       this.dblclick_handle.bind(this)
     );
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       this.resize();
       return false;
     });
@@ -705,7 +705,7 @@ export default class JsMind {
   }
 
   resize(): void {
-    console.log("JsMind.resize()")
+    console.log("JsMind.resize()");
     this.view.resize();
   }
 
