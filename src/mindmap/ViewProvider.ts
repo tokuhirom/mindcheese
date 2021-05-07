@@ -419,7 +419,8 @@ export default class ViewProvider {
     }
     this.actualZoom = zoom;
     for (let i = 0; i < this.e_panel.children.length; i++) {
-      (this.e_panel.children[i] as HTMLElement).style.transform = "scale(" + zoom + ")";
+      (this.e_panel.children[i] as HTMLElement).style.transform =
+        "scale(" + zoom + ")";
     }
     this.show(true);
     return true;
