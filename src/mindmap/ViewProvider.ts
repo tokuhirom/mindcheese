@@ -42,7 +42,7 @@ export default class ViewProvider {
   private jm: JsMind;
   private layout: LayoutProvider;
   container: HTMLElement;
-  e_panel: any; // div.jsmind-inner
+  e_panel: HTMLDivElement; // div.jsmind-inner
   e_nodes: HTMLElement; // <jmnodes>
   size: { w: number; h: number };
   private selected_node: any;
@@ -419,7 +419,7 @@ export default class ViewProvider {
     }
     this.actualZoom = zoom;
     for (let i = 0; i < this.e_panel.children.length; i++) {
-      this.e_panel.children[i].style.transform = "scale(" + zoom + ")";
+      (this.e_panel.children[i] as HTMLElement).style.transform = "scale(" + zoom + ")";
     }
     this.show(true);
     return true;
