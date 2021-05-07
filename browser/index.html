@@ -13,6 +13,7 @@
       <button id="dump_to_console">dump_to_console()</button>
       <button id="dump_to_console_markdown">dump_to_console_markdown()</button>
       <button id="load_markdown">load_markdown()</button>
+      <button id="resize">resize()</button>
     </div>
     <div id="container"></div>
 
@@ -108,12 +109,18 @@
           return false;
         });
       document
-        .getElementById("dump_to_console_markdown")
-        .addEventListener("click", () => {
-          const data = jsmind.get_data("markdown");
-          console.log(data);
-          return false;
-        });
+      .getElementById("dump_to_console_markdown")
+       .addEventListener("click", () => {
+        const data = jsmind.get_data("markdown");
+        console.log(data);
+        return false;
+      });
+      document
+      .getElementById("resize")
+       .addEventListener("click", () => {
+        jsmind.resize();
+        return false;
+      });
       document.getElementById("load_markdown").addEventListener("click", () => {
         jsmind.show("markdown", {
           title: "マークダウンのテスト",
