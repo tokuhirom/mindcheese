@@ -254,11 +254,7 @@ export default class Mind {
       }
 
       if (node.parent.isroot) {
-        if (direction === Direction.LEFT) {
-          node.direction = direction;
-        } else {
-          node.direction = Direction.RIGHT;
-        }
+        node.direction = direction;
       } else {
         node.direction = node.parent.direction;
       }
