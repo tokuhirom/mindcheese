@@ -35,7 +35,7 @@ export default class ShortcutProvider {
     if (e.which == 9) {
       e.preventDefault();
     } //prevent tab to change focus in browser
-    if (this.jm.view.is_editing()) {
+    if (this.jm.view.isEditing()) {
       return;
     }
     if (!this.enable) {

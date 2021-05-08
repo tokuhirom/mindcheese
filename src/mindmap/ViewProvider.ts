@@ -389,7 +389,7 @@ export default class ViewProvider {
     this.select_node(null);
   }
 
-  is_editing(): boolean {
+  isEditing(): boolean {
     return !!this.editing_node;
   }
 
