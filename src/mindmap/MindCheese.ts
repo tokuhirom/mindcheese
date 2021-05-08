@@ -27,7 +27,6 @@ function is_empty(s: string) {
 
 const DEFAULT_OPTIONS: any = {
   container: "", // id of the container
-  editable: false, // you can change it in your options
   theme: null,
   mode: "full", // full or side
   support_html: true,
@@ -74,6 +73,7 @@ export default class MindCheese {
   private readonly id: number;
   private undo_manager: UndoManager;
   private readonly event_router: EventRouter;
+  private _editable: boolean;
 
   constructor(id: number, options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
@@ -134,15 +134,15 @@ export default class MindCheese {
   }
 
   enable_edit(): void {
-    this.options.editable = true;
+    this._editable = true;
   }
 
   disable_edit(): void {
-    this.options.editable = false;
+    this._editable = false;
   }
 
-  get_editable(): boolean {
-    return this.options.editable;
+  isEditable(): boolean {
+    return this._editable;
   }
 
   set_theme(theme: string): void {
@@ -205,7 +205,7 @@ export default class MindCheese {
   }
 
   dblclick_handle(e: Event): void {
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.warn("The mindmap is not editable now.");
       return;
     }
@@ -215,18 +215,18 @@ export default class MindCheese {
     if (nodeid) {
       if (nodeid) {
         const the_node = this.getNodeById(nodeid);
+
         if (!the_node) {
-          console.error("the node[id=" + nodeid + "] can not be found.");
-          return;
-        } else {
-          return this.begin_edit(the_node);
+          throw new Error(`the node[id=${nodeid}] can not be found.`);
         }
+
+        return this.begin_edit(the_node);
       }
     }
   }
 
   begin_edit(node: MindNode): void {
-    if (this.get_editable()) {
+    if (this.isEditable()) {
       this.view.edit_node_begin(node);
     } else {
       console.error("fail, this mind map is not editable.");
@@ -331,7 +331,7 @@ export default class MindCheese {
     nodeid: string,
     topic: string
   ): null | MindNode {
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return null;
     }
@@ -368,7 +368,7 @@ export default class MindCheese {
     nodeid: string,
     topic: string
   ): null | MindNode {
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return null;
     }
@@ -397,7 +397,7 @@ export default class MindCheese {
     nodeid: string,
     topic: string
   ): MindNode | null {
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return null;
     }
@@ -422,7 +422,7 @@ export default class MindCheese {
   }
 
   remove_node(node: MindNode): boolean {
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return false;
     }
@@ -481,7 +481,7 @@ export default class MindCheese {
 
   // set topic to the node
   update_node(nodeid: string, topic: string): void {
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return;
     }
@@ -531,7 +531,7 @@ export default class MindCheese {
     direction: Direction
   ): void {
     console.log(`jm.move_node: ${nodeid} ${beforeid} ${parentid} ${direction}`);
-    if (!this.get_editable()) {
+    if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return;
     }

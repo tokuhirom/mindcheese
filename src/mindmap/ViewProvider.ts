@@ -121,6 +121,7 @@ export default class ViewProvider {
     this.layout.layout();
     this.show(false);
   }
+
   get_binded_nodeid(element: HTMLElement): string | null {
     if (element == null) {
       return null;

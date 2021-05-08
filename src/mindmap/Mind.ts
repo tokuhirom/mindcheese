@@ -23,12 +23,12 @@ export default class Mind {
   }
 
   setRoot(nodeid: string, topic: string): void {
-    if (this.root == null) {
-      this.root = new MindNode(nodeid, 0, topic, true, null, null, true);
-      this._putNode(this.root);
-    } else {
+    if (this.root != null) {
       throw new Error("root node is already exist");
     }
+
+    this.root = new MindNode(nodeid, 0, topic, true, null, null, true);
+    this._putNode(this.root);
   }
 
   add_node(

@@ -240,7 +240,7 @@ export default class Draggable {
   }
 
   dragstart(e: DragEvent): void {
-    if (!this.jm.get_editable()) {
+    if (!this.jm.isEditable()) {
       return;
     }
     if (this.capture) {
@@ -284,7 +284,7 @@ export default class Draggable {
   }
 
   drag(e: DragEvent): void {
-    if (!this.jm.get_editable()) {
+    if (!this.jm.isEditable()) {
       return;
     }
     if (this.capture) {
@@ -303,7 +303,7 @@ export default class Draggable {
   }
 
   dragend(): void {
-    if (!this.jm.get_editable()) {
+    if (!this.jm.isEditable()) {
       return;
     }
     if (this.capture) {
