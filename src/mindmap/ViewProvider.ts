@@ -2,19 +2,9 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
+import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
-
-const $h = function (n: any, t: any) {
-  // TODO inlining this
-  if (t instanceof HTMLElement) {
-    n.innerHTML = "";
-    n.appendChild(t);
-  } else {
-    n.innerHTML = t;
-  }
-};
 
 // detect isElemend
 // TODO remove this.
@@ -247,7 +237,8 @@ export default class ViewProvider {
     }
     if (node.topic) {
       if (this.opts.support_html) {
-        $h(d, node.topic);
+        // TODO inlining this
+        d.innerHTML = node.topic;
       } else {
         this.setTextToElement(d, node.topic);
       }
@@ -287,7 +278,8 @@ export default class ViewProvider {
     const element = view_data.element;
     if (node.topic) {
       if (this.opts.support_html) {
-        $h(element, node.topic);
+        // TODO inlining this
+        element.innerHTML = node.topic;
       } else {
         this.setTextToElement(element, node.topic);
       }
@@ -417,7 +409,8 @@ export default class ViewProvider {
       element.removeChild(this.e_editor);
       if (is_empty(topic) || node.topic === topic) {
         if (this.opts.support_html) {
-          $h(element, node.topic);
+          // TODO inlining this
+          element.innerHTML = node.topic;
         } else {
           this.setTextToElement(element, node.topic);
         }
