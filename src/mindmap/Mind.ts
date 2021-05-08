@@ -167,7 +167,7 @@ export default class Mind {
     return this._move_node(node, beforeid, parentid, direction);
   }
 
-  _flow_node_direction(node: MindNode, direction: Direction): void {
+  private _flow_node_direction(node: MindNode, direction: Direction): void {
     if (typeof direction === "undefined") {
       direction = node.direction;
     } else {
@@ -179,7 +179,7 @@ export default class Mind {
     }
   }
 
-  _move_node_internal(node: MindNode, beforeid: string): MindNode {
+  private _move_node_internal(node: MindNode, beforeid: string): MindNode {
     if (!!node && !!beforeid) {
       if (beforeid === BEFOREID_LAST) {
         node.index = -1;
@@ -213,7 +213,7 @@ export default class Mind {
     return node;
   }
 
-  _move_node(
+  private _move_node(
     node: MindNode,
     beforeid: string,
     parentid: string,
@@ -293,7 +293,7 @@ export default class Mind {
     this.nodes[node.id] = node;
   }
 
-  _reindex(node: MindNode): void {
+  private _reindex(node: MindNode): void {
     console.debug(
       `Before Mind._reindex: ` +
         node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
