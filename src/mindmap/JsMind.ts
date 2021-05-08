@@ -227,6 +227,7 @@ export default class JsMind {
     if (!this.options.default_event_handle["enable_click_handle"]) {
       return;
     }
+
     const element = e.target as HTMLElement;
     const isexpander = this.view.is_expander(element);
     if (isexpander) {
@@ -247,18 +248,21 @@ export default class JsMind {
     if (!this.options.default_event_handle["enable_dblclick_handle"]) {
       return;
     }
-    if (this.get_editable()) {
-      const element = e.target as HTMLElement;
-      const nodeid = this.view.get_binded_nodeid(element);
+    if (!this.get_editable()) {
+      console.warn("The mindmap is not editable now.")
+      return;
+    }
+
+    const element = e.target as HTMLElement;
+    const nodeid = this.view.get_binded_nodeid(element);
+    if (nodeid) {
       if (nodeid) {
-        if (nodeid) {
-          const the_node = this.get_node(nodeid);
-          if (!the_node) {
-            console.error("the node[id=" + nodeid + "] can not be found.");
-            return;
-          } else {
-            return this.begin_edit(the_node);
-          }
+        const the_node = this.get_node(nodeid);
+        if (!the_node) {
+          console.error("the node[id=" + nodeid + "] can not be found.");
+          return;
+        } else {
+          return this.begin_edit(the_node);
         }
       }
     }
@@ -379,13 +383,17 @@ export default class JsMind {
     topic: string,
     data: any
   ): null | MindNode {
-    if (this.get_editable()) {
-      this.invoke_event_handle(EventType.BEFORE_EDIT, {
-        evt: "add_node",
-        data: [parent_node.id, nodeid, topic, data],
-        node: nodeid,
-      });
-      const node = this.mind.add_node(
+    if (!this.get_editable()) {
+      console.error("fail, this mind map is not editable");
+      return null;
+    }
+
+    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+      evt: "add_node",
+      data: [parent_node.id, nodeid, topic, data],
+      node: nodeid,
+    });
+    const node = this.mind.add_node(
         parent_node,
         nodeid,
         topic,
@@ -393,24 +401,20 @@ export default class JsMind {
         null,
         null,
         null
-      );
-      if (node) {
-        this.view.add_node(node);
-        this.layout.layout();
-        this.view.show(false);
-        this.view.reset_node_custom_style(node);
-        this.expand_node(parent_node);
-        this.invoke_event_handle(EventType.AFTER_EDIT, {
-          evt: "add_node",
-          data: [parent_node.id, nodeid, topic, data],
-          node: nodeid,
-        });
-      }
-      return node;
-    } else {
-      console.error("fail, this mind map is not editable");
-      return null;
+    );
+    if (node) {
+      this.view.add_node(node);
+      this.layout.layout();
+      this.view.show(false);
+      this.view.reset_node_custom_style(node);
+      this.expand_node(parent_node);
+      this.invoke_event_handle(EventType.AFTER_EDIT, {
+        evt: "add_node",
+        data: [parent_node.id, nodeid, topic, data],
+        node: nodeid,
+      });
     }
+    return node;
   }
 
   insert_node_before(
@@ -419,34 +423,34 @@ export default class JsMind {
     topic: string,
     data: any
   ): null | MindNode {
-    if (this.get_editable()) {
-      const beforeid = node_before.id;
-      this.invoke_event_handle(EventType.BEFORE_EDIT, {
-        evt: "insert_node_before",
-        data: [beforeid, nodeid, topic, data],
-        node: nodeid,
-      });
-      const node = this.mind.insert_node_before(
+    if (!this.get_editable()) {
+      console.error("fail, this mind map is not editable");
+      return null;
+    }
+
+    const beforeid = node_before.id;
+    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+      evt: "insert_node_before",
+      data: [beforeid, nodeid, topic, data],
+      node: nodeid,
+    });
+    const node = this.mind.insert_node_before(
         node_before,
         nodeid,
         topic,
         data
-      );
-      if (node) {
-        this.view.add_node(node);
-        this.layout.layout();
-        this.view.show(false);
-        this.invoke_event_handle(EventType.AFTER_EDIT, {
-          evt: "insert_node_before",
-          data: [beforeid, nodeid, topic, data],
-          node: nodeid,
-        });
-      }
-      return node;
-    } else {
-      console.error("fail, this mind map is not editable");
-      return null;
+    );
+    if (node) {
+      this.view.add_node(node);
+      this.layout.layout();
+      this.view.show(false);
+      this.invoke_event_handle(EventType.AFTER_EDIT, {
+        evt: "insert_node_before",
+        data: [beforeid, nodeid, topic, data],
+        node: nodeid,
+      });
     }
+    return node;
   }
 
   insert_node_after(
@@ -455,69 +459,70 @@ export default class JsMind {
     topic: string,
     data: any
   ): MindNode | null {
-    if (this.get_editable()) {
-      const afterid = node_after.id;
-      const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
-      if (node) {
-        this.invoke_event_handle(EventType.BEFORE_EDIT, {
-          evt: "insert_node_after",
-          data: [afterid, nodeid, topic, data],
-          node: nodeid,
-        });
-        this.view.add_node(node);
-        this.layout.layout();
-        this.view.show(false);
-        this.invoke_event_handle(EventType.AFTER_EDIT, {
-          evt: "insert_node_after",
-          data: [afterid, nodeid, topic, data],
-          node: nodeid,
-        });
-      }
-      return node;
-    } else {
+    if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
       return null;
     }
+
+    const afterid = node_after.id;
+    const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
+    if (node) {
+      this.invoke_event_handle(EventType.BEFORE_EDIT, {
+        evt: "insert_node_after",
+        data: [afterid, nodeid, topic, data],
+        node: nodeid,
+      });
+      this.view.add_node(node);
+      this.layout.layout();
+      this.view.show(false);
+      this.invoke_event_handle(EventType.AFTER_EDIT, {
+        evt: "insert_node_after",
+        data: [afterid, nodeid, topic, data],
+        node: nodeid,
+      });
+    }
+    return node;
   }
 
   remove_node(node: MindNode): boolean {
-    if (this.get_editable()) {
-      if (node.isroot) {
-        console.error("fail, can not remove root node");
-        return false;
-      }
-      const nodeid = node.id;
-      const parentid = node.parent.id;
-      this.invoke_event_handle(EventType.BEFORE_EDIT, {
-        evt: "remove_node",
-        data: [nodeid],
-        node: parentid,
-      });
-      const parent_node = this.get_node(parentid);
-      const nextSelectedNode = this.findUpperBrotherOrParentNode(
-        parent_node,
-        nodeid
-      );
-      this.view.save_location(parent_node);
-      this.view.remove_node(node);
-      this.mind.remove_node(node);
-      this.layout.layout();
-      this.view.show(false);
-      if (parent_node.children.length > 0) {
-        this.mind.selected = nextSelectedNode;
-        this.view.select_node(nextSelectedNode);
-      }
-      this.view.restore_location(parent_node);
-      this.invoke_event_handle(EventType.AFTER_EDIT, {
-        evt: "remove_node",
-        data: [nodeid],
-        node: parentid,
-      });
-      return true;
-    } else {
+    if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
       return false;
     }
+
+    if (node.isroot) {
+      console.error("fail, can not remove root node");
+      return false;
+    }
+
+    const nodeid = node.id;
+    const parentid = node.parent.id;
+    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+      evt: "remove_node",
+      data: [nodeid],
+      node: parentid,
+    });
+    const parent_node = this.get_node(parentid);
+    const nextSelectedNode = this.findUpperBrotherOrParentNode(
+        parent_node,
+        nodeid
+    );
+    this.view.save_location(parent_node);
+    this.view.remove_node(node);
+    this.mind.remove_node(node);
+    this.layout.layout();
+    this.view.show(false);
+    if (parent_node.children.length > 0) {
+      this.mind.selected = nextSelectedNode;
+      this.view.select_node(nextSelectedNode);
+    }
+    this.view.restore_location(parent_node);
+    this.invoke_event_handle(EventType.AFTER_EDIT, {
+      evt: "remove_node",
+      data: [nodeid],
+      node: parentid,
+    });
+    return true;
   }
 
   private findUpperBrotherOrParentNode(
@@ -539,39 +544,41 @@ export default class JsMind {
 
   // set topic to the node
   update_node(nodeid: string, topic: string): void {
-    if (this.get_editable()) {
-      if (is_empty(topic)) {
-        console.warn("fail, topic can not be empty");
-        return;
-      }
-      const node = this.get_node(nodeid);
-      if (node) {
-        this.invoke_event_handle(EventType.BEFORE_EDIT, {
-          evt: "update_node",
-          data: [nodeid, topic],
-          node: nodeid,
-        });
-        if (node.topic === topic) {
-          console.info("nothing changed");
-          this.view.update_node(node);
-          return;
-        }
-        node.topic = topic;
-        this.view.update_node(node);
-        this.layout.layout();
-        this.view.show(false);
-        this.invoke_event_handle(EventType.AFTER_EDIT, {
-          evt: "update_node",
-          data: [nodeid, topic],
-          node: nodeid,
-        });
-      } else {
-        console.warn(`Unknown node: ${nodeid}`);
-      }
-    } else {
+    if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
       return;
     }
+
+    if (is_empty(topic)) {
+      console.warn("fail, topic can not be empty");
+      return;
+    }
+
+    const node = this.get_node(nodeid);
+    if (!node) {
+      console.warn(`Unknown node: ${nodeid}`);
+      return;
+    }
+
+    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+      evt: "update_node",
+      data: [nodeid, topic],
+      node: nodeid,
+    });
+    if (node.topic === topic) {
+      console.info("nothing changed");
+      this.view.update_node(node);
+      return;
+    }
+    node.topic = topic;
+    this.view.update_node(node);
+    this.layout.layout();
+    this.view.show(false);
+    this.invoke_event_handle(EventType.AFTER_EDIT, {
+      evt: "update_node",
+      data: [nodeid, topic],
+      node: nodeid,
+    });
   }
 
   /**
@@ -587,38 +594,36 @@ export default class JsMind {
     direction: Direction
   ): void {
     console.log(`jm.move_node: ${nodeid} ${beforeid} ${parentid} ${direction}`);
-    if (this.get_editable()) {
-      const the_node = this.get_node(nodeid);
-      if (!the_node) {
-        console.error("the node[id=" + nodeid + "] can not be found.");
-        return;
-      } else {
-        this.invoke_event_handle(EventType.BEFORE_EDIT, {
-          evt: "move_node",
-          data: [nodeid, beforeid, parentid, direction],
-          node: nodeid,
-        });
-        const node = this.mind.move_node(
-          the_node,
-          beforeid,
-          parentid,
-          direction
-        );
-        if (node) {
-          this.view.update_node(node);
-          this.layout.layout();
-          this.view.show(false);
-          this.invoke_event_handle(EventType.AFTER_EDIT, {
-            evt: "move_node",
-            data: [nodeid, beforeid, parentid, direction],
-            node: nodeid,
-          });
-        }
-      }
-    } else {
+    if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
       return;
     }
+
+    const the_node = this.get_node(nodeid);
+    if (!the_node) {
+      console.error("the node[id=" + nodeid + "] can not be found.");
+      return;
+    }
+
+    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+      evt: "move_node",
+      data: [nodeid, beforeid, parentid, direction],
+      node: nodeid,
+    });
+    const node = this.mind.move_node(
+        the_node,
+        beforeid,
+        parentid,
+        direction
+    );
+    this.view.update_node(node);
+    this.layout.layout();
+    this.view.show(false);
+    this.invoke_event_handle(EventType.AFTER_EDIT, {
+      evt: "move_node",
+      data: [nodeid, beforeid, parentid, direction],
+      node: nodeid,
+    });
   }
 
   select_node(node: MindNode): void {
