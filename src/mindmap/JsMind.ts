@@ -10,12 +10,12 @@ import Draggable from "./Draggable";
 import {
   BEFOREID_LAST,
   Direction,
-  EventType, KEYCODE_CTRL_KEY, KEYCODE_DEL,
-  KEYCODE_DOWN, KEYCODE_ENTER, KEYCODE_LEFT, KEYCODE_RIGHT,
-  KEYCODE_SHIFT_KEY, KEYCODE_SPACE, KEYCODE_TAB,
-  KEYCODE_UP, KEYCODE_Z,
+  EventType,
+  KEYCODE_CTRL_KEY,
+  KEYCODE_SHIFT_KEY,
 } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
+import ShortcutHandlers from "./ShortcutHandlers";
 
 function is_empty(s: string) {
   if (!s) {
@@ -44,22 +44,20 @@ const DEFAULT_OPTIONS: any = {
   },
   shortcut: {
     enable: true,
-    handles: {},
-    mapping: {
-      // shortcut key mapping
-      addchild: KEYCODE_TAB, // <Tab>
-      addbrother: KEYCODE_ENTER, // <Enter>
-      editnode: KEYCODE_CTRL_KEY + KEYCODE_ENTER, // <C-Enter>
-      delnode: KEYCODE_DEL, // <Delete>
-      toggle: KEYCODE_SPACE, // <Space>
-      left: KEYCODE_LEFT, // <Left>
-      up: KEYCODE_UP, // <Up>
-      right: KEYCODE_RIGHT, // <Right>
-      down: KEYCODE_DOWN, // <Down>
-      undo: KEYCODE_CTRL_KEY + KEYCODE_Z, // C-z
-      move_up: KEYCODE_SHIFT_KEY + KEYCODE_UP, // S-↑
-      move_down: KEYCODE_SHIFT_KEY + KEYCODE_DOWN, // S-↓
-    },
+    mappings: [
+      [0, "Delete", ShortcutHandlers.delete],
+      [0, "Tab", ShortcutHandlers.addChild],
+      [0, "Enter", ShortcutHandlers.addBrother],
+      [KEYCODE_CTRL_KEY, "Enter", ShortcutHandlers.editNode],
+      [0, "Space", ShortcutHandlers.toggle],
+      [KEYCODE_SHIFT_KEY, "ArrowUp", ShortcutHandlers.moveUp],
+      [KEYCODE_SHIFT_KEY, "ArrowDown", ShortcutHandlers.moveDown],
+      [0, "ArrowUp", ShortcutHandlers.up],
+      [0, "ArrowDown", ShortcutHandlers.down],
+      [0, "ArrowLeft", ShortcutHandlers.left],
+      [0, "ArrowRight", ShortcutHandlers.right],
+      [KEYCODE_CTRL_KEY, "KeyZ", ShortcutHandlers.undo],
+    ],
   },
 };
 
@@ -129,8 +127,7 @@ export default class JsMind {
     this.shortcut = new ShortcutProvider(
       this,
       opts.shortcut.enable,
-      opts.shortcut.mapping,
-      opts.shortcut.handles
+      opts.shortcut.mappings
     );
     this.draggable = new Draggable(this);
     this.undo_manager = new UndoManager(this);
@@ -787,5 +784,11 @@ export default class JsMind {
         }
       }
     }
+  }
+
+  generate_new_id(): string {
+    return (
+      new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
+    ).substr(2, 16);
   }
 }

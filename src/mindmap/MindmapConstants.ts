@@ -14,7 +14,6 @@ export const enum EventType {
   BEFORE_EDIT = 5,
 }
 
-
 export const BEFOREID_FIRST = "_first_";
 export const BEFOREID_LAST = "_last_";
 
