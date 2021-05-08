@@ -31,9 +31,9 @@ export default class Mind {
   setRoot(nodeid: string, topic: string, data: any): void {
     if (this.root == null) {
       this.root = new MindNode(nodeid, 0, topic, data, true, null, null, true);
-      this._put_node(this.root);
+      this._putNode(this.root);
     } else {
-      console.error("root node is already exist");
+      throw new Error("root node is already exist");
     }
   }
 
@@ -94,16 +94,12 @@ export default class Mind {
         expanded
       );
     }
-    if (this._put_node(node)) {
-      parent_node.children.push(node);
-      this._reindex(parent_node);
-      return node;
-    } else {
-      console.error(
-        "fail, the nodeid '" + node.id + "' has been already exist."
-      );
-      return null;
-    }
+
+    this._putNode(node);
+    parent_node.children.push(node);
+    this._reindex(parent_node);
+
+    return node;
   }
 
   insert_node_before(
@@ -314,14 +310,12 @@ export default class Mind {
     return true;
   }
 
-  _put_node(node: MindNode): boolean {
+  private _putNode(node: MindNode): void {
     if (node.id in this.nodes) {
-      console.warn("the nodeid '" + node.id + "' has been already exist.");
-      return false;
-    } else {
-      this.nodes[node.id] = node;
-      return true;
+      throw new Error("the nodeid '" + node.id + "' has been already exist.");
     }
+
+    this.nodes[node.id] = node;
   }
 
   _reindex(node: MindNode): void {
