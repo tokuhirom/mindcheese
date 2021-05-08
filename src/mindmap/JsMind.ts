@@ -718,13 +718,7 @@ export default class JsMind {
   }
 
   invoke_event_handle(type: EventType, data: any): void {
-    if (type === EventType.BEFORE_EDIT) {
-      this._invoke_event_handle(type, data);
-    } else {
-      setTimeout(() => {
-        this._invoke_event_handle(type, data);
-      }, 0);
-    }
+    this._invoke_event_handle(type, data);
   }
 
   _invoke_event_handle(type: EventType, data: any): void {
