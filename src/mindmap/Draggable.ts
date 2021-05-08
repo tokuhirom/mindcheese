@@ -15,8 +15,6 @@
  * Copyright (C) 2021 Tokuhiro Matsuno.
  */
 
-"use strict";
-
 import JsMind from "./JsMind";
 import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
@@ -236,50 +234,13 @@ export default class Draggable {
   }
 
   _event_bind(): void {
-    // TODO bind に置換可能っぽい
     const container = this.jm.view.container;
-    container.addEventListener(
-      "mousedown",
-      (e: Event) => {
-        this.dragstart.call(this, e);
-      },
-      false
-    );
-    container.addEventListener(
-      "mousemove",
-      (e: Event) => {
-        this.drag.call(this, e);
-      },
-      false
-    );
-    container.addEventListener(
-      "mouseup",
-      (e: Event) => {
-        this.dragend.call(this, e);
-      },
-      false
-    );
-    container.addEventListener(
-      "touchstart",
-      (e: Event) => {
-        this.dragstart.call(this, e);
-      },
-      false
-    );
-    container.addEventListener(
-      "touchmove",
-      (e: Event) => {
-        this.drag.call(this, e);
-      },
-      false
-    );
-    container.addEventListener(
-      "touchend",
-      (e: Event) => {
-        this.dragend.call(this, e);
-      },
-      false
-    );
+    container.addEventListener("mousedown", this.dragstart.bind(this), false);
+    container.addEventListener("mousemove", this.drag.bind(this), false);
+    container.addEventListener("mouseup", this.dragend.bind(this), false);
+    container.addEventListener("touchstart", this.dragstart.bind(this), false);
+    container.addEventListener("touchmove", this.drag.bind(this), false);
+    container.addEventListener("touchend", this.dragend.bind(this), false);
   }
 
   dragstart(e: DragEvent): void {
