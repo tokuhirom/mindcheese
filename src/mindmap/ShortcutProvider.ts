@@ -1,4 +1,5 @@
 import MindCheese from "./MindCheese";
+import {KeyModifier} from "./MindmapConstants";
 
 export default class ShortcutProvider {
   private readonly jm: MindCheese;
@@ -48,10 +49,10 @@ export default class ShortcutProvider {
       return true;
     }
     const gotFlags =
-      ((e.metaKey ? 1 : 0) << 13) +
-      ((e.ctrlKey ? 1 : 0) << 12) +
-      ((e.altKey ? 1 : 0) << 11) +
-      ((e.shiftKey ? 1 : 0) << 10);
+      (e.metaKey ? KeyModifier.META : 0) |
+      (e.ctrlKey ? KeyModifier.CTRL : 0) |
+      (e.altKey ? KeyModifier.ALT : 0) |
+      (e.shiftKey ? KeyModifier.SHIFT : 0);
     for (const handler of handlers) {
       const [flags, code] = handler;
       if (flags === gotFlags) {

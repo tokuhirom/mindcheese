@@ -11,8 +11,7 @@ import {
   BEFOREID_LAST,
   Direction,
   EventType,
-  KEYCODE_CTRL_KEY,
-  KEYCODE_SHIFT_KEY,
+  KeyModifier,
 } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
@@ -45,18 +44,18 @@ const DEFAULT_OPTIONS: any = {
   shortcut: {
     enable: true,
     mappings: [
-      [0, "Delete", ShortcutHandlers.delete],
-      [0, "Tab", ShortcutHandlers.addChild],
-      [0, "Enter", ShortcutHandlers.addBrother],
-      [KEYCODE_CTRL_KEY, "Enter", ShortcutHandlers.editNode],
-      [0, "Space", ShortcutHandlers.toggle],
-      [KEYCODE_SHIFT_KEY, "ArrowUp", ShortcutHandlers.moveUp],
-      [KEYCODE_SHIFT_KEY, "ArrowDown", ShortcutHandlers.moveDown],
-      [0, "ArrowUp", ShortcutHandlers.up],
-      [0, "ArrowDown", ShortcutHandlers.down],
-      [0, "ArrowLeft", ShortcutHandlers.left],
-      [0, "ArrowRight", ShortcutHandlers.right],
-      [KEYCODE_CTRL_KEY, "KeyZ", ShortcutHandlers.undo],
+      [KeyModifier.NONE, "Delete", ShortcutHandlers.delete],
+      [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],
+      [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
+      [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode],
+      [KeyModifier.NONE, "Space", ShortcutHandlers.toggle],
+      [KeyModifier.SHIFT, "ArrowUp", ShortcutHandlers.moveUp],
+      [KeyModifier.SHIFT, "ArrowDown", ShortcutHandlers.moveDown],
+      [KeyModifier.NONE, "ArrowUp", ShortcutHandlers.up],
+      [KeyModifier.NONE, "ArrowDown", ShortcutHandlers.down],
+      [KeyModifier.NONE, "ArrowLeft", ShortcutHandlers.left],
+      [KeyModifier.NONE, "ArrowRight", ShortcutHandlers.right],
+      [KeyModifier.CTRL, "KeyZ", ShortcutHandlers.undo],
     ],
   },
 };
