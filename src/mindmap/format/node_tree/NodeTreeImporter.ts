@@ -27,7 +27,7 @@ export default class NodeTreeImporter implements MindmapImporter {
 
   private _parse(mind: Mind, node_root: MindNode): void {
     const data = this._extract_data(node_root);
-    mind.set_root(node_root.id, node_root.topic, data);
+    mind.setRoot(node_root.id, node_root.topic, data);
     if ("children" in node_root) {
       const children = node_root.children;
       for (let i = 0; i < children.length; i++) {

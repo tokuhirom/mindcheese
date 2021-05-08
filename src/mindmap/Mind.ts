@@ -28,9 +28,9 @@ export default class Mind {
     }
   }
 
-  set_root(nodeid: string, topic: string, data: any): void {
+  setRoot(nodeid: string, topic: string, data: any): void {
     if (this.root == null) {
-      this.root = new MindNode(nodeid, 0, topic, data, true, null, null, null);
+      this.root = new MindNode(nodeid, 0, topic, data, true, null, null, true);
       this._put_node(this.root);
     } else {
       console.error("root node is already exist");
@@ -48,6 +48,9 @@ export default class Mind {
   ): MindNode {
     const nodeindex: number = idx || -1;
     let node;
+    if (typeof expanded === "undefined") { // TODO remove this
+      expanded = true;
+    }
     if (parent_node.isroot) {
       let d;
       if (direction == null) {
@@ -63,7 +66,7 @@ export default class Mind {
         }
         d = children_len > 1 && r > 0 ? Direction.LEFT : Direction.RIGHT;
       } else {
-        d = direction !== Direction.LEFT ? Direction.RIGHT : Direction.LEFT;
+        d = direction === Direction.LEFT ? Direction.LEFT : Direction.RIGHT;
       }
       console.log(
         `add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`
@@ -116,7 +119,7 @@ export default class Mind {
       data,
       node_index,
       null,
-      null
+      true
     );
   }
 
@@ -149,7 +152,7 @@ export default class Mind {
       data,
       node_index,
       node_after.direction,
-      null
+      true
     );
   }
 

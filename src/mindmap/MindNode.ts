@@ -44,32 +44,29 @@ export default class MindNode {
   };
 
   constructor(
-    sId: string,
-    iIndex: number,
-    sTopic: string,
-    oData: any,
-    bIsRoot: boolean,
-    oParent: MindNode,
-    eDirection: Direction,
-    bExpanded: boolean
+    id: string,
+    index: number,
+    topic: string,
+    data: any,
+    isRoot: boolean,
+    parent: MindNode,
+    direction: Direction,
+    expanded: boolean
   ) {
-    if (!sId) {
+    if (!id) {
       throw new Error("invalid nodeid");
     }
-    if (typeof iIndex != "number") {
+    if (typeof index != "number") {
       throw new Error("invalid node index");
     }
-    if (typeof bExpanded === "undefined") {
-      bExpanded = true;
-    }
-    this.id = sId;
-    this.index = iIndex;
-    this.topic = sTopic;
-    this.data = oData || {};
-    this.isroot = bIsRoot;
-    this.parent = oParent;
-    this.direction = eDirection;
-    this.expanded = !!bExpanded;
+    this.id = id;
+    this.index = index;
+    this.topic = topic;
+    this.data = data || {};
+    this.isroot = isRoot;
+    this.parent = parent;
+    this.direction = direction;
+    this.expanded = expanded;
     this.children = [];
     this._data = {
       view: new ViewData(),

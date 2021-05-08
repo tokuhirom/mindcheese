@@ -366,7 +366,7 @@ export default class JsMind {
       data,
       null,
       null,
-      null
+      true
     );
     if (node) {
       this.view.add_node(node);
