@@ -4,17 +4,11 @@ import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
 export default class Mind {
-  name: string;
-  author: string;
-  version: string;
   root: MindNode;
   selected: MindNode;
   nodes: Record<string, MindNode>;
 
   constructor() {
-    this.name = null;
-    this.author = null;
-    this.version = null;
     this.root = null;
     this.selected = null;
     this.nodes = {};

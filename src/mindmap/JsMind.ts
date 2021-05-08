@@ -323,14 +323,6 @@ export default class JsMind {
     this._show(format, mind);
   }
 
-  get_meta(): { author: string; name: string; version: string } {
-    return {
-      name: this.mind.name,
-      author: this.mind.author,
-      version: this.mind.version,
-    };
-  }
-
   getData(data_format: string): any {
     return this.data.getData(data_format);
   }
