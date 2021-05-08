@@ -10,10 +10,10 @@ import Draggable from "./Draggable";
 import {
   BEFOREID_LAST,
   Direction,
-  EventType,
-  KEYCODE_DOWN,
-  KEYCODE_SHIFT_KEY,
-  KEYCODE_UP,
+  EventType, KEYCODE_CTRL_KEY, KEYCODE_DEL,
+  KEYCODE_DOWN, KEYCODE_ENTER, KEYCODE_LEFT, KEYCODE_RIGHT,
+  KEYCODE_SHIFT_KEY, KEYCODE_SPACE, KEYCODE_TAB,
+  KEYCODE_UP, KEYCODE_Z,
 } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 
@@ -47,18 +47,18 @@ const DEFAULT_OPTIONS: any = {
     handles: {},
     mapping: {
       // shortcut key mapping
-      addchild: 9, // <Tab>
-      addbrother: 13, // <Enter>
-      editnode: 113, // <F2>
-      delnode: 46, // <Delete>
-      toggle: 32, // <Space>
-      left: 37, // <Left>
-      up: 38, // <Up>
-      right: 39, // <Right>
-      down: 40, // <Down>
-      undo: 90 + (1 << 12), // C-z
-      move_up: KEYCODE_UP + KEYCODE_SHIFT_KEY, // S-↑
-      move_down: KEYCODE_DOWN + KEYCODE_SHIFT_KEY, // S-↓
+      addchild: KEYCODE_TAB, // <Tab>
+      addbrother: KEYCODE_ENTER, // <Enter>
+      editnode: KEYCODE_CTRL_KEY + KEYCODE_ENTER, // <C-Enter>
+      delnode: KEYCODE_DEL, // <Delete>
+      toggle: KEYCODE_SPACE, // <Space>
+      left: KEYCODE_LEFT, // <Left>
+      up: KEYCODE_UP, // <Up>
+      right: KEYCODE_RIGHT, // <Right>
+      down: KEYCODE_DOWN, // <Down>
+      undo: KEYCODE_CTRL_KEY + KEYCODE_Z, // C-z
+      move_up: KEYCODE_SHIFT_KEY + KEYCODE_UP, // S-↑
+      move_down: KEYCODE_SHIFT_KEY + KEYCODE_DOWN, // S-↓
     },
   },
 };

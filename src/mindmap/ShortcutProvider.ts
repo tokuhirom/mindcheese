@@ -101,6 +101,8 @@ export default class ShortcutProvider {
       if (isConnected) {
         console.log(`Invoking shortcut handler: ID=${this.jm.mind.id}/${this.jm.id} connected=${isConnected}
       target=${e.target}
+      key=${e.key}
+      code=${e.code}
       `);
         this._mapping[kc].call(this, this.jm, e);
         return false;
