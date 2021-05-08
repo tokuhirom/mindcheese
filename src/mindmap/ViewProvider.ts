@@ -275,14 +275,12 @@ export default class ViewProvider {
 
   select_node(node: MindNode): void {
     if (this.selected_node) {
-      this.selected_node._data.view.element.className = this.selected_node._data.view.element.className.replace(
-        /\s*selected\b/i,
-        ""
-      );
+      const el = this.selected_node._data.view.element;
+      el.classList.remove('selected')
     }
     if (node) {
       this.selected_node = node;
-      node._data.view.element.className += " selected";
+      node._data.view.element.classList.add("selected");
       this.adjustScrollBar(node);
     }
   }

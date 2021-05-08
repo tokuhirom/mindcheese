@@ -62,6 +62,7 @@ export default class ShortcutHandlers {
     const selected_node = jm.get_selected_node();
     if (selected_node) {
       jm.move_up(selected_node);
+      jm.select_node(selected_node);
     }
     return false;
   }
@@ -70,6 +71,7 @@ export default class ShortcutHandlers {
     const selected_node = jm.get_selected_node();
     if (selected_node) {
       jm.move_down(selected_node);
+      jm.select_node(selected_node);
     }
     return false;
   }
