@@ -618,12 +618,14 @@ export default class JsMind {
     }
 
     if (node.parent.isroot) {
-      const children = node.parent.children.filter(it => it.direction===node.direction);
+      const children = node.parent.children.filter(
+        (it) => it.direction === node.direction
+      );
       for (let i = 0; i < children.length; i++) {
         const ni = children[i];
         if (node.id === ni.id) {
-          if (i!==0) {
-            return children[i-1];
+          if (i !== 0) {
+            return children[i - 1];
           } else {
             return null;
           }
