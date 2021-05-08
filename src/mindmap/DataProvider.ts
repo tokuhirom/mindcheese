@@ -18,8 +18,8 @@ class DataFormat {
   get_data(mind: Mind): any {
     return this.exporter.get_data(mind);
   }
-  get_mind(source: any, id: number): Mind {
-    return this.importer.get_mind(source, id);
+  get_mind(source: any): Mind {
+    return this.importer.get_mind(source);
   }
 }
 
@@ -35,9 +35,9 @@ export default class DataProvider {
     };
   }
 
-  load(format: string, mind_data: any, id: number): Mind {
+  load(format: string, mind_data: any): Mind {
     const data_format = this.format_map[format];
-    return data_format.get_mind(mind_data, id);
+    return data_format.get_mind(mind_data);
   }
 
   get_data(format: string): any {

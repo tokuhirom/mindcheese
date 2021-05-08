@@ -101,9 +101,9 @@ export default class ShortcutHandlers {
   static down(jm: JsMind, e: Event): boolean {
     const selected_node = jm.get_selected_node();
     if (selected_node) {
-      let down_node = jm.find_node_after(selected_node);
+      let down_node = jm.findNodeAfter(selected_node);
       if (!down_node && selected_node.parent) {
-        const np = jm.find_node_after(selected_node.parent);
+        const np = jm.findNodeAfter(selected_node.parent);
         if (!!np && np.children.length > 0) {
           down_node = np.children[0];
         }

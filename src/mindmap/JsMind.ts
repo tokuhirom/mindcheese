@@ -297,7 +297,7 @@ export default class JsMind {
   }
 
   _show(format: string, mind: any): void {
-    this.mind = this.data.load(format, mind, this.id);
+    this.mind = this.data.load(format, mind);
     if (!this.mind) {
       console.error("data.load error");
       return;
@@ -636,31 +636,31 @@ export default class JsMind {
     return n;
   }
 
-  find_node_after(node: MindNode): null | MindNode {
+  findNodeAfter(node: MindNode): null | MindNode {
     if (node.isroot) {
       return null;
     }
-    let n: MindNode = null;
+
     if (node.parent.isroot) {
-      const c = node.parent.children;
-      let getthis = false;
-      let ni = null;
-      for (let i = 0; i < c.length; i++) {
-        ni = c[i];
-        if (node.direction === ni.direction) {
-          if (getthis) {
-            n = ni;
-            break;
-          }
-          if (node.id === ni.id) {
-            getthis = true;
+      const children = node.parent.children.filter(
+        (it) => it.direction == node.direction
+      );
+      for (let i = 0; i < children.length; i++) {
+        const ni = children[i];
+        if (node.id === ni.id) {
+          if (i + 1 < children.length) {
+            return children[i + 1];
+          } else {
+            return null; // the last node.
           }
         }
       }
+      throw new Error(
+        `Illegal state. The parent node doesn't have this child: ${node.id}`
+      );
     } else {
-      n = this.mind.get_node_after(node);
+      return this.mind.get_node_after(node);
     }
-    return n;
   }
 
   resize(): void {
@@ -668,7 +668,6 @@ export default class JsMind {
     this.view.resize();
   }
 
-  // callback(type ,data)
   add_event_listener(
     eventType: EventType,
     callback: (data: any) => void
@@ -677,10 +676,6 @@ export default class JsMind {
   }
 
   invoke_event_handle(type: EventType, data: any): void {
-    this._invoke_event_handle(type, data);
-  }
-
-  _invoke_event_handle(type: EventType, data: any): void {
     const l = this.event_handles_map[type].length;
     for (let i = 0; i < l; i++) {
       this.event_handles_map[type][i](data);
