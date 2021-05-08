@@ -335,7 +335,7 @@ export default class JsMind {
     return this.data.get_data(data_format);
   }
 
-  get_root(): MindNode {
+  getRoot(): MindNode {
     return this.mind.root;
   }
 

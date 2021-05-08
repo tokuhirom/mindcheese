@@ -149,7 +149,7 @@ export default class Draggable {
     sp: any;
     direction: Direction;
   } {
-    const root = this.jm.get_root();
+    const root = this.jm.getRoot();
     const root_location = root.get_location();
     const root_size = root.get_size();
     const root_x = root_location.x + root_size.w / 2;
