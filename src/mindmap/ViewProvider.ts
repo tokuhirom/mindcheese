@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
+import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
 import JsMind from "./JsMind";
 import LayoutProvider from "./LayoutProvider";
 
@@ -28,10 +28,10 @@ function is_empty(s: string) {
 
 // noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
-  private opts: any;
-  private jm: JsMind;
-  private layout: LayoutProvider;
-  container: HTMLElement;
+  private readonly opts: any;
+  private readonly jm: JsMind;
+  private readonly layout: LayoutProvider;
+  private readonly container: HTMLElement;
   e_panel: HTMLDivElement; // div.jsmind-inner
   e_nodes: HTMLElement; // <jmnodes>
   size: { w: number; h: number };
@@ -44,12 +44,12 @@ export default class ViewProvider {
   private minZoom: number;
   private maxZoom: number;
 
-  constructor(jm: JsMind, options: any) {
+  constructor(jm: JsMind, container: HTMLElement,options: any) {
     this.opts = options;
     this.jm = jm;
     this.layout = jm.layout;
 
-    this.container = null;
+    this.container = container;
     this.e_panel = null;
     this.e_nodes = null;
 
@@ -64,13 +64,11 @@ export default class ViewProvider {
   init(): void {
     console.debug("view.init");
 
-    this.container = isElement(this.opts.container)
-      ? this.opts.container
-      : document.getElementById(this.opts.container);
     if (!this.container) {
       console.error("the options.view.container was not be found in dom");
       return;
     }
+
     this.e_panel = document.createElement("div");
     this.e_nodes = document.createElement("jmnodes");
     this.e_editor = document.createElement("textarea");
@@ -91,6 +89,7 @@ export default class ViewProvider {
     this.e_editor.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
+      // noinspection JSDeprecatedSymbols
       if (e.keyCode === KEYCODE_ENTER && !e.shiftKey) {
         this.edit_node_end();
         e.stopPropagation();

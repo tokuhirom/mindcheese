@@ -63,10 +63,10 @@ export default class Draggable {
     this.moved = false;
   }
 
-  init(): void {
+  init(container: HTMLElement): void {
     this._create_canvas();
     this._create_shadow();
-    this._event_bind();
+    this._event_bind(container);
   }
 
   resize(): void {
@@ -230,8 +230,7 @@ export default class Draggable {
     }
   }
 
-  _event_bind(): void {
-    const container = this.jm.view.container;
+  _event_bind(container: HTMLElement): void {
     container.addEventListener("mousedown", this.dragstart.bind(this), false);
     container.addEventListener("mousemove", this.drag.bind(this), false);
     container.addEventListener("mouseup", this.dragend.bind(this), false);

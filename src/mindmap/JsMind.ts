@@ -107,7 +107,6 @@ export default class JsMind {
     const opts = this.options;
 
     const opts_view = {
-      container: opts.container,
       support_html: opts.support_html,
       hmargin: opts.view.hmargin,
       vmargin: opts.view.vmargin,
@@ -123,7 +122,10 @@ export default class JsMind {
       opts.layout.vspace,
       opts.layout.pspace
     );
-    this.view = new ViewProvider(this, opts_view);
+    this.view = new ViewProvider(
+        this,
+        opts.container,
+        opts_view);
     this.shortcut = new ShortcutProvider(
       this,
       opts.shortcut.enable,
@@ -135,7 +137,7 @@ export default class JsMind {
     this.layout.init();
     this.view.init();
     this.shortcut.init();
-    this.draggable.init();
+    this.draggable.init(opts.container);
     this.undo_manager.init();
 
     this._event_bind();
