@@ -42,11 +42,6 @@ const DEFAULT_OPTIONS: any = {
     vspace: 20,
     pspace: 13,
   },
-  default_event_handle: {
-    enable_mousedown_handle: true,
-    enable_click_handle: true,
-    enable_dblclick_handle: true,
-  },
   shortcut: {
     enable: true,
     handles: {},
@@ -157,22 +152,6 @@ export default class JsMind {
     this.options.editable = false;
   }
 
-  // call enable_event_handle('dblclick')
-  // options are 'mousedown', 'click', 'dblclick'
-  enable_event_handle(event_handle: string): void {
-    this.options.default_event_handle[
-      "enable_" + event_handle + "_handle"
-    ] = true;
-  }
-
-  // call disable_event_handle('dblclick')
-  // options are 'mousedown', 'click', 'dblclick'
-  disable_event_handle(event_handle: string): void {
-    this.options.default_event_handle[
-      "enable_" + event_handle + "_handle"
-    ] = false;
-  }
-
   get_editable(): boolean {
     return this.options.editable;
   }
@@ -203,9 +182,6 @@ export default class JsMind {
   }
 
   mousedown_handle(e: Event): void {
-    if (!this.options.default_event_handle["enable_mousedown_handle"]) {
-      return;
-    }
     const element = e.target as HTMLElement;
     const nodeid = this.view.get_binded_nodeid(element);
     if (nodeid) {
@@ -224,10 +200,6 @@ export default class JsMind {
   }
 
   click_handle(e: Event): void {
-    if (!this.options.default_event_handle["enable_click_handle"]) {
-      return;
-    }
-
     const element = e.target as HTMLElement;
     const isexpander = this.view.is_expander(element);
     if (isexpander) {
@@ -245,9 +217,6 @@ export default class JsMind {
   }
 
   dblclick_handle(e: Event): void {
-    if (!this.options.default_event_handle["enable_dblclick_handle"]) {
-      return;
-    }
     if (!this.get_editable()) {
       console.warn("The mindmap is not editable now.");
       return;
