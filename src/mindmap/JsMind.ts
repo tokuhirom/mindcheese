@@ -612,28 +612,27 @@ export default class JsMind {
     return this.layout.is_visible(node);
   }
 
-  find_node_before(node: MindNode): null | MindNode {
+  findNodeBefore(node: MindNode): null | MindNode {
     if (node.isroot) {
       return null;
     }
-    let n: MindNode = null;
+
     if (node.parent.isroot) {
-      const c = node.parent.children;
-      let prev = null;
-      let ni = null;
-      for (let i = 0; i < c.length; i++) {
-        ni = c[i];
-        if (node.direction === ni.direction) {
-          if (node.id === ni.id) {
-            n = prev;
+      const children = node.parent.children.filter(it => it.direction===node.direction);
+      for (let i = 0; i < children.length; i++) {
+        const ni = children[i];
+        if (node.id === ni.id) {
+          if (i!==0) {
+            return children[i-1];
+          } else {
+            return null;
           }
-          prev = ni;
         }
       }
+      throw new Error(`Missing the node in parent: ${node.id}`);
     } else {
-      n = this.mind.get_node_before(node);
+      return this.mind.get_node_before(node);
     }
-    return n;
   }
 
   findNodeAfter(node: MindNode): null | MindNode {

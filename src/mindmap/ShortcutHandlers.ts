@@ -81,10 +81,14 @@ export default class ShortcutHandlers {
 
   static up(jm: JsMind, e: Event): boolean {
     const selected_node = jm.get_selected_node();
+    if (selected_node.isroot) {
+      return false;
+    }
+
     if (selected_node) {
-      let up_node = jm.find_node_before(selected_node);
-      if (!up_node && selected_node.parent) {
-        const np = jm.find_node_before(selected_node.parent);
+      let up_node = jm.findNodeBefore(selected_node);
+      if (!up_node) {
+        const np = jm.findNodeBefore(selected_node.parent);
         if (!!np && np.children.length > 0) {
           up_node = np.children[np.children.length - 1];
         }
@@ -100,9 +104,13 @@ export default class ShortcutHandlers {
 
   static down(jm: JsMind, e: Event): boolean {
     const selected_node = jm.get_selected_node();
+    if (selected_node.isroot) {
+      return false;
+    }
+
     if (selected_node) {
       let down_node = jm.findNodeAfter(selected_node);
-      if (!down_node && selected_node.parent) {
+      if (!down_node) {
         const np = jm.findNodeAfter(selected_node.parent);
         if (!!np && np.children.length > 0) {
           down_node = np.children[0];
