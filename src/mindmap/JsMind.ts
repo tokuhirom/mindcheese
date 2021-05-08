@@ -249,7 +249,7 @@ export default class JsMind {
       return;
     }
     if (!this.get_editable()) {
-      console.warn("The mindmap is not editable now.")
+      console.warn("The mindmap is not editable now.");
       return;
     }
 
@@ -394,13 +394,13 @@ export default class JsMind {
       node: nodeid,
     });
     const node = this.mind.add_node(
-        parent_node,
-        nodeid,
-        topic,
-        data,
-        null,
-        null,
-        null
+      parent_node,
+      nodeid,
+      topic,
+      data,
+      null,
+      null,
+      null
     );
     if (node) {
       this.view.add_node(node);
@@ -428,25 +428,19 @@ export default class JsMind {
       return null;
     }
 
-    const beforeid = node_before.id;
     this.invoke_event_handle(EventType.BEFORE_EDIT, {
       evt: "insert_node_before",
-      data: [beforeid, nodeid, topic, data],
+      data: [node_before.id, nodeid, topic, data],
       node: nodeid,
     });
-    const node = this.mind.insert_node_before(
-        node_before,
-        nodeid,
-        topic,
-        data
-    );
+    const node = this.mind.insert_node_before(node_before, nodeid, topic, data);
     if (node) {
       this.view.add_node(node);
       this.layout.layout();
       this.view.show(false);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "insert_node_before",
-        data: [beforeid, nodeid, topic, data],
+        data: [node_before.id, nodeid, topic, data],
         node: nodeid,
       });
     }
@@ -464,12 +458,11 @@ export default class JsMind {
       return null;
     }
 
-    const afterid = node_after.id;
     const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
     if (node) {
       this.invoke_event_handle(EventType.BEFORE_EDIT, {
         evt: "insert_node_after",
-        data: [afterid, nodeid, topic, data],
+        data: [node_after.id, nodeid, topic, data],
         node: nodeid,
       });
       this.view.add_node(node);
@@ -477,7 +470,7 @@ export default class JsMind {
       this.view.show(false);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "insert_node_after",
-        data: [afterid, nodeid, topic, data],
+        data: [node_after.id, nodeid, topic, data],
         node: nodeid,
       });
     }
@@ -496,16 +489,16 @@ export default class JsMind {
     }
 
     const nodeid = node.id;
+    const parent_node = node.parent;
     const parentid = node.parent.id;
     this.invoke_event_handle(EventType.BEFORE_EDIT, {
       evt: "remove_node",
       data: [nodeid],
       node: parentid,
     });
-    const parent_node = this.get_node(parentid);
     const nextSelectedNode = this.findUpperBrotherOrParentNode(
-        parent_node,
-        nodeid
+      parent_node,
+      nodeid
     );
     this.view.save_location(parent_node);
     this.view.remove_node(node);
@@ -610,12 +603,7 @@ export default class JsMind {
       data: [nodeid, beforeid, parentid, direction],
       node: nodeid,
     });
-    const node = this.mind.move_node(
-        the_node,
-        beforeid,
-        parentid,
-        direction
-    );
+    const node = this.mind.move_node(the_node, beforeid, parentid, direction);
     this.view.update_node(node);
     this.layout.layout();
     this.view.show(false);
