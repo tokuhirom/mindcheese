@@ -25,10 +25,8 @@ class DataFormat {
 
 export default class DataProvider {
   private readonly format_map: Record<string, DataFormat>;
-  private jm: MindCheese;
 
-  constructor(jm: MindCheese) {
-    this.jm = jm;
+  constructor() {
     this.format_map = {
       node_tree: new DataFormat(new NodeTreeImporter(), new NodeTreeExporter()),
       markdown: new DataFormat(new MarkdownImporter(), new MarkdownExporter()),
@@ -40,10 +38,10 @@ export default class DataProvider {
     return data_format.get_mind(mind_data);
   }
 
-  getData(format: string): any {
+  getData(format: string, mind: Mind): any {
     const data_format = this.format_map[format];
     if (data_format) {
-      return data_format.getData(this.jm.mind);
+      return data_format.getData(mind);
     } else {
       throw new Error(`Unknown format: ${data_format}`);
     }

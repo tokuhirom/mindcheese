@@ -105,7 +105,7 @@ export default class MindCheese {
       line_color: opts.view.line_color,
     };
     // create instance of function provider
-    this.data = new DataProvider(this);
+    this.data = new DataProvider();
     this.layout = new LayoutProvider(
       this,
       this.event_router,
@@ -314,7 +314,7 @@ export default class MindCheese {
   }
 
   getData(data_format: string): any {
-    return this.data.getData(data_format);
+    return this.data.getData(data_format, this.mind);
   }
 
   getRoot(): MindNode {
