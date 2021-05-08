@@ -35,8 +35,8 @@ export default class ViewProvider {
   e_panel: HTMLDivElement; // div.jsmind-inner
   e_nodes: HTMLElement; // <jmnodes>
   size: { w: number; h: number };
-  private selected_node: any;
-  private editing_node: any;
+  private selected_node: MindNode;
+  private editing_node: MindNode;
   private readonly graph: GraphCanvas;
   private e_editor: HTMLTextAreaElement;
   private actualZoom: number;
