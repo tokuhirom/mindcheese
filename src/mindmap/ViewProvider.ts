@@ -37,14 +37,14 @@ export default class ViewProvider {
   size: { w: number; h: number };
   private selected_node: any;
   private editing_node: any;
-  private graph: any;
+  private graph: GraphCanvas;
   private e_editor: HTMLTextAreaElement;
   private actualZoom: number;
   private zoomStep: number;
   private minZoom: number;
   private maxZoom: number;
 
-  constructor(jm: JsMind, container: HTMLElement,options: any) {
+  constructor(jm: JsMind, container: HTMLElement, options: any) {
     this.opts = options;
     this.jm = jm;
     this.layout = jm.layout;
@@ -58,7 +58,7 @@ export default class ViewProvider {
     this.selected_node = null;
     this.editing_node = null;
 
-    this.graph = null;
+    this.graph = new GraphCanvas(this);
   }
 
   init(): void {
@@ -72,8 +72,6 @@ export default class ViewProvider {
     this.e_panel = document.createElement("div");
     this.e_nodes = document.createElement("jmnodes");
     this.e_editor = document.createElement("textarea");
-
-    this.graph = new GraphCanvas(this);
 
     this.e_panel.className = "jsmind-inner";
     this.e_panel.appendChild(this.graph.element());

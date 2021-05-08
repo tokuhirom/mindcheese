@@ -122,10 +122,7 @@ export default class JsMind {
       opts.layout.vspace,
       opts.layout.pspace
     );
-    this.view = new ViewProvider(
-        this,
-        opts.container,
-        opts_view);
+    this.view = new ViewProvider(this, opts.container, opts_view);
     this.shortcut = new ShortcutProvider(
       this,
       opts.shortcut.enable,
