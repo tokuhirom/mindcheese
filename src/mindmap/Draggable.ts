@@ -19,12 +19,6 @@ import JsMind from "./JsMind";
 import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
-const options = {
-  line_width: 5,
-  lookup_delay: 500,
-  lookup_interval: 80,
-};
-
 export default class Draggable {
   private jm: JsMind;
   private e_canvas: HTMLCanvasElement;
@@ -45,6 +39,9 @@ export default class Draggable {
   private moved: boolean;
   private client_hw: number;
   private client_hh: number;
+  line_width = 5;
+  lookup_delay = 500;
+  lookup_interval = 80;
 
   constructor(jm: JsMind) {
     this.jm = jm;
@@ -127,7 +124,7 @@ export default class Draggable {
     direction: number;
   }): void {
     if (node) {
-      this.canvas_ctx.lineWidth = options.line_width;
+      this.canvas_ctx.lineWidth = this.line_width;
       this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
       this.canvas_ctx.lineCap = "round";
       this._clear_lines();
@@ -188,16 +185,16 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.w) +
             Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + ns.w - options.line_width, y: nl.y + ns.h / 2 };
-          sp = { x: sx + options.line_width, y: sy + sh / 2 };
+          np = { x: nl.x + ns.w - this.line_width, y: nl.y + ns.h / 2 };
+          sp = { x: sx + this.line_width, y: sy + sh / 2 };
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
           }
           distance =
             Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + options.line_width, y: nl.y + ns.h / 2 };
-          sp = { x: sx + sw - options.line_width, y: sy + sh / 2 };
+          np = { x: nl.x + this.line_width, y: nl.y + ns.h / 2 };
+          sp = { x: sx + sw - this.line_width, y: sy + sh / 2 };
         }
         if (distance < min_distance) {
           closest_node = node;
@@ -279,9 +276,9 @@ export default class Draggable {
           this.hlookup_delay = 0;
           this.hlookup_timer = window.setInterval(
             this.lookup_close_node.bind(this),
-            options.lookup_interval
+            this.lookup_interval
           );
-        }, options.lookup_delay);
+        }, this.lookup_delay);
         this.capture = true;
       }
     }
