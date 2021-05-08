@@ -608,10 +608,6 @@ export default class JsMind {
     }
   }
 
-  is_node_visible(node: MindNode): boolean {
-    return this.layout.is_visible(node);
-  }
-
   findNodeBefore(node: MindNode): null | MindNode {
     if (node.isroot) {
       return null;
