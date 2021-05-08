@@ -71,9 +71,9 @@ export default class MindCheese {
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
-  id: number;
+  private readonly id: number;
   private undo_manager: UndoManager;
-  private event_router: EventRouter;
+  private readonly event_router: EventRouter;
 
   constructor(id: number, options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
@@ -109,7 +109,13 @@ export default class MindCheese {
       opts.layout.pspace
     );
     const graph = new GraphCanvas(opts.view.line_color, opts.view.line_width);
-    this.view = new ViewProvider(this, opts.container, opts.view.hmargin, opts.view.vmargin, graph);
+    this.view = new ViewProvider(
+      this,
+      opts.container,
+      opts.view.hmargin,
+      opts.view.vmargin,
+      graph
+    );
     this.shortcut = new ShortcutProvider(
       this,
       opts.shortcut.enable,

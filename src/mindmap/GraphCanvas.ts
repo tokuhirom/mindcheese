@@ -6,7 +6,7 @@ export default class GraphCanvas {
   private readonly _line_color: string;
   private readonly _line_width: number;
 
-  constructor(line_color="#555", line_width=2) {
+  constructor(line_color = "#555", line_width = 2) {
     this._line_color = line_color;
     this._line_width = line_width;
     this.e_canvas = document.createElement("canvas");

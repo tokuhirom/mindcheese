@@ -47,7 +47,7 @@ export default class ViewProvider {
     hmargin: number = 100,
     vmargin: number = 50,
     graph: GraphCanvas,
-    renderer = plainTextRenderer,
+    renderer = plainTextRenderer
   ) {
     this.jm = jm;
     this._renderer = renderer;
