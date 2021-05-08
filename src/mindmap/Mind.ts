@@ -268,26 +268,24 @@ export default class Mind {
     return node;
   }
 
-  remove_node(node: MindNode): boolean {
-    if (!node) {
-      console.error("fail, the node can not be found");
-      return false;
-    }
+  removeNode(node: MindNode): boolean {
     if (node.isroot) {
-      console.error("fail, can not remove root node");
-      return false;
+      throw new Error("fail, can not remove root node");
     }
     if (this.selected != null && this.selected.id === node.id) {
       this.selected = null;
     }
+
     // clean all subordinate nodes
     const children = node.children;
     let ci = children.length;
     while (ci--) {
-      this.remove_node(children[ci]);
+      this.removeNode(children[ci]);
     }
+
     // clean all children
     children.length = 0;
+
     // remove from parent's children
     const sibling = node.parent.children;
     let si = sibling.length;
@@ -297,16 +295,10 @@ export default class Mind {
         break;
       }
     }
+
     // remove from global nodes
     delete this.nodes[node.id];
-    // clean all properties
-    for (const k in node) {
-      // @ts-ignore
-      delete node[k];
-    }
-    // remove it's self
-    node = null;
-    //delete node;
+
     return true;
   }
 

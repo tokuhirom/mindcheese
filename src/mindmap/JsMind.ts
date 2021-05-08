@@ -468,7 +468,7 @@ export default class JsMind {
     );
     this.view.save_location(parent_node);
     this.view.remove_node(node);
-    this.mind.remove_node(node);
+    this.mind.removeNode(node);
     this.layout.layout();
     this.view.show(false);
     if (parent_node.children.length > 0) {
