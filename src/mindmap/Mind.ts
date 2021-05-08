@@ -272,7 +272,6 @@ export default class Mind {
     return node;
   }
 
-  // XXX jsMind では Node ではなく string も受け付けていた。
   remove_node(node: MindNode): boolean {
     if (!node) {
       console.error("fail, the node can not be found");
