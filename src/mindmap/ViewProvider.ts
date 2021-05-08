@@ -99,19 +99,11 @@ export default class ViewProvider {
         e.stopPropagation();
       }
     });
-    this.e_editor.addEventListener("keyup", () => {
-      // adjust size dynamically.
-      this.adjustEditorElementSize();
-    });
-    this.e_editor.addEventListener("blur", () => {
-      // when the element lost focus.
-      this.edit_node_end();
-    });
-    this.e_editor.addEventListener("input", () => {
-      console.log("textarea.oninput");
-      this.adjustEditorElementSize();
-      return false;
-    });
+    // adjust size dynamically.
+    this.e_editor.addEventListener("keyup", this.adjustEditorElementSize.bind(this));
+    // when the element lost focus.
+    this.e_editor.addEventListener("blur", this.edit_node_end.bind(this));
+    this.e_editor.addEventListener("input", this.adjustEditorElementSize.bind(this));
 
     this.container.appendChild(this.e_panel);
   }
