@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <script src="browser.js"></script>
     <link href="../styles.css" rel="stylesheet" />
+    <title>Demo site of the MindCheese</title>
   </head>
   <body>
-    <div>
+    <div id="menu">
       <button id="layout">layout.layout()</button>
       <button id="viewShow">view.show()</button>
       <button id="expandSize">view.expand_size()</button>
@@ -81,6 +82,26 @@
       });
       console.log(window.JsMind);
 
+      window.addEventListener("resize", () => resize());
+      resize();
+      function resize() {
+        const container = document.getElementById("container");
+        const menu = document.getElementById("menu");
+        const browserHeight = document.documentElement.clientHeight;
+        const bodyMarginTop = parseInt(
+          getComputedStyle(document.body).marginTop
+        );
+        const bodyMarginBottom = parseInt(
+          getComputedStyle(document.body).marginTop
+        );
+        container.style.height =
+          browserHeight -
+          menu.clientHeight -
+          bodyMarginTop -
+          bodyMarginBottom +
+          "px";
+      }
+
       document.getElementById("layout").addEventListener("click", () => {
         console.log("layout.layout");
         jsmind.layout.layout();
@@ -117,6 +138,7 @@
         });
       document.getElementById("resize").addEventListener("click", () => {
         jsmind.resize();
+        resize();
         return false;
       });
       document.getElementById("load_markdown").addEventListener("click", () => {
@@ -179,6 +201,7 @@
 + aaa
           `,
         });
+        resize();
         return false;
       });
     </script>

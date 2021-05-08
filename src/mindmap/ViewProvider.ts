@@ -317,67 +317,71 @@ export default class ViewProvider {
       node._data.view.element.className += " selected";
       this.clear_node_custom_style(node);
 
-      // show node in the browser.
-      // はみ出てる条件とは?
-      // 左上は中にある?
-      // e_panel.scrollWidth は使わない。
-      const nodeEl = node._data.view.element;
-      const panelEl = this.e_panel;
-      // console.debug(`select_node!
-      // panelEl.scrollLeft=${panelEl.scrollLeft}
-      // panelEl.clientWidth=${panelEl.clientWidth}
-      // e_panel.sL+cW=${panelEl.scrollLeft+panelEl.clientWidth}
-      // node.offsetLeft=${nodeEl.offsetLeft}
-      // node.clientWidth=${nodeEl.clientWidth}
-      // node.oL+cW=${nodeEl.offsetLeft+nodeEl.clientWidth}
-      //
-      // panelEl.scrollTop=${panelEl.scrollTop}
-      // panelEl.clientHeight=${panelEl.clientHeight}
-      // panelEl.offsetHeight=${panelEl.offsetHeight}
-      // panelEl.scrollHeight=${panelEl.scrollHeight}
-      // panelEl.getBoundingClientRect().top=${panelEl.getBoundingClientRect().top}
-      // panelEl.getBoundingClientRect().y=${panelEl.getBoundingClientRect().y}
-      // panelEl.getBoundingClientRect().height=${panelEl.getBoundingClientRect().height}
-      // getComputedStyle(panelEl).height=${getComputedStyle(panelEl).height}
-      // getComputedStyle(panelEl).maxHeight=${getComputedStyle(panelEl).maxHeight}
-      // e_panel.sT+cH=${panelEl.scrollTop+panelEl.clientHeight}
-      // node.offsetTop=${nodeEl.offsetTop}
-      // node.clientHeight=${nodeEl.clientHeight}
-      // node.oT+cH=${nodeEl.offsetTop+nodeEl.clientHeight}
-      // `);
-      if (panelEl.scrollLeft > nodeEl.offsetLeft) {
-        console.debug(`select_node! left adjust`);
-        panelEl.scrollLeft = Math.max(nodeEl.offsetLeft - 10, 0);
-      }
-      if (
-        nodeEl.offsetLeft + nodeEl.clientWidth >=
-        panelEl.scrollLeft + panelEl.clientWidth
-      ) {
-        console.debug("select_node! right adjust");
-        panelEl.scrollLeft = Math.max(
-          panelEl.scrollLeft +
-            (nodeEl.offsetLeft +
-              nodeEl.clientWidth +
-              30 -
-              (panelEl.scrollLeft + panelEl.clientWidth)),
-          0
-        );
-      }
-      // ↓ this routine doesn't work well.
+      this.adjustScrollBar(node);
+    }
+  }
 
-      // if (panelEl.scrollTop > nodeEl.offsetTop) {
-      //   console.debug("select_node! top adjust");
-      //   panelEl.scrollTop = Math.max(nodeEl.offsetTop - 10, 0);
-      // }
-      // if (nodeEl.offsetTop + nodeEl.clientHeight >= panelEl.scrollTop + panelEl.clientHeight) {
-      //   console.debug("select_node! bottom adjust");
-      //   panelEl.scrollTop = Math.max(
-      //       panelEl.scrollTop + (
-      //           (nodeEl.offsetTop + nodeEl.clientHeight + 30)
-      //           - (panelEl.scrollTop + panelEl.clientHeight)
-      //       ),
-      //       0);
-      // }
+  // Adjust the scroll bar. show node in the browser.
+  adjustScrollBar(node: MindNode): void {
+    const nodeEl = node._data.view.element;
+    const panelEl = this.e_panel;
+    // console.debug(`select_node!
+    // panelEl.scrollLeft=${panelEl.scrollLeft}
+    // panelEl.clientWidth=${panelEl.clientWidth}
+    // e_panel.sL+cW=${panelEl.scrollLeft+panelEl.clientWidth}
+    // node.offsetLeft=${nodeEl.offsetLeft}
+    // node.clientWidth=${nodeEl.clientWidth}
+    // node.oL+cW=${nodeEl.offsetLeft+nodeEl.clientWidth}
+    //
+    // panelEl.scrollTop=${panelEl.scrollTop}
+    // panelEl.clientHeight=${panelEl.clientHeight}
+    // panelEl.offsetHeight=${panelEl.offsetHeight}
+    // panelEl.scrollHeight=${panelEl.scrollHeight}
+    // panelEl.getBoundingClientRect().top=${panelEl.getBoundingClientRect().top}
+    // panelEl.getBoundingClientRect().y=${panelEl.getBoundingClientRect().y}
+    // panelEl.getBoundingClientRect().height=${panelEl.getBoundingClientRect().height}
+    // getComputedStyle(panelEl).height=${getComputedStyle(panelEl).height}
+    // getComputedStyle(panelEl).maxHeight=${getComputedStyle(panelEl).maxHeight}
+    // e_panel.sT+cH=${panelEl.scrollTop+panelEl.clientHeight}
+    // node.offsetTop=${nodeEl.offsetTop}
+    // node.clientHeight=${nodeEl.clientHeight}
+    // node.oT+cH=${nodeEl.offsetTop+nodeEl.clientHeight}
+    // `);
+    if (panelEl.scrollLeft > nodeEl.offsetLeft) {
+      console.debug(`select_node! left adjust`);
+      panelEl.scrollLeft = Math.max(nodeEl.offsetLeft - 10, 0);
+    }
+    if (
+      nodeEl.offsetLeft + nodeEl.clientWidth >=
+      panelEl.scrollLeft + panelEl.clientWidth
+    ) {
+      console.debug("select_node! right adjust");
+      panelEl.scrollLeft = Math.max(
+        panelEl.scrollLeft +
+          (nodeEl.offsetLeft +
+            nodeEl.clientWidth +
+            30 -
+            (panelEl.scrollLeft + panelEl.clientWidth)),
+        0
+      );
+    }
+    if (panelEl.scrollTop > nodeEl.offsetTop) {
+      console.debug("select_node! top adjust");
+      panelEl.scrollTop = Math.max(nodeEl.offsetTop - 10, 0);
+    }
+    if (
+      nodeEl.offsetTop + nodeEl.clientHeight >=
+      panelEl.scrollTop + panelEl.clientHeight
+    ) {
+      console.debug("select_node! bottom adjust");
+      panelEl.scrollTop = Math.max(
+        panelEl.scrollTop +
+          (nodeEl.offsetTop +
+            nodeEl.clientHeight +
+            30 -
+            (panelEl.scrollTop + panelEl.clientHeight)),
+        0
+      );
     }
   }
 
