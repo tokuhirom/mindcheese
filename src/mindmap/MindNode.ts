@@ -1,4 +1,3 @@
-// TODO convert to typescript
 // noinspection JSUnusedGlobalSymbols
 
 import { Direction } from "./MindmapConstants";
@@ -32,7 +31,6 @@ export default class MindNode {
   public id: string;
   public index: number;
   public topic: string;
-  public data: { view: ViewData; layout: LayoutData };
   public isroot: boolean;
   public parent: MindNode;
   public direction: Direction;
@@ -47,7 +45,6 @@ export default class MindNode {
     id: string,
     index: number,
     topic: string,
-    data: any,
     isRoot: boolean,
     parent: MindNode,
     direction: Direction,
@@ -62,7 +59,6 @@ export default class MindNode {
     this.id = id;
     this.index = index;
     this.topic = topic;
-    this.data = data || {};
     this.isroot = isRoot;
     this.parent = parent;
     this.direction = direction;

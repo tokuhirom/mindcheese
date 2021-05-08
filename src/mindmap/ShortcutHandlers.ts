@@ -15,7 +15,7 @@ export default class ShortcutHandlers {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       const nodeid = _jm.generate_new_id();
-      const node = _jm.add_node(selected_node, nodeid, "New Node", null);
+      const node = _jm.add_node(selected_node, nodeid, "New Node");
       if (node) {
         _jm.select_node(node);
         _jm.begin_edit(node);
@@ -33,8 +33,7 @@ export default class ShortcutHandlers {
       const node = jm.insert_node_after(
         selected_node,
         nodeid,
-        "New Node",
-        null
+        "New Node"
       );
       if (node) {
         jm.select_node(node);

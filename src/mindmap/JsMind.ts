@@ -158,7 +158,6 @@ export default class JsMind {
     this.options.theme = theme ? theme : null;
     if (theme_old !== this.options.theme) {
       this.view.reset_theme();
-      this.view.reset_custom_style();
     }
   }
 
@@ -338,8 +337,7 @@ export default class JsMind {
   add_node(
     parent_node: MindNode,
     nodeid: string,
-    topic: string,
-    data: any
+    topic: string
   ): null | MindNode {
     if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
@@ -348,14 +346,13 @@ export default class JsMind {
 
     this.invoke_event_handle(EventType.BEFORE_EDIT, {
       evt: "add_node",
-      data: [parent_node.id, nodeid, topic, data],
+      data: [parent_node.id, nodeid, topic],
       node: nodeid,
     });
     const node = this.mind.add_node(
       parent_node,
       nodeid,
       topic,
-      data,
       null,
       null,
       true
@@ -364,11 +361,10 @@ export default class JsMind {
       this.view.add_node(node);
       this.layout.layout();
       this.view.show(false);
-      this.view.reset_node_custom_style(node);
       this.expand_node(parent_node);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "add_node",
-        data: [parent_node.id, nodeid, topic, data],
+        data: [parent_node.id, nodeid, topic],
         node: nodeid,
       });
     }
@@ -378,8 +374,7 @@ export default class JsMind {
   insert_node_before(
     node_before: MindNode,
     nodeid: string,
-    topic: string,
-    data: any
+    topic: string
   ): null | MindNode {
     if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
@@ -388,17 +383,17 @@ export default class JsMind {
 
     this.invoke_event_handle(EventType.BEFORE_EDIT, {
       evt: "insert_node_before",
-      data: [node_before.id, nodeid, topic, data],
+      data: [node_before.id, nodeid, topic],
       node: nodeid,
     });
-    const node = this.mind.insert_node_before(node_before, nodeid, topic, data);
+    const node = this.mind.insert_node_before(node_before, nodeid, topic);
     if (node) {
       this.view.add_node(node);
       this.layout.layout();
       this.view.show(false);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "insert_node_before",
-        data: [node_before.id, nodeid, topic, data],
+        data: [node_before.id, nodeid, topic],
         node: nodeid,
       });
     }
@@ -408,19 +403,18 @@ export default class JsMind {
   insert_node_after(
     node_after: MindNode,
     nodeid: string,
-    topic: string,
-    data: any
+    topic: string
   ): MindNode | null {
     if (!this.get_editable()) {
       console.error("fail, this mind map is not editable");
       return null;
     }
 
-    const node = this.mind.insert_node_after(node_after, nodeid, topic, data);
+    const node = this.mind.insert_node_after(node_after, nodeid, topic);
     if (node) {
       this.invoke_event_handle(EventType.BEFORE_EDIT, {
         evt: "insert_node_after",
-        data: [node_after.id, nodeid, topic, data],
+        data: [node_after.id, nodeid, topic],
         node: nodeid,
       });
       this.view.add_node(node);
@@ -428,7 +422,7 @@ export default class JsMind {
       this.view.show(false);
       this.invoke_event_handle(EventType.AFTER_EDIT, {
         evt: "insert_node_after",
-        data: [node_after.id, nodeid, topic, data],
+        data: [node_after.id, nodeid, topic],
         node: nodeid,
       });
     }

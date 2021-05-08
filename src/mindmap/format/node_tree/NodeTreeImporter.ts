@@ -23,8 +23,7 @@ export default class NodeTreeImporter implements MindmapImporter {
   }
 
   private _parse(mind: Mind, node_root: MindNode): void {
-    const data = this._extract_data(node_root);
-    mind.setRoot(node_root.id, node_root.topic, data);
+    mind.setRoot(node_root.id, node_root.topic);
     if ("children" in node_root) {
       const children = node_root.children;
       for (let i = 0; i < children.length; i++) {
@@ -33,31 +32,12 @@ export default class NodeTreeImporter implements MindmapImporter {
     }
   }
 
-  private _extract_data(node_json: any): Record<string, any> {
-    const data: Record<string, any> = {};
-    for (const k in node_json) {
-      if (
-        k == "id" ||
-        k == "topic" ||
-        k == "children" ||
-        k == "direction" ||
-        k == "expanded"
-      ) {
-        continue;
-      }
-      // @ts-ignore
-      data[k] = node_json[k];
-    }
-    return data;
-  }
-
   private _extract_subnode(
     mind: Mind,
     node_parent: MindNode,
     node_json: any
   ): void {
-    const data = this._extract_data(node_json);
-    let d = null;
+    let d: Direction = null;
     if (node_parent.isroot) {
       d = node_json.direction == "left" ? Direction.LEFT : Direction.RIGHT;
     }
@@ -68,7 +48,6 @@ export default class NodeTreeImporter implements MindmapImporter {
       node_parent,
       node_json.id,
       node_json.topic,
-      data,
       null,
       d,
       node_json.expanded

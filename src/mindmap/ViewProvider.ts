@@ -182,13 +182,6 @@ export default class ViewProvider {
     }
   }
 
-  reset_custom_style(): void {
-    const nodes = this.jm.mind.nodes;
-    for (const nodeid in nodes) {
-      this.reset_node_custom_style(nodes[nodeid]);
-    }
-  }
-
   load(): void {
     console.debug("view.load");
     this.init_nodes();
@@ -261,7 +254,6 @@ export default class ViewProvider {
     }
     d.setAttribute("nodeid", node.id);
     d.style.visibility = "hidden";
-    this._reset_node_custom_style(d, node.data);
 
     parent_node.appendChild(d);
     view_data.element = d;
@@ -310,13 +302,10 @@ export default class ViewProvider {
         /\s*selected\b/i,
         ""
       );
-      this.reset_node_custom_style(this.selected_node);
     }
     if (node) {
       this.selected_node = node;
       node._data.view.element.className += " selected";
-      this.clear_node_custom_style(node);
-
       this.adjustScrollBar(node);
     }
   }
@@ -569,7 +558,6 @@ export default class ViewProvider {
         expander.style.display = "none";
         continue;
       }
-      this.reset_node_custom_style(node);
       const p = this.layout.get_node_point(node);
       view_data.abs_x = _offset.x + p.x;
       view_data.abs_y = _offset.y + p.y;
@@ -592,77 +580,6 @@ export default class ViewProvider {
         expander.style.visibility = "hidden";
       }
     }
-  }
-
-  reset_node_custom_style(node: MindNode): void {
-    this._reset_node_custom_style(node._data.view.element, node.data);
-  }
-
-  _reset_node_custom_style(node_element: HTMLElement, node_data: any): void {
-    if ("background-color" in node_data) {
-      node_element.style.backgroundColor = node_data["background-color"];
-    }
-    if ("foreground-color" in node_data) {
-      node_element.style.color = node_data["foreground-color"];
-    }
-    if ("width" in node_data) {
-      node_element.style.width = node_data["width"] + "px";
-    }
-    if ("height" in node_data) {
-      node_element.style.height = node_data["height"] + "px";
-    }
-    if ("font-size" in node_data) {
-      node_element.style.fontSize = node_data["font-size"] + "px";
-    }
-    if ("font-weight" in node_data) {
-      node_element.style.fontWeight = node_data["font-weight"];
-    }
-    if ("font-style" in node_data) {
-      node_element.style.fontStyle = node_data["font-style"];
-    }
-    if ("background-image" in node_data) {
-      const backgroundImage = node_data["background-image"];
-      if (
-        backgroundImage.startsWith("data") &&
-        node_data["width"] &&
-        node_data["height"]
-      ) {
-        const img = new Image();
-
-        img.onload = function () {
-          const c = document.createElement("canvas");
-          c.width = node_element.clientWidth;
-          c.height = node_element.clientHeight;
-          if (c.getContext) {
-            const ctx: CanvasRenderingContext2D = c.getContext("2d");
-            ctx.drawImage(
-              img as HTMLImageElement,
-              2,
-              2,
-              node_element.clientWidth,
-              node_element.clientHeight
-            );
-            const scaledImageData = c.toDataURL();
-            node_element.style.backgroundImage = "url(" + scaledImageData + ")";
-          }
-        };
-        img.src = backgroundImage;
-      } else {
-        node_element.style.backgroundImage = "url(" + backgroundImage + ")";
-      }
-      node_element.style.backgroundSize = "99%";
-
-      if ("background-rotation" in node_data) {
-        node_element.style.transform =
-          "rotate(" + node_data["background-rotation"] + "deg)";
-      }
-    }
-  }
-
-  clear_node_custom_style(node: MindNode): void {
-    const node_element = node._data.view.element;
-    node_element.style.backgroundColor = "";
-    node_element.style.color = "";
   }
 
   clear_lines(): void {

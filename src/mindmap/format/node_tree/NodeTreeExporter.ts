@@ -23,13 +23,6 @@ export default class NodeTreeExporter implements MindmapExporter {
     if (!!node.parent && node.parent.isroot) {
       o.direction = node.direction == Direction.LEFT ? "left" : "right";
     }
-    if (node.data != null) {
-      const node_data = node.data;
-      for (const k in node_data) {
-        // @ts-ignore
-        o[k] = node_data[k];
-      }
-    }
     const children = node.children;
     if (children.length > 0) {
       o.children = [];

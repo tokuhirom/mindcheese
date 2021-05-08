@@ -22,9 +22,9 @@ export default class Mind {
     }
   }
 
-  setRoot(nodeid: string, topic: string, data: any): void {
+  setRoot(nodeid: string, topic: string): void {
     if (this.root == null) {
-      this.root = new MindNode(nodeid, 0, topic, data, true, null, null, true);
+      this.root = new MindNode(nodeid, 0, topic, true, null, null, true);
       this._putNode(this.root);
     } else {
       throw new Error("root node is already exist");
@@ -35,7 +35,6 @@ export default class Mind {
     parent_node: MindNode,
     nodeid: string,
     topic: string,
-    data: any,
     idx: number,
     direction: Direction | null,
     expanded: boolean
@@ -70,7 +69,6 @@ export default class Mind {
         nodeid,
         nodeindex,
         topic,
-        data,
         false,
         parent_node,
         d,
@@ -81,7 +79,6 @@ export default class Mind {
         nodeid,
         nodeindex,
         topic,
-        data,
         false,
         parent_node,
         parent_node.direction,
@@ -99,15 +96,13 @@ export default class Mind {
   insert_node_before(
     node_before: MindNode,
     nodeid: string,
-    topic: string,
-    data: any
+    topic: string
   ): MindNode {
     const node_index = node_before.index - 0.5;
     return this.add_node(
       node_before.parent,
       nodeid,
       topic,
-      data,
       node_index,
       null,
       true
@@ -131,8 +126,7 @@ export default class Mind {
   insert_node_after(
     node_after: MindNode,
     nodeid: string,
-    topic: string,
-    data: any
+    topic: string
   ): MindNode {
     const node_index = node_after.index + 0.5;
     // follow current direction.
@@ -140,7 +134,6 @@ export default class Mind {
       node_after.parent,
       nodeid,
       topic,
-      data,
       node_index,
       node_after.direction,
       true
