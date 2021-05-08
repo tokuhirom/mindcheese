@@ -37,7 +37,7 @@ export default class ViewProvider {
   size: { w: number; h: number };
   private selected_node: any;
   private editing_node: any;
-  private graph: GraphCanvas;
+  private readonly graph: GraphCanvas;
   private e_editor: HTMLTextAreaElement;
   private actualZoom: number;
   private zoomStep: number;
