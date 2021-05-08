@@ -123,14 +123,14 @@
       document
         .getElementById("dump_to_console")
         .addEventListener("click", () => {
-          const data = jsmind.get_data("node_tree");
+          const data = jsmind.getData("node_tree");
           console.log(data);
           return false;
         });
       document
         .getElementById("dump_to_console_markdown")
         .addEventListener("click", () => {
-          const data = jsmind.get_data("markdown");
+          const data = jsmind.getData("markdown");
           console.log(data);
           return false;
         });

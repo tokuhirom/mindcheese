@@ -331,8 +331,8 @@ export default class JsMind {
     };
   }
 
-  get_data(data_format: string): any {
-    return this.data.get_data(data_format);
+  getData(data_format: string): any {
+    return this.data.getData(data_format);
   }
 
   getRoot(): MindNode {

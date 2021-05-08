@@ -19,7 +19,7 @@ export default class UndoManager {
         this.undoStack.shift();
       }
       console.log(`UndoManager: callback event pushing. ${data.evt}`);
-      this.undoStack.push([data.evt, this._jm.get_data("node_tree")]);
+      this.undoStack.push([data.evt, this._jm.getData("node_tree")]);
     });
   }
 

@@ -39,7 +39,7 @@ export class EditableMindmapView extends TextFileView {
   getViewData(): string {
     // console.log(`getViewData: invoked`);
     if (this.mm && this.mm.mind) {
-      const data = this.mm.get_data("node_tree");
+      const data = this.mm.getData("node_tree");
       if (!data.data) {
         // mindmap is not available, yet.
         return this.data;

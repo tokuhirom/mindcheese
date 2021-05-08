@@ -10,8 +10,8 @@ export default class MarkdownExporter implements MindmapExporter {
     this.node_tree_exporter = new NodeTreeExporter();
   }
 
-  get_data(mind: Mind): string {
-    const data = this.node_tree_exporter.get_data(mind);
+  getData(mind: Mind): string {
+    const data = this.node_tree_exporter.getData(mind);
     return convertMM2MD(data);
   }
 }

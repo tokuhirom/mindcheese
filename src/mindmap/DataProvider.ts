@@ -15,8 +15,8 @@ class DataFormat {
     this.importer = importer;
     this.exporter = exporter;
   }
-  get_data(mind: Mind): any {
-    return this.exporter.get_data(mind);
+  getData(mind: Mind): any {
+    return this.exporter.getData(mind);
   }
   get_mind(source: any): Mind {
     return this.importer.get_mind(source);
@@ -40,10 +40,10 @@ export default class DataProvider {
     return data_format.get_mind(mind_data);
   }
 
-  get_data(format: string): any {
+  getData(format: string): any {
     const data_format = this.format_map[format];
     if (data_format) {
-      return data_format.get_data(this.jm.mind);
+      return data_format.getData(this.jm.mind);
     } else {
       throw new Error(`Unknown format: ${data_format}`);
     }

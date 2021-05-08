@@ -4,7 +4,7 @@ import MindNode from "../../MindNode";
 import { Direction } from "../../MindmapConstants";
 
 export default class NodeTreeExporter implements MindmapExporter {
-  get_data(mind: Mind): Record<string, any> {
+  getData(mind: Mind): Record<string, any> {
     const json: Record<string, any> = {};
     json.meta = {
       name: mind.name,
