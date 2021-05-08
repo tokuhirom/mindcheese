@@ -48,7 +48,8 @@ export default class Mind {
   ): MindNode {
     const nodeindex: number = idx || -1;
     let node;
-    if (typeof expanded === "undefined") { // TODO remove this
+    if (typeof expanded === "undefined") {
+      // TODO remove this
       expanded = true;
     }
     if (parent_node.isroot) {
