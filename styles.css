@@ -25,6 +25,7 @@ canvas.jsmind-draggable {
 
 textarea.jsmind-editor {
   max-width: 380px;
+  font-size: 21px;
 }
 jmnode {
   max-width: 400px;
