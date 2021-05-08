@@ -1,8 +1,8 @@
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 import { Direction } from "./MindmapConstants";
 
 export default class ShortcutHandlers {
-  static delete(_jm: JsMind): boolean {
+  static delete(_jm: MindCheese): boolean {
     const selected_node = _jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
       _jm.select_node(selected_node.parent);
@@ -11,7 +11,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static addChild(_jm: JsMind): boolean {
+  static addChild(_jm: MindCheese): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
       const nodeid = _jm.generateNewId();
@@ -24,7 +24,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static addBrother(jm: JsMind, e: Event): boolean {
+  static addBrother(jm: MindCheese, e: Event): boolean {
     e.preventDefault();
 
     const selected_node = jm.get_selected_node();
@@ -39,7 +39,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static editNode(jm: JsMind): boolean {
+  static editNode(jm: MindCheese): boolean {
     const selected_node = jm.get_selected_node();
     if (selected_node) {
       jm.begin_edit(selected_node);
@@ -47,7 +47,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static toggle(jm: JsMind, e: Event): boolean {
+  static toggle(jm: MindCheese, e: Event): boolean {
     const selected_node = jm.get_selected_node();
     if (selected_node) {
       jm.toggle_node(selected_node);
@@ -57,7 +57,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static moveUp(jm: JsMind): boolean {
+  static moveUp(jm: MindCheese): boolean {
     console.debug(`ShortcutProvider.handle_move_up`);
     const selected_node = jm.get_selected_node();
     if (selected_node) {
@@ -66,7 +66,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static moveDown(jm: JsMind): boolean {
+  static moveDown(jm: MindCheese): boolean {
     const selected_node = jm.get_selected_node();
     if (selected_node) {
       jm.move_down(selected_node);
@@ -74,7 +74,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static up(jm: JsMind, e: Event): boolean {
+  static up(jm: MindCheese, e: Event): boolean {
     const selected_node = jm.get_selected_node();
     if (selected_node.isroot) {
       return false;
@@ -97,7 +97,7 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static down(jm: JsMind, e: Event): boolean {
+  static down(jm: MindCheese, e: Event): boolean {
     const selected_node = jm.get_selected_node();
     if (selected_node.isroot) {
       return false;
@@ -120,17 +120,17 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static left(jm: JsMind, e: Event): boolean {
+  static left(jm: MindCheese, e: Event): boolean {
     ShortcutHandlers._handle_direction(jm, e, Direction.LEFT);
     return false;
   }
 
-  static right(jm: JsMind, e: Event): boolean {
+  static right(jm: MindCheese, e: Event): boolean {
     ShortcutHandlers._handle_direction(jm, e, Direction.RIGHT);
     return false;
   }
 
-  static _handle_direction(jm: JsMind, e: Event, d: Direction): void {
+  static _handle_direction(jm: MindCheese, e: Event, d: Direction): void {
     let children;
     const selected_node = jm.get_selected_node();
     let node = null;
@@ -161,7 +161,7 @@ export default class ShortcutHandlers {
     }
   }
 
-  static undo(jm: JsMind, e: KeyboardEvent) {
+  static undo(jm: MindCheese, e: KeyboardEvent) {
     console.log("UNDO!");
     jm.undo();
     e.stopPropagation();

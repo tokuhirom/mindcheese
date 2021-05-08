@@ -3,20 +3,8 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
 import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 import LayoutProvider from "./LayoutProvider";
-
-// detect isElemend
-// TODO remove this.
-function isElement(el: HTMLElement) {
-  return (
-    !!el &&
-    typeof el === "object" &&
-    el.nodeType === 1 &&
-    typeof el.style === "object" &&
-    typeof el.ownerDocument === "object"
-  );
-}
 
 function is_empty(s: string) {
   // TODO inlining?
@@ -29,7 +17,7 @@ function is_empty(s: string) {
 // noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
   private readonly opts: any;
-  private readonly jm: JsMind;
+  private readonly jm: MindCheese;
   private readonly layout: LayoutProvider;
   private readonly container: HTMLElement;
   e_panel: HTMLDivElement; // div.jsmind-inner
@@ -44,7 +32,7 @@ export default class ViewProvider {
   private minZoom: number;
   private maxZoom: number;
 
-  constructor(jm: JsMind, container: HTMLElement, options: any) {
+  constructor(jm: MindCheese, container: HTMLElement, options: any) {
     this.opts = options;
     this.jm = jm;
     this.layout = jm.layout;

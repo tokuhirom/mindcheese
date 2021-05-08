@@ -61,7 +61,7 @@ const DEFAULT_OPTIONS: any = {
   },
 };
 
-export default class JsMind {
+export default class MindCheese {
   options: any;
   private inited: boolean;
   public mind: Mind;

@@ -15,12 +15,12 @@
  * Copyright (C) 2021 Tokuhiro Matsuno.
  */
 
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
 export default class Draggable {
-  private jm: JsMind;
+  private jm: MindCheese;
   private e_canvas: HTMLCanvasElement;
   private canvas_ctx: CanvasRenderingContext2D;
   private shadow: HTMLElement;
@@ -43,7 +43,7 @@ export default class Draggable {
   lookup_delay = 500;
   lookup_interval = 80;
 
-  constructor(jm: JsMind) {
+  constructor(jm: MindCheese) {
     this.jm = jm;
     this.e_canvas = null;
     this.canvas_ctx = null;

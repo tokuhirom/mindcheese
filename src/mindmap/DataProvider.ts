@@ -1,4 +1,4 @@
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 import Mind from "./Mind";
 import MindmapExporter from "./format/MindmapExporter";
 import MindmapImporter from "./format/MindmapImporter";
@@ -25,9 +25,9 @@ class DataFormat {
 
 export default class DataProvider {
   private readonly format_map: Record<string, DataFormat>;
-  private jm: JsMind;
+  private jm: MindCheese;
 
-  constructor(jm: JsMind) {
+  constructor(jm: MindCheese) {
     this.jm = jm;
     this.format_map = {
       node_tree: new DataFormat(new NodeTreeImporter(), new NodeTreeExporter()),

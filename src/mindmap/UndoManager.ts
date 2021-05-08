@@ -1,12 +1,12 @@
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 import { EventType } from "./MindmapConstants";
 
 export default class UndoManager {
-  private readonly _jm: JsMind;
+  private readonly _jm: MindCheese;
   private undoStack: [string, any][];
   private readonly undoStackLimit: number;
 
-  constructor(jm: JsMind, undoStackLimit = 10000) {
+  constructor(jm: MindCheese, undoStackLimit = 10000) {
     this._jm = jm;
     this.undoStack = [];
     this.undoStackLimit = undoStackLimit;

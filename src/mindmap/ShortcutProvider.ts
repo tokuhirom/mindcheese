@@ -1,17 +1,17 @@
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 
 export default class ShortcutProvider {
-  private readonly jm: JsMind;
+  private readonly jm: MindCheese;
   private enable: boolean;
   private readonly mappings: Record<
     string,
-    [number, (jm: JsMind, e: KeyboardEvent) => boolean][]
+    [number, (jm: MindCheese, e: KeyboardEvent) => boolean][]
   >;
 
   constructor(
-    jm: JsMind,
+    jm: MindCheese,
     enable: boolean,
-    mappings: [number, string, (jm: JsMind, e: Event) => boolean][]
+    mappings: [number, string, (jm: MindCheese, e: Event) => boolean][]
   ) {
     this.jm = jm;
     this.enable = enable;
@@ -61,11 +61,11 @@ export default class ShortcutProvider {
   }
 
   private compileHandlers(
-    new_handlers: [number, string, (jm: JsMind, e: Event) => boolean][]
-  ): Record<string, [number, (jm: JsMind, e: Event) => boolean][]> {
+    new_handlers: [number, string, (jm: MindCheese, e: Event) => boolean][]
+  ): Record<string, [number, (jm: MindCheese, e: Event) => boolean][]> {
     const result: Record<
       string,
-      [number, (jm: JsMind, e: Event) => boolean][]
+      [number, (jm: MindCheese, e: Event) => boolean][]
     > = {};
     new_handlers.forEach((it) => {
       const [flags, keyString, code] = it;

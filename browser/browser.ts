@@ -1,6 +1,6 @@
-import JsMind from "../src/mindmap/JsMind";
+import MindCheese from "../src/mindmap/MindCheese";
 
-export default JsMind;
+export default MindCheese;
 console.log("Loaded browser.ts");
 // @ts-ignore
-window.JsMind = JsMind;
+window.JsMind = MindCheese;

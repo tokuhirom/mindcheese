@@ -3,7 +3,7 @@ import { MINDMAP_VIEW_TYPE } from "./Constants";
 import MyPlugin from "./main";
 import { convertMM2MD } from "./MM2MDConverter";
 import { convertMD2MM } from "./MD2MMConverter";
-import JsMind from "./mindmap/JsMind";
+import MindCheese from "./mindmap/MindCheese";
 import { EventType } from "./mindmap/MindmapConstants";
 
 const FROMTMATTER_RE = /^---([\w\W]+)---/;
@@ -12,7 +12,7 @@ let jsMindId = 0;
 
 export class EditableMindmapView extends TextFileView {
   private plugin: MyPlugin;
-  private mm: JsMind;
+  private mm: MindCheese;
   private yfm: string;
 
   constructor(leaf: WorkspaceLeaf, plugin: MyPlugin) {
@@ -120,7 +120,7 @@ export class EditableMindmapView extends TextFileView {
           editable: true,
           support_html: false, // TODO HTML support
         };
-        this.mm = new JsMind(jsMindId, options);
+        this.mm = new MindCheese(jsMindId, options);
         // ↓ *quick hack* to avoid the timing issue...
         setTimeout(() => {
           this.mm.show("node_tree", mind);

@@ -3,7 +3,7 @@
 import { Direction, EventType } from "./MindmapConstants";
 
 import MindNode from "./MindNode";
-import JsMind from "./JsMind";
+import MindCheese from "./MindCheese";
 
 class Point {
   x: number;
@@ -11,7 +11,7 @@ class Point {
 }
 
 export default class LayoutProvider {
-  private readonly jm: JsMind;
+  private readonly jm: MindCheese;
   private readonly isside: boolean;
   bounds: { n: number; s: number; w: number; e: number };
   private cache_valid: boolean;
@@ -20,7 +20,7 @@ export default class LayoutProvider {
   private readonly _pspace: number;
 
   constructor(
-    jm: JsMind,
+    jm: MindCheese,
     mode = "full" /* 'full' or 'side' */,
     hspace = 30,
     vspace = 20,
