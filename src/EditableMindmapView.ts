@@ -133,32 +133,21 @@ export class EditableMindmapView extends TextFileView {
     );
   }
 
-  async jsMindEventListener(eventType: number, params: any): Promise<void> {
+  async jsMindEventListener(): Promise<void> {
     console.log(`Got jsMind AFTER_EDIT event`);
-
-    console.log(`EDIT event: id=${this.mm.mind.id}`);
-    // const viewData = this.getViewData();
-    // console.log(
-    //   `Write data by jsMind's event: ${viewData} id=${this.mm.mind.id} TIMESTAMP`
-    // );
-    console.log(params);
-    // await this.plugin.app.vault.modify(this.file, viewData);
     this.requestSave();
   }
 
   // TODO handle onResize
   onResize(): void {
-    console.log(`onResize: ${this.mm} TIMESTAMP`);
     super.onResize();
   }
 
   protected async onOpen(): Promise<void> {
-    console.log(`onOpen: ${this.mm} TIMESTAMP`);
     return super.onOpen();
   }
 
   async onLoadFile(file: TFile): Promise<void> {
-    console.log(`onLoadFile: ${this.mm} TIMESTAMP`);
     return super.onLoadFile(file);
   }
 

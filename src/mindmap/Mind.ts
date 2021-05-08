@@ -12,10 +12,8 @@ export default class Mind {
   root: MindNode;
   selected: MindNode;
   nodes: Record<string, MindNode>;
-  id: number;
 
-  constructor(id: number) {
-    this.id = id; // TODO remove ID
+  constructor() {
     this.name = null;
     this.author = null;
     this.version = null;

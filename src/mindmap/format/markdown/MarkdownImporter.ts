@@ -9,8 +9,8 @@ export default class MarkdownImporter implements MindmapImporter {
     this.node_tree_importer = new NodeTreeImporter();
   }
 
-  get_mind(source: any, id: number): Mind {
+  get_mind(source: any): Mind {
     const tree = convertMD2MM(source.title, source.markdown);
-    return this.node_tree_importer.get_mind(tree, id);
+    return this.node_tree_importer.get_mind(tree);
   }
 }
