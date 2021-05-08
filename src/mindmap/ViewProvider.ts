@@ -14,6 +14,17 @@ function is_empty(s: string) {
   return s.replace(/\s*/, "").length == 0;
 }
 
+export function plainTextRenderer(topic: string) {
+  function escapeHtml(src: string) {
+    const pre = document.createElement("pre");
+    const text = document.createTextNode(src);
+    pre.appendChild(text);
+    return pre.innerHTML;
+  }
+
+  return escapeHtml(topic).replace(/\n/g, "<br>");
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
   private readonly opts: any;
@@ -31,10 +42,17 @@ export default class ViewProvider {
   private zoomStep: number;
   private minZoom: number;
   private maxZoom: number;
+  private readonly _renderer: (topic: string) => string;
 
-  constructor(jm: MindCheese, container: HTMLElement, options: any) {
+  constructor(
+    jm: MindCheese,
+    container: HTMLElement,
+    options: any,
+    renderer = plainTextRenderer
+  ) {
     this.opts = options;
     this.jm = jm;
+    this._renderer = renderer;
     this.layout = jm.layout;
 
     this.container = container;
@@ -109,18 +127,6 @@ export default class ViewProvider {
     this.layout.layout();
     this.show(false);
   }
-
-  setTextToElement(element: HTMLElement, topic: string): void {
-    element.innerHTML = ViewProvider.escapeHTML(topic).replace(/\n/g, "<br>");
-  }
-
-  private static escapeHTML(src: string) {
-    const pre = document.createElement("pre");
-    const text = document.createTextNode(src);
-    pre.appendChild(text);
-    return pre.innerHTML;
-  }
-
   get_binded_nodeid(element: HTMLElement): string | null {
     if (element == null) {
       return null;
@@ -213,20 +219,15 @@ export default class ViewProvider {
     if (node.isroot) {
       d.className = "root";
     } else {
-      const d_e: HTMLElement = document.createElement("jmexpander");
-      this.setTextToElement(d_e, "-");
-      d_e.setAttribute("nodeid", node.id);
-      d_e.style.visibility = "hidden";
-      parent_node.appendChild(d_e);
-      view_data.expander = d_e;
+      const expanderElement: HTMLElement = document.createElement("jmexpander");
+      expanderElement.innerText = "-";
+      expanderElement.setAttribute("nodeid", node.id);
+      expanderElement.style.visibility = "hidden";
+      parent_node.appendChild(expanderElement);
+      view_data.expander = expanderElement;
     }
     if (node.topic) {
-      if (this.opts.support_html) {
-        // TODO inlining this
-        d.innerHTML = node.topic;
-      } else {
-        this.setTextToElement(d, node.topic);
-      }
+      d.innerHTML = this._renderer(node.topic);
     }
     d.setAttribute("nodeid", node.id);
     d.style.visibility = "hidden";
@@ -262,12 +263,7 @@ export default class ViewProvider {
     const view_data = node._data.view;
     const element = view_data.element;
     if (node.topic) {
-      if (this.opts.support_html) {
-        // TODO inlining this
-        element.innerHTML = node.topic;
-      } else {
-        this.setTextToElement(element, node.topic);
-      }
+      element.innerHTML = this._renderer(node.topic);
     }
     view_data.width = element.clientWidth;
     view_data.height = element.clientHeight;
@@ -391,12 +387,7 @@ export default class ViewProvider {
       element.style.zIndex = "auto";
       element.removeChild(this.e_editor);
       if (is_empty(topic) || node.topic === topic) {
-        if (this.opts.support_html) {
-          // TODO inlining this
-          element.innerHTML = node.topic;
-        } else {
-          this.setTextToElement(element, node.topic);
-        }
+        element.innerHTML = this._renderer(node.topic);
         setTimeout(() => {
           view_data.width = element.clientWidth;
           view_data.height = element.clientHeight;
@@ -548,7 +539,7 @@ export default class ViewProvider {
         expander.style.top = _offset.y + p_expander.y + "px";
         expander.style.display = "";
         expander.style.visibility = "visible";
-        this.setTextToElement(expander, expander_text);
+        expander.innerText = expander_text;
       }
       // hide expander while all children have been removed
       if (!node.isroot && node.children.length == 0) {
