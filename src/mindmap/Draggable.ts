@@ -256,7 +256,7 @@ export default class Draggable {
     }
     const nodeid = jview.get_binded_nodeid(el);
     if (nodeid) {
-      const node = this.jm.get_node(nodeid);
+      const node = this.jm.getNodeById(nodeid);
       if (!node.isroot) {
         this.reset_shadow(el);
         this.active_node = node;

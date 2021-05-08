@@ -1,7 +1,5 @@
 // noinspection JSUnfilteredForInLoop
 
-"use strict";
-
 import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
@@ -22,7 +20,7 @@ export default class Mind {
     this.nodes = {};
   }
 
-  get_node(nodeid: string): MindNode {
+  getNodeById(nodeid: string): MindNode {
     if (nodeid in this.nodes) {
       return this.nodes[nodeid];
     } else {
@@ -212,7 +210,7 @@ export default class Mind {
          *   - A <- node     = 3-0.5=2.5
          *   - B <- beforeid = 3
          */
-        const node_before = beforeid ? this.get_node(beforeid) : null;
+        const node_before = beforeid ? this.getNodeById(beforeid) : null;
         if (
           node_before != null &&
           node_before.parent != null &&
@@ -251,7 +249,7 @@ export default class Mind {
             break;
           }
         }
-        node.parent = this.get_node(parentid);
+        node.parent = this.getNodeById(parentid);
         node.parent.children.push(node);
       }
 

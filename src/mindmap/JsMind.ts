@@ -183,7 +183,7 @@ export default class JsMind {
     const nodeid = this.view.get_binded_nodeid(element);
     if (nodeid) {
       if (element.tagName.toLowerCase() === "jmnode") {
-        const the_node = this.get_node(nodeid);
+        const the_node = this.getNodeById(nodeid);
         if (!the_node) {
           console.error("the node[id=" + nodeid + "] can not be found.");
           return;
@@ -202,7 +202,7 @@ export default class JsMind {
     if (isexpander) {
       const nodeid = this.view.get_binded_nodeid(element);
       if (nodeid) {
-        const the_node = this.get_node(nodeid);
+        const the_node = this.getNodeById(nodeid);
         if (!the_node) {
           console.error("the node[id=" + nodeid + "] can not be found.");
           return;
@@ -223,7 +223,7 @@ export default class JsMind {
     const nodeid = this.view.get_binded_nodeid(element);
     if (nodeid) {
       if (nodeid) {
-        const the_node = this.get_node(nodeid);
+        const the_node = this.getNodeById(nodeid);
         if (!the_node) {
           console.error("the node[id=" + nodeid + "] can not be found.");
           return;
@@ -339,8 +339,8 @@ export default class JsMind {
     return this.mind.root;
   }
 
-  get_node(nodeid: string): MindNode {
-    return this.mind.get_node(nodeid);
+  getNodeById(nodeid: string): MindNode {
+    return this.mind.getNodeById(nodeid);
   }
 
   add_node(
@@ -513,7 +513,7 @@ export default class JsMind {
       return;
     }
 
-    const node = this.get_node(nodeid);
+    const node = this.getNodeById(nodeid);
     if (!node) {
       console.warn(`Unknown node: ${nodeid}`);
       return;
@@ -558,7 +558,7 @@ export default class JsMind {
       return;
     }
 
-    const the_node = this.get_node(nodeid);
+    const the_node = this.getNodeById(nodeid);
     if (!the_node) {
       console.error("the node[id=" + nodeid + "] can not be found.");
       return;
