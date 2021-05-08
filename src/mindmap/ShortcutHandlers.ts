@@ -14,7 +14,7 @@ export default class ShortcutHandlers {
   static addChild(_jm: JsMind): boolean {
     const selected_node = _jm.get_selected_node();
     if (selected_node) {
-      const nodeid = _jm.generate_new_id();
+      const nodeid = _jm.generateNewId();
       const node = _jm.add_node(selected_node, nodeid, "New Node");
       if (node) {
         _jm.select_node(node);
@@ -29,7 +29,7 @@ export default class ShortcutHandlers {
 
     const selected_node = jm.get_selected_node();
     if (!!selected_node && !selected_node.isroot) {
-      const nodeid = jm.generate_new_id();
+      const nodeid = jm.generateNewId();
       const node = jm.insert_node_after(selected_node, nodeid, "New Node");
       if (node) {
         jm.select_node(node);
