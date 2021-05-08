@@ -16,6 +16,7 @@ import {
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
 import EventRouter from "./EventRouter";
+import GraphCanvas from "./GraphCanvas";
 
 function is_empty(s: string) {
   if (!s) {
@@ -97,13 +98,6 @@ export default class MindCheese {
 
     const opts = this.options;
 
-    const opts_view = {
-      support_html: opts.support_html,
-      hmargin: opts.view.hmargin,
-      vmargin: opts.view.vmargin,
-      line_width: opts.view.line_width,
-      line_color: opts.view.line_color,
-    };
     // create instance of function provider
     this.data = new DataProvider();
     this.layout = new LayoutProvider(
@@ -114,7 +108,8 @@ export default class MindCheese {
       opts.layout.vspace,
       opts.layout.pspace
     );
-    this.view = new ViewProvider(this, opts.container, opts_view);
+    const graph = new GraphCanvas(opts.view.line_color, opts.view.line_width);
+    this.view = new ViewProvider(this, opts.container, opts.view.hmargin, opts.view.vmargin, graph);
     this.shortcut = new ShortcutProvider(
       this,
       opts.shortcut.enable,

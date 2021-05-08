@@ -27,7 +27,6 @@ export function plainTextRenderer(topic: string) {
 
 // noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
-  private readonly opts: any;
   private readonly jm: MindCheese;
   private readonly layout: LayoutProvider;
   private readonly container: HTMLElement;
@@ -39,14 +38,17 @@ export default class ViewProvider {
   private readonly graph: GraphCanvas;
   private e_editor: HTMLTextAreaElement;
   private readonly _renderer: (topic: string) => string;
+  private readonly _hmargin: number;
+  private readonly _vmargin: number;
 
   constructor(
     jm: MindCheese,
     container: HTMLElement,
-    options: any,
-    renderer = plainTextRenderer
+    hmargin: number = 100,
+    vmargin: number = 50,
+    graph: GraphCanvas,
+    renderer = plainTextRenderer,
   ) {
-    this.opts = options;
     this.jm = jm;
     this._renderer = renderer;
     this.layout = jm.layout;
@@ -60,7 +62,10 @@ export default class ViewProvider {
     this.selected_node = null;
     this.editing_node = null;
 
-    this.graph = new GraphCanvas(this);
+    this._hmargin = hmargin;
+    this._vmargin = vmargin;
+
+    this.graph = graph;
   }
 
   init(): void {
@@ -159,8 +164,8 @@ export default class ViewProvider {
 
   expand_size(): void {
     const min_size = this.layout.get_min_size();
-    const min_width = min_size.w + this.opts.hmargin * 2;
-    const min_height = min_size.h + this.opts.vmargin * 2;
+    const min_width = min_size.w + this._hmargin * 2;
+    const min_height = min_size.h + this._vmargin * 2;
     let client_w = this.e_panel.clientWidth;
     let client_h = this.e_panel.clientHeight;
     console.debug(`ViewProvider.expand_size:

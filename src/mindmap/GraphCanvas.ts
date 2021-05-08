@@ -3,9 +3,12 @@ export default class GraphCanvas {
   private readonly e_canvas: HTMLCanvasElement;
   private readonly canvas_ctx: CanvasRenderingContext2D;
   private size: { w: number; h: number };
+  private readonly _line_color: string;
+  private readonly _line_width: number;
 
-  constructor(view: any) {
-    this.opts = view.opts;
+  constructor(line_color="#555", line_width=2) {
+    this._line_color = line_color;
+    this._line_width = line_width;
     this.e_canvas = document.createElement("canvas");
     this.e_canvas.className = "jsmind";
     this.canvas_ctx = this.e_canvas.getContext("2d");
@@ -33,8 +36,8 @@ export default class GraphCanvas {
     offset: { x: number; y: number }
   ): void {
     const ctx = this.canvas_ctx;
-    ctx.strokeStyle = this.opts.line_color;
-    ctx.lineWidth = this.opts.line_width;
+    ctx.strokeStyle = this._line_color;
+    ctx.lineWidth = this._line_width;
     ctx.lineCap = "round";
 
     this._bezier_to(
