@@ -276,7 +276,7 @@ export default class ViewProvider {
   select_node(node: MindNode): void {
     if (this.selected_node) {
       const el = this.selected_node._data.view.element;
-      el.classList.remove('selected')
+      el.classList.remove("selected");
     }
     if (node) {
       this.selected_node = node;
