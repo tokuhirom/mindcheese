@@ -38,10 +38,6 @@ export default class ViewProvider {
   private editing_node: MindNode;
   private readonly graph: GraphCanvas;
   private e_editor: HTMLTextAreaElement;
-  private actualZoom: number;
-  private zoomStep: number;
-  private minZoom: number;
-  private maxZoom: number;
   private readonly _renderer: (topic: string) => string;
 
   constructor(
@@ -85,11 +81,6 @@ export default class ViewProvider {
 
     this.e_editor.className = "jsmind-editor";
 
-    this.actualZoom = 1;
-    this.zoomStep = 0.1;
-    this.minZoom = 0.5;
-    this.maxZoom = 2;
-
     this.e_editor.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
@@ -100,10 +91,16 @@ export default class ViewProvider {
       }
     });
     // adjust size dynamically.
-    this.e_editor.addEventListener("keyup", this.adjustEditorElementSize.bind(this));
+    this.e_editor.addEventListener(
+      "keyup",
+      this.adjustEditorElementSize.bind(this)
+    );
     // when the element lost focus.
     this.e_editor.addEventListener("blur", this.edit_node_end.bind(this));
-    this.e_editor.addEventListener("input", this.adjustEditorElementSize.bind(this));
+    this.e_editor.addEventListener(
+      "input",
+      this.adjustEditorElementSize.bind(this)
+    );
 
     this.container.appendChild(this.e_panel);
   }
@@ -417,27 +414,6 @@ export default class ViewProvider {
     //this.layout.cache_valid = true;
     this.jm.invoke_event_handle(EventType.RESIZE, { data: [] });
     this.jm.draggable.resize();
-  }
-
-  zoomIn(): boolean {
-    return this.setZoom(this.actualZoom + this.zoomStep);
-  }
-
-  zoomOut(): boolean {
-    return this.setZoom(this.actualZoom - this.zoomStep);
-  }
-
-  setZoom(zoom: number): boolean {
-    if (zoom < this.minZoom || zoom > this.maxZoom) {
-      return false;
-    }
-    this.actualZoom = zoom;
-    for (let i = 0; i < this.e_panel.children.length; i++) {
-      (this.e_panel.children[i] as HTMLElement).style.transform =
-        "scale(" + zoom + ")";
-    }
-    this.show(true);
-    return true;
   }
 
   _center_root(): void {
