@@ -4,6 +4,7 @@ import { Direction, EventType } from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
+import EventRouter from "./EventRouter";
 
 class Point {
   x: number;
@@ -18,14 +19,17 @@ export default class LayoutProvider {
   private readonly _hspace: number;
   private readonly _vspace: number;
   private readonly _pspace: number;
+  private readonly _eventRouter: EventRouter;
 
   constructor(
     jm: MindCheese,
+    eventRouter: EventRouter,
     mode = "full" /* 'full' or 'side' */,
     hspace = 30,
     vspace = 20,
     pspace = 13
   ) {
+    this._eventRouter = eventRouter;
     this._hspace = hspace;
     this._vspace = vspace;
     this._pspace = pspace;
@@ -349,7 +353,7 @@ export default class LayoutProvider {
     node.expanded = true;
     this.part_layout(node);
     this.set_visible(node.children, true);
-    this.jm.invoke_event_handle(EventType.SHOW, {
+    this._eventRouter.invokeEventHandler(EventType.SHOW, {
       evt: "expand_node",
       data: [],
       node: node.id,
@@ -360,7 +364,7 @@ export default class LayoutProvider {
     node.expanded = false;
     this.part_layout(node);
     this.set_visible(node.children, false);
-    this.jm.invoke_event_handle(EventType.SHOW, {
+    this._eventRouter.invokeEventHandler(EventType.SHOW, {
       evt: "collapse_node",
       data: [],
       node: node.id,

@@ -15,6 +15,7 @@ import {
 } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
+import EventRouter from "./EventRouter";
 
 function is_empty(s: string) {
   if (!s) {
@@ -64,10 +65,6 @@ export default class MindCheese {
   options: any;
   private inited: boolean;
   public mind: Mind;
-  private readonly event_handles_map: Record<
-    EventType,
-    ((data: any) => void)[]
-  >;
   private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
@@ -75,6 +72,7 @@ export default class MindCheese {
   draggable: Draggable;
   id: number;
   private undo_manager: UndoManager;
+  private event_router: EventRouter;
 
   constructor(id: number, options: any) {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
@@ -86,14 +84,8 @@ export default class MindCheese {
     this.options = opts;
     this.inited = false;
     this.mind = null; // TODO original では null が入っていた
-    this.event_handles_map = {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": [],
-    };
     this.id = id;
+    this.event_router = new EventRouter();
     this.init();
   }
 
@@ -116,6 +108,7 @@ export default class MindCheese {
     this.data = new DataProvider(this);
     this.layout = new LayoutProvider(
       this,
+      this.event_router,
       opts.mode,
       opts.layout.hspace,
       opts.layout.vspace,
@@ -653,14 +646,11 @@ export default class MindCheese {
     eventType: EventType,
     callback: (data: any) => void
   ): void {
-    this.event_handles_map[eventType].push(callback);
+    this.event_router.addEventListener(eventType, callback);
   }
 
-  invoke_event_handle(type: EventType, data: any): void {
-    const l = this.event_handles_map[type].length;
-    for (let i = 0; i < l; i++) {
-      this.event_handles_map[type][i](data);
-    }
+  invoke_event_handle(eventType: EventType, data: any): void {
+    this.event_router.invokeEventHandler(eventType, data);
   }
 
   undo(): void {
