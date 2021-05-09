@@ -4,7 +4,7 @@ import { Direction } from "./MindmapConstants";
 
 export class ViewData {
   element: HTMLElement;
-  _saved_location: any;
+  _saved_location: { x: number; y: number };
   expander: HTMLElement;
   abs_x: number;
   abs_y: number;
