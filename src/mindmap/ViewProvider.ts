@@ -1,6 +1,8 @@
+// noinspection JSUnfilteredForInLoop
+
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
+import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider from "./LayoutProvider";
 import EventRouter from "./EventRouter";
@@ -486,7 +488,7 @@ export default class ViewProvider {
       view_data = node._data.view;
       node_element = view_data.element;
       expander = view_data.expander;
-      if (!this.layout.is_visible(node)) {
+      if (!node._data.layout.visible) {
         node_element.style.display = "none";
         expander.style.display = "none";
         continue;

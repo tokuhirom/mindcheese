@@ -1,6 +1,6 @@
 // noinspection JSUnfilteredForInLoop
 
-import { Direction, EventType } from "./MindmapConstants";
+import {Direction, EventType} from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
@@ -430,10 +430,5 @@ export default class LayoutProvider {
         node._data.layout.visible = visible;
       }
     }
-  }
-
-  is_visible(node: MindNode): boolean {
-    const layout_data = node._data.layout;
-    return !("visible" in layout_data && !layout_data.visible);
   }
 }

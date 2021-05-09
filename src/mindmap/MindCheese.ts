@@ -7,12 +7,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {
-  BEFOREID_LAST,
-  Direction,
-  EventType,
-  KeyModifier,
-} from "./MindmapConstants";
+import {BEFOREID_LAST, Direction, EventType, KeyModifier,} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
 import EventRouter from "./EventRouter";
@@ -543,7 +538,7 @@ export default class MindCheese {
   }
 
   select_node(node: MindNode): void {
-    if (!this.layout.is_visible(node)) {
+    if (!node._data.layout.visible) {
       return;
     }
     this.mind.selected = node;

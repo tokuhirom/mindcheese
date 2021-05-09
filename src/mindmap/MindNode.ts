@@ -13,6 +13,10 @@ export class ViewData {
 }
 
 export class LayoutData {
+  constructor() {
+    this.visible = true;
+  }
+
   direction: Direction;
   visible: boolean;
   offset_x: number;
