@@ -5,6 +5,7 @@ import MindNode from "./MindNode";
 import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider from "./LayoutProvider";
+import EventRouter from "./EventRouter";
 
 function is_empty(s: string) {
   // TODO inlining?
@@ -40,9 +41,11 @@ export default class ViewProvider {
   private readonly _renderer: (topic: string) => string;
   private readonly _hmargin: number;
   private readonly _vmargin: number;
+  private readonly _eventRouter: EventRouter;
 
   constructor(
     jm: MindCheese,
+    event_router: EventRouter,
     container: HTMLElement,
     hmargin: number = 100,
     vmargin: number = 50,
@@ -52,6 +55,7 @@ export default class ViewProvider {
     this.jm = jm;
     this._renderer = renderer;
     this.layout = jm.layout;
+    this._eventRouter = event_router;
 
     this.container = container;
     this.e_panel = null;
@@ -418,7 +422,7 @@ export default class ViewProvider {
     this.show_nodes();
     this.show_lines();
     //this.layout.cache_valid = true;
-    this.jm.invoke_event_handle(EventType.RESIZE, { data: [] });
+    this._eventRouter.invokeEventHandler(EventType.RESIZE, { data: [] });
     this.jm.draggable.resize();
   }
 

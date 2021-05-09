@@ -112,6 +112,7 @@ export default class MindCheese {
     const graph = new GraphCanvas(opts.view.line_color, opts.view.line_width);
     this.view = new ViewProvider(
       this,
+      this.event_router,
       opts.container,
       opts.view.hmargin,
       opts.view.vmargin,
@@ -637,7 +638,7 @@ export default class MindCheese {
     this.event_router.addEventListener(eventType, callback);
   }
 
-  invoke_event_handle(eventType: EventType, data: any): void {
+  private invoke_event_handle(eventType: EventType, data: any): void {
     this.event_router.invokeEventHandler(eventType, data);
   }
 
