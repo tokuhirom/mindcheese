@@ -99,10 +99,7 @@ export default class LayoutProvider {
     }
   }
 
-  private _layout_direction_side(
-    node: MindNode,
-    direction: Direction
-  ): void {
+  private _layout_direction_side(node: MindNode, direction: Direction): void {
     const layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
