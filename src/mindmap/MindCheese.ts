@@ -242,7 +242,7 @@ export default class MindCheese {
     }
     this.view.save_location(node);
     this.layout.toggle_node(node);
-    this.view.relayout();
+    this.view.show();
     this.view.restore_location(node);
   }
 
@@ -252,7 +252,7 @@ export default class MindCheese {
     }
     this.view.save_location(node);
     this.layout.expand_node(node);
-    this.view.relayout();
+    this.view.show();
     this.view.restore_location(node);
   }
 
@@ -262,23 +262,23 @@ export default class MindCheese {
     }
     this.view.save_location(node);
     this.layout.collapse_node(node);
-    this.view.relayout();
+    this.view.show();
     this.view.restore_location(node);
   }
 
   expand_all(): void {
     this.layout.expand_all();
-    this.view.relayout();
+    this.view.show();
   }
 
   collapse_all(): void {
     this.layout.collapse_all();
-    this.view.relayout();
+    this.view.show();
   }
 
   expand_to_depth(depth: number): void {
     this.layout.expand_to_depth(depth, null, null);
-    this.view.relayout();
+    this.view.show();
   }
 
   _reset(): void {
@@ -294,7 +294,8 @@ export default class MindCheese {
 
     this.view.load();
     this.layout.layout();
-    this.view.show(true);
+    this.view.show();
+    this.view.centerRoot();
     this.event_router.invokeEventHandler(EventType.SHOW, { data: [mind] });
   }
 
@@ -341,7 +342,7 @@ export default class MindCheese {
     if (node) {
       this.view.add_node(node);
       this.layout.layout();
-      this.view.show(false);
+      this.view.show();
       this.expand_node(parent_node);
       this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
         evt: "add_node",
@@ -371,7 +372,7 @@ export default class MindCheese {
     if (node) {
       this.view.add_node(node);
       this.layout.layout();
-      this.view.show(false);
+      this.view.show();
       this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
         evt: "insert_node_before",
         data: [node_before.id, nodeid, topic],
@@ -400,7 +401,7 @@ export default class MindCheese {
       });
       this.view.add_node(node);
       this.layout.layout();
-      this.view.show(false);
+      this.view.show();
       this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
         evt: "insert_node_after",
         data: [node_after.id, nodeid, topic],
@@ -437,7 +438,7 @@ export default class MindCheese {
     this.view.remove_node(node);
     this.mind.removeNode(node);
     this.layout.layout();
-    this.view.show(false);
+    this.view.show();
     if (parent_node.children.length > 0) {
       this.mind.selected = nextSelectedNode;
       this.view.select_node(nextSelectedNode);
@@ -499,7 +500,7 @@ export default class MindCheese {
     node.topic = topic;
     this.view.update_node(node);
     this.layout.layout();
-    this.view.show(false);
+    this.view.show();
     this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
       evt: "update_node",
       data: [nodeid, topic],
@@ -535,7 +536,7 @@ export default class MindCheese {
     this.mind.move_node(node, beforeid, parent, direction);
     this.view.update_node(node);
     this.layout.layout();
-    this.view.show(false);
+    this.view.show();
     this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
       evt: "move_node",
       data: [node.id, beforeid, parent.id, direction],

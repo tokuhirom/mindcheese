@@ -123,7 +123,7 @@ export default class ViewProvider {
     this.editing_node._data.view.width = this.e_editor.clientWidth;
     this.editing_node._data.view.height = this.e_editor.clientHeight;
     this.layout.layout();
-    this.show(false);
+    this.show();
   }
 
   get_binded_nodeid(element: HTMLElement): string | null {
@@ -391,7 +391,7 @@ export default class ViewProvider {
           view_data.width = element.clientWidth;
           view_data.height = element.clientHeight;
           this.layout.layout();
-          this.show(false);
+          this.show();
         }, 0);
       } else {
         this.jm.update_node(node.id, topic);
@@ -425,7 +425,7 @@ export default class ViewProvider {
     this._eventRouter.invokeEventHandler(EventType.RESIZE, { data: [] });
   }
 
-  _center_root(): void {
+  centerRoot(): void {
     // center root node
     const outer_w = this.e_panel.clientWidth;
     const outer_h = this.e_panel.clientHeight;
@@ -438,16 +438,8 @@ export default class ViewProvider {
     }
   }
 
-  show(keep_center: boolean): void {
+  show(): void {
     console.debug("view.show");
-    this.expand_size();
-    this._show();
-    if (keep_center) {
-      this._center_root();
-    }
-  }
-
-  relayout(): void {
     this.expand_size();
     this._show();
   }
