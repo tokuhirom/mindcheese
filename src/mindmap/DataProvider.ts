@@ -7,8 +7,8 @@ import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import MarkdownExporter from "./format/markdown/MarkdownExporter";
 
 class DataFormat {
-  importer: MindmapImporter;
-  exporter: MindmapExporter;
+  private readonly importer: MindmapImporter;
+  private readonly exporter: MindmapExporter;
 
   constructor(importer: MindmapImporter, exporter: MindmapExporter) {
     this.importer = importer;
