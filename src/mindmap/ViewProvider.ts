@@ -423,7 +423,6 @@ export default class ViewProvider {
     this.show_lines();
     //this.layout.cache_valid = true;
     this._eventRouter.invokeEventHandler(EventType.RESIZE, { data: [] });
-    this.jm.draggable.resize();
   }
 
   _center_root(): void {

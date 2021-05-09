@@ -123,7 +123,7 @@ export default class MindCheese {
       opts.shortcut.enable,
       opts.shortcut.mappings
     );
-    this.draggable = new Draggable(this);
+    this.draggable = new Draggable(this, this.event_router);
     this.undo_manager = new UndoManager(this);
 
     this.layout.init();
