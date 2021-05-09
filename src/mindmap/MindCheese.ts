@@ -74,7 +74,7 @@ export default class MindCheese {
   private _editable: boolean;
   private readonly _container: HTMLElement;
 
-  constructor(id: number, container: HTMLElement, options: any={}) {
+  constructor(id: number, container: HTMLElement, options: any = {}) {
     this._container = container;
 
     let opts = Object.assign({}, DEFAULT_OPTIONS);
