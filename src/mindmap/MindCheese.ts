@@ -7,12 +7,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {
-  BEFOREID_LAST,
-  Direction,
-  EventType,
-  KeyModifier,
-} from "./MindmapConstants";
+import {BEFOREID_LAST, Direction, EventType, KeyModifier,} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
 import EventRouter from "./EventRouter";
@@ -295,7 +290,7 @@ export default class MindCheese {
     this.view.load();
     this.layout.layout();
     this.view.show(true);
-    this.invoke_event_handle(EventType.SHOW, { data: [mind] });
+    this.event_router.invokeEventHandler(EventType.SHOW, {data: [mind]});
   }
 
   show(format: string, mind: any): void {
@@ -325,7 +320,7 @@ export default class MindCheese {
       return null;
     }
 
-    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
       evt: "add_node",
       data: [parent_node.id, nodeid, topic],
       node: nodeid,
@@ -343,7 +338,7 @@ export default class MindCheese {
       this.layout.layout();
       this.view.show(false);
       this.expand_node(parent_node);
-      this.invoke_event_handle(EventType.AFTER_EDIT, {
+      this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
         evt: "add_node",
         data: [parent_node.id, nodeid, topic],
         node: nodeid,
@@ -362,7 +357,7 @@ export default class MindCheese {
       return null;
     }
 
-    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
       evt: "insert_node_before",
       data: [node_before.id, nodeid, topic],
       node: nodeid,
@@ -372,7 +367,7 @@ export default class MindCheese {
       this.view.add_node(node);
       this.layout.layout();
       this.view.show(false);
-      this.invoke_event_handle(EventType.AFTER_EDIT, {
+      this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
         evt: "insert_node_before",
         data: [node_before.id, nodeid, topic],
         node: nodeid,
@@ -393,7 +388,7 @@ export default class MindCheese {
 
     const node = this.mind.insert_node_after(node_after, nodeid, topic);
     if (node) {
-      this.invoke_event_handle(EventType.BEFORE_EDIT, {
+      this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
         evt: "insert_node_after",
         data: [node_after.id, nodeid, topic],
         node: nodeid,
@@ -401,7 +396,7 @@ export default class MindCheese {
       this.view.add_node(node);
       this.layout.layout();
       this.view.show(false);
-      this.invoke_event_handle(EventType.AFTER_EDIT, {
+      this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
         evt: "insert_node_after",
         data: [node_after.id, nodeid, topic],
         node: nodeid,
@@ -424,7 +419,7 @@ export default class MindCheese {
     const nodeid = node.id;
     const parent_node = node.parent;
     const parentid = node.parent.id;
-    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
       evt: "remove_node",
       data: [nodeid],
       node: parentid,
@@ -443,7 +438,7 @@ export default class MindCheese {
       this.view.select_node(nextSelectedNode);
     }
     this.view.restore_location(parent_node);
-    this.invoke_event_handle(EventType.AFTER_EDIT, {
+    this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
       evt: "remove_node",
       data: [nodeid],
       node: parentid,
@@ -486,7 +481,7 @@ export default class MindCheese {
       return;
     }
 
-    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
       evt: "update_node",
       data: [nodeid, topic],
       node: nodeid,
@@ -500,7 +495,7 @@ export default class MindCheese {
     this.view.update_node(node);
     this.layout.layout();
     this.view.show(false);
-    this.invoke_event_handle(EventType.AFTER_EDIT, {
+    this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
       evt: "update_node",
       data: [nodeid, topic],
       node: nodeid,
@@ -527,7 +522,7 @@ export default class MindCheese {
       return;
     }
 
-    this.invoke_event_handle(EventType.BEFORE_EDIT, {
+    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
       evt: "move_node",
       data: [node.id, beforeid, parent.id, direction],
       node: node.id,
@@ -536,7 +531,7 @@ export default class MindCheese {
     this.view.update_node(node);
     this.layout.layout();
     this.view.show(false);
-    this.invoke_event_handle(EventType.AFTER_EDIT, {
+    this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
       evt: "move_node",
       data: [node.id, beforeid, parent.id, direction],
       node: node.id,
@@ -549,7 +544,7 @@ export default class MindCheese {
     }
     this.mind.selected = node;
     this.view.select_node(node);
-    this.invoke_event_handle(EventType.SELECT, {
+    this.event_router.invokeEventHandler(EventType.SELECT, {
       evt: "select_node",
       data: [],
       node: node.id,
@@ -633,10 +628,6 @@ export default class MindCheese {
     callback: (data: any) => void
   ): void {
     this.event_router.addEventListener(eventType, callback);
-  }
-
-  private invoke_event_handle(eventType: EventType, data: any): void {
-    this.event_router.invokeEventHandler(eventType, data);
   }
 
   undo(): void {

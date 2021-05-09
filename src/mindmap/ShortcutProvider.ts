@@ -1,5 +1,6 @@
 import MindCheese from "./MindCheese";
 import { KeyModifier } from "./MindmapConstants";
+import ShortcutHandlers from "./ShortcutHandlers";
 
 export default class ShortcutProvider {
   private readonly jm: MindCheese;
@@ -12,7 +13,20 @@ export default class ShortcutProvider {
   constructor(
     jm: MindCheese,
     enable: boolean = true,
-    mappings: [number, string, (jm: MindCheese, e: Event) => boolean][]
+    mappings: [number, string, (jm: MindCheese, e: Event) => boolean][] = [
+      [KeyModifier.NONE, "Delete", ShortcutHandlers.delete],
+      [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],
+      [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
+      [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode],
+      [KeyModifier.NONE, "Space", ShortcutHandlers.toggle],
+      [KeyModifier.SHIFT, "ArrowUp", ShortcutHandlers.moveUp],
+      [KeyModifier.SHIFT, "ArrowDown", ShortcutHandlers.moveDown],
+      [KeyModifier.NONE, "ArrowUp", ShortcutHandlers.up],
+      [KeyModifier.NONE, "ArrowDown", ShortcutHandlers.down],
+      [KeyModifier.NONE, "ArrowLeft", ShortcutHandlers.left],
+      [KeyModifier.NONE, "ArrowRight", ShortcutHandlers.right],
+      [KeyModifier.CTRL, "KeyZ", ShortcutHandlers.undo],
+    ]
   ) {
     this.jm = jm;
     this.enable = enable;
