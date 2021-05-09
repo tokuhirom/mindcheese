@@ -12,7 +12,7 @@ export default class ShortcutProvider {
 
   constructor(
     jm: MindCheese,
-    enable: boolean = true,
+    enable = true,
     mappings: [number, string, (jm: MindCheese, e: Event) => boolean][] = [
       [KeyModifier.NONE, "Delete", ShortcutHandlers.delete],
       [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],

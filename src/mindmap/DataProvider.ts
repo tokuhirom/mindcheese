@@ -1,4 +1,3 @@
-import MindCheese from "./MindCheese";
 import Mind from "./Mind";
 import MindmapExporter from "./format/MindmapExporter";
 import MindmapImporter from "./format/MindmapImporter";

@@ -1,4 +1,4 @@
-// noinspection JSUnfilteredForInLoop,JSUnusedGlobalSymbols,JSUnusedGlobalSymbols
+// noinspection JSUnfilteredForInLoop
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
@@ -47,8 +47,8 @@ export default class ViewProvider {
     jm: MindCheese,
     event_router: EventRouter,
     container: HTMLElement,
-    hmargin: number = 100,
-    vmargin: number = 50,
+    hmargin = 100,
+    vmargin = 50,
     graph: GraphCanvas,
     renderer = plainTextRenderer
   ) {
