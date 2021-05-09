@@ -70,11 +70,10 @@ export default class LayoutProvider {
     const children = node.children;
     const children_count = children.length;
     layout_data.direction = Direction.CENTER;
-    layout_data.side_index = 0;
     if (this.isside) {
       let i = children_count;
       while (i--) {
-        this._layout_direction_side(children[i], Direction.RIGHT, i);
+        this._layout_direction_side(children[i], Direction.RIGHT);
       }
     } else {
       let i = children_count;
@@ -82,9 +81,9 @@ export default class LayoutProvider {
       while (i--) {
         subnode = children[i];
         if (subnode.direction == Direction.LEFT) {
-          this._layout_direction_side(subnode, Direction.LEFT, i);
+          this._layout_direction_side(subnode, Direction.LEFT);
         } else {
-          this._layout_direction_side(subnode, Direction.RIGHT, i);
+          this._layout_direction_side(subnode, Direction.RIGHT);
         }
       }
       /*
@@ -100,20 +99,18 @@ export default class LayoutProvider {
     }
   }
 
-  _layout_direction_side(
+  private _layout_direction_side(
     node: MindNode,
-    direction: Direction,
-    side_index: number
+    direction: Direction
   ): void {
     const layout_data = node._data.layout;
     const children = node.children;
     const children_count = children.length;
 
     layout_data.direction = direction;
-    layout_data.side_index = side_index;
     let i = children_count;
     while (i--) {
-      this._layout_direction_side(children[i], direction, i);
+      this._layout_direction_side(children[i], direction);
     }
   }
 

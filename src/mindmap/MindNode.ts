@@ -22,7 +22,6 @@ export class LayoutData {
   right_nodes: MindNode[];
   outer_height_left: number;
   outer_height_right: number;
-  side_index: number;
 }
 
 export default class MindNode {
