@@ -1,6 +1,6 @@
 // noinspection JSUnfilteredForInLoop
 
-import { Direction, EventType } from "./MindmapConstants";
+import {Direction, EventType} from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
@@ -266,39 +266,24 @@ export default class LayoutProvider {
     return new Point(x, y);
   }
 
-  get_node_point_in(node: MindNode): { x: number; y: number } {
+  get_node_point_in(node: MindNode): Point {
     return this.getNodeOffset(node);
   }
 
-  get_node_point_out(node: MindNode): { x: number; y: number } {
-    const layout_data = node._data.layout;
-    let pout_cache: { x: number; y: number };
-    if ("_pout_" in layout_data && false) {
-      pout_cache = layout_data._pout_;
+  getNodePointOut(node: MindNode): Point {
+    if (node.isroot) {
+      return new Point(0, 0);
     } else {
-      pout_cache = { x: -1, y: -1 };
-      layout_data._pout_ = pout_cache;
-    }
-    if (pout_cache.x == -1 || pout_cache.y == -1) {
-      if (node.isroot) {
-        pout_cache.x = 0;
-        pout_cache.y = 0;
-      } else {
-        const view_data = node._data.view;
-        const offset_p = this.getNodeOffset(node);
-        pout_cache.x =
+      const offset_p = this.getNodeOffset(node);
+      const x =
           offset_p.x +
-          (view_data.width + this._pspace) * node._data.layout.direction;
-        pout_cache.y = offset_p.y;
-        //console.debug('pout');
-        //console.debug(pout_cache);
-      }
+          (node._data.view.width + this._pspace) * node._data.layout.direction;
+      return new Point(x, offset_p.y);
     }
-    return pout_cache;
   }
 
   get_expander_point(node: MindNode): Point {
-    const p = this.get_node_point_out(node);
+    const p = this.getNodePointOut(node);
     let x: number;
     if (node._data.layout.direction == Direction.RIGHT) {
       x = p.x - this._pspace;
@@ -313,7 +298,7 @@ export default class LayoutProvider {
     const nodes = this.jm.mind.nodes;
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
-      const pout = this.get_node_point_out(node);
+      const pout = this.getNodePointOut(node);
       // e = Math.max(x, e)
       if (pout.x > this.bounds.e) {
         this.bounds.e = pout.x;

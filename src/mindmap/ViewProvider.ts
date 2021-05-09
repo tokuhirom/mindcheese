@@ -530,7 +530,7 @@ export default class ViewProvider {
         continue;
       }
       pin = this.layout.get_node_point_in(node);
-      pout = this.layout.get_node_point_out(node.parent);
+      pout = this.layout.getNodePointOut(node.parent);
       this.graph.draw_line(pout, pin, _offset);
     }
   }
