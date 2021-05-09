@@ -29,7 +29,6 @@ const DEFAULT_OPTIONS: any = {
   container: "", // id of the container
   theme: null,
   mode: "full", // full or side
-  support_html: true,
 
   view: {
     hmargin: 100,

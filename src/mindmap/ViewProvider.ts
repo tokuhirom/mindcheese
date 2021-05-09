@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
+import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider from "./LayoutProvider";
 import EventRouter from "./EventRouter";

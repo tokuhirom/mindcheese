@@ -118,7 +118,6 @@ export class EditableMindmapView extends TextFileView {
           container: el,
           theme: "primary", // TODO make it customizable?
           editable: true,
-          support_html: false, // TODO HTML support
         };
         this.mm = new MindCheese(jsMindId, options);
         // ↓ *quick hack* to avoid the timing issue...
