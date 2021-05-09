@@ -14,12 +14,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-#      - name: Prettify code
-#        uses: creyD/prettier_action@v3.1
-#        with:
-#          prettier_options: --write **/*.{tsx,md,ts}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #      - name: Prettify code
+      #        uses: creyD/prettier_action@v3.1
+      #        with:
+      #          prettier_options: --write **/*.{tsx,md,ts}
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v2
         with:
