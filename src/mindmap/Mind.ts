@@ -156,15 +156,12 @@ export default class Mind {
   move_node(
     node: MindNode,
     beforeid: string,
-    parentid: string,
+    parent: MindNode,
     direction: Direction
-  ): MindNode {
+  ): void {
     console.assert(node instanceof MindNode, "node should be Node");
-    console.log(`move_node: ${node} ${beforeid} ${parentid} ${direction}`);
-    if (!parentid) {
-      parentid = node.parent.id;
-    }
-    return this._move_node(node, beforeid, parentid, direction);
+    console.log(`move_node: ${node} ${beforeid} ${parent.id} ${direction}`);
+    this._move_node(node, beforeid, parent, direction);
   }
 
   private _flow_node_direction(node: MindNode, direction: Direction): void {
@@ -216,15 +213,15 @@ export default class Mind {
   private _move_node(
     node: MindNode,
     beforeid: string,
-    parentid: string,
+    parent: MindNode,
     direction: Direction
-  ): MindNode {
+  ): void {
     console.log(
-      `_move_node: node=${node}, ${beforeid}, parentid=${parentid}, ${direction}`
+      `_move_node: node=${node}, ${beforeid}, parentid=${parent.id}, ${direction}`
     );
-    if (!!node && !!parentid) {
+    if (!!node && !!parent.id) {
       console.assert(node.parent, `node.parent is null: ${node}`);
-      if (node.parent.id !== parentid) {
+      if (node.parent.id !== parent.id) {
         console.log(`_move_node: node.parent.id!==parentid`);
         // remove from parent's children
         const sibling = node.parent.children;
@@ -236,7 +233,7 @@ export default class Mind {
             break;
           }
         }
-        node.parent = this.getNodeById(parentid);
+        node.parent = this.getNodeById(parent.id);
         node.parent.children.push(node);
       }
 
@@ -248,7 +245,6 @@ export default class Mind {
       this._move_node_internal(node, beforeid);
       this._flow_node_direction(node, direction);
     }
-    return node;
   }
 
   removeNode(node: MindNode): boolean {

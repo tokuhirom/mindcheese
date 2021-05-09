@@ -368,8 +368,7 @@ export default class Draggable {
       console.log(
         `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
       );
-      this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
-      // this.jm.move_node(src_node.id, beforeid, target_node.id, target_direct);
+      this.jm.move_node(src_node, beforeid, target_node, target_direct);
     }
     this.active_node = null;
     this.target_node = null;

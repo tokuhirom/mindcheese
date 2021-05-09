@@ -510,42 +510,38 @@ export default class MindCheese {
   }
 
   /**
-   * @param nodeid
+   * @param node Target node to move.
    * @param beforeid Move nodeid's node to above of the *beforeid*. You can use BEFOREID_* constants.
-   * @param parentid
+   * @param parent
    * @param direction
    */
   move_node(
-    nodeid: string,
+    node: MindNode,
     beforeid: string,
-    parentid: string,
+    parent: MindNode,
     direction: Direction
   ): void {
-    console.log(`jm.move_node: ${nodeid} ${beforeid} ${parentid} ${direction}`);
+    console.log(
+      `jm.move_node: ${node.id} ${beforeid} ${parent.id} ${direction}`
+    );
     if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return;
     }
 
-    const the_node = this.getNodeById(nodeid);
-    if (!the_node) {
-      console.error("the node[id=" + nodeid + "] can not be found.");
-      return;
-    }
-
     this.invoke_event_handle(EventType.BEFORE_EDIT, {
       evt: "move_node",
-      data: [nodeid, beforeid, parentid, direction],
-      node: nodeid,
+      data: [node.id, beforeid, parent.id, direction],
+      node: node.id,
     });
-    const node = this.mind.move_node(the_node, beforeid, parentid, direction);
+    this.mind.move_node(node, beforeid, parent, direction);
     this.view.update_node(node);
     this.layout.layout();
     this.view.show(false);
     this.invoke_event_handle(EventType.AFTER_EDIT, {
       evt: "move_node",
-      data: [nodeid, beforeid, parentid, direction],
-      node: nodeid,
+      data: [node.id, beforeid, parent.id, direction],
+      node: node.id,
     });
   }
 
@@ -663,7 +659,7 @@ export default class MindCheese {
      */
     const upNode = this.findNodeBefore(node);
     if (upNode) {
-      this.move_node(node.id, upNode.id, node.parent.id, node.direction);
+      this.move_node(node, upNode.id, node.parent, node.direction);
       return;
     }
   }
@@ -690,12 +686,7 @@ export default class MindCheese {
            *     - c = 2
            *     - b = LAST
            */
-          this.move_node(
-            node.id,
-            BEFOREID_LAST,
-            node.parent.id,
-            node.direction
-          );
+          this.move_node(node, BEFOREID_LAST, node.parent, node.direction);
           return; // Put on last element.
         } else {
           /*
@@ -716,12 +707,7 @@ export default class MindCheese {
               children[i + 1].topic
             } direction=${node.direction}`
           );
-          this.move_node(
-            node.id,
-            children[i + 2].id,
-            node.parent.id,
-            node.direction
-          );
+          this.move_node(node, children[i + 2].id, node.parent, node.direction);
           console.log(this.mind);
           return;
         }
