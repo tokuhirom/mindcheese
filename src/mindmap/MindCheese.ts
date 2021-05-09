@@ -7,7 +7,12 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {BEFOREID_LAST, Direction, EventType, KeyModifier,} from "./MindmapConstants";
+import {
+  BEFOREID_LAST,
+  Direction,
+  EventType,
+  KeyModifier,
+} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
 import EventRouter from "./EventRouter";
@@ -290,7 +295,7 @@ export default class MindCheese {
     this.view.load();
     this.layout.layout();
     this.view.show(true);
-    this.event_router.invokeEventHandler(EventType.SHOW, {data: [mind]});
+    this.event_router.invokeEventHandler(EventType.SHOW, { data: [mind] });
   }
 
   show(format: string, mind: any): void {
