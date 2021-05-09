@@ -663,12 +663,7 @@ export default class MindCheese {
      */
     const upNode = this.findNodeBefore(node);
     if (upNode) {
-      this.move_node(
-          node.id,
-          upNode.id,
-          node.parent.id,
-          node.direction
-      )
+      this.move_node(node.id, upNode.id, node.parent.id, node.direction);
       return;
     }
   }
