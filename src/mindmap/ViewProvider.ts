@@ -406,6 +406,7 @@ export default class ViewProvider {
     return { x: _x, y: _y };
   }
 
+  // TODO remove this method?
   resize(): void {
     this.graph.set_size(1, 1);
     this.e_nodes.style.width = "1px";
@@ -415,7 +416,7 @@ export default class ViewProvider {
     this._show();
   }
 
-  _show(): void {
+  private _show(): void {
     this.graph.set_size(this.size.w, this.size.h);
     this.e_nodes.style.width = this.size.w + "px";
     this.e_nodes.style.height = this.size.h + "px";
