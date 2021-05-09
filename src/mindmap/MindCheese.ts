@@ -26,8 +26,7 @@ function is_empty(s: string) {
 }
 
 const DEFAULT_OPTIONS: any = {
-  container: "", // id of the container
-  theme: null,
+  theme: "primary",
   mode: "full", // full or side
 
   view: {
@@ -73,14 +72,13 @@ export default class MindCheese {
   private undo_manager: UndoManager;
   private readonly event_router: EventRouter;
   private _editable: boolean;
+  private readonly _container: HTMLElement;
 
-  constructor(id: number, options: any) {
+  constructor(id: number, container: HTMLElement, options: any={}) {
+    this._container = container;
+
     let opts = Object.assign({}, DEFAULT_OPTIONS);
     opts = Object.assign(opts, options);
-    if (!opts.container) {
-      console.error("the options.container should not be null or empty.");
-      return;
-    }
     this.options = opts;
     this.inited = false;
     this.mind = null; // TODO original では null が入っていた
@@ -112,7 +110,7 @@ export default class MindCheese {
     this.view = new ViewProvider(
       this,
       this.event_router,
-      opts.container,
+      this._container,
       opts.view.hmargin,
       opts.view.vmargin,
       graph
@@ -128,7 +126,7 @@ export default class MindCheese {
     this.layout.init();
     this.view.init();
     this.shortcut.init();
-    this.draggable.init(opts.container);
+    this.draggable.init(this._container);
     this.undo_manager.init();
 
     this._event_bind();

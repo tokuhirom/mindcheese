@@ -20,11 +20,7 @@
 
     <script>
       const container = document.getElementById("container");
-      const jsmind = new window.MindCheese(1, {
-        container: container,
-        theme: "primary", // TODO make it customizable?
-        editable: true,
-      });
+      const jsmind = new window.MindCheese(1, container);
       jsmind.show("node_tree", {
         meta: {
           name: "jsMind remote",

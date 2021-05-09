@@ -115,11 +115,10 @@ export class EditableMindmapView extends TextFileView {
           }`
         );
         const options = {
-          container: el,
           theme: "primary", // TODO make it customizable?
           editable: true,
         };
-        this.mm = new MindCheese(jsMindId, options);
+        this.mm = new MindCheese(jsMindId, el, options);
         // ↓ *quick hack* to avoid the timing issue...
         setTimeout(() => {
           this.mm.show("node_tree", mind);
