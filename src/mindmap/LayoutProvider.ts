@@ -1,6 +1,6 @@
 // noinspection JSUnfilteredForInLoop
 
-import {Direction, EventType} from "./MindmapConstants";
+import { Direction, EventType } from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
@@ -276,8 +276,8 @@ export default class LayoutProvider {
     } else {
       const offset_p = this.getNodeOffset(node);
       const x =
-          offset_p.x +
-          (node._data.view.width + this._pspace) * node._data.layout.direction;
+        offset_p.x +
+        (node._data.view.width + this._pspace) * node._data.layout.direction;
       return new Point(x, offset_p.y);
     }
   }
