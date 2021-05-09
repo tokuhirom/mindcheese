@@ -1,13 +1,14 @@
 // noinspection JSUnusedGlobalSymbols
 
 import { Direction } from "./MindmapConstants";
+import { Point } from "./LayoutProvider";
 
 export class ViewData {
   element: HTMLElement;
-  _saved_location: { x: number; y: number };
+  savedLocation: Point; // TODO DO NOT store this field in viewdata.
   expander: HTMLElement;
-  abs_x: number;
-  abs_y: number;
+  absX: number;
+  absY: number;
   width: number;
   height: number;
 }
@@ -19,13 +20,13 @@ export class LayoutData {
 
   direction: Direction;
   visible: boolean;
-  offset_x: number;
-  offset_y: number;
-  outer_height: number;
-  left_nodes: MindNode[];
-  right_nodes: MindNode[];
-  outer_height_left: number;
-  outer_height_right: number;
+  offsetX: number;
+  offsetY: number;
+  outerHeight: number;
+  leftNodes: MindNode[];
+  rightNodes: MindNode[];
+  outerHeightLeft: number;
+  outerHeightRight: number;
 }
 
 export default class MindNode {
@@ -37,7 +38,8 @@ export default class MindNode {
   public direction: Direction;
   public expanded: boolean;
   public children: MindNode[];
-  public _data: {
+  public data: {
+    // TODO extract this.data.view to this.view_data
     view: ViewData;
     layout: LayoutData;
   };
@@ -65,7 +67,7 @@ export default class MindNode {
     this.direction = direction;
     this.expanded = expanded;
     this.children = [];
-    this._data = {
+    this.data = {
       view: new ViewData(),
       layout: new LayoutData(),
     };
@@ -111,16 +113,13 @@ export default class MindNode {
     return false;
   }
 
-  get_location(): { x: number; y: number } {
-    const vd = this._data.view;
-    return {
-      x: vd.abs_x,
-      y: vd.abs_y,
-    };
+  getLocation(): Point {
+    const vd = this.data.view;
+    return new Point(vd.absX, vd.absY);
   }
 
-  get_size(): { w: number; h: number } {
-    const vd = this._data.view;
+  getSize(): { w: number; h: number } {
+    const vd = this.data.view;
     return {
       w: vd.width,
       h: vd.height,

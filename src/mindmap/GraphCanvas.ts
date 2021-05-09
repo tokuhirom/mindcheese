@@ -1,45 +1,45 @@
 export default class GraphCanvas {
-  private readonly e_canvas: HTMLCanvasElement;
-  private readonly canvas_ctx: CanvasRenderingContext2D;
+  private readonly canvasElement: HTMLCanvasElement;
+  private readonly canvasContext: CanvasRenderingContext2D;
   private size: { w: number; h: number };
-  private readonly _line_color: string;
-  private readonly _line_width: number;
+  private readonly lineColor: string;
+  private readonly lineWidth: number;
 
-  constructor(line_color = "#555", line_width = 2) {
-    this._line_color = line_color;
-    this._line_width = line_width;
-    this.e_canvas = document.createElement("canvas");
-    this.e_canvas.className = "jsmind";
-    this.canvas_ctx = this.e_canvas.getContext("2d");
+  constructor(lineColor = "#555", lineWidth = 2) {
+    this.lineColor = lineColor;
+    this.lineWidth = lineWidth;
+    this.canvasElement = document.createElement("canvas");
+    this.canvasElement.className = "jsmind";
+    this.canvasContext = this.canvasElement.getContext("2d");
     this.size = { w: 0, h: 0 };
   }
 
   element(): HTMLCanvasElement {
-    return this.e_canvas;
+    return this.canvasElement;
   }
 
-  set_size(w: number, h: number): void {
+  setSize(w: number, h: number): void {
     this.size.w = w;
     this.size.h = h;
-    this.e_canvas.width = w;
-    this.e_canvas.height = h;
+    this.canvasElement.width = w;
+    this.canvasElement.height = h;
   }
 
   clear(): void {
-    this.canvas_ctx.clearRect(0, 0, this.size.w, this.size.h);
+    this.canvasContext.clearRect(0, 0, this.size.w, this.size.h);
   }
 
-  draw_line(
+  drawLine(
     pout: { x: number; y: number },
     pin: { x: number; y: number },
     offset: { x: number; y: number }
   ): void {
-    const ctx = this.canvas_ctx;
-    ctx.strokeStyle = this._line_color;
-    ctx.lineWidth = this._line_width;
+    const ctx = this.canvasContext;
+    ctx.strokeStyle = this.lineColor;
+    ctx.lineWidth = this.lineWidth;
     ctx.lineCap = "round";
 
-    this._bezier_to(
+    this.bezierTo(
       ctx,
       pin.x + offset.x,
       pin.y + offset.y,
@@ -48,7 +48,7 @@ export default class GraphCanvas {
     );
   }
 
-  _bezier_to(
+  private bezierTo(
     ctx: CanvasRenderingContext2D,
     x1: number,
     y1: number,

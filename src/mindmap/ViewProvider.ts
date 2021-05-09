@@ -4,10 +4,10 @@ import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
 import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider from "./LayoutProvider";
+import LayoutProvider, { Point } from "./LayoutProvider";
 import EventRouter from "./EventRouter";
 
-function is_empty(s: string) {
+function isEmpty(s: string) {
   // TODO inlining?
   if (!s) {
     return true;
@@ -31,21 +31,21 @@ export default class ViewProvider {
   private readonly jm: MindCheese;
   private readonly layout: LayoutProvider;
   private readonly container: HTMLElement;
-  e_panel: HTMLDivElement; // div.jsmind-inner
-  e_nodes: HTMLElement; // <jmnodes>
+  jsmindInnerElement: HTMLDivElement; // div.jsmind-inner
+  jmnodes: HTMLElement; // <jmnodes>
   size: { w: number; h: number };
-  private selected_node: MindNode;
-  private editing_node: MindNode;
+  private selectedNode: MindNode;
+  private editingNode: MindNode;
   private readonly graph: GraphCanvas;
-  private e_editor: HTMLTextAreaElement;
-  private readonly _renderer: (topic: string) => string;
-  private readonly _hmargin: number;
-  private readonly _vmargin: number;
-  private readonly _eventRouter: EventRouter;
+  private textAreaElement: HTMLTextAreaElement;
+  private readonly renderer: (topic: string) => string;
+  private readonly hMargin: number;
+  private readonly vMargin: number;
+  private readonly eventRouter: EventRouter;
 
   constructor(
     jm: MindCheese,
-    event_router: EventRouter,
+    eventRouter: EventRouter,
     container: HTMLElement,
     hmargin = 100,
     vmargin = 50,
@@ -53,21 +53,21 @@ export default class ViewProvider {
     renderer = plainTextRenderer
   ) {
     this.jm = jm;
-    this._renderer = renderer;
+    this.renderer = renderer;
     this.layout = jm.layout;
-    this._eventRouter = event_router;
+    this.eventRouter = eventRouter;
 
     this.container = container;
-    this.e_panel = null;
-    this.e_nodes = null;
+    this.jsmindInnerElement = null;
+    this.jmnodes = null;
 
     this.size = { w: 0, h: 0 };
 
-    this.selected_node = null;
-    this.editing_node = null;
+    this.selectedNode = null;
+    this.editingNode = null;
 
-    this._hmargin = hmargin;
-    this._vmargin = vmargin;
+    this.hMargin = hmargin;
+    this.vMargin = vmargin;
 
     this.graph = graph;
   }
@@ -80,53 +80,53 @@ export default class ViewProvider {
       return;
     }
 
-    this.e_panel = document.createElement("div");
-    this.e_nodes = document.createElement("jmnodes");
-    this.e_editor = document.createElement("textarea");
+    this.jsmindInnerElement = document.createElement("div");
+    this.jmnodes = document.createElement("jmnodes");
+    this.textAreaElement = document.createElement("textarea");
 
-    this.e_panel.className = "jsmind-inner";
-    this.e_panel.appendChild(this.graph.element());
-    this.e_panel.appendChild(this.e_nodes);
+    this.jsmindInnerElement.className = "jsmind-inner";
+    this.jsmindInnerElement.appendChild(this.graph.element());
+    this.jsmindInnerElement.appendChild(this.jmnodes);
 
-    this.e_editor.className = "jsmind-editor";
+    this.textAreaElement.className = "jsmind-editor";
 
-    this.e_editor.addEventListener("keydown", (e) => {
+    this.textAreaElement.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
       // noinspection JSDeprecatedSymbols
       if (e.keyCode === KEYCODE_ENTER && !e.shiftKey) {
-        this.edit_node_end();
+        this.editNodeEnd();
         e.stopPropagation();
       }
     });
     // adjust size dynamically.
-    this.e_editor.addEventListener(
+    this.textAreaElement.addEventListener(
       "keyup",
       this.adjustEditorElementSize.bind(this)
     );
     // when the element lost focus.
-    this.e_editor.addEventListener("blur", this.edit_node_end.bind(this));
-    this.e_editor.addEventListener(
+    this.textAreaElement.addEventListener("blur", this.editNodeEnd.bind(this));
+    this.textAreaElement.addEventListener(
       "input",
       this.adjustEditorElementSize.bind(this)
     );
 
-    this.container.appendChild(this.e_panel);
+    this.container.appendChild(this.jsmindInnerElement);
   }
 
   adjustEditorElementSize() {
-    const el = this.e_editor;
+    const el = this.textAreaElement;
     el.style.width = "";
     el.style.height = "";
     el.style.width = el.scrollWidth + "px";
     el.style.height = el.scrollHeight + "px";
-    this.editing_node._data.view.width = this.e_editor.clientWidth;
-    this.editing_node._data.view.height = this.e_editor.clientHeight;
+    this.editingNode.data.view.width = this.textAreaElement.clientWidth;
+    this.editingNode.data.view.height = this.textAreaElement.clientHeight;
     this.layout.layout();
     this.show();
   }
 
-  get_binded_nodeid(element: HTMLElement): string | null {
+  getBindedNodeId(element: HTMLElement): string | null {
     if (element == null) {
       return null;
     }
@@ -137,28 +137,28 @@ export default class ViewProvider {
     if (tagName === "jmnode" || tagName === "jmexpander") {
       return element.getAttribute("nodeid");
     } else {
-      return this.get_binded_nodeid(element.parentElement);
+      return this.getBindedNodeId(element.parentElement);
     }
   }
 
-  is_expander(element: HTMLElement): boolean {
+  isExpander(element: HTMLElement): boolean {
     return element.tagName.toLowerCase() === "jmexpander";
   }
 
   reset(): void {
     console.debug("view.reset");
-    this.selected_node = null;
+    this.selectedNode = null;
     this.graph.clear();
-    this.clear_nodes();
-    this.reset_theme();
+    this.clearNodes();
+    this.resetTheme();
   }
 
-  reset_theme(): void {
-    const theme_name = this.jm.options.theme;
-    if (theme_name) {
-      this.e_nodes.className = "theme-" + theme_name;
+  resetTheme(): void {
+    const themeName = this.jm.options.theme;
+    if (themeName) {
+      this.jmnodes.className = "theme-" + themeName;
     } else {
-      this.e_nodes.className = "";
+      this.jmnodes.className = "";
     }
   }
 
@@ -167,51 +167,51 @@ export default class ViewProvider {
     this.initNodes();
   }
 
-  expand_size(): void {
-    const min_size = this.layout.get_min_size();
-    const min_width = min_size.w + this._hmargin * 2;
-    const min_height = min_size.h + this._vmargin * 2;
-    let client_w = this.e_panel.clientWidth;
-    let client_h = this.e_panel.clientHeight;
+  expandSize(): void {
+    const minSize = this.layout.getMinSize();
+    const minWidth = minSize.w + this.hMargin * 2;
+    const minHeight = minSize.h + this.vMargin * 2;
+    let clientW = this.jsmindInnerElement.clientWidth;
+    let clientH = this.jsmindInnerElement.clientHeight;
     console.debug(`ViewProvider.expand_size:
-    min_width=${min_width}
-    min_height=${min_height}
-    client_w=${client_w}
-    client_h=${client_h}`);
-    if (client_w < min_width) {
-      client_w = min_width;
+    min_width=${minWidth}
+    min_height=${minHeight}
+    client_w=${clientW}
+    client_h=${clientH}`);
+    if (clientW < minWidth) {
+      clientW = minWidth;
     }
-    if (client_h < min_height) {
-      client_h = min_height;
+    if (clientH < minHeight) {
+      clientH = minHeight;
     }
-    this.size.w = client_w;
-    this.size.h = client_h;
+    this.size.w = clientW;
+    this.size.h = clientH;
   }
 
   private initNodeSize(node: MindNode): void {
-    const view_data = node._data.view;
-    view_data.width = view_data.element.clientWidth;
-    view_data.height = view_data.element.clientHeight;
+    const viewData = node.data.view;
+    viewData.width = viewData.element.clientWidth;
+    viewData.height = viewData.element.clientHeight;
   }
 
   private initNodes(): void {
     const nodes = this.jm.mind.nodes;
-    const doc_frag: DocumentFragment = document.createDocumentFragment();
+    const documentFragment: DocumentFragment = document.createDocumentFragment();
     for (const node of Object.values(nodes)) {
-      this.createNodeElement(node, doc_frag);
+      this.createNodeElement(node, documentFragment);
     }
-    this.e_nodes.appendChild(doc_frag);
+    this.jmnodes.appendChild(documentFragment);
     for (const node of Object.values(nodes)) {
       this.initNodeSize(node);
     }
   }
 
   addNode(node: MindNode): void {
-    this.createNodeElement(node, this.e_nodes);
+    this.createNodeElement(node, this.jmnodes);
     this.initNodeSize(node);
   }
 
-  private createNodeElement(node: MindNode, parent_node: Node): void {
+  private createNodeElement(node: MindNode, parentNode: Node): void {
     const nodeEl: HTMLElement = document.createElement("jmnode");
     if (node.isroot) {
       nodeEl.className = "root";
@@ -220,68 +220,68 @@ export default class ViewProvider {
       expanderElement.innerText = "-";
       expanderElement.setAttribute("nodeid", node.id);
       expanderElement.style.visibility = "hidden";
-      parent_node.appendChild(expanderElement);
-      node._data.view.expander = expanderElement;
+      parentNode.appendChild(expanderElement);
+      node.data.view.expander = expanderElement;
     }
     if (node.topic) {
-      nodeEl.innerHTML = this._renderer(node.topic);
+      nodeEl.innerHTML = this.renderer(node.topic);
     }
     nodeEl.setAttribute("nodeid", node.id);
     nodeEl.style.visibility = "hidden";
 
-    parent_node.appendChild(nodeEl);
-    node._data.view.element = nodeEl;
+    parentNode.appendChild(nodeEl);
+    node.data.view.element = nodeEl;
   }
 
-  remove_node(node: MindNode): void {
-    if (this.selected_node != null && this.selected_node.id == node.id) {
-      this.selected_node = null;
+  removeNode(node: MindNode): void {
+    if (this.selectedNode != null && this.selectedNode.id == node.id) {
+      this.selectedNode = null;
     }
-    if (this.editing_node != null && this.editing_node.id == node.id) {
-      node._data.view.element.removeChild(this.e_editor);
-      this.editing_node = null;
+    if (this.editingNode != null && this.editingNode.id == node.id) {
+      node.data.view.element.removeChild(this.textAreaElement);
+      this.editingNode = null;
     }
     const children = node.children;
     let i = children.length;
     while (i--) {
-      this.remove_node(children[i]);
+      this.removeNode(children[i]);
     }
-    if (node._data.view) {
-      const element = node._data.view.element;
-      const expander = node._data.view.expander;
-      this.e_nodes.removeChild(element);
-      this.e_nodes.removeChild(expander);
-      node._data.view.element = null;
-      node._data.view.expander = null;
+    if (node.data.view) {
+      const element = node.data.view.element;
+      const expander = node.data.view.expander;
+      this.jmnodes.removeChild(element);
+      this.jmnodes.removeChild(expander);
+      node.data.view.element = null;
+      node.data.view.expander = null;
     }
   }
 
-  update_node(node: MindNode): void {
-    const view_data = node._data.view;
-    const element = view_data.element;
+  updateNode(node: MindNode): void {
+    const viewData = node.data.view;
+    const element = viewData.element;
     if (node.topic) {
-      element.innerHTML = this._renderer(node.topic);
+      element.innerHTML = this.renderer(node.topic);
     }
-    view_data.width = element.clientWidth;
-    view_data.height = element.clientHeight;
+    viewData.width = element.clientWidth;
+    viewData.height = element.clientHeight;
   }
 
-  select_node(node: MindNode): void {
-    if (this.selected_node) {
-      const el = this.selected_node._data.view.element;
+  selectNode(node: MindNode): void {
+    if (this.selectedNode) {
+      const el = this.selectedNode.data.view.element;
       el.classList.remove("selected");
     }
     if (node) {
-      this.selected_node = node;
-      node._data.view.element.classList.add("selected");
+      this.selectedNode = node;
+      node.data.view.element.classList.add("selected");
       this.adjustScrollBar(node);
     }
   }
 
   // Adjust the scroll bar. show node in the browser.
   adjustScrollBar(node: MindNode): void {
-    const nodeEl = node._data.view.element;
-    const panelEl = this.e_panel;
+    const nodeEl = node.data.view.element;
+    const panelEl = this.jsmindInnerElement;
     // console.debug(`select_node!
     // panelEl.scrollLeft=${panelEl.scrollLeft}
     // panelEl.clientWidth=${panelEl.clientWidth}
@@ -342,124 +342,124 @@ export default class ViewProvider {
     }
   }
 
-  select_clear(): void {
-    this.select_node(null);
+  selectClear(): void {
+    this.selectNode(null);
   }
 
   isEditing(): boolean {
-    return !!this.editing_node;
+    return !!this.editingNode;
   }
 
-  edit_node_begin(node: MindNode): void {
+  editNodeBegin(node: MindNode): void {
     if (!node.topic) {
       console.warn("don't edit image nodes");
       return;
     }
-    if (this.editing_node != null) {
-      this.edit_node_end();
+    if (this.editingNode != null) {
+      this.editNodeEnd();
     }
-    this.editing_node = node;
-    const view_data = node._data.view;
-    const element: HTMLElement = view_data.element;
+    this.editingNode = node;
+    const viewData = node.data.view;
+    const element: HTMLElement = viewData.element;
     const topic = node.topic;
-    this.e_editor.value = topic;
-    this.e_editor.style.width = "380px";
-    this.e_editor.style.height = topic.split(/\n/).length + "em";
+    this.textAreaElement.value = topic;
+    this.textAreaElement.style.width = "380px";
+    this.textAreaElement.style.height = topic.split(/\n/).length + "em";
     element.innerHTML = "";
-    element.appendChild(this.e_editor);
+    element.appendChild(this.textAreaElement);
     element.style.zIndex = "5";
-    this.e_editor.focus();
-    this.e_editor.select();
+    this.textAreaElement.focus();
+    this.textAreaElement.select();
 
     setTimeout(this.adjustEditorElementSize.bind(this), 0);
   }
 
-  edit_node_end(): void {
-    if (this.editing_node != null) {
-      const node = this.editing_node;
-      this.editing_node = null;
-      const view_data = node._data.view;
-      const element = view_data.element;
-      const topic = this.e_editor.value;
+  editNodeEnd(): void {
+    if (this.editingNode != null) {
+      const node = this.editingNode;
+      this.editingNode = null;
+      const viewData = node.data.view;
+      const element = viewData.element;
+      const topic = this.textAreaElement.value;
       element.style.zIndex = "auto";
-      element.removeChild(this.e_editor);
-      if (is_empty(topic) || node.topic === topic) {
-        element.innerHTML = this._renderer(node.topic);
+      element.removeChild(this.textAreaElement);
+      if (isEmpty(topic) || node.topic === topic) {
+        element.innerHTML = this.renderer(node.topic);
         setTimeout(() => {
-          view_data.width = element.clientWidth;
-          view_data.height = element.clientHeight;
+          viewData.width = element.clientWidth;
+          viewData.height = element.clientHeight;
           this.layout.layout();
           this.show();
         }, 0);
       } else {
-        this.jm.update_node(node.id, topic);
+        this.jm.updateNode(node.id, topic);
       }
     }
   }
 
-  get_view_offset(): { x: number; y: number } {
+  getViewOffset(): Point {
     const bounds = this.layout.bounds;
-    const _x = (this.size.w - bounds.e - bounds.w) / 2;
-    const _y = this.size.h / 2;
-    return { x: _x, y: _y };
+    const x = (this.size.w - bounds.e - bounds.w) / 2;
+    const y = this.size.h / 2;
+    return new Point(x, y);
   }
 
   // TODO remove this method?
   resize(): void {
-    this.graph.set_size(1, 1);
-    this.e_nodes.style.width = "1px";
-    this.e_nodes.style.height = "1px";
+    this.graph.setSize(1, 1);
+    this.jmnodes.style.width = "1px";
+    this.jmnodes.style.height = "1px";
 
-    this.expand_size();
-    this._show();
+    this.expandSize();
+    this.doShow();
   }
 
-  private _show(): void {
-    this.graph.set_size(this.size.w, this.size.h);
-    this.e_nodes.style.width = this.size.w + "px";
-    this.e_nodes.style.height = this.size.h + "px";
-    this.show_nodes();
-    this.show_lines();
+  private doShow(): void {
+    this.graph.setSize(this.size.w, this.size.h);
+    this.jmnodes.style.width = this.size.w + "px";
+    this.jmnodes.style.height = this.size.h + "px";
+    this.showNodes();
+    this.showLines();
     //this.layout.cache_valid = true;
-    this._eventRouter.invokeEventHandler(EventType.RESIZE, { data: [] });
+    this.eventRouter.invokeEventHandler(EventType.Resize, { data: [] });
   }
 
   centerRoot(): void {
     // center root node
-    const outer_w = this.e_panel.clientWidth;
-    const outer_h = this.e_panel.clientHeight;
-    if (this.size.w > outer_w) {
-      const _offset = this.get_view_offset();
-      this.e_panel.scrollLeft = _offset.x - outer_w / 2;
+    const outerW = this.jsmindInnerElement.clientWidth;
+    const outerH = this.jsmindInnerElement.clientHeight;
+    if (this.size.w > outerW) {
+      const offset = this.getViewOffset();
+      this.jsmindInnerElement.scrollLeft = offset.x - outerW / 2;
     }
-    if (this.size.h > outer_h) {
-      this.e_panel.scrollTop = (this.size.h - outer_h) / 2;
+    if (this.size.h > outerH) {
+      this.jsmindInnerElement.scrollTop = (this.size.h - outerH) / 2;
     }
   }
 
   show(): void {
     console.debug("view.show");
-    this.expand_size();
-    this._show();
+    this.expandSize();
+    this.doShow();
   }
 
-  save_location(node: MindNode): void {
-    const vd = node._data.view;
-    vd._saved_location = {
-      x: parseInt(vd.element.style.left) - this.e_panel.scrollLeft,
-      y: parseInt(vd.element.style.top) - this.e_panel.scrollTop,
-    };
+  saveLocation(node: MindNode): void {
+    const vd = node.data.view;
+    vd.savedLocation = new Point(
+      parseInt(vd.element.style.left) - this.jsmindInnerElement.scrollLeft,
+      parseInt(vd.element.style.top) - this.jsmindInnerElement.scrollTop
+    );
   }
 
-  restore_location(node: MindNode): void {
-    const vd = node._data.view;
-    this.e_panel.scrollLeft =
-      parseInt(vd.element.style.left) - vd._saved_location.x;
-    this.e_panel.scrollTop =
-      parseInt(vd.element.style.top) - vd._saved_location.y;
+  restoreLocation(node: MindNode): void {
+    const vd = node.data.view;
+    this.jsmindInnerElement.scrollLeft =
+      parseInt(vd.element.style.left) - vd.savedLocation.x;
+    this.jsmindInnerElement.scrollTop =
+      parseInt(vd.element.style.top) - vd.savedLocation.y;
   }
 
-  clear_nodes(): void {
+  clearNodes(): void {
     const mind = this.jm.mind;
     if (mind == null) {
       return;
@@ -468,46 +468,46 @@ export default class ViewProvider {
     let node = null;
     for (const nodeid in nodes) {
       node = nodes[nodeid];
-      node._data.view.element = null;
-      node._data.view.expander = null;
+      node.data.view.element = null;
+      node.data.view.expander = null;
     }
-    this.e_nodes.innerHTML = "";
+    this.jmnodes.innerHTML = "";
   }
 
-  show_nodes(): void {
+  showNodes(): void {
     const nodes = this.jm.mind.nodes;
     let node = null;
-    let node_element = null;
+    let nodeElement = null;
     let expander = null;
-    let p_expander = null;
-    let expander_text = "-";
-    let view_data = null;
-    const _offset = this.get_view_offset();
+    let expanderPoint = null;
+    let expanderText = "-";
+    let viewData = null;
+    const offset = this.getViewOffset();
     for (const nodeid in nodes) {
       node = nodes[nodeid];
-      view_data = node._data.view;
-      node_element = view_data.element;
-      expander = view_data.expander;
-      if (!node._data.layout.visible) {
-        node_element.style.display = "none";
+      viewData = node.data.view;
+      nodeElement = viewData.element;
+      expander = viewData.expander;
+      if (!node.data.layout.visible) {
+        nodeElement.style.display = "none";
         expander.style.display = "none";
         continue;
       }
-      const p = this.layout.get_node_point(node);
-      view_data.abs_x = _offset.x + p.x;
-      view_data.abs_y = _offset.y + p.y;
-      node_element.style.left = _offset.x + p.x + "px";
-      node_element.style.top = _offset.y + p.y + "px";
-      node_element.style.display = "";
-      node_element.style.visibility = "visible";
+      const p = this.layout.getNodePoint(node);
+      viewData.absX = offset.x + p.x;
+      viewData.absY = offset.y + p.y;
+      nodeElement.style.left = offset.x + p.x + "px";
+      nodeElement.style.top = offset.y + p.y + "px";
+      nodeElement.style.display = "";
+      nodeElement.style.visibility = "visible";
       if (!node.isroot && node.children.length > 0) {
-        expander_text = node.expanded ? "-" : "+";
-        p_expander = this.layout.get_expander_point(node);
-        expander.style.left = _offset.x + p_expander.x + "px";
-        expander.style.top = _offset.y + p_expander.y + "px";
+        expanderText = node.expanded ? "-" : "+";
+        expanderPoint = this.layout.getExpanderPoint(node);
+        expander.style.left = offset.x + expanderPoint.x + "px";
+        expander.style.top = offset.y + expanderPoint.y + "px";
         expander.style.display = "";
         expander.style.visibility = "visible";
-        expander.innerText = expander_text;
+        expander.innerText = expanderText;
       }
       // hide expander while all children have been removed
       if (!node.isroot && node.children.length == 0) {
@@ -516,24 +516,25 @@ export default class ViewProvider {
       }
     }
   }
-  show_lines(): void {
+
+  showLines(): void {
     this.graph.clear();
     const nodes = this.jm.mind.nodes;
-    let node = null;
-    let pin = null;
-    let pout = null;
-    const _offset = this.get_view_offset();
+    let node = null; // TODO make this const
+    let pin = null; // TODO make this const
+    let pout = null; // TODO make this const
+    const offset = this.getViewOffset();
     for (const nodeid in nodes) {
       node = nodes[nodeid];
       if (node.isroot) {
         continue;
       }
-      if ("visible" in node._data.layout && !node._data.layout.visible) {
+      if ("visible" in node.data.layout && !node.data.layout.visible) {
         continue;
       }
-      pin = this.layout.get_node_point_in(node);
+      pin = this.layout.getNodePointIn(node);
       pout = this.layout.getNodePointOut(node.parent);
-      this.graph.draw_line(pout, pin, _offset);
+      this.graph.drawLine(pout, pin, offset);
     }
   }
 }

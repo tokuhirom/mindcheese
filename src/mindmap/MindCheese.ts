@@ -18,7 +18,7 @@ import ShortcutHandlers from "./ShortcutHandlers";
 import EventRouter from "./EventRouter";
 import GraphCanvas from "./GraphCanvas";
 
-function is_empty(s: string) {
+function isEmpty(s: string) {
   if (!s) {
     return true;
   }
@@ -31,8 +31,8 @@ const DEFAULT_OPTIONS: any = {
   view: {
     hmargin: 100,
     vmargin: 50,
-    line_width: 2,
-    line_color: "#555",
+    lineWidth: 2,
+    lineColor: "#555",
   },
   layout: {
     hspace: 30,
@@ -68,13 +68,13 @@ export default class MindCheese {
   shortcut: ShortcutProvider;
   draggable: Draggable;
   private readonly id: number;
-  private undo_manager: UndoManager;
-  private readonly event_router: EventRouter;
-  private _editable: boolean;
-  private readonly _container: HTMLElement;
+  private undoManager: UndoManager;
+  private readonly eventRouter: EventRouter;
+  private editable: boolean;
+  private readonly container: HTMLElement;
 
   constructor(id: number, container: HTMLElement, options: any = {}) {
-    this._container = container;
+    this.container = container;
 
     let opts = Object.assign({}, DEFAULT_OPTIONS);
     opts = Object.assign(opts, options);
@@ -82,8 +82,8 @@ export default class MindCheese {
     this.inited = false;
     this.mind = null; // TODO original では null が入っていた
     this.id = id;
-    this.event_router = new EventRouter();
-    this._editable = true;
+    this.eventRouter = new EventRouter();
+    this.editable = true;
     this.init();
   }
 
@@ -99,7 +99,7 @@ export default class MindCheese {
     this.data = new DataProvider();
     this.layout = new LayoutProvider(
       this,
-      this.event_router,
+      this.eventRouter,
       opts.layout.hspace,
       opts.layout.vspace,
       opts.layout.pspace
@@ -107,8 +107,8 @@ export default class MindCheese {
     const graph = new GraphCanvas(opts.view.line_color, opts.view.line_width);
     this.view = new ViewProvider(
       this,
-      this.event_router,
-      this._container,
+      this.eventRouter,
+      this.container,
       opts.view.hmargin,
       opts.view.vmargin,
       graph
@@ -118,47 +118,47 @@ export default class MindCheese {
       opts.shortcut.enable,
       opts.shortcut.mappings
     );
-    this.draggable = new Draggable(this, this.event_router);
-    this.undo_manager = new UndoManager(this);
+    this.draggable = new Draggable(this, this.eventRouter);
+    this.undoManager = new UndoManager(this);
 
     this.layout.init();
     this.view.init();
     this.shortcut.init();
-    this.draggable.init(this._container);
-    this.undo_manager.init();
+    this.draggable.init(this.container);
+    this.undoManager.init();
 
-    this._event_bind();
+    this.bindEvent();
   }
 
-  enable_edit(): void {
-    this._editable = true;
+  enableEdit(): void {
+    this.editable = true;
   }
 
-  disable_edit(): void {
-    this._editable = false;
+  disableEdit(): void {
+    this.editable = false;
   }
 
   isEditable(): boolean {
-    return this._editable;
+    return this.editable;
   }
 
-  set_theme(theme: string): void {
-    const theme_old = this.options.theme;
+  setTheme(theme: string): void {
+    const themeOld = this.options.theme;
     this.options.theme = theme ? theme : null;
-    if (theme_old !== this.options.theme) {
-      this.view.reset_theme();
+    if (themeOld !== this.options.theme) {
+      this.view.resetTheme();
     }
   }
 
-  _event_bind(): void {
-    this.view.e_nodes.addEventListener(
+  private bindEvent(): void {
+    this.view.jmnodes.addEventListener(
       "mousedown",
-      this.mousedown_handle.bind(this)
+      this.mousedownHandle.bind(this)
     );
-    this.view.e_nodes.addEventListener("click", this.click_handle.bind(this));
-    this.view.e_nodes.addEventListener(
+    this.view.jmnodes.addEventListener("click", this.clickHandle.bind(this));
+    this.view.jmnodes.addEventListener(
       "dblclick",
-      this.dblclick_handle.bind(this)
+      this.dblclickHandle.bind(this)
     );
     window.addEventListener("resize", () => {
       this.resize();
@@ -166,125 +166,125 @@ export default class MindCheese {
     });
   }
 
-  mousedown_handle(e: Event): void {
+  mousedownHandle(e: Event): void {
     const element = e.target as HTMLElement;
-    const nodeid = this.view.get_binded_nodeid(element);
+    const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
       if (element.tagName.toLowerCase() === "jmnode") {
-        const the_node = this.getNodeById(nodeid);
-        if (!the_node) {
+        const theNode = this.getNodeById(nodeid);
+        if (!theNode) {
           console.error("the node[id=" + nodeid + "] can not be found.");
           return;
         } else {
-          return this.select_node(the_node);
+          return this.selectNode(theNode);
         }
       }
     } else {
-      this.select_clear();
+      this.selectClear();
     }
   }
 
-  click_handle(e: Event): void {
+  clickHandle(e: Event): void {
     const element = e.target as HTMLElement;
-    const isexpander = this.view.is_expander(element);
+    const isexpander = this.view.isExpander(element);
     if (isexpander) {
-      const nodeid = this.view.get_binded_nodeid(element);
+      const nodeid = this.view.getBindedNodeId(element);
       if (nodeid) {
-        const the_node = this.getNodeById(nodeid);
-        if (!the_node) {
+        const theNode = this.getNodeById(nodeid);
+        if (!theNode) {
           console.error("the node[id=" + nodeid + "] can not be found.");
           return;
         } else {
-          return this.toggle_node(the_node);
+          return this.toggleNode(theNode);
         }
       }
     }
   }
 
-  dblclick_handle(e: Event): void {
+  dblclickHandle(e: Event): void {
     if (!this.isEditable()) {
       console.warn("The mindmap is not editable now.");
       return;
     }
 
     const element = e.target as HTMLElement;
-    const nodeid = this.view.get_binded_nodeid(element);
+    const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
       if (nodeid) {
-        const the_node = this.getNodeById(nodeid);
+        const theNode = this.getNodeById(nodeid);
 
-        if (!the_node) {
+        if (!theNode) {
           throw new Error(`the node[id=${nodeid}] can not be found.`);
         }
 
-        return this.begin_edit(the_node);
+        return this.beginEdit(theNode);
       }
     }
   }
 
-  begin_edit(node: MindNode): void {
+  beginEdit(node: MindNode): void {
     if (this.isEditable()) {
-      this.view.edit_node_begin(node);
+      this.view.editNodeBegin(node);
     } else {
       console.error("fail, this mind map is not editable.");
     }
   }
 
-  end_edit(): void {
-    this.view.edit_node_end();
+  endEdit(): void {
+    this.view.editNodeEnd();
   }
 
-  toggle_node(node: MindNode): void {
+  toggleNode(node: MindNode): void {
     if (node.isroot) {
       return;
     }
-    this.view.save_location(node);
-    this.layout.toggle_node(node);
+    this.view.saveLocation(node);
+    this.layout.toggleNode(node);
     this.view.show();
-    this.view.restore_location(node);
+    this.view.restoreLocation(node);
   }
 
-  expand_node(node: MindNode): void {
+  expandNode(node: MindNode): void {
     if (node.isroot) {
       return;
     }
-    this.view.save_location(node);
-    this.layout.expand_node(node);
+    this.view.saveLocation(node);
+    this.layout.expandNode(node);
     this.view.show();
-    this.view.restore_location(node);
+    this.view.restoreLocation(node);
   }
 
-  collapse_node(node: MindNode): void {
+  collapseNode(node: MindNode): void {
     if (node.isroot) {
       return;
     }
-    this.view.save_location(node);
-    this.layout.collapse_node(node);
+    this.view.saveLocation(node);
+    this.layout.collapseNode(node);
     this.view.show();
-    this.view.restore_location(node);
+    this.view.restoreLocation(node);
   }
 
-  expand_all(): void {
-    this.layout.expand_all();
-    this.view.show();
-  }
-
-  collapse_all(): void {
-    this.layout.collapse_all();
+  expandAll(): void {
+    this.layout.expandAll();
     this.view.show();
   }
 
-  expand_to_depth(depth: number): void {
-    this.layout.expand_to_depth(depth, null, null);
+  collapseAll(): void {
+    this.layout.collapseAll();
     this.view.show();
   }
 
-  _reset(): void {
+  expandToDepth(depth: number): void {
+    this.layout.expandToDepth(depth, null, null);
+    this.view.show();
+  }
+
+  private doReset(): void {
     this.view.reset();
     this.layout.reset();
   }
 
-  _show(format: string, mind: any): void {
+  private doShow(format: string, mind: any): void {
     this.mind = this.data.load(format, mind);
     if (!this.mind) {
       throw new Error("data.load error");
@@ -294,16 +294,16 @@ export default class MindCheese {
     this.layout.layout();
     this.view.show();
     this.view.centerRoot();
-    this.event_router.invokeEventHandler(EventType.SHOW, { data: [mind] });
+    this.eventRouter.invokeEventHandler(EventType.Show, { data: [mind] });
   }
 
   show(format: string, mind: any): void {
-    this._reset();
-    this._show(format, mind);
+    this.doReset();
+    this.doShow(format, mind);
   }
 
-  getData(data_format: string): any {
-    return this.data.getData(data_format, this.mind);
+  getData(dataFormat: string): any {
+    return this.data.getData(dataFormat, this.mind);
   }
 
   getRoot(): MindNode {
@@ -314,8 +314,8 @@ export default class MindCheese {
     return this.mind.getNodeById(nodeid);
   }
 
-  add_node(
-    parent_node: MindNode,
+  addNode(
+    parentNode: MindNode,
     nodeid: string,
     topic: string
   ): null | MindNode {
@@ -324,35 +324,28 @@ export default class MindCheese {
       return null;
     }
 
-    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
       evt: "add_node",
-      data: [parent_node.id, nodeid, topic],
+      data: [parentNode.id, nodeid, topic],
       node: nodeid,
     });
-    const node = this.mind.add_node(
-      parent_node,
-      nodeid,
-      topic,
-      null,
-      null,
-      true
-    );
+    const node = this.mind.addNode(parentNode, nodeid, topic, null, null, true);
     if (node) {
       this.view.addNode(node);
       this.layout.layout();
       this.view.show();
-      this.expand_node(parent_node);
-      this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
+      this.expandNode(parentNode);
+      this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
         evt: "add_node",
-        data: [parent_node.id, nodeid, topic],
+        data: [parentNode.id, nodeid, topic],
         node: nodeid,
       });
     }
     return node;
   }
 
-  insert_node_before(
-    node_before: MindNode,
+  insertNodeBefore(
+    nodeBefore: MindNode,
     nodeid: string,
     topic: string
   ): null | MindNode {
@@ -361,27 +354,27 @@ export default class MindCheese {
       return null;
     }
 
-    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
       evt: "insert_node_before",
-      data: [node_before.id, nodeid, topic],
+      data: [nodeBefore.id, nodeid, topic],
       node: nodeid,
     });
-    const node = this.mind.insert_node_before(node_before, nodeid, topic);
+    const node = this.mind.insertNodeBefore(nodeBefore, nodeid, topic);
     if (node) {
       this.view.addNode(node);
       this.layout.layout();
       this.view.show();
-      this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
+      this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
         evt: "insert_node_before",
-        data: [node_before.id, nodeid, topic],
+        data: [nodeBefore.id, nodeid, topic],
         node: nodeid,
       });
     }
     return node;
   }
 
-  insert_node_after(
-    node_after: MindNode,
+  insertNodeAfter(
+    nodeAfter: MindNode,
     nodeid: string,
     topic: string
   ): MindNode | null {
@@ -390,26 +383,26 @@ export default class MindCheese {
       return null;
     }
 
-    const node = this.mind.insert_node_after(node_after, nodeid, topic);
+    const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
     if (node) {
-      this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
+      this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
         evt: "insert_node_after",
-        data: [node_after.id, nodeid, topic],
+        data: [nodeAfter.id, nodeid, topic],
         node: nodeid,
       });
       this.view.addNode(node);
       this.layout.layout();
       this.view.show();
-      this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
+      this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
         evt: "insert_node_after",
-        data: [node_after.id, nodeid, topic],
+        data: [nodeAfter.id, nodeid, topic],
         node: nodeid,
       });
     }
     return node;
   }
 
-  remove_node(node: MindNode): boolean {
+  removeNode(node: MindNode): boolean {
     if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return false;
@@ -421,28 +414,28 @@ export default class MindCheese {
     }
 
     const nodeid = node.id;
-    const parent_node = node.parent;
+    const parentNode = node.parent;
     const parentid = node.parent.id;
-    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
       evt: "remove_node",
       data: [nodeid],
       node: parentid,
     });
     const nextSelectedNode = this.findUpperBrotherOrParentNode(
-      parent_node,
+      parentNode,
       nodeid
     );
-    this.view.save_location(parent_node);
-    this.view.remove_node(node);
+    this.view.saveLocation(parentNode);
+    this.view.removeNode(node);
     this.mind.removeNode(node);
     this.layout.layout();
     this.view.show();
-    if (parent_node.children.length > 0) {
+    if (parentNode.children.length > 0) {
       this.mind.selected = nextSelectedNode;
-      this.view.select_node(nextSelectedNode);
+      this.view.selectNode(nextSelectedNode);
     }
-    this.view.restore_location(parent_node);
-    this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
+    this.view.restoreLocation(parentNode);
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
       evt: "remove_node",
       data: [nodeid],
       node: parentid,
@@ -451,30 +444,30 @@ export default class MindCheese {
   }
 
   private findUpperBrotherOrParentNode(
-    parent_node: MindNode,
-    target_node_id: string
+    parentNode: MindNode,
+    targetNodeId: string
   ) {
-    const children = parent_node.children;
+    const children = parentNode.children;
     for (let i = 0; i < children.length; i++) {
-      if (children[i].id == target_node_id) {
+      if (children[i].id == targetNodeId) {
         if (i == 0) {
-          return parent_node;
+          return parentNode;
         } else {
           return children[i - 1];
         }
       }
     }
-    return parent_node; // return
+    return parentNode; // return
   }
 
   // set topic to the node
-  update_node(nodeid: string, topic: string): void {
+  updateNode(nodeid: string, topic: string): void {
     if (!this.isEditable()) {
       console.error("fail, this mind map is not editable");
       return;
     }
 
-    if (is_empty(topic)) {
+    if (isEmpty(topic)) {
       console.warn("fail, topic can not be empty");
       return;
     }
@@ -485,21 +478,21 @@ export default class MindCheese {
       return;
     }
 
-    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
       evt: "update_node",
       data: [nodeid, topic],
       node: nodeid,
     });
     if (node.topic === topic) {
       console.info("nothing changed");
-      this.view.update_node(node);
+      this.view.updateNode(node);
       return;
     }
     node.topic = topic;
-    this.view.update_node(node);
+    this.view.updateNode(node);
     this.layout.layout();
     this.view.show();
-    this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
       evt: "update_node",
       data: [nodeid, topic],
       node: nodeid,
@@ -512,7 +505,7 @@ export default class MindCheese {
    * @param parent
    * @param direction
    */
-  move_node(
+  moveNode(
     node: MindNode,
     beforeid: string,
     parent: MindNode,
@@ -526,36 +519,36 @@ export default class MindCheese {
       return;
     }
 
-    this.event_router.invokeEventHandler(EventType.BEFORE_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
       evt: "move_node",
       data: [node.id, beforeid, parent.id, direction],
       node: node.id,
     });
-    this.mind.move_node(node, beforeid, parent, direction);
-    this.view.update_node(node);
+    this.mind.moveNode(node, beforeid, parent, direction);
+    this.view.updateNode(node);
     this.layout.layout();
     this.view.show();
-    this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
       evt: "move_node",
       data: [node.id, beforeid, parent.id, direction],
       node: node.id,
     });
   }
 
-  select_node(node: MindNode): void {
-    if (!node._data.layout.visible) {
+  selectNode(node: MindNode): void {
+    if (!node.data.layout.visible) {
       return;
     }
     this.mind.selected = node;
-    this.view.select_node(node);
-    this.event_router.invokeEventHandler(EventType.SELECT, {
+    this.view.selectNode(node);
+    this.eventRouter.invokeEventHandler(EventType.Select, {
       evt: "select_node",
       data: [],
       node: node.id,
     });
   }
 
-  get_selected_node(): MindNode {
+  getSelectedNode(): MindNode {
     if (this.mind) {
       return this.mind.selected;
     } else {
@@ -563,10 +556,10 @@ export default class MindCheese {
     }
   }
 
-  select_clear(): void {
+  selectClear(): void {
     if (this.mind) {
       this.mind.selected = null;
-      this.view.select_clear();
+      this.view.selectClear();
     }
   }
 
@@ -591,7 +584,7 @@ export default class MindCheese {
       }
       throw new Error(`Missing the node in parent: ${node.id}`);
     } else {
-      return this.mind.get_node_before(node);
+      return this.mind.getNodeBefore(node);
     }
   }
 
@@ -618,7 +611,7 @@ export default class MindCheese {
         `Illegal state. The parent node doesn't have this child: ${node.id}`
       );
     } else {
-      return this.mind.get_node_after(node);
+      return this.mind.getNodeAfter(node);
     }
   }
 
@@ -627,18 +620,15 @@ export default class MindCheese {
     this.view.resize();
   }
 
-  add_event_listener(
-    eventType: EventType,
-    callback: (data: any) => void
-  ): void {
-    this.event_router.addEventListener(eventType, callback);
+  addEventListener(eventType: EventType, callback: (data: any) => void): void {
+    this.eventRouter.addEventListener(eventType, callback);
   }
 
   undo(): void {
-    this.undo_manager.undo();
+    this.undoManager.undo();
   }
 
-  move_up(node: MindNode): void {
+  moveUp(node: MindNode): void {
     /*
     as-is:
       - a
@@ -652,12 +642,12 @@ export default class MindCheese {
      */
     const upNode = this.findNodeBefore(node);
     if (upNode) {
-      this.move_node(node, upNode.id, node.parent, node.direction);
+      this.moveNode(node, upNode.id, node.parent, node.direction);
       return;
     }
   }
 
-  move_down(node: MindNode) {
+  moveDown(node: MindNode) {
     const children = node.parent.children.filter(
       (it) => it.direction === node.direction
     );
@@ -679,7 +669,7 @@ export default class MindCheese {
            *     - c = 2
            *     - b = LAST
            */
-          this.move_node(node, BEFOREID_LAST, node.parent, node.direction);
+          this.moveNode(node, BEFOREID_LAST, node.parent, node.direction);
           return; // Put on last element.
         } else {
           /*
@@ -700,7 +690,7 @@ export default class MindCheese {
               children[i + 1].topic
             } direction=${node.direction}`
           );
-          this.move_node(node, children[i + 2].id, node.parent, node.direction);
+          this.moveNode(node, children[i + 2].id, node.parent, node.direction);
           console.log(this.mind);
           return;
         }

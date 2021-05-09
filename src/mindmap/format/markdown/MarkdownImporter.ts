@@ -4,13 +4,14 @@ import NodeTreeImporter from "../node_tree/NodeTreeImporter";
 import { convertMD2MM } from "../../../MD2MMConverter";
 
 export default class MarkdownImporter implements MindmapImporter {
-  private node_tree_importer: NodeTreeImporter;
+  private readonly nodeTreeImporter: NodeTreeImporter;
+
   constructor() {
-    this.node_tree_importer = new NodeTreeImporter();
+    this.nodeTreeImporter = new NodeTreeImporter();
   }
 
-  get_mind(source: any): Mind {
+  getMind(source: any): Mind {
     const tree = convertMD2MM(source.title, source.markdown);
-    return this.node_tree_importer.get_mind(tree);
+    return this.nodeTreeImporter.getMind(tree);
   }
 }

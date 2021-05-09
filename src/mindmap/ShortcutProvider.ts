@@ -37,11 +37,11 @@ export default class ShortcutProvider {
     document.addEventListener("keydown", this.handler.bind(this));
   }
 
-  enable_shortcut(): void {
+  enableShortcut(): void {
     this.enable = true;
   }
 
-  disable_shortcut(): void {
+  disableShortcut(): void {
     this.enable = false;
   }
 
@@ -76,13 +76,13 @@ export default class ShortcutProvider {
   }
 
   private compileHandlers(
-    new_handlers: [number, string, (jm: MindCheese, e: Event) => boolean][]
+    handlers: [number, string, (jm: MindCheese, e: Event) => boolean][]
   ): Record<string, [number, (jm: MindCheese, e: Event) => boolean][]> {
     const result: Record<
       string,
       [number, (jm: MindCheese, e: Event) => boolean][]
     > = {};
-    new_handlers.forEach((it) => {
+    handlers.forEach((it) => {
       const [flags, keyString, code] = it;
       if (!result[keyString]) {
         result[keyString] = [];

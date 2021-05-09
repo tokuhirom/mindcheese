@@ -28,11 +28,11 @@ export default class Mind {
     }
 
     this.root = new MindNode(nodeid, 0, topic, true, null, null, true);
-    this._putNode(this.root);
+    this.putNode(this.root);
   }
 
-  add_node(
-    parent_node: MindNode,
+  addNode(
+    parentNode: MindNode,
     nodeid: string,
     topic: string,
     idx: number,
@@ -45,20 +45,20 @@ export default class Mind {
       // TODO remove this
       expanded = true;
     }
-    if (parent_node.isroot) {
+    if (parentNode.isroot) {
       let d;
       if (direction == null) {
-        const children = parent_node.children;
-        const children_len = children.length;
+        const children = parentNode.children;
+        const childrenLength = children.length;
         let r = 0;
-        for (let i = 0; i < children_len; i++) {
+        for (let i = 0; i < childrenLength; i++) {
           if (children[i].direction === Direction.LEFT) {
             r--;
           } else {
             r++;
           }
         }
-        d = children_len > 1 && r > 0 ? Direction.LEFT : Direction.RIGHT;
+        d = childrenLength > 1 && r > 0 ? Direction.LEFT : Direction.RIGHT;
       } else {
         d = direction === Direction.LEFT ? Direction.LEFT : Direction.RIGHT;
       }
@@ -70,7 +70,7 @@ export default class Mind {
         nodeindex,
         topic,
         false,
-        parent_node,
+        parentNode,
         d,
         expanded
       );
@@ -80,36 +80,36 @@ export default class Mind {
         nodeindex,
         topic,
         false,
-        parent_node,
-        parent_node.direction,
+        parentNode,
+        parentNode.direction,
         expanded
       );
     }
 
-    this._putNode(node);
-    parent_node.children.push(node);
-    this._reindex(parent_node);
+    this.putNode(node);
+    parentNode.children.push(node);
+    this.reindex(parentNode);
 
     return node;
   }
 
-  insert_node_before(
-    node_before: MindNode,
+  insertNodeBefore(
+    nodeBefore: MindNode,
     nodeid: string,
     topic: string
   ): MindNode {
-    const node_index = node_before.index - 0.5;
-    return this.add_node(
-      node_before.parent,
+    const nodeIndex = nodeBefore.index - 0.5;
+    return this.addNode(
+      nodeBefore.parent,
       nodeid,
       topic,
-      node_index,
+      nodeIndex,
       null,
       true
     );
   }
 
-  get_node_before(node: MindNode): MindNode {
+  getNodeBefore(node: MindNode): MindNode {
     if (node.isroot) {
       return null;
     }
@@ -123,24 +123,24 @@ export default class Mind {
   }
 
   // add little brother node.
-  insert_node_after(
-    node_after: MindNode,
+  insertNodeAfter(
+    nodeAfter: MindNode,
     nodeid: string,
     topic: string
   ): MindNode {
-    const node_index = node_after.index + 0.5;
+    const nodeIndex = nodeAfter.index + 0.5;
     // follow current direction.
-    return this.add_node(
-      node_after.parent,
+    return this.addNode(
+      nodeAfter.parent,
       nodeid,
       topic,
-      node_index,
-      node_after.direction,
+      nodeIndex,
+      nodeAfter.direction,
       true
     );
   }
 
-  get_node_after(node: MindNode): MindNode {
+  getNodeAfter(node: MindNode): MindNode {
     if (node.isroot) {
       return null;
     }
@@ -153,7 +153,7 @@ export default class Mind {
     }
   }
 
-  move_node(
+  moveNode(
     node: MindNode,
     beforeid: string,
     parent: MindNode,
@@ -161,10 +161,10 @@ export default class Mind {
   ): void {
     console.assert(node instanceof MindNode, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parent.id} ${direction}`);
-    this._move_node(node, beforeid, parent, direction);
+    this.doMoveNode(node, beforeid, parent, direction);
   }
 
-  private _flow_node_direction(node: MindNode, direction: Direction): void {
+  private flowNodeDirection(node: MindNode, direction: Direction): void {
     if (typeof direction === "undefined") {
       direction = node.direction;
     } else {
@@ -172,18 +172,18 @@ export default class Mind {
     }
     let len = node.children.length;
     while (len--) {
-      this._flow_node_direction(node.children[len], direction);
+      this.flowNodeDirection(node.children[len], direction);
     }
   }
 
-  private _move_node_internal(node: MindNode, beforeid: string): MindNode {
+  private moveNodeInternal(node: MindNode, beforeid: string): MindNode {
     if (!!node && !!beforeid) {
       if (beforeid === BEFOREID_LAST) {
         node.index = -1;
-        this._reindex(node.parent);
+        this.reindex(node.parent);
       } else if (beforeid === BEFOREID_FIRST) {
         node.index = 0;
-        this._reindex(node.parent);
+        this.reindex(node.parent);
       } else {
         /*
          * Before:
@@ -194,14 +194,14 @@ export default class Mind {
          *   - A <- node     = 3-0.5=2.5
          *   - B <- beforeid = 3
          */
-        const node_before = beforeid ? this.getNodeById(beforeid) : null;
+        const nodeBefore = beforeid ? this.getNodeById(beforeid) : null;
         if (
-          node_before != null &&
-          node_before.parent != null &&
-          node_before.parent.id === node.parent.id
+          nodeBefore != null &&
+          nodeBefore.parent != null &&
+          nodeBefore.parent.id === node.parent.id
         ) {
-          node.index = node_before.index - 0.5;
-          this._reindex(node.parent);
+          node.index = nodeBefore.index - 0.5;
+          this.reindex(node.parent);
         } else {
           console.error(`Missing node_before: ${beforeid}`);
         }
@@ -210,7 +210,7 @@ export default class Mind {
     return node;
   }
 
-  private _move_node(
+  private doMoveNode(
     node: MindNode,
     beforeid: string,
     parent: MindNode,
@@ -242,8 +242,8 @@ export default class Mind {
       } else {
         node.direction = node.parent.direction;
       }
-      this._move_node_internal(node, beforeid);
-      this._flow_node_direction(node, direction);
+      this.moveNodeInternal(node, beforeid);
+      this.flowNodeDirection(node, direction);
     }
   }
 
@@ -281,7 +281,7 @@ export default class Mind {
     return true;
   }
 
-  private _putNode(node: MindNode): void {
+  private putNode(node: MindNode): void {
     if (node.id in this.nodes) {
       throw new Error("the nodeid '" + node.id + "' has been already exist.");
     }
@@ -289,7 +289,7 @@ export default class Mind {
     this.nodes[node.id] = node;
   }
 
-  private _reindex(node: MindNode): void {
+  private reindex(node: MindNode): void {
     console.debug(
       `Before Mind._reindex: ` +
         node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")

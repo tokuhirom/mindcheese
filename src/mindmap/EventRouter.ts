@@ -1,13 +1,10 @@
 import { EventType } from "./MindmapConstants";
 
 export default class EventRouter {
-  private readonly event_handles_map: Record<
-    EventType,
-    ((data: any) => void)[]
-  >;
+  private readonly eventHandlersMap: Record<EventType, ((data: any) => void)[]>;
 
   constructor() {
-    this.event_handles_map = {
+    this.eventHandlersMap = {
       "1": [],
       "2": [],
       "3": [],
@@ -17,13 +14,13 @@ export default class EventRouter {
   }
 
   addEventListener(eventType: EventType, callback: (data: any) => void): void {
-    this.event_handles_map[eventType].push(callback);
+    this.eventHandlersMap[eventType].push(callback);
   }
 
   invokeEventHandler(type: EventType, data: any): void {
-    const l = this.event_handles_map[type].length;
+    const l = this.eventHandlersMap[type].length;
     for (let i = 0; i < l; i++) {
-      this.event_handles_map[type][i](data);
+      this.eventHandlersMap[type][i](data);
     }
   }
 }

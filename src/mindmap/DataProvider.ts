@@ -17,32 +17,32 @@ class DataFormat {
   getData(mind: Mind): any {
     return this.exporter.getData(mind);
   }
-  get_mind(source: any): Mind {
-    return this.importer.get_mind(source);
+  getMind(source: any): Mind {
+    return this.importer.getMind(source);
   }
 }
 
 export default class DataProvider {
-  private readonly format_map: Record<string, DataFormat>;
+  private readonly formatMap: Record<string, DataFormat>;
 
   constructor() {
-    this.format_map = {
-      node_tree: new DataFormat(new NodeTreeImporter(), new NodeTreeExporter()),
+    this.formatMap = {
+      nodeTree: new DataFormat(new NodeTreeImporter(), new NodeTreeExporter()),
       markdown: new DataFormat(new MarkdownImporter(), new MarkdownExporter()),
     };
   }
 
-  load(format: string, mind_data: any): Mind {
-    const data_format = this.format_map[format];
-    return data_format.get_mind(mind_data);
+  load(format: string, mindData: any): Mind {
+    const dataFormat = this.formatMap[format];
+    return dataFormat.getMind(mindData);
   }
 
   getData(format: string, mind: Mind): any {
-    const data_format = this.format_map[format];
-    if (data_format) {
-      return data_format.getData(mind);
+    const dataFormat = this.formatMap[format];
+    if (dataFormat) {
+      return dataFormat.getData(mind);
     } else {
-      throw new Error(`Unknown format: ${data_format}`);
+      throw new Error(`Unknown format: ${dataFormat}`);
     }
   }
 }

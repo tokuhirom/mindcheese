@@ -24,79 +24,77 @@ import {
   EventType,
 } from "./MindmapConstants";
 import EventRouter from "./EventRouter";
+import { Point } from "./LayoutProvider";
 
 export default class Draggable {
   private jm: MindCheese;
-  private e_canvas: HTMLCanvasElement;
-  private canvas_ctx: CanvasRenderingContext2D;
+  private canvasElement: HTMLCanvasElement;
+  private canvasContext: CanvasRenderingContext2D;
   private shadow: HTMLElement;
-  private shadow_w: number;
-  private shadow_h: number;
-  private active_node: MindNode;
-  private target_node: MindNode;
-  private target_direct: Direction;
-  private client_w: number;
-  private client_h: number;
-  private offset_x: number;
-  private offset_y: number;
-  private hlookup_delay: number;
-  private hlookup_timer: number;
+  private shadowW: number;
+  private shadowH: number;
+  private activeNode: MindNode;
+  private targetNode: MindNode;
+  private targetDirect: Direction;
+  private clientW: number;
+  private clientH: number;
+  private offsetX: number;
+  private offsetY: number;
+  private hlookupDelay: number;
+  private hlookupTimer: number;
   private capture: boolean;
   private moved: boolean;
-  private client_hw: number;
-  private client_hh: number;
-  private readonly line_width = 5;
-  private readonly lookup_delay = 500;
-  private readonly lookup_interval = 80;
-  private readonly _eventRouter: EventRouter;
+  private clientHW: number;
+  private clientHH: number;
+  private readonly lineWidth = 5;
+  private readonly lookupDelay = 500;
+  private readonly lookupInterval = 80;
+  private readonly eventRouter: EventRouter;
 
   constructor(jm: MindCheese, eventRouter: EventRouter) {
     this.jm = jm;
-    this._eventRouter = eventRouter;
-    this.e_canvas = null;
-    this.canvas_ctx = null;
+    this.eventRouter = eventRouter;
+    this.canvasElement = null;
+    this.canvasContext = null;
     this.shadow = null;
-    this.shadow_w = 0;
-    this.shadow_h = 0;
-    this.active_node = null;
-    this.target_node = null;
-    this.target_direct = null;
-    this.client_w = 0;
-    this.client_h = 0;
-    this.offset_x = 0;
-    this.offset_y = 0;
-    this.hlookup_delay = 0;
-    this.hlookup_timer = 0;
+    this.shadowW = 0;
+    this.shadowH = 0;
+    this.activeNode = null;
+    this.targetNode = null;
+    this.targetDirect = null;
+    this.clientW = 0;
+    this.clientH = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.hlookupDelay = 0;
+    this.hlookupTimer = 0;
     this.capture = false;
     this.moved = false;
   }
 
   init(container: HTMLElement): void {
-    this._create_canvas();
-    this._create_shadow();
-    this._event_bind(container);
-    this._eventRouter.addEventListener(
-      EventType.RESIZE,
-      this.resize.bind(this)
-    );
+    this.createCanvas();
+    this.createShadow();
+    this.eventBind(container);
+    this.eventRouter.addEventListener(EventType.Resize, this.resize.bind(this));
   }
 
   resize(): void {
-    this.jm.view.e_nodes.appendChild(this.shadow);
-    this.e_canvas.width = this.jm.view.size.w;
-    this.e_canvas.height = this.jm.view.size.h;
+    this.jm.view.jmnodes.appendChild(this.shadow);
+    this.canvasElement.width = this.jm.view.size.w;
+    this.canvasElement.height = this.jm.view.size.h;
   }
 
-  _create_canvas(): void {
+  private createCanvas(): void {
     const c: HTMLCanvasElement = document.createElement("canvas");
     c.className = "jsmind-draggable";
-    this.jm.view.e_panel.appendChild(c);
+    this.jm.view.jsmindInnerElement.appendChild(c);
     const ctx: CanvasRenderingContext2D = c.getContext("2d");
-    this.e_canvas = c;
-    this.canvas_ctx = ctx;
+    this.canvasElement = c;
+    this.canvasContext = ctx;
   }
 
-  _create_shadow(): void {
+  private createShadow(): void {
     const s: HTMLElement = document.createElement("jmnode");
     s.style.visibility = "hidden";
     s.style.zIndex = "3";
@@ -105,7 +103,7 @@ export default class Draggable {
     this.shadow = s;
   }
 
-  reset_shadow(el: HTMLElement): void {
+  resetShadow(el: HTMLElement): void {
     const s = this.shadow.style;
     this.shadow.innerHTML = el.innerHTML;
     s.left = el.style.left;
@@ -115,81 +113,86 @@ export default class Draggable {
     s.backgroundImage = el.style.backgroundImage;
     s.backgroundSize = el.style.backgroundSize;
     s.transform = el.style.transform;
-    this.shadow_w = this.shadow.clientWidth;
-    this.shadow_h = this.shadow.clientHeight;
+    this.shadowW = this.shadow.clientWidth;
+    this.shadowH = this.shadow.clientHeight;
   }
 
-  show_shadow(): void {
+  showShadow(): void {
     if (!this.moved) {
       this.shadow.style.visibility = "visible";
     }
   }
 
-  hide_shadow(): void {
+  hideShadow(): void {
     this.shadow.style.visibility = "hidden";
   }
 
-  _magnet_shadow(node: {
+  private magnetShadow(node: {
     node: any;
     np: any;
     sp: any;
     direction: number;
   }): void {
     if (node) {
-      this.canvas_ctx.lineWidth = this.line_width;
-      this.canvas_ctx.strokeStyle = "rgba(0,0,0,0.3)";
-      this.canvas_ctx.lineCap = "round";
-      this._clear_lines();
-      this._canvas_lineto(node.sp.x, node.sp.y, node.np.x, node.np.y);
+      this.canvasContext.lineWidth = this.lineWidth;
+      this.canvasContext.strokeStyle = "rgba(0,0,0,0.3)";
+      this.canvasContext.lineCap = "round";
+      this.clearLines();
+      this.canvasLineTo(node.sp.x, node.sp.y, node.np.x, node.np.y);
     }
   }
 
-  _clear_lines(): void {
-    this.canvas_ctx.clearRect(0, 0, this.jm.view.size.w, this.jm.view.size.h);
+  private clearLines(): void {
+    this.canvasContext.clearRect(
+      0,
+      0,
+      this.jm.view.size.w,
+      this.jm.view.size.h
+    );
   }
 
-  _canvas_lineto(x1: number, y1: number, x2: number, y2: number): void {
-    this.canvas_ctx.beginPath();
-    this.canvas_ctx.moveTo(x1, y1);
-    this.canvas_ctx.lineTo(x2, y2);
-    this.canvas_ctx.stroke();
+  private canvasLineTo(x1: number, y1: number, x2: number, y2: number): void {
+    this.canvasContext.beginPath();
+    this.canvasContext.moveTo(x1, y1);
+    this.canvasContext.lineTo(x2, y2);
+    this.canvasContext.stroke();
   }
 
-  _lookup_close_node(): {
+  private doLookupCloseNode(): {
     node: MindNode;
     np: any;
     sp: any;
     direction: Direction;
   } {
     const root = this.jm.getRoot();
-    const root_location = root.get_location();
-    const root_size = root.get_size();
-    const root_x = root_location.x + root_size.w / 2;
+    const rootLocation = root.getLocation();
+    const rootSize = root.getSize();
+    const rootX = rootLocation.x + rootSize.w / 2;
 
-    const sw = this.shadow_w;
-    const sh = this.shadow_h;
+    const sw = this.shadowW;
+    const sh = this.shadowH;
     const sx = this.shadow.offsetLeft;
     const sy = this.shadow.offsetTop;
 
     let ns, nl;
 
-    const direct = sx + sw / 2 >= root_x ? Direction.RIGHT : Direction.LEFT;
+    const direct = sx + sw / 2 >= rootX ? Direction.RIGHT : Direction.LEFT;
     const nodes = this.jm.mind.nodes;
     let node = null;
-    let min_distance = Number.MAX_VALUE;
+    let minDistance = Number.MAX_VALUE;
     let distance = 0;
-    let closest_node = null;
-    let closest_p = null;
-    let shadow_p = null;
+    let closestNode = null;
+    let closestPoint: Point = null;
+    let shadowPoint: Point = null;
     for (const nodeid in nodes) {
       let np, sp;
       node = nodes[nodeid];
       if (node.isroot || node.direction == direct) {
-        if (node.id == this.active_node.id) {
+        if (node.id == this.activeNode.id) {
           continue;
         }
-        ns = node.get_size();
-        nl = node.get_location();
+        ns = node.getSize();
+        nl = node.getLocation();
         if (direct == Direction.RIGHT) {
           if (sx - nl.x - ns.w <= 0) {
             continue;
@@ -197,52 +200,52 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.w) +
             Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + ns.w - this.line_width, y: nl.y + ns.h / 2 };
-          sp = { x: sx + this.line_width, y: sy + sh / 2 };
+          np = { x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h / 2 };
+          sp = { x: sx + this.lineWidth, y: sy + sh / 2 };
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
           }
           distance =
             Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + this.line_width, y: nl.y + ns.h / 2 };
-          sp = { x: sx + sw - this.line_width, y: sy + sh / 2 };
+          np = { x: nl.x + this.lineWidth, y: nl.y + ns.h / 2 };
+          sp = { x: sx + sw - this.lineWidth, y: sy + sh / 2 };
         }
-        if (distance < min_distance) {
-          closest_node = node;
-          closest_p = np;
-          shadow_p = sp;
-          min_distance = distance;
+        if (distance < minDistance) {
+          closestNode = node;
+          closestPoint = np;
+          shadowPoint = sp;
+          minDistance = distance;
         }
       }
     }
-    if (closest_node) {
+    if (closestNode) {
       return {
-        node: closest_node,
+        node: closestNode,
         direction: direct,
-        sp: shadow_p,
-        np: closest_p,
+        sp: shadowPoint,
+        np: closestPoint,
       };
     } else {
       return null;
     }
   }
 
-  lookup_close_node(): void {
-    const node_data: {
+  lookupCloseNode(): void {
+    const nodeData: {
       node: MindNode;
       np: any;
       sp: any;
       direction: Direction;
-    } = this._lookup_close_node();
-    if (node_data) {
-      this._magnet_shadow(node_data);
-      this.target_node = node_data.node;
-      this.target_direct = node_data.direction;
+    } = this.doLookupCloseNode();
+    if (nodeData) {
+      this.magnetShadow(nodeData);
+      this.targetNode = nodeData.node;
+      this.targetDirect = nodeData.direction;
     }
   }
 
-  _event_bind(container: HTMLElement): void {
+  private eventBind(container: HTMLElement): void {
     container.addEventListener("mousedown", this.dragstart.bind(this), false);
     container.addEventListener("mousemove", this.drag.bind(this), false);
     container.addEventListener("mouseup", this.dragend.bind(this), false);
@@ -258,38 +261,38 @@ export default class Draggable {
     if (this.capture) {
       return;
     }
-    this.active_node = null;
+    this.activeNode = null;
 
     const jview = this.jm.view;
     const el = e.target as HTMLElement;
     if (el.tagName.toLowerCase() !== "jmnode") {
       return;
     }
-    const nodeid = jview.get_binded_nodeid(el);
+    const nodeid = jview.getBindedNodeId(el);
     if (nodeid) {
       const node = this.jm.getNodeById(nodeid);
       if (!node.isroot) {
-        this.reset_shadow(el);
-        this.active_node = node;
-        this.offset_x = e.clientX - el.offsetLeft;
-        this.offset_y = e.clientY - el.offsetTop;
-        // this.offset_x = (e.clientX || e.touches[0].clientX) - el.offsetLeft;
+        this.resetShadow(el);
+        this.activeNode = node;
+        this.offsetX = e.clientX - el.offsetLeft;
+        this.offsetY = e.clientY - el.offsetTop;
+        // this.offsetX = (e.clientX || e.touches[0].clientX) - el.offsetLeft;
         // this.offset_y = (e.clientY || e.touches[0].clientY) - el.offsetTop;
-        this.client_hw = Math.floor(el.clientWidth / 2);
-        this.client_hh = Math.floor(el.clientHeight / 2);
-        if (this.hlookup_delay !== 0) {
-          window.clearTimeout(this.hlookup_delay);
+        this.clientHW = Math.floor(el.clientWidth / 2);
+        this.clientHH = Math.floor(el.clientHeight / 2);
+        if (this.hlookupDelay !== 0) {
+          window.clearTimeout(this.hlookupDelay);
         }
-        if (this.hlookup_timer !== 0) {
-          window.clearInterval(this.hlookup_timer);
+        if (this.hlookupTimer !== 0) {
+          window.clearInterval(this.hlookupTimer);
         }
-        this.hlookup_delay = window.setTimeout(() => {
-          this.hlookup_delay = 0;
-          this.hlookup_timer = window.setInterval(
-            this.lookup_close_node.bind(this),
-            this.lookup_interval
+        this.hlookupDelay = window.setTimeout(() => {
+          this.hlookupDelay = 0;
+          this.hlookupTimer = window.setInterval(
+            this.lookupCloseNode.bind(this),
+            this.lookupInterval
           );
-        }, this.lookup_delay);
+        }, this.lookupDelay);
         this.capture = true;
       }
     }
@@ -301,12 +304,12 @@ export default class Draggable {
     }
     if (this.capture) {
       e.preventDefault();
-      this.show_shadow();
+      this.showShadow();
       this.moved = true;
       window.getSelection().removeAllRanges();
-      const px = e.clientX - this.offset_x;
-      const py = e.clientY - this.offset_y;
-      // const px = (e.clientX || e.touches[0].clientX) - this.offset_x;
+      const px = e.clientX - this.offsetX;
+      const py = e.clientY - this.offsetY;
+      // const px = (e.clientX || e.touches[0].clientX) - this.offsetX;
       // const py = (e.clientY || e.touches[0].clientY) - this.offset_y;
       this.shadow.style.left = px + "px";
       this.shadow.style.top = py + "px";
@@ -319,71 +322,67 @@ export default class Draggable {
       return;
     }
     if (this.capture) {
-      if (this.hlookup_delay !== 0) {
-        window.clearTimeout(this.hlookup_delay);
-        this.hlookup_delay = 0;
-        this._clear_lines();
+      if (this.hlookupDelay !== 0) {
+        window.clearTimeout(this.hlookupDelay);
+        this.hlookupDelay = 0;
+        this.clearLines();
       }
-      if (this.hlookup_timer !== 0) {
-        window.clearInterval(this.hlookup_timer);
-        this.hlookup_timer = 0;
-        this._clear_lines();
+      if (this.hlookupTimer !== 0) {
+        window.clearInterval(this.hlookupTimer);
+        this.hlookupTimer = 0;
+        this.clearLines();
       }
       if (this.moved) {
-        const src_node = this.active_node;
-        const target_node = this.target_node;
-        const target_direct = this.target_direct;
-        this.move_node(src_node, target_node, target_direct);
+        const srcNode = this.activeNode;
+        const targetNode = this.targetNode;
+        const targetDirect = this.targetDirect;
+        this.moveNode(srcNode, targetNode, targetDirect);
       }
-      this.hide_shadow();
+      this.hideShadow();
     }
     this.moved = false;
     this.capture = false;
   }
 
-  move_node(
-    src_node: MindNode,
-    target_node: MindNode,
-    target_direct: Direction
+  moveNode(
+    srcNode: MindNode,
+    targetNode: MindNode,
+    targetDirect: Direction
   ): void {
     console.log(
-      `jsMind.dgraggable.move_node: ${src_node} ${target_node} ${target_direct}`
+      `jsMind.dgraggable.move_node: ${srcNode} ${targetNode} ${targetDirect}`
     );
-    const shadow_h = this.shadow.offsetTop;
-    if (
-      !!target_node &&
-      !!src_node &&
-      !MindNode.inherited(src_node, target_node)
-    ) {
+    const shadowH = this.shadow.offsetTop;
+    if (!!targetNode && !!srcNode && !MindNode.inherited(srcNode, targetNode)) {
       console.log(`let's move!`);
       // lookup before_node
-      const sibling_nodes = target_node.children;
-      let sc = sibling_nodes.length;
+      const siblingNodes = targetNode.children;
+      let sc = siblingNodes.length;
       let node = null;
-      let delta_y = Number.MAX_VALUE;
-      let node_before = null;
+      let deltaY = Number.MAX_VALUE;
+      let nodeBefore = null;
       let beforeid = BEFOREID_LAST;
       while (sc--) {
-        node = sibling_nodes[sc];
-        if (node.direction === target_direct && node.id !== src_node.id) {
-          const dy = node.get_location().y - shadow_h;
-          if (dy > 0 && dy < delta_y) {
-            delta_y = dy;
-            node_before = node;
+        node = siblingNodes[sc];
+        if (node.direction === targetDirect && node.id !== srcNode.id) {
+          const dy = node.getLocation().y - shadowH;
+          if (dy > 0 && dy < deltaY) {
+            deltaY = dy;
+            nodeBefore = node;
             beforeid = BEFOREID_FIRST;
           }
         }
       }
-      if (node_before) {
-        beforeid = node_before.id;
+      if (nodeBefore) {
+        beforeid = nodeBefore.id;
       }
       console.log(
-        `Calling jm.move_node: ${src_node.id}, ${beforeid}, ${target_node.id}, ${target_direct}`
+        `Calling jm.move_node: ${srcNode.id}, ${beforeid}, ${targetNode.id}, ${targetDirect}`
       );
-      this.jm.move_node(src_node, beforeid, target_node, target_direct);
+      this.jm.moveNode(srcNode, beforeid, targetNode, targetDirect);
     }
-    this.active_node = null;
-    this.target_node = null;
-    this.target_direct = null;
+    this.activeNode = null;
+    this.targetNode = null;
+    this.targetDirect = null;
   }
 }

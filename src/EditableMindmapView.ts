@@ -32,14 +32,14 @@ export class EditableMindmapView extends TextFileView {
 
   clear(): void {
     console.log(`EditableMindmapView: clear`);
-    this.mm.shortcut.disable_shortcut();
+    this.mm.shortcut.disableShortcut();
     this.mm.mind = null;
   }
 
   getViewData(): string {
     // console.log(`getViewData: invoked`);
     if (this.mm && this.mm.mind) {
-      const data = this.mm.getData("node_tree");
+      const data = this.mm.getData("nodeTree");
       if (!data.data) {
         // mindmap is not available, yet.
         return this.data;
@@ -121,10 +121,10 @@ export class EditableMindmapView extends TextFileView {
         this.mm = new MindCheese(jsMindId, el, options);
         // ↓ *quick hack* to avoid the timing issue...
         setTimeout(() => {
-          this.mm.show("node_tree", mind);
+          this.mm.show("nodeTree", mind);
         }, 0);
-        this.mm.add_event_listener(
-          EventType.AFTER_EDIT,
+        this.mm.addEventListener(
+          EventType.AfterEdit,
           this.jsMindEventListener.bind(this)
         );
       }

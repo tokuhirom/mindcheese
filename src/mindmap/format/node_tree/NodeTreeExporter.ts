@@ -7,11 +7,11 @@ export default class NodeTreeExporter implements MindmapExporter {
   getData(mind: Mind): Record<string, any> {
     const json: Record<string, any> = {};
     json.format = "node_tree";
-    json.data = this._buildnode(mind.root);
+    json.data = this.buildNode(mind.root);
     return json;
   }
 
-  private _buildnode(node: MindNode): Record<string, any> {
+  private buildNode(node: MindNode): Record<string, any> {
     if (!(node instanceof MindNode)) {
       return;
     }
@@ -27,7 +27,7 @@ export default class NodeTreeExporter implements MindmapExporter {
     if (children.length > 0) {
       o.children = [];
       for (let i = 0; i < children.length; i++) {
-        o.children.push(this._buildnode(children[i]));
+        o.children.push(this.buildNode(children[i]));
       }
     }
     return o;

@@ -21,7 +21,7 @@
     <script>
       const container = document.getElementById("container");
       const jsmind = new window.MindCheese(1, container);
-      jsmind.show("node_tree", {
+      jsmind.show("nodeTree", {
         meta: {
           name: "jsMind remote",
           author: "hizzgdev@163.com",
@@ -107,7 +107,7 @@
       });
       document.getElementById("expandSize").addEventListener("click", () => {
         console.log("viewShow");
-        jsmind.view.expand_size();
+        jsmind.view.expandSize();
         return false;
       });
       document.getElementById("view_show").addEventListener("click", () => {
@@ -118,7 +118,7 @@
       document
         .getElementById("dump_to_console")
         .addEventListener("click", () => {
-          const data = jsmind.getData("node_tree");
+          const data = jsmind.getData("nodeTree");
           console.log(data);
           return false;
         });

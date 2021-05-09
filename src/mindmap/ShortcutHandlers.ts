@@ -3,22 +3,22 @@ import { Direction } from "./MindmapConstants";
 
 export default class ShortcutHandlers {
   static delete(_jm: MindCheese): boolean {
-    const selected_node = _jm.get_selected_node();
-    if (!!selected_node && !selected_node.isroot) {
-      _jm.select_node(selected_node.parent);
-      _jm.remove_node(selected_node);
+    const selectedNode = _jm.getSelectedNode();
+    if (!!selectedNode && !selectedNode.isroot) {
+      _jm.selectNode(selectedNode.parent);
+      _jm.removeNode(selectedNode);
     }
     return false;
   }
 
   static addChild(_jm: MindCheese): boolean {
-    const selected_node = _jm.get_selected_node();
-    if (selected_node) {
+    const selectedNode = _jm.getSelectedNode();
+    if (selectedNode) {
       const nodeid = _jm.generateNewId();
-      const node = _jm.add_node(selected_node, nodeid, "New Node");
+      const node = _jm.addNode(selectedNode, nodeid, "New Node");
       if (node) {
-        _jm.select_node(node);
-        _jm.begin_edit(node);
+        _jm.selectNode(node);
+        _jm.beginEdit(node);
       }
     }
     return false;
@@ -27,30 +27,30 @@ export default class ShortcutHandlers {
   static addBrother(jm: MindCheese, e: Event): boolean {
     e.preventDefault();
 
-    const selected_node = jm.get_selected_node();
-    if (!!selected_node && !selected_node.isroot) {
+    const selectedNode = jm.getSelectedNode();
+    if (!!selectedNode && !selectedNode.isroot) {
       const nodeid = jm.generateNewId();
-      const node = jm.insert_node_after(selected_node, nodeid, "New Node");
+      const node = jm.insertNodeAfter(selectedNode, nodeid, "New Node");
       if (node) {
-        jm.select_node(node);
-        jm.begin_edit(node);
+        jm.selectNode(node);
+        jm.beginEdit(node);
       }
     }
     return false;
   }
 
   static editNode(jm: MindCheese): boolean {
-    const selected_node = jm.get_selected_node();
-    if (selected_node) {
-      jm.begin_edit(selected_node);
+    const selectedNode = jm.getSelectedNode();
+    if (selectedNode) {
+      jm.beginEdit(selectedNode);
     }
     return false;
   }
 
   static toggle(jm: MindCheese, e: Event): boolean {
-    const selected_node = jm.get_selected_node();
-    if (selected_node) {
-      jm.toggle_node(selected_node);
+    const selectedNode = jm.getSelectedNode();
+    if (selectedNode) {
+      jm.toggleNode(selectedNode);
       e.stopPropagation();
       e.preventDefault();
     }
@@ -59,39 +59,39 @@ export default class ShortcutHandlers {
 
   static moveUp(jm: MindCheese): boolean {
     console.debug(`ShortcutProvider.handle_move_up`);
-    const selected_node = jm.get_selected_node();
-    if (selected_node) {
-      jm.move_up(selected_node);
-      jm.select_node(selected_node);
+    const selectedNode = jm.getSelectedNode();
+    if (selectedNode) {
+      jm.moveUp(selectedNode);
+      jm.selectNode(selectedNode);
     }
     return false;
   }
 
   static moveDown(jm: MindCheese): boolean {
-    const selected_node = jm.get_selected_node();
-    if (selected_node) {
-      jm.move_down(selected_node);
-      jm.select_node(selected_node);
+    const selectedNode = jm.getSelectedNode();
+    if (selectedNode) {
+      jm.moveDown(selectedNode);
+      jm.selectNode(selectedNode);
     }
     return false;
   }
 
-  static up(jm: MindCheese, e: Event): boolean {
-    const selected_node = jm.get_selected_node();
-    if (selected_node.isroot) {
+  static up(mindCheese: MindCheese, e: Event): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
+    if (selectedNode.isroot) {
       return false;
     }
 
-    if (selected_node) {
-      let up_node = jm.findNodeBefore(selected_node);
-      if (!up_node) {
-        const np = jm.findNodeBefore(selected_node.parent);
+    if (selectedNode) {
+      let upNode = mindCheese.findNodeBefore(selectedNode);
+      if (!upNode) {
+        const np = mindCheese.findNodeBefore(selectedNode.parent);
         if (!!np && np.children.length > 0) {
-          up_node = np.children[np.children.length - 1];
+          upNode = np.children[np.children.length - 1];
         }
       }
-      if (up_node) {
-        jm.select_node(up_node);
+      if (upNode) {
+        mindCheese.selectNode(upNode);
       }
       e.stopPropagation();
       e.preventDefault();
@@ -99,22 +99,22 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static down(jm: MindCheese, e: Event): boolean {
-    const selected_node = jm.get_selected_node();
-    if (selected_node.isroot) {
+  static down(mindCheese: MindCheese, e: Event): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
+    if (selectedNode.isroot) {
       return false;
     }
 
-    if (selected_node) {
-      let down_node = jm.findNodeAfter(selected_node);
-      if (!down_node) {
-        const np = jm.findNodeAfter(selected_node.parent);
+    if (selectedNode) {
+      let downNode = mindCheese.findNodeAfter(selectedNode);
+      if (!downNode) {
+        const np = mindCheese.findNodeAfter(selectedNode.parent);
         if (!!np && np.children.length > 0) {
-          down_node = np.children[0];
+          downNode = np.children[0];
         }
       }
-      if (down_node) {
-        jm.select_node(down_node);
+      if (downNode) {
+        mindCheese.selectNode(downNode);
       }
       e.stopPropagation();
       e.preventDefault();
@@ -123,22 +123,22 @@ export default class ShortcutHandlers {
   }
 
   static left(jm: MindCheese, e: Event): boolean {
-    ShortcutHandlers._handle_direction(jm, e, Direction.LEFT);
+    ShortcutHandlers.handleDirection(jm, e, Direction.LEFT);
     return false;
   }
 
   static right(jm: MindCheese, e: Event): boolean {
-    ShortcutHandlers._handle_direction(jm, e, Direction.RIGHT);
+    ShortcutHandlers.handleDirection(jm, e, Direction.RIGHT);
     return false;
   }
 
-  static _handle_direction(jm: MindCheese, e: Event, d: Direction): void {
+  private static handleDirection(jm: MindCheese, e: Event, d: Direction): void {
     let children;
-    const selected_node = jm.get_selected_node();
+    const selectedNode = jm.getSelectedNode();
     let node = null;
-    if (selected_node) {
-      if (selected_node.isroot) {
-        const c = selected_node.children;
+    if (selectedNode) {
+      if (selectedNode.isroot) {
+        const c = selectedNode.children;
         children = [];
         for (let i = 0; i < c.length; i++) {
           if (c[i].direction === d) {
@@ -146,17 +146,17 @@ export default class ShortcutHandlers {
           }
         }
         node = c[children[Math.floor((children.length - 1) / 2)]];
-      } else if (selected_node.direction === d) {
-        children = selected_node.children;
+      } else if (selectedNode.direction === d) {
+        children = selectedNode.children;
         const childrenCount = children.length;
         if (childrenCount > 0) {
           node = children[Math.floor((childrenCount - 1) / 2)];
         }
       } else {
-        node = selected_node.parent;
+        node = selectedNode.parent;
       }
       if (node) {
-        jm.select_node(node);
+        jm.selectNode(node);
       }
       e.stopPropagation();
       e.preventDefault();

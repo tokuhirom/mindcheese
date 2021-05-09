@@ -16,46 +16,46 @@ import { Direction } from "../../MindmapConstants";
  */
 
 export default class NodeTreeImporter implements MindmapImporter {
-  get_mind(source: any): Mind {
+  getMind(source: any): Mind {
     const mind = new Mind();
-    this._parse(mind, source.data);
+    this.parse(mind, source.data);
     return mind;
   }
 
-  private _parse(mind: Mind, node_root: MindNode): void {
-    mind.setRoot(node_root.id, node_root.topic);
-    if ("children" in node_root) {
-      const children = node_root.children;
+  private parse(mind: Mind, nodeRoot: MindNode): void {
+    mind.setRoot(nodeRoot.id, nodeRoot.topic);
+    if ("children" in nodeRoot) {
+      const children = nodeRoot.children;
       for (let i = 0; i < children.length; i++) {
-        this._extract_subnode(mind, mind.root, children[i]);
+        this.extractSubNode(mind, mind.root, children[i]);
       }
     }
   }
 
-  private _extract_subnode(
+  private extractSubNode(
     mind: Mind,
-    node_parent: MindNode,
-    node_json: any
+    nodeParent: MindNode,
+    nodeJson: any
   ): void {
     let d: Direction = null;
-    if (node_parent.isroot) {
-      d = node_json.direction == "left" ? Direction.LEFT : Direction.RIGHT;
+    if (nodeParent.isroot) {
+      d = nodeJson.direction == "left" ? Direction.LEFT : Direction.RIGHT;
     }
     console.log(
-      `_extract_subnode node_json.direction DIRECTION=${node_json.direction} d=${d} ${node_json.topic}`
+      `_extract_subnode node_json.direction DIRECTION=${nodeJson.direction} d=${d} ${nodeJson.topic}`
     );
-    const node = mind.add_node(
-      node_parent,
-      node_json.id,
-      node_json.topic,
+    const node = mind.addNode(
+      nodeParent,
+      nodeJson.id,
+      nodeJson.topic,
       null,
       d,
-      node_json.expanded
+      nodeJson.expanded
     );
-    if ("children" in node_json) {
-      const children = node_json.children;
+    if ("children" in nodeJson) {
+      const children = nodeJson.children;
       for (let i = 0; i < children.length; i++) {
-        this._extract_subnode(mind, node, children[i]);
+        this.extractSubNode(mind, node, children[i]);
       }
     }
   }
