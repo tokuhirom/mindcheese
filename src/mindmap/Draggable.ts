@@ -17,7 +17,12 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction, EventType} from "./MindmapConstants";
+import {
+  BEFOREID_FIRST,
+  BEFOREID_LAST,
+  Direction,
+  EventType,
+} from "./MindmapConstants";
 import EventRouter from "./EventRouter";
 
 export default class Draggable {
@@ -70,7 +75,10 @@ export default class Draggable {
     this._create_canvas();
     this._create_shadow();
     this._event_bind(container);
-    this._eventRouter.addEventListener(EventType.RESIZE, this.resize.bind(this));
+    this._eventRouter.addEventListener(
+      EventType.RESIZE,
+      this.resize.bind(this)
+    );
   }
 
   resize(): void {
