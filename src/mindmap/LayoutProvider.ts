@@ -18,7 +18,6 @@ export class Point {
 
 export default class LayoutProvider {
   private readonly jm: MindCheese;
-  private readonly isside: boolean;
   bounds: { n: number; s: number; w: number; e: number };
   private readonly _hspace: number;
   private readonly _vspace: number;
@@ -28,7 +27,6 @@ export default class LayoutProvider {
   constructor(
     jm: MindCheese,
     eventRouter: EventRouter,
-    mode = "full" /* 'full' or 'side' */,
     hspace = 30,
     vspace = 20,
     pspace = 13
@@ -38,7 +36,6 @@ export default class LayoutProvider {
     this._vspace = vspace;
     this._pspace = pspace;
     this.jm = jm;
-    this.isside = mode == "side";
     this.bounds = null;
   }
 
@@ -70,32 +67,16 @@ export default class LayoutProvider {
     const children = node.children;
     const children_count = children.length;
     layout_data.direction = Direction.CENTER;
-    if (this.isside) {
-      let i = children_count;
-      while (i--) {
-        this._layout_direction_side(children[i], Direction.RIGHT);
+
+    let i = children_count;
+    let subnode = null;
+    while (i--) {
+      subnode = children[i];
+      if (subnode.direction == Direction.LEFT) {
+        this._layout_direction_side(subnode, Direction.LEFT);
+      } else {
+        this._layout_direction_side(subnode, Direction.RIGHT);
       }
-    } else {
-      let i = children_count;
-      let subnode = null;
-      while (i--) {
-        subnode = children[i];
-        if (subnode.direction == Direction.LEFT) {
-          this._layout_direction_side(subnode, Direction.LEFT);
-        } else {
-          this._layout_direction_side(subnode, Direction.RIGHT);
-        }
-      }
-      /*
-              var boundary = Math.ceil(children_count/2);
-              var i = children_count;
-              while(i--){
-                  if(i>=boundary){
-                      this._layout_direction_side(children[i],Direction.LEFT, children_count-i-1);
-                  }else{
-                      this._layout_direction_side(children[i],Direction.RIGHT, i);
-                  }
-              }*/
     }
   }
 

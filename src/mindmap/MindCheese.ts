@@ -27,7 +27,6 @@ function is_empty(s: string) {
 
 const DEFAULT_OPTIONS: any = {
   theme: "primary",
-  mode: "full", // full or side
 
   view: {
     hmargin: 100,
@@ -101,7 +100,6 @@ export default class MindCheese {
     this.layout = new LayoutProvider(
       this,
       this.event_router,
-      opts.mode,
       opts.layout.hspace,
       opts.layout.vspace,
       opts.layout.pspace
