@@ -87,6 +87,7 @@ export default class MindCheese {
     this.mind = null; // TODO original では null が入っていた
     this.id = id;
     this.event_router = new EventRouter();
+    this._editable = true;
     this.init();
   }
 
@@ -290,22 +291,12 @@ export default class MindCheese {
   _show(format: string, mind: any): void {
     this.mind = this.data.load(format, mind);
     if (!this.mind) {
-      console.error("data.load error");
-      return;
-    } else {
-      console.debug("data.load ok");
+      throw new Error("data.load error");
     }
-    console.log(`JsMind.show id=${this.id}`);
 
     this.view.load();
-    console.debug("view.load ok");
-
     this.layout.layout();
-    console.debug("layout.layout ok");
-
     this.view.show(true);
-    console.debug("view.show ok");
-
     this.invoke_event_handle(EventType.SHOW, { data: [mind] });
   }
 
@@ -670,25 +661,15 @@ export default class MindCheese {
         - bar      ← target node
         - foo
      */
-
-    const children = node.parent.children.filter(
-      (it) => it.direction == node.direction
-    );
-    for (let i = 0; i < children.length; i++) {
-      if (children[i].id == node.id) {
-        if (i == 0) {
-          // do nothing
-          return;
-        } else {
-          this.move_node(
-            node.id,
-            children[i - 1].id,
-            node.parent.id,
-            node.direction
-          );
-          return;
-        }
-      }
+    const upNode = this.findNodeBefore(node);
+    if (upNode) {
+      this.move_node(
+          node.id,
+          upNode.id,
+          node.parent.id,
+          node.direction
+      )
+      return;
     }
   }
 
