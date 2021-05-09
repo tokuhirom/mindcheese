@@ -6,9 +6,14 @@ import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
 import EventRouter from "./EventRouter";
 
-class Point {
-  x: number;
-  y: number;
+export class Point {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  readonly x: number;
+  readonly y: number;
 }
 
 export default class LayoutProvider {
@@ -266,13 +271,10 @@ export default class LayoutProvider {
   get_node_point(node: MindNode): Point {
     const view_data = node._data.view;
     const offset_p = this.get_node_offset(node);
-    //console.debug(offset_p);
-    const p: Point = new Point();
-    p.x =
+    const x =
       offset_p.x + (view_data.width * (node._data.layout.direction - 1)) / 2;
-    p.y = offset_p.y - view_data.height / 2;
-    //console.debug(p);
-    return p;
+    const y = offset_p.y - view_data.height / 2;
+    return new Point(x, y);
   }
 
   get_node_point_in(node: MindNode): { x: number; y: number } {
@@ -308,14 +310,14 @@ export default class LayoutProvider {
 
   get_expander_point(node: MindNode): Point {
     const p = this.get_node_point_out(node);
-    const ex_p: Point = new Point();
+    let x: number;
     if (node._data.layout.direction == Direction.RIGHT) {
-      ex_p.x = p.x - this._pspace;
+      x = p.x - this._pspace;
     } else {
-      ex_p.x = p.x;
+      x = p.x;
     }
-    ex_p.y = p.y - Math.ceil(this._pspace / 2);
-    return ex_p;
+    const y = p.y - Math.ceil(this._pspace / 2);
+    return new Point(x, y);
   }
 
   get_min_size(): { w: number; h: number } {
