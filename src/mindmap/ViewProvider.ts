@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
+import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider from "./LayoutProvider";
 import EventRouter from "./EventRouter";
@@ -148,7 +148,7 @@ export default class ViewProvider {
   reset(): void {
     console.debug("view.reset");
     this.selected_node = null;
-    this.clear_lines();
+    this.graph.clear();
     this.clear_nodes();
     this.reset_theme();
   }
@@ -525,13 +525,8 @@ export default class ViewProvider {
       }
     }
   }
-
-  clear_lines(): void {
-    this.graph.clear();
-  }
-
   show_lines(): void {
-    this.clear_lines();
+    this.graph.clear();
     const nodes = this.jm.mind.nodes;
     let node = null;
     let pin = null;
