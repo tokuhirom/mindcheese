@@ -340,7 +340,7 @@ export default class MindCheese {
       true
     );
     if (node) {
-      this.view.add_node(node);
+      this.view.addNode(node);
       this.layout.layout();
       this.view.show();
       this.expand_node(parent_node);
@@ -370,7 +370,7 @@ export default class MindCheese {
     });
     const node = this.mind.insert_node_before(node_before, nodeid, topic);
     if (node) {
-      this.view.add_node(node);
+      this.view.addNode(node);
       this.layout.layout();
       this.view.show();
       this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {
@@ -399,7 +399,7 @@ export default class MindCheese {
         data: [node_after.id, nodeid, topic],
         node: nodeid,
       });
-      this.view.add_node(node);
+      this.view.addNode(node);
       this.layout.layout();
       this.view.show();
       this.event_router.invokeEventHandler(EventType.AFTER_EDIT, {

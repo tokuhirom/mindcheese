@@ -1,8 +1,6 @@
-// noinspection JSUnfilteredForInLoop
-
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
+import {EventType, KEYCODE_ENTER} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider from "./LayoutProvider";
 import EventRouter from "./EventRouter";
@@ -164,7 +162,7 @@ export default class ViewProvider {
 
   load(): void {
     console.debug("view.load");
-    this.init_nodes();
+    this.initNodes();
   }
 
   expand_size(): void {
@@ -188,51 +186,49 @@ export default class ViewProvider {
     this.size.h = client_h;
   }
 
-  init_nodes_size(node: MindNode): void {
+  private initNodeSize(node: MindNode): void {
     const view_data = node._data.view;
     view_data.width = view_data.element.clientWidth;
     view_data.height = view_data.element.clientHeight;
   }
 
-  init_nodes(): void {
+  private initNodes(): void {
     const nodes = this.jm.mind.nodes;
     const doc_frag: DocumentFragment = document.createDocumentFragment();
-    for (const nodeid in nodes) {
-      this.create_node_element(nodes[nodeid], doc_frag);
+    for (const node of Object.values(nodes)) {
+      this.createNodeElement(node, doc_frag);
     }
     this.e_nodes.appendChild(doc_frag);
-    for (const nodeid in nodes) {
-      this.init_nodes_size(nodes[nodeid]);
+    for (const node of Object.values(nodes)) {
+      this.initNodeSize(node);
     }
   }
 
-  add_node(node: MindNode): void {
-    this.create_node_element(node, this.e_nodes);
-    this.init_nodes_size(node);
+  addNode(node: MindNode): void {
+    this.createNodeElement(node, this.e_nodes);
+    this.initNodeSize(node);
   }
 
-  create_node_element(node: MindNode, parent_node: Node): void {
-    const view_data = node._data.view;
-
-    const d: HTMLElement = document.createElement("jmnode");
+  private createNodeElement(node: MindNode, parent_node: Node): void {
+    const nodeEl: HTMLElement = document.createElement("jmnode");
     if (node.isroot) {
-      d.className = "root";
+      nodeEl.className = "root";
     } else {
       const expanderElement: HTMLElement = document.createElement("jmexpander");
       expanderElement.innerText = "-";
       expanderElement.setAttribute("nodeid", node.id);
       expanderElement.style.visibility = "hidden";
       parent_node.appendChild(expanderElement);
-      view_data.expander = expanderElement;
+      node._data.view.expander = expanderElement;
     }
     if (node.topic) {
-      d.innerHTML = this._renderer(node.topic);
+      nodeEl.innerHTML = this._renderer(node.topic);
     }
-    d.setAttribute("nodeid", node.id);
-    d.style.visibility = "hidden";
+    nodeEl.setAttribute("nodeid", node.id);
+    nodeEl.style.visibility = "hidden";
 
-    parent_node.appendChild(d);
-    view_data.element = d;
+    parent_node.appendChild(nodeEl);
+    node._data.view.element = nodeEl;
   }
 
   remove_node(node: MindNode): void {
