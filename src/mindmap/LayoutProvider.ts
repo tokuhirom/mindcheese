@@ -20,7 +20,6 @@ export default class LayoutProvider {
   private readonly jm: MindCheese;
   private readonly isside: boolean;
   bounds: { n: number; s: number; w: number; e: number };
-  private cache_valid: boolean;
   private readonly _hspace: number;
   private readonly _vspace: number;
   private readonly _pspace: number;
@@ -41,7 +40,6 @@ export default class LayoutProvider {
     this.jm = jm;
     this.isside = mode == "side";
     this.bounds = null;
-    this.cache_valid = false;
   }
 
   init(): void {
@@ -245,32 +243,23 @@ export default class LayoutProvider {
     return total_height;
   }
 
-  get_node_offset(node: MindNode): Point {
+  getNodeOffset(node: MindNode): Point {
     const layout_data = node._data.layout;
-    let offset_cache;
-    if ("_offset_" in layout_data && this.cache_valid) {
-      offset_cache = layout_data._offset_;
-    } else {
-      offset_cache = { x: -1, y: -1 };
-      layout_data._offset_ = offset_cache;
+
+    let x = layout_data.offset_x;
+    let y = layout_data.offset_y;
+    if (!node.isroot) {
+      const offset_p = this.getNodeOffset(node.parent);
+      x += offset_p.x;
+      y += offset_p.y;
     }
-    if (offset_cache.x == -1 || offset_cache.y == -1) {
-      let x = layout_data.offset_x;
-      let y = layout_data.offset_y;
-      if (!node.isroot) {
-        const offset_p = this.get_node_offset(node.parent);
-        x += offset_p.x;
-        y += offset_p.y;
-      }
-      offset_cache.x = x;
-      offset_cache.y = y;
-    }
-    return offset_cache;
+
+    return new Point(x, y);
   }
 
   get_node_point(node: MindNode): Point {
     const view_data = node._data.view;
-    const offset_p = this.get_node_offset(node);
+    const offset_p = this.getNodeOffset(node);
     const x =
       offset_p.x + (view_data.width * (node._data.layout.direction - 1)) / 2;
     const y = offset_p.y - view_data.height / 2;
@@ -278,13 +267,13 @@ export default class LayoutProvider {
   }
 
   get_node_point_in(node: MindNode): { x: number; y: number } {
-    return this.get_node_offset(node);
+    return this.getNodeOffset(node);
   }
 
   get_node_point_out(node: MindNode): { x: number; y: number } {
     const layout_data = node._data.layout;
     let pout_cache: { x: number; y: number };
-    if ("_pout_" in layout_data && this.cache_valid) {
+    if ("_pout_" in layout_data && false) {
       pout_cache = layout_data._pout_;
     } else {
       pout_cache = { x: -1, y: -1 };
@@ -296,7 +285,7 @@ export default class LayoutProvider {
         pout_cache.y = 0;
       } else {
         const view_data = node._data.view;
-        const offset_p = this.get_node_offset(node);
+        const offset_p = this.getNodeOffset(node);
         pout_cache.x =
           offset_p.x +
           (view_data.width + this._pspace) * node._data.layout.direction;
@@ -462,7 +451,6 @@ export default class LayoutProvider {
         root_layout_data.outer_height_left,
         root_layout_data.outer_height_right
       );
-      this.cache_valid = false;
     } else {
       console.warn("can not found root node");
     }
