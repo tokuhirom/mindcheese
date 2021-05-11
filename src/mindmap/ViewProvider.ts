@@ -443,20 +443,18 @@ export default class ViewProvider {
     this.doShow();
   }
 
-  saveLocation(node: MindNode): void {
+  takeLocation(node: MindNode): Point {
     const vd = node.data.view;
-    vd.savedLocation = new Point(
+    return new Point(
       parseInt(vd.element.style.left) - this.jsmindInnerElement.scrollLeft,
       parseInt(vd.element.style.top) - this.jsmindInnerElement.scrollTop
     );
   }
 
-  restoreLocation(node: MindNode): void {
+  restoreLocation(node: MindNode, location: Point): void {
     const vd = node.data.view;
-    this.jsmindInnerElement.scrollLeft =
-      parseInt(vd.element.style.left) - vd.savedLocation.x;
-    this.jsmindInnerElement.scrollTop =
-      parseInt(vd.element.style.top) - vd.savedLocation.y;
+    this.jsmindInnerElement.scrollLeft = parseInt(vd.element.style.left) - location.x;
+    this.jsmindInnerElement.scrollTop = parseInt(vd.element.style.top) - location.y;
   }
 
   clearNodes(): void {

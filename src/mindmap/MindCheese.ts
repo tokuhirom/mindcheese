@@ -238,30 +238,30 @@ export default class MindCheese {
     if (node.isroot) {
       return;
     }
-    this.view.saveLocation(node);
+    const location = this.view.takeLocation(node);
     this.layout.toggleNode(node);
     this.view.show();
-    this.view.restoreLocation(node);
+    this.view.restoreLocation(node, location);
   }
 
   expandNode(node: MindNode): void {
     if (node.isroot) {
       return;
     }
-    this.view.saveLocation(node);
+    const location = this.view.takeLocation(node);
     this.layout.expandNode(node);
     this.view.show();
-    this.view.restoreLocation(node);
+    this.view.restoreLocation(node, location);
   }
 
   collapseNode(node: MindNode): void {
     if (node.isroot) {
       return;
     }
-    this.view.saveLocation(node);
+    const location = this.view.takeLocation(node);
     this.layout.collapseNode(node);
     this.view.show();
-    this.view.restoreLocation(node);
+    this.view.restoreLocation(node, location);
   }
 
   expandAll(): void {
@@ -425,7 +425,7 @@ export default class MindCheese {
       parentNode,
       nodeid
     );
-    this.view.saveLocation(parentNode);
+    const location = this.view.takeLocation(node);
     this.view.removeNode(node);
     this.mind.removeNode(node);
     this.layout.layout();
@@ -434,7 +434,7 @@ export default class MindCheese {
       this.mind.selected = nextSelectedNode;
       this.view.selectNode(nextSelectedNode);
     }
-    this.view.restoreLocation(parentNode);
+    this.view.restoreLocation(parentNode, location);
     this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
       evt: "remove_node",
       data: [nodeid],

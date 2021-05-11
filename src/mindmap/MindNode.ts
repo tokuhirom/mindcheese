@@ -5,7 +5,6 @@ import { Point } from "./LayoutProvider";
 
 export class ViewData {
   element: HTMLElement;
-  savedLocation: Point; // TODO DO NOT store this field in viewdata.
   expander: HTMLElement;
   absX: number;
   absY: number;
