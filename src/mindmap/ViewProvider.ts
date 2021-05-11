@@ -453,8 +453,10 @@ export default class ViewProvider {
 
   restoreLocation(node: MindNode, location: Point): void {
     const vd = node.data.view;
-    this.jsmindInnerElement.scrollLeft = parseInt(vd.element.style.left) - location.x;
-    this.jsmindInnerElement.scrollTop = parseInt(vd.element.style.top) - location.y;
+    this.jsmindInnerElement.scrollLeft =
+      parseInt(vd.element.style.left) - location.x;
+    this.jsmindInnerElement.scrollTop =
+      parseInt(vd.element.style.top) - location.y;
   }
 
   clearNodes(): void {
