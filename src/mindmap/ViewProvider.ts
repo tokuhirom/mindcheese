@@ -196,7 +196,8 @@ export default class ViewProvider {
 
   private initNodes(): void {
     const nodes = this.jm.mind.nodes;
-    const documentFragment: DocumentFragment = document.createDocumentFragment();
+    const documentFragment: DocumentFragment =
+      document.createDocumentFragment();
     for (const node of Object.values(nodes)) {
       this.createNodeElement(node, documentFragment);
     }
