@@ -23,7 +23,7 @@
     "@rollup/plugin-node-resolve": "11.2.1",
     "@rollup/plugin-typescript": "8.3.1",
     "@types/jest": "26.0.24",
-    "@types/node": "14.18.12",
+    "@types/node": "16.11.26",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "babel-jest": "26.6.3",
