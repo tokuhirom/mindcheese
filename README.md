@@ -15,6 +15,11 @@ Portable Mindmap library written in TypeScript.
 
 自分でビルドしたら試せます。
 
+## Hacking
+
+    rollup -c
+    rollup -c browser/rollup.config.js
+
 ## Difference between original jsmind
 
 - Ported to TypeScript.
