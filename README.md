@@ -3,7 +3,7 @@
 Portable Mindmap library written in TypeScript.
 
 - Written in TypeScript
-    - easy to maintain
+  - easy to maintain
 
 ## **Note**
 
