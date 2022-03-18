@@ -27,6 +27,6 @@ jobs:
           check-latest: true
 
       - run: npm install
-      - run: npm build
-      - run: npm run build-browser
+      - run: npm run build
+      - run: npm run test
       - run: npx eslint . --ext .ts,.tsx
