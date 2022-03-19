@@ -1,4 +1,4 @@
-import {object2mindmap} from "../node_tree/NodeTreeImporter";
+import { object2mindmap } from "../node_tree/NodeTreeImporter";
 import Mind from "../../Mind";
 
 function parse(md: string) {

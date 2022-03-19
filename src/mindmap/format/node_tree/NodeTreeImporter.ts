@@ -1,6 +1,6 @@
 import Mind from "../../Mind";
 import MindNode from "../../MindNode";
-import {Direction} from "../../MindmapConstants";
+import { Direction } from "../../MindmapConstants";
 
 /*
 {
