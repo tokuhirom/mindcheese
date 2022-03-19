@@ -76,7 +76,6 @@ export default class MindCheese {
     let opts = Object.assign({}, DEFAULT_OPTIONS);
     opts = Object.assign(opts, options);
     this.options = opts;
-    this.inited = false;
     this.mind = null; // TODO original では null が入っていた
     this.id = id;
     this.editable = true;
