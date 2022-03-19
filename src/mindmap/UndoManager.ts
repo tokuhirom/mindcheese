@@ -1,5 +1,4 @@
 import MindCheese from "./MindCheese";
-import { EventType } from "./MindmapConstants";
 
 export default class UndoManager {
   private readonly mindCheese: MindCheese;

@@ -21,9 +21,7 @@ import {
   BEFOREID_FIRST,
   BEFOREID_LAST,
   Direction,
-  EventType,
 } from "./MindmapConstants";
-import EventRouter from "./EventRouter";
 import { Point } from "./LayoutProvider";
 
 export default class Draggable {
@@ -49,11 +47,9 @@ export default class Draggable {
   private readonly lineWidth = 5;
   private readonly lookupDelay = 500;
   private readonly lookupInterval = 80;
-  private readonly eventRouter: EventRouter;
 
-  constructor(jm: MindCheese, eventRouter: EventRouter) {
+  constructor(jm: MindCheese) {
     this.jm = jm;
-    this.eventRouter = eventRouter;
     this.canvasElement = null;
     this.canvasContext = null;
     this.shadow = null;
@@ -76,7 +72,6 @@ export default class Draggable {
     this.createCanvas();
     this.createShadow();
     this.eventBind(container);
-    this.eventRouter.addEventListener(EventType.Resize, this.resize.bind(this));
   }
 
   resize(): void {

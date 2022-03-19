@@ -6,10 +6,6 @@ export const enum Direction {
   RIGHT = 1,
 }
 
-export const enum EventType {
-  Resize = 2,
-}
-
 export const BEFOREID_FIRST = "_first_";
 export const BEFOREID_LAST = "_last_";
 

@@ -2,10 +2,9 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { EventType, KEYCODE_ENTER } from "./MindmapConstants";
+import { KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
-import EventRouter from "./EventRouter";
 
 function isEmpty(s: string) {
   // TODO inlining?
@@ -41,11 +40,9 @@ export default class ViewProvider {
   private readonly renderer: (topic: string) => string;
   private readonly hMargin: number;
   private readonly vMargin: number;
-  private readonly eventRouter: EventRouter;
 
   constructor(
     jm: MindCheese,
-    eventRouter: EventRouter,
     container: HTMLElement,
     hmargin = 100,
     vmargin = 50,
@@ -55,7 +52,6 @@ export default class ViewProvider {
     this.jm = jm;
     this.renderer = renderer;
     this.layout = jm.layout;
-    this.eventRouter = eventRouter;
 
     this.container = container;
     this.jsmindInnerElement = null;
@@ -422,7 +418,7 @@ export default class ViewProvider {
     this.showNodes();
     this.showLines();
     //this.layout.cache_valid = true;
-    this.eventRouter.invokeEventHandler(EventType.Resize, { data: [] });
+    this.jm.draggable.resize()
   }
 
   centerRoot(): void {

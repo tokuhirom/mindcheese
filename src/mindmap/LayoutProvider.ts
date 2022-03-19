@@ -1,10 +1,9 @@
 // noinspection JSUnfilteredForInLoop
 
-import { Direction, EventType } from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
-import EventRouter from "./EventRouter";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -22,16 +21,13 @@ export default class LayoutProvider {
   private readonly hSpace: number;
   private readonly vSpace: number;
   private readonly pSpace: number;
-  private readonly eventRouter: EventRouter;
 
   constructor(
     mindCheese: MindCheese,
-    eventRouter: EventRouter,
     hspace = 30,
     vspace = 20,
     pspace = 13
   ) {
-    this.eventRouter = eventRouter;
     this.hSpace = hspace;
     this.vSpace = vspace;
     this.pSpace = pspace;

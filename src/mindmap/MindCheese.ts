@@ -9,12 +9,10 @@ import Draggable from "./Draggable";
 import {
   BEFOREID_LAST,
   Direction,
-  EventType,
   KeyModifier,
 } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
-import EventRouter from "./EventRouter";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
@@ -71,7 +69,6 @@ export default class MindCheese {
   draggable: Draggable;
   private readonly id: number;
   private undoManager: UndoManager;
-  private readonly eventRouter: EventRouter;
   private editable: boolean;
   private readonly container: HTMLElement;
 
@@ -87,7 +84,6 @@ export default class MindCheese {
     this.inited = false;
     this.mind = null; // TODO original では null が入っていた
     this.id = id;
-    this.eventRouter = new EventRouter();
     this.editable = true;
     this.init();
   }
@@ -103,7 +99,6 @@ export default class MindCheese {
     // create instance of function provider
     this.layout = new LayoutProvider(
       this,
-      this.eventRouter,
       opts.layout.hspace,
       opts.layout.vspace,
       opts.layout.pspace
@@ -111,7 +106,6 @@ export default class MindCheese {
     const graph = new GraphCanvas(opts.view.line_color, opts.view.line_width);
     this.view = new ViewProvider(
       this,
-      this.eventRouter,
       this.container,
       opts.view.hmargin,
       opts.view.vmargin,
@@ -122,7 +116,7 @@ export default class MindCheese {
       opts.shortcut.enable,
       opts.shortcut.mappings
     );
-    this.draggable = new Draggable(this, this.eventRouter);
+    this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
 
     this.layout.init();
@@ -573,10 +567,6 @@ export default class MindCheese {
   resize(): void {
     console.log("JsMind.resize()");
     this.view.resize();
-  }
-
-  addEventListener(eventType: EventType, callback: (data: any) => void): void {
-    this.eventRouter.addEventListener(eventType, callback);
   }
 
   undo(): void {
