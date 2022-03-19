@@ -22,7 +22,7 @@ function isEmpty(s: string) {
 }
 
 export default class MindCheese {
-  options: any;
+  options: MindOption;
   public mind: Mind;
   layout: LayoutProvider;
   view: ViewProvider;
@@ -231,11 +231,8 @@ export default class MindCheese {
     this.layout.reset();
   }
 
-  private doShow(mind: any): void {
+  private doShow(mind: Mind): void {
     this.mind = mind;
-    if (!this.mind) {
-      throw new Error("data.load error");
-    }
 
     this.view.load();
     this.layout.layout();
@@ -243,6 +240,7 @@ export default class MindCheese {
     this.view.centerRoot();
   }
 
+  // nodeTree = object representation of the mindmap.
   showNodeTree(nodeTree: any): void {
     this.doReset();
     this.doShow(object2mindmap(nodeTree));
