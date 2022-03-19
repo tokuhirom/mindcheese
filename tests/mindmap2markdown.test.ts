@@ -1,4 +1,4 @@
-import { object2mindmap } from "../src/mindmap/format/node_tree/NodeTreeImporter";
+import { object2mindmap } from "../src/mindmap/format/node_tree/object2mindmap";
 import { mindmap2markdown } from "../src/mindmap/format/markdown/mindmap2markdown";
 
 const mind = {

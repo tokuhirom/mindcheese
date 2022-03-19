@@ -9,7 +9,7 @@ import Draggable from "./Draggable";
 import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import { object2mindmap } from "./format/node_tree/NodeTreeImporter";
+import { object2mindmap } from "./format/node_tree/object2mindmap";
 import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
