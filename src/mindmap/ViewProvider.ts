@@ -30,8 +30,8 @@ export default class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layout: LayoutProvider;
   private readonly container: HTMLElement;
-  jsmindInnerElement: HTMLDivElement; // div.jsmind-inner
-  jmnodes: HTMLElement; // <jmnodes>
+  mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
+  mcnodes: HTMLElement; // <mcnodes>
   size: { w: number; h: number };
   private selectedNode: MindNode;
   private editingNode: MindNode;
@@ -54,8 +54,8 @@ export default class ViewProvider {
     this.layout = mindCheese.layout;
 
     this.container = container;
-    this.jsmindInnerElement = null;
-    this.jmnodes = null;
+    this.mindCheeseInnerElement = null;
+    this.mcnodes = null;
 
     this.size = { w: 0, h: 0 };
 
@@ -76,15 +76,15 @@ export default class ViewProvider {
       return;
     }
 
-    this.jsmindInnerElement = document.createElement("div");
-    this.jmnodes = document.createElement("jmnodes");
+    this.mindCheeseInnerElement = document.createElement("div");
+    this.mcnodes = document.createElement("mcnodes");
     this.textAreaElement = document.createElement("textarea");
 
-    this.jsmindInnerElement.className = "jsmind-inner";
-    this.jsmindInnerElement.appendChild(this.graph.element());
-    this.jsmindInnerElement.appendChild(this.jmnodes);
+    this.mindCheeseInnerElement.className = "mindcheese-inner";
+    this.mindCheeseInnerElement.appendChild(this.graph.element());
+    this.mindCheeseInnerElement.appendChild(this.mcnodes);
 
-    this.textAreaElement.className = "jsmind-editor";
+    this.textAreaElement.className = "mindcheese-editor";
 
     this.textAreaElement.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
@@ -107,7 +107,7 @@ export default class ViewProvider {
       this.adjustEditorElementSize.bind(this)
     );
 
-    this.container.appendChild(this.jsmindInnerElement);
+    this.container.appendChild(this.mindCheeseInnerElement);
   }
 
   adjustEditorElementSize() {
@@ -127,10 +127,10 @@ export default class ViewProvider {
       return null;
     }
     const tagName = element.tagName.toLowerCase();
-    if (tagName === "jmnodes" || tagName === "body" || tagName === "html") {
+    if (tagName === "mcnodes" || tagName === "body" || tagName === "html") {
       return null;
     }
-    if (tagName === "jmnode" || tagName === "jmexpander") {
+    if (tagName === "mcnode" || tagName === "mcexpander") {
       return element.getAttribute("nodeid");
     } else {
       return this.getBindedNodeId(element.parentElement);
@@ -138,7 +138,7 @@ export default class ViewProvider {
   }
 
   isExpander(element: HTMLElement): boolean {
-    return element.tagName.toLowerCase() === "jmexpander";
+    return element.tagName.toLowerCase() === "mcexpander";
   }
 
   reset(): void {
@@ -152,9 +152,9 @@ export default class ViewProvider {
   resetTheme(): void {
     const themeName = this.mindCheese.options.theme;
     if (themeName) {
-      this.jmnodes.className = "theme-" + themeName;
+      this.mcnodes.className = "theme-" + themeName;
     } else {
-      this.jmnodes.className = "";
+      this.mcnodes.className = "";
     }
   }
 
@@ -167,8 +167,8 @@ export default class ViewProvider {
     const minSize = this.layout.getMinSize();
     const minWidth = minSize.w + this.hMargin * 2;
     const minHeight = minSize.h + this.vMargin * 2;
-    let clientW = this.jsmindInnerElement.clientWidth;
-    let clientH = this.jsmindInnerElement.clientHeight;
+    let clientW = this.mindCheeseInnerElement.clientWidth;
+    let clientH = this.mindCheeseInnerElement.clientHeight;
     console.debug(`ViewProvider.expand_size:
     min_width=${minWidth}
     min_height=${minHeight}
@@ -197,23 +197,23 @@ export default class ViewProvider {
     for (const node of Object.values(nodes)) {
       this.createNodeElement(node, documentFragment);
     }
-    this.jmnodes.appendChild(documentFragment);
+    this.mcnodes.appendChild(documentFragment);
     for (const node of Object.values(nodes)) {
       this.initNodeSize(node);
     }
   }
 
   addNode(node: MindNode): void {
-    this.createNodeElement(node, this.jmnodes);
+    this.createNodeElement(node, this.mcnodes);
     this.initNodeSize(node);
   }
 
   private createNodeElement(node: MindNode, parentNode: Node): void {
-    const nodeEl: HTMLElement = document.createElement("jmnode");
+    const nodeEl: HTMLElement = document.createElement("mcnode");
     if (node.isroot) {
       nodeEl.className = "root";
     } else {
-      const expanderElement: HTMLElement = document.createElement("jmexpander");
+      const expanderElement: HTMLElement = document.createElement("mcexpander");
       expanderElement.innerText = "-";
       expanderElement.setAttribute("nodeid", node.id);
       expanderElement.style.visibility = "hidden";
@@ -246,8 +246,8 @@ export default class ViewProvider {
     if (node.data.view) {
       const element = node.data.view.element;
       const expander = node.data.view.expander;
-      this.jmnodes.removeChild(element);
-      this.jmnodes.removeChild(expander);
+      this.mcnodes.removeChild(element);
+      this.mcnodes.removeChild(expander);
       node.data.view.element = null;
       node.data.view.expander = null;
     }
@@ -278,7 +278,7 @@ export default class ViewProvider {
   // Adjust the scroll bar. show node in the browser.
   adjustScrollBar(node: MindNode): void {
     const nodeEl = node.data.view.element;
-    const panelEl = this.jsmindInnerElement;
+    const panelEl = this.mindCheeseInnerElement;
     // console.debug(`select_node!
     // panelEl.scrollLeft=${panelEl.scrollLeft}
     // panelEl.clientWidth=${panelEl.clientWidth}
@@ -404,8 +404,8 @@ export default class ViewProvider {
   // TODO remove this method?
   resize(): void {
     this.graph.setSize(1, 1);
-    this.jmnodes.style.width = "1px";
-    this.jmnodes.style.height = "1px";
+    this.mcnodes.style.width = "1px";
+    this.mcnodes.style.height = "1px";
 
     this.expandSize();
     this.doShow();
@@ -413,8 +413,8 @@ export default class ViewProvider {
 
   private doShow(): void {
     this.graph.setSize(this.size.w, this.size.h);
-    this.jmnodes.style.width = this.size.w + "px";
-    this.jmnodes.style.height = this.size.h + "px";
+    this.mcnodes.style.width = this.size.w + "px";
+    this.mcnodes.style.height = this.size.h + "px";
     this.showNodes();
     this.showLines();
     //this.layout.cache_valid = true;
@@ -423,14 +423,14 @@ export default class ViewProvider {
 
   centerRoot(): void {
     // center root node
-    const outerW = this.jsmindInnerElement.clientWidth;
-    const outerH = this.jsmindInnerElement.clientHeight;
+    const outerW = this.mindCheeseInnerElement.clientWidth;
+    const outerH = this.mindCheeseInnerElement.clientHeight;
     if (this.size.w > outerW) {
       const offset = this.getViewOffset();
-      this.jsmindInnerElement.scrollLeft = offset.x - outerW / 2;
+      this.mindCheeseInnerElement.scrollLeft = offset.x - outerW / 2;
     }
     if (this.size.h > outerH) {
-      this.jsmindInnerElement.scrollTop = (this.size.h - outerH) / 2;
+      this.mindCheeseInnerElement.scrollTop = (this.size.h - outerH) / 2;
     }
   }
 
@@ -443,16 +443,16 @@ export default class ViewProvider {
   takeLocation(node: MindNode): Point {
     const vd = node.data.view;
     return new Point(
-      parseInt(vd.element.style.left) - this.jsmindInnerElement.scrollLeft,
-      parseInt(vd.element.style.top) - this.jsmindInnerElement.scrollTop
+      parseInt(vd.element.style.left) - this.mindCheeseInnerElement.scrollLeft,
+      parseInt(vd.element.style.top) - this.mindCheeseInnerElement.scrollTop
     );
   }
 
   restoreLocation(node: MindNode, location: Point): void {
     const vd = node.data.view;
-    this.jsmindInnerElement.scrollLeft =
+    this.mindCheeseInnerElement.scrollLeft =
       parseInt(vd.element.style.left) - location.x;
-    this.jsmindInnerElement.scrollTop =
+    this.mindCheeseInnerElement.scrollTop =
       parseInt(vd.element.style.top) - location.y;
   }
 
@@ -468,7 +468,7 @@ export default class ViewProvider {
       node.data.view.element = null;
       node.data.view.expander = null;
     }
-    this.jmnodes.innerHTML = "";
+    this.mcnodes.innerHTML = "";
   }
 
   showNodes(): void {

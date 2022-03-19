@@ -1,33 +1,33 @@
 /* From https://raw.githubusercontent.com/hizzgdev/jsmind/master/style/jsmind.css */
 
-#jsmind_container {
+#mindcheese_container {
   width: 100%;
   height: 100%;
 }
 
-/*#jsmind_container .jsmind-inner {*/
+/*#mindcheese_container .mindcheese-inner {*/
 /*  border: 4px solid red;*/
 /*}*/
-/*#jsmind_container canvas {*/
+/*#mindcheese_container canvas {*/
 /*  border: 4px solid darkgreen;*/
 /*}*/
-/*#jsmind_container jmnodes {*/
+/*#mindcheese_container mcnodes {*/
 /*  border: 4px solid orchid;*/
 /*}*/
 
-/*textarea.jsmind-editor {*/
+/*textarea.mindcheese-editor {*/
 /*  !*padding: 0;*!*/
 /*}*/
 
-canvas.jsmind-draggable {
+canvas.mindcheese-draggable {
   vertical-align: top;
 }
 
-textarea.jsmind-editor {
+textarea.mindcheese-editor {
   max-width: 380px;
   font-size: 21px;
 }
-jmnode {
+mcnode {
   max-width: 400px;
 }
 
@@ -40,14 +40,14 @@ jmnode {
  */
 
 /* important section */
-.jsmind-inner {
+.mindcheese-inner {
   position: relative;
   overflow: auto;
   width: 100%;
   height: 100%;
 } /*box-shadow:0 0 2px #000;*/
 
-.jsmind-inner {
+.mindcheese-inner {
   moz-user-select: -moz-none;
   -moz-user-select: none;
   -o-user-select: none;
@@ -58,22 +58,22 @@ jmnode {
 }
 
 /* z-index:1 */
-svg.jsmind {
+svg.mindCheese {
   position: absolute;
   z-index: 1;
 }
-canvas.jsmind {
+canvas.mindCheese {
   position: absolute;
   z-index: 1;
 }
 
 /* z-index:2 */
-jmnodes {
+mcnodes {
   position: absolute;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0);
 } /*background color is necessary*/
-jmnode {
+mcnode {
   position: absolute;
   cursor: default;
   /*max-width: 400px;*/
@@ -81,7 +81,7 @@ jmnode {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-jmexpander {
+mcexpander {
   position: absolute;
   width: 11px;
   height: 11px;
@@ -97,7 +97,7 @@ jmexpander {
 }
 
 /* default theme */
-jmnode {
+mcnode {
   padding: 10px;
   background-color: #fff;
   color: #333;
@@ -105,327 +105,327 @@ jmnode {
   box-shadow: 1px 1px 1px #666;
   font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
-jmnode:hover {
+mcnode:hover {
   box-shadow: 2px 2px 8px #000;
   background-color: #ebebeb;
   color: #333;
 }
-jmnode.selected {
+mcnode.selected {
   background-color: #11f;
   color: #fff;
   box-shadow: 2px 2px 8px #000;
 }
-jmnode.root {
+mcnode.root {
   font-size: 24px;
 }
-jmexpander {
+mcexpander {
   border-color: gray;
 }
-jmexpander:hover {
+mcexpander:hover {
   border-color: #000;
 }
 
 @media screen and (max-device-width: 1024px) {
-  jmnode {
+  mcnode {
     padding: 5px;
     border-radius: 3px;
     font-size: 14px;
   }
-  jmnode.root {
+  mcnode.root {
     font-size: 21px;
   }
 }
 /* primary theme */
-jmnodes.theme-primary jmnode {
+mcnodes.theme-primary mcnode {
   background-color: #428bca;
   color: #fff;
   border-color: #357ebd;
 }
-jmnodes.theme-primary jmnode:hover {
+mcnodes.theme-primary mcnode:hover {
   background-color: #3276b1;
   border-color: #285e8e;
 }
-jmnodes.theme-primary jmnode.selected {
+mcnodes.theme-primary mcnode.selected {
   background-color: #f1c40f;
   color: #fff;
 }
-jmnodes.theme-primary jmnode.root {
+mcnodes.theme-primary mcnode.root {
 }
-jmnodes.theme-primary jmexpander {
+mcnodes.theme-primary mcexpander {
 }
-jmnodes.theme-primary jmexpander:hover {
+mcnodes.theme-primary mcexpander:hover {
 }
 
 /* warning theme */
-jmnodes.theme-warning jmnode {
+mcnodes.theme-warning mcnode {
   background-color: #f0ad4e;
   border-color: #eea236;
   color: #fff;
 }
-jmnodes.theme-warning jmnode:hover {
+mcnodes.theme-warning mcnode:hover {
   background-color: #ed9c28;
   border-color: #d58512;
 }
-jmnodes.theme-warning jmnode.selected {
+mcnodes.theme-warning mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-warning jmnode.root {
+mcnodes.theme-warning mcnode.root {
 }
-jmnodes.theme-warning jmexpander {
+mcnodes.theme-warning mcexpander {
 }
-jmnodes.theme-warning jmexpander:hover {
+mcnodes.theme-warning mcexpander:hover {
 }
 
 /* danger theme */
-jmnodes.theme-danger jmnode {
+mcnodes.theme-danger mcnode {
   background-color: #d9534f;
   border-color: #d43f3a;
   color: #fff;
 }
-jmnodes.theme-danger jmnode:hover {
+mcnodes.theme-danger mcnode:hover {
   background-color: #d2322d;
   border-color: #ac2925;
 }
-jmnodes.theme-danger jmnode.selected {
+mcnodes.theme-danger mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-danger jmnode.root {
+mcnodes.theme-danger mcnode.root {
 }
-jmnodes.theme-danger jmexpander {
+mcnodes.theme-danger mcexpander {
 }
-jmnodes.theme-danger jmexpander:hover {
+mcnodes.theme-danger mcexpander:hover {
 }
 
 /* success theme */
-jmnodes.theme-success jmnode {
+mcnodes.theme-success mcnode {
   background-color: #5cb85c;
   border-color: #4cae4c;
   color: #fff;
 }
-jmnodes.theme-success jmnode:hover {
+mcnodes.theme-success mcnode:hover {
   background-color: #47a447;
   border-color: #398439;
 }
-jmnodes.theme-success jmnode.selected {
+mcnodes.theme-success mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-success jmnode.root {
+mcnodes.theme-success mcnode.root {
 }
-jmnodes.theme-success jmexpander {
+mcnodes.theme-success mcexpander {
 }
-jmnodes.theme-success jmexpander:hover {
+mcnodes.theme-success mcexpander:hover {
 }
 
 /* info theme */
-jmnodes.theme-info jmnode {
+mcnodes.theme-info mcnode {
   background-color: #5dc0de;
   border-color: #46b8da;
   color: #fff;
 }
-jmnodes.theme-info jmnode:hover {
+mcnodes.theme-info mcnode:hover {
   background-color: #39b3d7;
   border-color: #269abc;
 }
-jmnodes.theme-info jmnode.selected {
+mcnodes.theme-info mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-info jmnode.root {
+mcnodes.theme-info mcnode.root {
 }
-jmnodes.theme-info jmexpander {
+mcnodes.theme-info mcexpander {
 }
-jmnodes.theme-info jmexpander:hover {
+mcnodes.theme-info mcexpander:hover {
 }
 
 /* greensea theme */
-jmnodes.theme-greensea jmnode {
+mcnodes.theme-greensea mcnode {
   background-color: #1abc9c;
   color: #fff;
 }
-jmnodes.theme-greensea jmnode:hover {
+mcnodes.theme-greensea mcnode:hover {
   background-color: #16a085;
 }
-jmnodes.theme-greensea jmnode.selected {
+mcnodes.theme-greensea mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-greensea jmnode.root {
+mcnodes.theme-greensea mcnode.root {
 }
-jmnodes.theme-greensea jmexpander {
+mcnodes.theme-greensea mcexpander {
 }
-jmnodes.theme-greensea jmexpander:hover {
+mcnodes.theme-greensea mcexpander:hover {
 }
 
 /* nephrite theme */
-jmnodes.theme-nephrite jmnode {
+mcnodes.theme-nephrite mcnode {
   background-color: #2ecc71;
   color: #fff;
 }
-jmnodes.theme-nephrite jmnode:hover {
+mcnodes.theme-nephrite mcnode:hover {
   background-color: #27ae60;
 }
-jmnodes.theme-nephrite jmnode.selected {
+mcnodes.theme-nephrite mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-nephrite jmnode.root {
+mcnodes.theme-nephrite mcnode.root {
 }
-jmnodes.theme-nephrite jmexpander {
+mcnodes.theme-nephrite mcexpander {
 }
-jmnodes.theme-nephrite jmexpander:hover {
+mcnodes.theme-nephrite mcexpander:hover {
 }
 
 /* belizehole theme */
-jmnodes.theme-belizehole jmnode {
+mcnodes.theme-belizehole mcnode {
   background-color: #3498db;
   color: #fff;
 }
-jmnodes.theme-belizehole jmnode:hover {
+mcnodes.theme-belizehole mcnode:hover {
   background-color: #2980b9;
 }
-jmnodes.theme-belizehole jmnode.selected {
+mcnodes.theme-belizehole mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-belizehole jmnode.root {
+mcnodes.theme-belizehole mcnode.root {
 }
-jmnodes.theme-belizehole jmexpander {
+mcnodes.theme-belizehole mcexpander {
 }
-jmnodes.theme-belizehole jmexpander:hover {
+mcnodes.theme-belizehole mcexpander:hover {
 }
 
 /* wisteria theme */
-jmnodes.theme-wisteria jmnode {
+mcnodes.theme-wisteria mcnode {
   background-color: #9b59b6;
   color: #fff;
 }
-jmnodes.theme-wisteria jmnode:hover {
+mcnodes.theme-wisteria mcnode:hover {
   background-color: #8e44ad;
 }
-jmnodes.theme-wisteria jmnode.selected {
+mcnodes.theme-wisteria mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-wisteria jmnode.root {
+mcnodes.theme-wisteria mcnode.root {
 }
-jmnodes.theme-wisteria jmexpander {
+mcnodes.theme-wisteria mcexpander {
 }
-jmnodes.theme-wisteria jmexpander:hover {
+mcnodes.theme-wisteria mcexpander:hover {
 }
 
 /* asphalt theme */
-jmnodes.theme-asphalt jmnode {
+mcnodes.theme-asphalt mcnode {
   background-color: #34495e;
   color: #fff;
 }
-jmnodes.theme-asphalt jmnode:hover {
+mcnodes.theme-asphalt mcnode:hover {
   background-color: #2c3e50;
 }
-jmnodes.theme-asphalt jmnode.selected {
+mcnodes.theme-asphalt mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-asphalt jmnode.root {
+mcnodes.theme-asphalt mcnode.root {
 }
-jmnodes.theme-asphalt jmexpander {
+mcnodes.theme-asphalt mcexpander {
 }
-jmnodes.theme-asphalt jmexpander:hover {
+mcnodes.theme-asphalt mcexpander:hover {
 }
 
 /* orange theme */
-jmnodes.theme-orange jmnode {
+mcnodes.theme-orange mcnode {
   background-color: #f1c40f;
   color: #fff;
 }
-jmnodes.theme-orange jmnode:hover {
+mcnodes.theme-orange mcnode:hover {
   background-color: #f39c12;
 }
-jmnodes.theme-orange jmnode.selected {
+mcnodes.theme-orange mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-orange jmnode.root {
+mcnodes.theme-orange mcnode.root {
 }
-jmnodes.theme-orange jmexpander {
+mcnodes.theme-orange mcexpander {
 }
-jmnodes.theme-orange jmexpander:hover {
+mcnodes.theme-orange mcexpander:hover {
 }
 
 /* pumpkin theme */
-jmnodes.theme-pumpkin jmnode {
+mcnodes.theme-pumpkin mcnode {
   background-color: #e67e22;
   color: #fff;
 }
-jmnodes.theme-pumpkin jmnode:hover {
+mcnodes.theme-pumpkin mcnode:hover {
   background-color: #d35400;
 }
-jmnodes.theme-pumpkin jmnode.selected {
+mcnodes.theme-pumpkin mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-pumpkin jmnode.root {
+mcnodes.theme-pumpkin mcnode.root {
 }
-jmnodes.theme-pumpkin jmexpander {
+mcnodes.theme-pumpkin mcexpander {
 }
-jmnodes.theme-pumpkin jmexpander:hover {
+mcnodes.theme-pumpkin mcexpander:hover {
 }
 
 /* pomegranate theme */
-jmnodes.theme-pomegranate jmnode {
+mcnodes.theme-pomegranate mcnode {
   background-color: #e74c3c;
   color: #fff;
 }
-jmnodes.theme-pomegranate jmnode:hover {
+mcnodes.theme-pomegranate mcnode:hover {
   background-color: #c0392b;
 }
-jmnodes.theme-pomegranate jmnode.selected {
+mcnodes.theme-pomegranate mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-pomegranate jmnode.root {
+mcnodes.theme-pomegranate mcnode.root {
 }
-jmnodes.theme-pomegranate jmexpander {
+mcnodes.theme-pomegranate mcexpander {
 }
-jmnodes.theme-pomegranate jmexpander:hover {
+mcnodes.theme-pomegranate mcexpander:hover {
 }
 
 /* clouds theme */
-jmnodes.theme-clouds jmnode {
+mcnodes.theme-clouds mcnode {
   background-color: #ecf0f1;
   color: #333;
 }
-jmnodes.theme-clouds jmnode:hover {
+mcnodes.theme-clouds mcnode:hover {
   background-color: #bdc3c7;
 }
-jmnodes.theme-clouds jmnode.selected {
+mcnodes.theme-clouds mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-clouds jmnode.root {
+mcnodes.theme-clouds mcnode.root {
 }
-jmnodes.theme-clouds jmexpander {
+mcnodes.theme-clouds mcexpander {
 }
-jmnodes.theme-clouds jmexpander:hover {
+mcnodes.theme-clouds mcexpander:hover {
 }
 
 /* asbestos theme */
-jmnodes.theme-asbestos jmnode {
+mcnodes.theme-asbestos mcnode {
   background-color: #95a5a6;
   color: #fff;
 }
-jmnodes.theme-asbestos jmnode:hover {
+mcnodes.theme-asbestos mcnode:hover {
   background-color: #7f8c8d;
 }
-jmnodes.theme-asbestos jmnode.selected {
+mcnodes.theme-asbestos mcnode.selected {
   background-color: #11f;
   color: #fff;
 }
-jmnodes.theme-asbestos jmnode.root {
+mcnodes.theme-asbestos mcnode.root {
 }
-jmnodes.theme-asbestos jmexpander {
+mcnodes.theme-asbestos mcexpander {
 }
-jmnodes.theme-asbestos jmexpander:hover {
+mcnodes.theme-asbestos mcexpander:hover {
 }

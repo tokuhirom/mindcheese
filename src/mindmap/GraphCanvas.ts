@@ -9,7 +9,7 @@ export default class GraphCanvas {
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
     this.canvasElement = document.createElement("canvas");
-    this.canvasElement.className = "jsmind";
+    this.canvasElement.className = "mindCheese";
     this.canvasContext = this.canvasElement.getContext("2d");
     this.size = { w: 0, h: 0 };
   }

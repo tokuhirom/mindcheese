@@ -105,12 +105,12 @@ export default class MindCheese {
   }
 
   private bindEvent(): void {
-    this.view.jmnodes.addEventListener(
+    this.view.mcnodes.addEventListener(
       "mousedown",
       this.mousedownHandle.bind(this)
     );
-    this.view.jmnodes.addEventListener("click", this.clickHandle.bind(this));
-    this.view.jmnodes.addEventListener(
+    this.view.mcnodes.addEventListener("click", this.clickHandle.bind(this));
+    this.view.mcnodes.addEventListener(
       "dblclick",
       this.dblclickHandle.bind(this)
     );
@@ -124,7 +124,7 @@ export default class MindCheese {
     const element = e.target as HTMLElement;
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
-      if (element.tagName.toLowerCase() === "jmnode") {
+      if (element.tagName.toLowerCase() === "mcnode") {
         const theNode = this.getNodeById(nodeid);
         if (!theNode) {
           throw new Error("the node[id=" + nodeid + "] can not be found.");
@@ -485,7 +485,7 @@ export default class MindCheese {
   }
 
   resize(): void {
-    console.log("JsMind.resize()");
+    console.log("MindCheese.resize()");
     this.view.resize();
   }
 
@@ -551,7 +551,7 @@ export default class MindCheese {
            *     - d = 3
            */
           console.debug(
-            `JsMind.move_down: topic=${node.topic} before.topic=${
+            `MindCheese.moveDown: topic=${node.topic} before.topic=${
               children[i + 1].topic
             } direction=${node.direction}`
           );

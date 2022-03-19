@@ -85,22 +85,22 @@ export default class Draggable {
   }
 
   resize(): void {
-    this.mindCheese.view.jmnodes.appendChild(this.shadow);
+    this.mindCheese.view.mcnodes.appendChild(this.shadow);
     this.canvasElement.width = this.mindCheese.view.size.w;
     this.canvasElement.height = this.mindCheese.view.size.h;
   }
 
   private createCanvas(): void {
     const c: HTMLCanvasElement = document.createElement("canvas");
-    c.className = "jsmind-draggable";
-    this.mindCheese.view.jsmindInnerElement.appendChild(c);
+    c.className = "mindcheese-draggable";
+    this.mindCheese.view.mindCheeseInnerElement.appendChild(c);
     const ctx: CanvasRenderingContext2D = c.getContext("2d");
     this.canvasElement = c;
     this.canvasContext = ctx;
   }
 
   private createShadow(): void {
-    const s: HTMLElement = document.createElement("jmnode");
+    const s: HTMLElement = document.createElement("mcnode");
     s.style.visibility = "hidden";
     s.style.zIndex = "3";
     s.style.cursor = "move";
@@ -248,7 +248,7 @@ export default class Draggable {
 
     const jview = this.mindCheese.view;
     const el = e.target as HTMLElement;
-    if (el.tagName.toLowerCase() !== "jmnode") {
+    if (el.tagName.toLowerCase() !== "mcnode") {
       return;
     }
     const nodeid = jview.getBindedNodeId(el);
@@ -332,9 +332,7 @@ export default class Draggable {
     targetNode: MindNode,
     targetDirect: Direction
   ): void {
-    console.log(
-      `jsMind.dgraggable.move_node: ${srcNode} ${targetNode} ${targetDirect}`
-    );
+    console.log(`Draggable.moveNode: ${srcNode} ${targetNode} ${targetDirect}`);
     const shadowH = this.shadow.offsetTop;
     if (!!targetNode && !!srcNode && !MindNode.inherited(srcNode, targetNode)) {
       console.log(`let's move!`);
