@@ -145,9 +145,9 @@ test("basic", () => {
         id: 1,
         topic: "A",
         direction: "right",
-        children: [{id: 2, topic: "B", direction: "right", children: []}],
+        children: [{ id: 2, topic: "B", direction: "right", children: [] }],
       },
-      {id: 3, topic: "C", direction: "right", children: []},
+      { id: 3, topic: "C", direction: "right", children: [] },
     ],
   });
 });
@@ -164,9 +164,9 @@ test("left", () => {
         id: 1,
         topic: "A",
         direction: "right",
-        children: [{id: 2, topic: "B", direction: "right", children: []}],
+        children: [{ id: 2, topic: "B", direction: "right", children: [] }],
       },
-      {id: 3, topic: "C", direction: "left", children: []},
+      { id: 3, topic: "C", direction: "left", children: [] },
     ],
   });
 });
@@ -178,7 +178,7 @@ test("ignore yfm", () => {
   expect(mm).toStrictEqual({
     id: "root",
     topic: "top",
-    children: [{id: 1, topic: "A", direction: "right", children: []}],
+    children: [{ id: 1, topic: "A", direction: "right", children: [] }],
   });
 });
 
@@ -198,25 +198,25 @@ test("dedent 2 step", () => {
     id: "root",
     topic: "top",
     children: [
-      {id: 1, topic: "A1", direction: "right", children: []},
+      { id: 1, topic: "A1", direction: "right", children: [] },
       {
         id: 2,
         topic: "A2",
         direction: "right",
         children: [
-          {id: 3, topic: "B1", direction: "right", children: []},
+          { id: 3, topic: "B1", direction: "right", children: [] },
           {
             id: 4,
             topic: "B2",
             direction: "right",
             children: [
-              {id: 5, topic: "C1", direction: "right", children: []},
-              {id: 6, topic: "C2", direction: "right", children: []},
+              { id: 5, topic: "C1", direction: "right", children: [] },
+              { id: 6, topic: "C2", direction: "right", children: [] },
             ],
           },
         ],
       },
-      {id: 7, topic: "A3", direction: "right", children: []},
+      { id: 7, topic: "A3", direction: "right", children: [] },
     ],
   });
 });
@@ -239,33 +239,33 @@ test("dedent 3 step", () => {
     id: "root",
     topic: "top",
     children: [
-      {id: 1, topic: "A1", direction: "right", children: []},
+      { id: 1, topic: "A1", direction: "right", children: [] },
       {
         id: 2,
         topic: "A2",
         direction: "right",
         children: [
-          {id: 3, topic: "B1", direction: "right", children: []},
+          { id: 3, topic: "B1", direction: "right", children: [] },
           {
             id: 4,
             topic: "B2",
             direction: "right",
             children: [
-              {id: 5, topic: "C1", direction: "right", children: []},
+              { id: 5, topic: "C1", direction: "right", children: [] },
               {
                 id: 6,
                 topic: "C2",
                 direction: "right",
                 children: [
-                  {id: 7, topic: "D1", direction: "right", children: []},
-                  {id: 8, topic: "D2", direction: "right", children: []},
+                  { id: 7, topic: "D1", direction: "right", children: [] },
+                  { id: 8, topic: "D2", direction: "right", children: [] },
                 ],
               },
             ],
           },
         ],
       },
-      {id: 9, topic: "A3", direction: "right", children: []},
+      { id: 9, topic: "A3", direction: "right", children: [] },
     ],
   });
 });
@@ -283,7 +283,7 @@ test("Multiline", () => {
         topic: "A1\nA2",
         direction: "right",
         children: [
-          {id: 2, topic: "B1\nB2\nB3", direction: "right", children: []},
+          { id: 2, topic: "B1\nB2\nB3", direction: "right", children: [] },
         ],
       },
     ],
