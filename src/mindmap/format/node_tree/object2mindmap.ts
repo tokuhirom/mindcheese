@@ -4,7 +4,7 @@ import { Direction } from "../../MindmapConstants";
 
 /*
 {
-    { "id": "root", "topic": "jsMind Example" }
+    { "id": "root", "topic": "mindCheese Example" }
 }
  */
 

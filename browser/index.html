@@ -20,10 +20,10 @@
 
     <script>
       const container = document.getElementById("container");
-      const jsmind = new window.MindCheese(1, container);
-      jsmind.showNodeTree({
+      const mindCheese = new window.MindCheese(1, container);
+      mindCheese.showNodeTree({
         id: "root",
-        topic: "jsMind",
+        topic: "mindCheese",
         children: [
           {
             id: "easy",
@@ -89,45 +89,45 @@
 
       document.getElementById("layout").addEventListener("click", () => {
         console.log("layout.layout");
-        jsmind.layout.layout();
+        mindCheese.layout.layout();
         return false;
       });
       document.getElementById("viewShow").addEventListener("click", () => {
         console.log("viewShow");
-        jsmind.view.show();
+        mindCheese.view.show();
         return false;
       });
       document.getElementById("expandSize").addEventListener("click", () => {
         console.log("viewShow");
-        jsmind.view.expandSize();
+        mindCheese.view.expandSize();
         return false;
       });
       document
         .getElementById("dump_to_console")
         .addEventListener("click", () => {
-          const data = jsmind.getNodeTree();
+          const data = mindCheese.getNodeTree();
           console.log(data);
           return false;
         });
       document
         .getElementById("dump_to_console_markdown")
         .addEventListener("click", () => {
-          const data = jsmind.getMarkdown();
+          const data = mindCheese.getMarkdown();
           console.log(data);
           return false;
         });
       document.getElementById("resize").addEventListener("click", () => {
-        jsmind.resize();
+        mindCheese.resize();
         resize();
         return false;
       });
       document.getElementById("undo").addEventListener("click", () => {
-        jsmind.undo();
+        mindCheese.undo();
         resize();
         return false;
       });
       document.getElementById("load_markdown").addEventListener("click", () => {
-        jsmind.showMarkdown(
+        mindCheese.showMarkdown(
           `
 - マークダウンのテスト
   - a1
