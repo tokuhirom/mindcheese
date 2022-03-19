@@ -85,6 +85,7 @@ export default class ViewProvider {
     this.mindCheeseInnerElement.appendChild(this.mcnodes);
 
     this.textAreaElement.className = "mindcheese-editor";
+    this.textAreaElement.wrap = "off";
 
     this.textAreaElement.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
@@ -110,13 +111,22 @@ export default class ViewProvider {
     this.container.appendChild(this.mindCheeseInnerElement);
   }
 
+
   adjustEditorElementSize() {
     const el = this.textAreaElement;
     el.style.width = "";
     el.style.height = "";
     const lineHeight = 1.3;
-    el.style.width = el.scrollWidth + "px";
-    el.style.height = (el.value.split(/\n/).length * lineHeight) + "em";
+    const fontSize = 14;
+    el.style.width = `${(() => {
+      const lines = el.value.split(/\n/g)
+      let max = 0;
+      lines.map(line => line.length).forEach(it => {
+        max = Math.max(it, max)
+      })
+      return max * fontSize
+    })()}px`;
+    el.style.height = el.value.split(/\n/).length * lineHeight + "em";
     this.editingNode.data.view.width = this.textAreaElement.clientWidth;
     this.editingNode.data.view.height = this.textAreaElement.clientHeight;
     this.layout.layout();
@@ -364,7 +374,8 @@ export default class ViewProvider {
     this.textAreaElement.style.width = "380px";
     // TODO I don't know to get the line height from element object.
     const lineHeight = 1.3;
-    this.textAreaElement.style.height = (topic.split(/\n/).length * lineHeight) + "em";
+    this.textAreaElement.style.height =
+      topic.split(/\n/).length * lineHeight + "em";
     element.innerHTML = "";
     element.appendChild(this.textAreaElement);
     element.style.zIndex = "5";

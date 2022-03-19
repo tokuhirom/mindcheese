@@ -21,11 +21,12 @@ textarea.mindcheese-editor {
   font-size: 21px;
   line-height: 1.3;
   resize: none;
+  outline: none; /* remove the border */
 }
+
 mcnode {
   max-width: 400px;
 }
-
 
 /* important section */
 .mindcheese-inner {
@@ -55,7 +56,9 @@ mcnodes {
   position: absolute;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0);
-} /*background color is necessary*/
+}
+
+/*background color is necessary*/
 mcnode {
   position: absolute;
   cursor: default;
@@ -64,6 +67,7 @@ mcnode {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 mcexpander {
   position: absolute;
   width: 11px;
@@ -88,24 +92,30 @@ mcnode {
   /*box-shadow: 0px 0px 1px #666;*/
   font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
+
 mcnode.editing {
   padding: 0;
 }
+
 mcnode:hover {
   box-shadow: 2px 2px 8px #000;
   background-color: #ebebeb;
   color: #333;
 }
+
 mcnode.selected {
   color: #fff;
   box-shadow: 2px 2px 8px #000;
 }
+
 mcnode.root {
   font-size: 24px;
 }
+
 mcexpander {
   border-color: gray;
 }
+
 mcexpander:hover {
   border-color: #000;
 }
@@ -116,10 +126,12 @@ mcexpander:hover {
     border-radius: 3px;
     font-size: 14px;
   }
+
   mcnode.root {
     font-size: 21px;
   }
 }
+
 /* primary theme */
 mcnodes.theme-primary mcnode {
   background-color: white;
@@ -127,16 +139,21 @@ mcnodes.theme-primary mcnode {
   /* TODO: render underline in canvas. */
   border-bottom: 2px solid black;
 }
+
 mcnodes.theme-primary mcnode:hover {
 }
+
 mcnodes.theme-primary mcnode.selected {
   color: black;
 }
+
 mcnodes.theme-primary mcnode.root {
   background-color: black;
   color: white;
 }
+
 mcnodes.theme-primary mcexpander {
 }
+
 mcnodes.theme-primary mcexpander:hover {
 }
