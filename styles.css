@@ -1,4 +1,11 @@
 /* From https://raw.githubusercontent.com/hizzgdev/jsmind/master/style/jsmind.css */
+/*
+ * Original jsmind's css is licensed by BSD License
+ * Copyright (c) 2014-2015 hizzgdev@163.com
+ *
+ * Project Home:
+ *   https://github.com/hizzgdev/jsmind/
+ */
 
 #mindcheese_container {
   width: 100%;
@@ -17,13 +24,6 @@ mcnode {
   max-width: 400px;
 }
 
-/*
- * Released under BSD License
- * Copyright (c) 2014-2015 hizzgdev@163.com
- *
- * Project Home:
- *   https://github.com/hizzgdev/jsmind/
- */
 
 /* important section */
 .mindcheese-inner {
@@ -86,13 +86,15 @@ mcnode {
   /*box-shadow: 0px 0px 1px #666;*/
   font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
+mcnode.editing {
+  padding: 0;
+}
 mcnode:hover {
   box-shadow: 2px 2px 8px #000;
   background-color: #ebebeb;
   color: #333;
 }
 mcnode.selected {
-  background-color: #11f;
   color: #fff;
   box-shadow: 2px 2px 8px #000;
 }

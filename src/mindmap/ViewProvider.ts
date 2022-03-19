@@ -365,6 +365,7 @@ export default class ViewProvider {
     element.innerHTML = "";
     element.appendChild(this.textAreaElement);
     element.style.zIndex = "5";
+    element.classList.add("editing");
     this.textAreaElement.focus();
     this.textAreaElement.select();
 
@@ -379,6 +380,7 @@ export default class ViewProvider {
       const element = viewData.element;
       const topic = this.textAreaElement.value;
       element.style.zIndex = "auto";
+      element.classList.remove("editing");
       element.removeChild(this.textAreaElement);
       if (isEmpty(topic) || node.topic === topic) {
         element.innerHTML = this.renderer(node.topic);
