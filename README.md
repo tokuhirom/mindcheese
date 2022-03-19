@@ -9,11 +9,18 @@ Portable Mindmap library written in TypeScript.
 
 - This library based on jsMind: https://github.com/hizzgdev/jsmind
   - base commit hash is 33ad14832661034dc9a5a84bc0b0f18c93ceca4a
-- [ ] TODO: run jest on github actions
+- [x] TODO: run jest on github actions
 - [x] DnD support
-- [ ] Undo feature
+- [x] Undo feature
 
 自分でビルドしたら試せます。
+
+## Motivation
+
+jsMind is a great library to implement the mindmap editor.
+... and so, I want to add/modify some features. But jsMind is written in pure javascript.
+Large library written in pure JavaScript is hard to modify.
+As a result, I port whole of the jsMind to TypeScript. And I added some features, what I want.
 
 ## Hacking
 
