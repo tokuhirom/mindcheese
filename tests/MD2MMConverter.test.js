@@ -25,11 +25,6 @@ test("complex", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: {
-      name: "jsMind remote",
-      author: "hizzgdev@163.com",
-      version: "0.2",
-    },
     format: "node_tree",
     data: {
       id: "root",
@@ -146,7 +141,6 @@ test("basic", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
     format: "node_tree",
     data: {
       id: "root",
@@ -169,7 +163,6 @@ test("left", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
     format: "node_tree",
     data: {
       id: "root",
@@ -192,7 +185,6 @@ test("ignore yfm", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
     format: "node_tree",
     data: {
       id: "root",
@@ -215,7 +207,6 @@ test("dedent 2 step", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
     format: "node_tree",
     data: {
       id: "root",
@@ -260,7 +251,6 @@ test("dedent 3 step", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
     format: "node_tree",
     data: {
       id: "root",
@@ -303,7 +293,6 @@ test("Multiline", () => {
   const mm = MD2MMConverter.convertMD2MM("top", md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    meta: { name: "jsMind remote", author: "hizzgdev@163.com", version: "0.2" },
     format: "node_tree",
     data: {
       id: "root",

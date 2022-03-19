@@ -82,11 +82,6 @@ function parse(title: string, md: string) {
 
 export function convertMD2MM(title: string, md: string): any {
   return {
-    meta: {
-      name: "jsMind remote",
-      author: "hizzgdev@163.com",
-      version: "0.2",
-    },
     format: "node_tree",
     data: parse(title, md.replace(/^---$.*^---$/ms, "")),
   };

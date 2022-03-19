@@ -1,10 +1,5 @@
 const MM2MDConverter = require("../src/MM2MDConverter");
 const mind = {
-  meta: {
-    name: "jsMind remote",
-    author: "hizzgdev@163.com",
-    version: "0.2",
-  },
   format: "node_tree",
   data: {
     id: "root",
@@ -79,11 +74,6 @@ test("basic", () => {
 
 test("multiline", () => {
   const mind = {
-    meta: {
-      name: "jsMind remote",
-      author: "hizzgdev@163.com",
-      version: "0.2",
-    },
     format: "node_tree",
     data: {
       id: "root",

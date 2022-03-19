@@ -5,11 +5,6 @@ import { Direction } from "../../MindmapConstants";
 
 /*
 {
-    "meta": {
-      "name": __name__,
-      "author": __author__,
-      "version": __version__
-    },
     "format": "node_tree",
     "data": { "id": "root", "topic": "jsMind Example" }
 }
