@@ -8,7 +8,7 @@ export class RoundRobin<T> {
   }
 
   take(): T {
-    const v = this.data[this.index++]
+    const v = this.data[this.index++];
     if (this.index == this.data.length) {
       this.index = 0;
     }
