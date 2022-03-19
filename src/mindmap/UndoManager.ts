@@ -12,10 +12,6 @@ export default class UndoManager {
     this.undoStackLimit = undoStackLimit;
   }
 
-  init(): void {
-    this.mindCheese.addEventListener(EventType.BeforeEdit, this.recordSnapshot.bind(this));
-  }
-
   recordSnapshot() {
     if (this.undoStack.length > this.undoStackLimit) {
       console.log(`UndoManager: callback event. too much stacks.`);

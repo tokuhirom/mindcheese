@@ -6,7 +6,6 @@ export default class EventRouter {
   constructor() {
     this.eventHandlersMap = {
       "2": [],
-      "5": [],
     };
   }
 

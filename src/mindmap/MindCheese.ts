@@ -129,7 +129,6 @@ export default class MindCheese {
     this.view.init();
     this.shortcut.init();
     this.draggable.init(this.container);
-    this.undoManager.init();
 
     this.bindEvent();
   }
@@ -340,11 +339,7 @@ export default class MindCheese {
       return null;
     }
 
-    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
-      evt: "add_node",
-      data: [parentNode.id, nodeid, topic],
-      node: nodeid,
-    });
+    this.undoManager.recordSnapshot();
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null, true);
     if (node) {
       this.view.addNode(node);
@@ -365,11 +360,7 @@ export default class MindCheese {
       return null;
     }
 
-    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
-      evt: "insert_node_before",
-      data: [nodeBefore.id, nodeid, topic],
-      node: nodeid,
-    });
+    this.undoManager.recordSnapshot();
     const node = this.mind.insertNodeBefore(nodeBefore, nodeid, topic);
     if (node) {
       this.view.addNode(node);
@@ -391,11 +382,7 @@ export default class MindCheese {
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
     if (node) {
-      this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
-        evt: "insert_node_after",
-        data: [nodeAfter.id, nodeid, topic],
-        node: nodeid,
-      });
+      this.undoManager.recordSnapshot();
       this.view.addNode(node);
       this.layout.layout();
       this.view.show();
@@ -416,12 +403,7 @@ export default class MindCheese {
 
     const nodeid = node.id;
     const parentNode = node.parent;
-    const parentid = node.parent.id;
-    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
-      evt: "remove_node",
-      data: [nodeid],
-      node: parentid,
-    });
+    this.undoManager.recordSnapshot();
     const nextSelectedNode = this.findUpperBrotherOrParentNode(
       parentNode,
       nodeid
@@ -474,11 +456,7 @@ export default class MindCheese {
       return;
     }
 
-    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
-      evt: "update_node",
-      data: [nodeid, topic],
-      node: nodeid,
-    });
+    this.undoManager.recordSnapshot();
     if (node.topic === topic) {
       console.info("nothing changed");
       this.view.updateNode(node);
@@ -510,11 +488,7 @@ export default class MindCheese {
       return;
     }
 
-    this.eventRouter.invokeEventHandler(EventType.BeforeEdit, {
-      evt: "move_node",
-      data: [node.id, beforeid, parent.id, direction],
-      node: node.id,
-    });
+    this.undoManager.recordSnapshot();
     this.mind.moveNode(node, beforeid, parent, direction);
     this.view.updateNode(node);
     this.layout.layout();

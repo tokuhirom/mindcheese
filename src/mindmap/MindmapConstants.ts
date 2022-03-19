@@ -8,7 +8,6 @@ export const enum Direction {
 
 export const enum EventType {
   Resize = 2,
-  BeforeEdit = 5,
 }
 
 export const BEFOREID_FIRST = "_first_";
