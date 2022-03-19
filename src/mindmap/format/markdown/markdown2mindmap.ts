@@ -1,4 +1,4 @@
-import NodeTreeImporter from "../node_tree/NodeTreeImporter";
+import {object2mindmap} from "../node_tree/NodeTreeImporter";
 import Mind from "../../Mind";
 
 function parse(md: string) {
@@ -94,5 +94,5 @@ function parse(md: string) {
 
 export function markdown2mindmap(md: string): Mind {
   const tree = parse(md.replace(/^---$.*^---$/ms, ""));
-  return new NodeTreeImporter().getMind(tree);
+  return object2mindmap(tree);
 }

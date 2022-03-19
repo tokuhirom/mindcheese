@@ -6,13 +6,13 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_LAST, Direction} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
-import { MindOption } from "./MindOption";
-import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
-import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
+import {object2mindmap} from "./format/node_tree/NodeTreeImporter";
+import {MindOption} from "./MindOption";
+import {mindmap2markdown} from "./format/markdown/mindmap2markdown";
+import {markdown2mindmap} from "./format/markdown/markdown2mindmap";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -33,7 +33,6 @@ export default class MindCheese {
   private editable: boolean;
   private readonly container: HTMLElement;
 
-  private nodeTreeImporter = new NodeTreeImporter();
   constructor(
     id: number,
     container: HTMLElement,
@@ -246,9 +245,7 @@ export default class MindCheese {
 
   showNodeTree(nodeTree: any): void {
     this.doReset();
-
-    const mind = this.nodeTreeImporter.getMind(nodeTree);
-    this.doShow(mind);
+    this.doShow(object2mindmap(nodeTree));
   }
 
   showMarkdown(body: string): void {

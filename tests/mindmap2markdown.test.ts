@@ -1,4 +1,4 @@
-import NodeTreeImporter from "../src/mindmap/format/node_tree/NodeTreeImporter";
+import {object2mindmap} from "../src/mindmap/format/node_tree/NodeTreeImporter";
 import { mindmap2markdown } from "../src/mindmap/format/markdown/mindmap2markdown";
 
 const mind = {
@@ -48,7 +48,7 @@ const mind = {
 };
 
 test("basic", () => {
-  const mindobj = new NodeTreeImporter().getMind(mind);
+  const mindobj = object2mindmap(mind);
   console.log(JSON.stringify(mindobj.root.toObject(), null, 2));
   const md = mindmap2markdown(mindobj);
   expect(md).toBe(
@@ -93,7 +93,7 @@ test("multiline", () => {
       },
     ],
   };
-  const mindobj = new NodeTreeImporter().getMind(mind);
+  const mindobj = object2mindmap(mind);
   const md = mindmap2markdown(mindobj);
   expect(md).toBe(
     [
