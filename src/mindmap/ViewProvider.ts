@@ -27,7 +27,7 @@ export function plainTextRenderer(topic: string) {
 
 // noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
-  private readonly jm: MindCheese;
+  private readonly mindCheese: MindCheese;
   private readonly layout: LayoutProvider;
   private readonly container: HTMLElement;
   jsmindInnerElement: HTMLDivElement; // div.jsmind-inner
@@ -42,16 +42,16 @@ export default class ViewProvider {
   private readonly vMargin: number;
 
   constructor(
-    jm: MindCheese,
+    mindCheese: MindCheese,
     container: HTMLElement,
     hmargin = 100,
     vmargin = 50,
     graph: GraphCanvas,
     renderer = plainTextRenderer
   ) {
-    this.jm = jm;
+    this.mindCheese = mindCheese;
     this.renderer = renderer;
-    this.layout = jm.layout;
+    this.layout = mindCheese.layout;
 
     this.container = container;
     this.jsmindInnerElement = null;
@@ -150,7 +150,7 @@ export default class ViewProvider {
   }
 
   resetTheme(): void {
-    const themeName = this.jm.options.theme;
+    const themeName = this.mindCheese.options.theme;
     if (themeName) {
       this.jmnodes.className = "theme-" + themeName;
     } else {
@@ -191,7 +191,7 @@ export default class ViewProvider {
   }
 
   private initNodes(): void {
-    const nodes = this.jm.mind.nodes;
+    const nodes = this.mindCheese.mind.nodes;
     const documentFragment: DocumentFragment =
       document.createDocumentFragment();
     for (const node of Object.values(nodes)) {
@@ -389,7 +389,7 @@ export default class ViewProvider {
           this.show();
         }, 0);
       } else {
-        this.jm.updateNode(node.id, topic);
+        this.mindCheese.updateNode(node.id, topic);
       }
     }
   }
@@ -418,7 +418,7 @@ export default class ViewProvider {
     this.showNodes();
     this.showLines();
     //this.layout.cache_valid = true;
-    this.jm.draggable.resize();
+    this.mindCheese.draggable.resize();
   }
 
   centerRoot(): void {
@@ -457,7 +457,7 @@ export default class ViewProvider {
   }
 
   clearNodes(): void {
-    const mind = this.jm.mind;
+    const mind = this.mindCheese.mind;
     if (mind == null) {
       return;
     }
@@ -472,7 +472,7 @@ export default class ViewProvider {
   }
 
   showNodes(): void {
-    const nodes = this.jm.mind.nodes;
+    const nodes = this.mindCheese.mind.nodes;
     let node = null;
     let nodeElement = null;
     let expander = null;
@@ -516,7 +516,7 @@ export default class ViewProvider {
 
   showLines(): void {
     this.graph.clear();
-    const nodes = this.jm.mind.nodes;
+    const nodes = this.mindCheese.mind.nodes;
     let node = null; // TODO make this const
     let pin = null; // TODO make this const
     let pout = null; // TODO make this const

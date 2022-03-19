@@ -35,7 +35,7 @@ class ClosePoint {
 }
 
 export default class Draggable {
-  private jm: MindCheese;
+  private mindCheese: MindCheese;
   private canvasElement: HTMLCanvasElement;
   private canvasContext: CanvasRenderingContext2D;
   private shadow: HTMLElement;
@@ -58,8 +58,8 @@ export default class Draggable {
   private readonly lookupDelay = 500;
   private readonly lookupInterval = 80;
 
-  constructor(jm: MindCheese) {
-    this.jm = jm;
+  constructor(mindCheese: MindCheese) {
+    this.mindCheese = mindCheese;
     this.canvasElement = null;
     this.canvasContext = null;
     this.shadow = null;
@@ -85,15 +85,15 @@ export default class Draggable {
   }
 
   resize(): void {
-    this.jm.view.jmnodes.appendChild(this.shadow);
-    this.canvasElement.width = this.jm.view.size.w;
-    this.canvasElement.height = this.jm.view.size.h;
+    this.mindCheese.view.jmnodes.appendChild(this.shadow);
+    this.canvasElement.width = this.mindCheese.view.size.w;
+    this.canvasElement.height = this.mindCheese.view.size.h;
   }
 
   private createCanvas(): void {
     const c: HTMLCanvasElement = document.createElement("canvas");
     c.className = "jsmind-draggable";
-    this.jm.view.jsmindInnerElement.appendChild(c);
+    this.mindCheese.view.jsmindInnerElement.appendChild(c);
     const ctx: CanvasRenderingContext2D = c.getContext("2d");
     this.canvasElement = c;
     this.canvasContext = ctx;
@@ -144,8 +144,8 @@ export default class Draggable {
     this.canvasContext.clearRect(
       0,
       0,
-      this.jm.view.size.w,
-      this.jm.view.size.h
+      this.mindCheese.view.size.w,
+      this.mindCheese.view.size.h
     );
   }
 
@@ -157,7 +157,7 @@ export default class Draggable {
   }
 
   private doLookupCloseNode(): ClosePoint | null {
-    const root = this.jm.getRoot();
+    const root = this.mindCheese.getRoot();
     const rootLocation = root.getLocation();
     const rootSize = root.getSize();
     const rootX = rootLocation.x + rootSize.w / 2;
@@ -170,7 +170,7 @@ export default class Draggable {
     let ns, nl;
 
     const direct = sx + sw / 2 >= rootX ? Direction.RIGHT : Direction.LEFT;
-    const nodes = this.jm.mind.nodes;
+    const nodes = this.mindCheese.mind.nodes;
     let node = null;
     let minDistance = Number.MAX_VALUE;
     let distance = 0;
@@ -238,7 +238,7 @@ export default class Draggable {
   }
 
   dragstart(e: DragEvent): void {
-    if (!this.jm.isEditable()) {
+    if (!this.mindCheese.isEditable()) {
       return;
     }
     if (this.capture) {
@@ -246,14 +246,14 @@ export default class Draggable {
     }
     this.activeNode = null;
 
-    const jview = this.jm.view;
+    const jview = this.mindCheese.view;
     const el = e.target as HTMLElement;
     if (el.tagName.toLowerCase() !== "jmnode") {
       return;
     }
     const nodeid = jview.getBindedNodeId(el);
     if (nodeid) {
-      const node = this.jm.getNodeById(nodeid);
+      const node = this.mindCheese.getNodeById(nodeid);
       if (!node.isroot) {
         this.resetShadow(el);
         this.activeNode = node;
@@ -282,7 +282,7 @@ export default class Draggable {
   }
 
   drag(e: DragEvent): void {
-    if (!this.jm.isEditable()) {
+    if (!this.mindCheese.isEditable()) {
       return;
     }
     if (this.capture) {
@@ -301,7 +301,7 @@ export default class Draggable {
   }
 
   dragend(): void {
-    if (!this.jm.isEditable()) {
+    if (!this.mindCheese.isEditable()) {
       return;
     }
     if (this.capture) {
@@ -362,7 +362,7 @@ export default class Draggable {
       console.log(
         `Calling jm.move_node: ${srcNode.id}, ${beforeid}, ${targetNode.id}, ${targetDirect}`
       );
-      this.jm.moveNode(srcNode, beforeid, targetNode, targetDirect);
+      this.mindCheese.moveNode(srcNode, beforeid, targetNode, targetDirect);
     }
     this.activeNode = null;
     this.targetNode = null;

@@ -2,7 +2,7 @@ import MindCheese from "./MindCheese";
 import { KeyModifier } from "./MindmapConstants";
 
 export default class ShortcutProvider {
-  private readonly jm: MindCheese;
+  private readonly mindCheese: MindCheese;
   private enable: boolean;
   private readonly mappings: Record<
     string,
@@ -10,11 +10,11 @@ export default class ShortcutProvider {
   >;
 
   constructor(
-    jm: MindCheese,
+    mindCheese: MindCheese,
     enable = true,
     mappings: [number, string, (jm: MindCheese, e: Event) => boolean][]
   ) {
-    this.jm = jm;
+    this.mindCheese = mindCheese;
     this.enable = enable;
     this.mappings = this.compileHandlers(mappings);
   }
@@ -36,7 +36,7 @@ export default class ShortcutProvider {
     if (e.which == 9) {
       e.preventDefault();
     } //prevent tab to change focus in browser
-    if (this.jm.view.isEditing()) {
+    if (this.mindCheese.view.isEditing()) {
       return;
     }
     if (!this.enable) {
@@ -56,7 +56,7 @@ export default class ShortcutProvider {
     for (const handler of handlers) {
       const [flags, code] = handler;
       if (flags === gotFlags) {
-        return code(this.jm, e);
+        return code(this.mindCheese, e);
       }
     }
   }
