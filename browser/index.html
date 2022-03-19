@@ -14,6 +14,7 @@
       <button id="dump_to_console_markdown">dump_to_console_markdown()</button>
       <button id="load_markdown">load_markdown()</button>
       <button id="resize">resize()</button>
+      <button id="undo">undo()</button>
     </div>
     <div id="container"></div>
 
@@ -120,6 +121,11 @@
         });
       document.getElementById("resize").addEventListener("click", () => {
         jsmind.resize();
+        resize();
+        return false;
+      });
+      document.getElementById("undo").addEventListener("click", () => {
+        jsmind.undo();
         resize();
         return false;
       });
