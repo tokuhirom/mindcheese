@@ -1,7 +1,8 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { Direction } from "./MindmapConstants";
-import { Point } from "./LayoutProvider";
+import {Direction} from "./MindmapConstants";
+import {Point} from "./LayoutProvider";
+import {RoundRobin} from "./utils/RoundRobin";
 
 export class ViewData {
   element: HTMLElement;
@@ -28,6 +29,16 @@ export class LayoutData {
   outerHeightRight: number;
 }
 
+const COLORS = new RoundRobin([
+  "#cc0000",
+  "#00cc00",
+  "#0000cc",
+  "#00cccc",
+  "#cc00cc",
+  "#cccc00",
+])
+
+
 export default class MindNode {
   public id: string;
   public index: number;
@@ -37,6 +48,7 @@ export default class MindNode {
   public direction: Direction;
   public expanded: boolean;
   public children: MindNode[];
+  public color: string;
   public data: {
     // TODO extract this.data.view to this.view_data
     view: ViewData;
@@ -70,6 +82,16 @@ export default class MindNode {
       view: new ViewData(),
       layout: new LayoutData(),
     };
+
+    console.log(`ID: ${id}`)
+    if (!parent) {
+      this.color = null
+    } else if (parent && parent.color) {
+      // inherit parent's color
+      this.color = parent.color;
+    } else {
+      this.color = COLORS.take();
+    }
   }
 
   static compare(node1: MindNode, node2: MindNode): number {

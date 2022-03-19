@@ -535,7 +535,7 @@ export default class ViewProvider {
       }
       const pin = this.layout.getNodePointIn(node);
       const pout = this.layout.getNodePointOut(node.parent);
-      this.graph.drawLine(pout, pin, offset);
+      this.graph.drawLine(pout, pin, offset, node.color);
     }
   }
 }

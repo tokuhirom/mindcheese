@@ -32,10 +32,11 @@ export default class GraphCanvas {
   drawLine(
     pout: { x: number; y: number },
     pin: { x: number; y: number },
-    offset: { x: number; y: number }
+    offset: { x: number; y: number },
+    color: string
   ): void {
     const ctx = this.canvasContext;
-    ctx.strokeStyle = this.lineColor;
+    ctx.strokeStyle = color;
     ctx.lineWidth = this.lineWidth;
     ctx.lineCap = "round";
 
