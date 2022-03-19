@@ -13,16 +13,17 @@ export default class UndoManager {
   }
 
   init(): void {
-    this.mindCheese.addEventListener(EventType.BeforeEdit, (data) => {
-      if (this.undoStack.length > this.undoStackLimit) {
-        console.log(`UndoManager: callback event. too much stacks.`);
-        this.undoStack.shift();
-      }
-      console.log(`UndoManager: callback event pushing. ${data.evt}`);
-      // TODO At here, there's no reason to use nodeTree.
-      // We can use the "Mind" object itself.
-      this.undoStack.push(this.mindCheese.getNodeTree());
-    });
+    this.mindCheese.addEventListener(EventType.BeforeEdit, this.recordSnapshot.bind(this));
+  }
+
+  recordSnapshot() {
+    if (this.undoStack.length > this.undoStackLimit) {
+      console.log(`UndoManager: callback event. too much stacks.`);
+      this.undoStack.shift();
+    }
+
+    console.log(`UndoManager: callback event pushing.`);
+    this.undoStack.push(this.mindCheese.getNodeTree());
   }
 
   undo(): void {
