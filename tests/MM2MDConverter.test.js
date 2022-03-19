@@ -1,51 +1,48 @@
 const MM2MDConverter = require("../src/MM2MDConverter");
 const mind = {
-  format: "node_tree",
-  data: {
-    id: "root",
-    topic: "jsMind",
-    children: [
-      {
-        id: "easy",
-        topic: "Easy",
-        direction: "left",
-        children: [
-          { id: "easy1", topic: "Easy to show" },
-          { id: "easy2", topic: "Easy to edit" },
-          { id: "easy3", topic: "Easy to store" },
-          { id: "easy4", topic: "Easy to embed" },
-        ],
-      },
-      {
-        id: "open",
-        topic: "Open Source",
-        direction: "right",
-        children: [
-          { id: "open1", topic: "on GitHub" },
-          { id: "open2", topic: "BSD License" },
-        ],
-      },
-      {
-        id: "powerful",
-        topic: "Powerful",
-        direction: "right",
-        children: [
-          { id: "powerful1", topic: "Base on Javascript" },
-          { id: "powerful2", topic: "Base on HTML5" },
-          { id: "powerful3", topic: "Depends on you" },
-        ],
-      },
-      {
-        id: "other",
-        topic: "test node",
-        direction: "left",
-        children: [
-          { id: "other1", topic: "I'm from local variable" },
-          { id: "other2", topic: "I can do everything" },
-        ],
-      },
-    ],
-  },
+  id: "root",
+  topic: "jsMind",
+  children: [
+    {
+      id: "easy",
+      topic: "Easy",
+      direction: "left",
+      children: [
+        {id: "easy1", topic: "Easy to show"},
+        {id: "easy2", topic: "Easy to edit"},
+        {id: "easy3", topic: "Easy to store"},
+        {id: "easy4", topic: "Easy to embed"},
+      ],
+    },
+    {
+      id: "open",
+      topic: "Open Source",
+      direction: "right",
+      children: [
+        {id: "open1", topic: "on GitHub"},
+        {id: "open2", topic: "BSD License"},
+      ],
+    },
+    {
+      id: "powerful",
+      topic: "Powerful",
+      direction: "right",
+      children: [
+        {id: "powerful1", topic: "Base on Javascript"},
+        {id: "powerful2", topic: "Base on HTML5"},
+        {id: "powerful3", topic: "Depends on you"},
+      ],
+    },
+    {
+      id: "other",
+      topic: "test node",
+      direction: "left",
+      children: [
+        {id: "other1", topic: "I'm from local variable"},
+        {id: "other2", topic: "I can do everything"},
+      ],
+    },
+  ],
 };
 
 test("basic", () => {
@@ -74,25 +71,22 @@ test("basic", () => {
 
 test("multiline", () => {
   const mind = {
-    format: "node_tree",
-    data: {
-      id: "root",
-      topic: "jsMind",
-      children: [
-        {
-          id: "easy",
-          topic: "Easy 1\nEasy 2\nEasy 3",
-          direction: "left",
-          children: [
-            {
-              id: "abc",
-              topic: "Abc 1\nAbc 2\nAbc 3",
-              direction: "left",
-            },
-          ],
-        },
-      ],
-    },
+    id: "root",
+    topic: "jsMind",
+    children: [
+      {
+        id: "easy",
+        topic: "Easy 1\nEasy 2\nEasy 3",
+        direction: "left",
+        children: [
+          {
+            id: "abc",
+            topic: "Abc 1\nAbc 2\nAbc 3",
+            direction: "left",
+          },
+        ],
+      },
+    ],
   };
   const md = MM2MDConverter.convertMM2MD(mind);
   expect(md).toBe(

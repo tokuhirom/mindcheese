@@ -34,7 +34,7 @@ function renderMd(node: any, level: number): string {
 export function convertMM2MD(data: any): string {
   const p = {
     // Skip the root node。
-    children: data.data.children,
+    children: data.children,
   };
   return renderMd(p, -1);
 }

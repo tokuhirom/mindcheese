@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
-import {Direction} from "./MindmapConstants";
-import {Point} from "./LayoutProvider";
+import { Direction } from "./MindmapConstants";
+import { Point } from "./LayoutProvider";
 
 export class ViewData {
   element: HTMLElement;
@@ -130,11 +130,11 @@ export default class MindNode {
       id: this.id,
       topic: this.topic,
       expanded: this.expanded,
-      children: this.children.map(it => it.toObject())
+      children: this.children.map((it) => it.toObject()),
     };
     if (!!this.parent && this.parent.isroot) {
       o.direction = this.direction == Direction.LEFT ? "left" : "right";
     }
-    return o
+    return o;
   }
 }

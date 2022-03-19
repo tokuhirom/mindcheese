@@ -6,14 +6,13 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_LAST, Direction} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
-import MarkdownExporter from "./format/markdown/MarkdownExporter";
-import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
-import { MindOption } from "./MindOption";
+import {MindOption} from "./MindOption";
+import {convertMM2MD} from "../MM2MDConverter";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -262,11 +261,11 @@ export default class MindCheese {
   }
 
   getMarkdown(): string {
-    return new MarkdownExporter().getData(this.mind);
+    return convertMM2MD(this.mind.root.toObject());
   }
 
   getNodeTree(): Record<string, any> {
-    return new NodeTreeExporter().getData(this.mind);
+    return this.mind.root.toObject();
   }
 
   getRoot(): MindNode {
