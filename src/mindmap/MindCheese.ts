@@ -61,7 +61,8 @@ export default class MindCheese {
       this.container,
       options.view.hmargin,
       options.view.vmargin,
-      graph
+      graph,
+      options.view.renderer
     );
     this.shortcut = new ShortcutProvider(
       this,

@@ -5,6 +5,7 @@ import MindNode from "./MindNode";
 import { KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
+import {Renderer} from "./renderer/Renderer";
 
 function isEmpty(s: string) {
   // TODO inlining?
@@ -12,17 +13,6 @@ function isEmpty(s: string) {
     return true;
   }
   return s.replace(/\s*/, "").length == 0;
-}
-
-export function plainTextRenderer(topic: string) {
-  function escapeHtml(src: string) {
-    const pre = document.createElement("pre");
-    const text = document.createTextNode(src);
-    pre.appendChild(text);
-    return pre.innerHTML;
-  }
-
-  return escapeHtml(topic).replace(/\n/g, "<br>");
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -37,7 +27,7 @@ export default class ViewProvider {
   private editingNode: MindNode;
   private readonly graph: GraphCanvas;
   private textAreaElement: HTMLTextAreaElement;
-  private readonly renderer: (topic: string) => string;
+  private readonly renderer: Renderer;
   private readonly hMargin: number;
   private readonly vMargin: number;
 
@@ -47,7 +37,7 @@ export default class ViewProvider {
     hmargin = 100,
     vmargin = 50,
     graph: GraphCanvas,
-    renderer = plainTextRenderer
+    renderer: Renderer
   ) {
     this.mindCheese = mindCheese;
     this.renderer = renderer;
@@ -233,7 +223,7 @@ export default class ViewProvider {
       node.data.view.expander = expanderElement;
     }
     if (node.topic) {
-      nodeEl.innerHTML = this.renderer(node.topic);
+      nodeEl.innerHTML = this.renderer.render(node.topic);
     }
     nodeEl.setAttribute("nodeid", node.id);
     nodeEl.style.visibility = "hidden";
@@ -269,7 +259,7 @@ export default class ViewProvider {
     const viewData = node.data.view;
     const element = viewData.element;
     if (node.topic) {
-      element.innerHTML = this.renderer(node.topic);
+      element.innerHTML = this.renderer.render(node.topic);
     }
     viewData.width = element.clientWidth;
     viewData.height = element.clientHeight;
@@ -398,7 +388,7 @@ export default class ViewProvider {
       element.classList.remove("editing");
       element.removeChild(this.textAreaElement);
       if (isEmpty(topic) || node.topic === topic) {
-        element.innerHTML = this.renderer(node.topic);
+        element.innerHTML = this.renderer.render(node.topic);
         setTimeout(() => {
           viewData.width = element.clientWidth;
           viewData.height = element.clientHeight;

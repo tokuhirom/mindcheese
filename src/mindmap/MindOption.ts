@@ -1,6 +1,8 @@
 import { KeyModifier } from "./MindmapConstants";
 import ShortcutHandlers from "./ShortcutHandlers";
 import MindCheese from "./MindCheese";
+import {Renderer} from "./renderer/Renderer";
+import PlainTextRenderer from "./renderer/PlainTextRenderer";
 
 export class MindOption {
   theme = "primary";
@@ -14,6 +16,7 @@ class ViewOption {
   vmargin = 50;
   lineWidth = 2;
   lineColor = "#555";
+  renderer: Renderer = new PlainTextRenderer()
 }
 
 class LayoutOption {
