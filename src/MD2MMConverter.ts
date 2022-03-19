@@ -1,3 +1,6 @@
+import NodeTreeImporter from "./mindmap/format/node_tree/NodeTreeImporter";
+import Mind from "./mindmap/Mind";
+
 function parse(md: string) {
   if (md == null) {
     throw new Error("md should not be null");
@@ -89,6 +92,7 @@ function parse(md: string) {
   return realRoot;
 }
 
-export function convertMD2MM(md: string): any {
-  return parse(md.replace(/^---$.*^---$/ms, ""));
+export function markdown2mindmap(md: string): Mind {
+  const tree = parse(md.replace(/^---$.*^---$/ms, ""));
+  return new NodeTreeImporter().getMind(tree);
 }

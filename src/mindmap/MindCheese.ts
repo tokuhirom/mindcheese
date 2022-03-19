@@ -10,9 +10,9 @@ import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
-import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import { MindOption } from "./MindOption";
 import { mind2markdown } from "../MM2MDConverter";
+import { markdown2mindmap } from "../MD2MMConverter";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -34,8 +34,6 @@ export default class MindCheese {
   private readonly container: HTMLElement;
 
   private nodeTreeImporter = new NodeTreeImporter();
-  private markdownImporter = new MarkdownImporter();
-
   constructor(
     id: number,
     container: HTMLElement,
@@ -255,9 +253,7 @@ export default class MindCheese {
 
   showMarkdown(body: string): void {
     this.doReset();
-
-    const mind = this.markdownImporter.getMind(body);
-    this.doShow(mind);
+    this.doShow(markdown2mindmap(body));
   }
 
   getMarkdown(): string {
