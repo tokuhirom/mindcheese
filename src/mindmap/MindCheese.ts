@@ -45,13 +45,11 @@ export default class MindCheese {
     this.container = container;
 
     this.options = options;
-    this.mind = null; // TODO original では null が入っていた
+    this.mind = new Mind()
     this.id = id;
     this.editable = true;
 
     // create instance of function provider
-    console.log("LAYOUT");
-    console.log(`options.layout=${options}`);
     this.layout = new LayoutProvider(
       this,
       options.layout.hspace,
