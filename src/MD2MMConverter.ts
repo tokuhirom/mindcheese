@@ -1,4 +1,4 @@
-function parse(title: string, md: string) {
+function parse(md: string) {
   if (md == null) {
     throw new Error("md should not be null");
   }
@@ -7,7 +7,7 @@ function parse(title: string, md: string) {
   let lastSpaces = "";
   const root: Record<string, any> = {
     id: "root",
-    topic: title,
+    topic: "DUMMY",
     children: [],
   };
   let i = 0;
@@ -77,9 +77,13 @@ function parse(title: string, md: string) {
       lastSpaces = leadingSpaces;
     }
   }
-  return root;
+  const realRoot = root.children[0];
+  if ('direction' in realRoot) {
+    delete realRoot['direction']
+  }
+  return realRoot
 }
 
-export function convertMD2MM(title: string, md: string): any {
-  return parse(title, md.replace(/^---$.*^---$/ms, ""));
+export function convertMD2MM(md: string): any {
+  return parse(md.replace(/^---$.*^---$/ms, ""));
 }

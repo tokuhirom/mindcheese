@@ -4,60 +4,61 @@ const MD2MMConverter = require("../src/MD2MMConverter");
 
 test("complex", () => {
   const md = [
-    "- jsMind",
-    "\t- Easy",
-    "\t\t- Easy to show",
-    "\t\t- Easy to edit",
-    "\t\t- Easy to store",
-    "\t\t- Easy to embed",
-    "\t- Open Source",
-    "\t\t- on GitHub",
-    "\t\t- BSD License",
-    "\t- Powerful",
-    "\t\t- Base on Javascript",
-    "\t\t- Base on HTML5",
-    "\t\t- Depends on you",
-    "\t- test node",
-    "\t\t- I'm from local variable",
-    "\t\t- I can do everything",
+    "- top",
+    "\t- jsMind",
+    "\t\t- Easy",
+    "\t\t\t- Easy to show",
+    "\t\t\t- Easy to edit",
+    "\t\t\t- Easy to store",
+    "\t\t\t- Easy to embed",
+    "\t\t- Open Source",
+    "\t\t\t- on GitHub",
+    "\t\t\t- BSD License",
+    "\t\t- Powerful",
+    "\t\t\t- Base on Javascript",
+    "\t\t\t- Base on HTML5",
+    "\t\t\t- Depends on you",
+    "\t\t- test node",
+    "\t\t\t- I'm from local variable",
+    "\t\t\t- I can do everything",
     "",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
     children: [
       {
-        id: 1,
+        id: 2,
         topic: "jsMind",
         direction: "right",
         children: [
           {
-            id: 2,
+            id: 3,
             topic: "Easy",
             direction: "right",
             children: [
               {
-                id: 3,
+                id: 4,
                 topic: "Easy to show",
                 direction: "right",
                 children: [],
               },
               {
-                id: 4,
+                id: 5,
                 topic: "Easy to edit",
                 direction: "right",
                 children: [],
               },
               {
-                id: 5,
+                id: 6,
                 topic: "Easy to store",
                 direction: "right",
                 children: [],
               },
               {
-                id: 6,
+                id: 7,
                 topic: "Easy to embed",
                 direction: "right",
                 children: [],
@@ -65,18 +66,18 @@ test("complex", () => {
             ],
           },
           {
-            id: 7,
+            id: 8,
             topic: "Open Source",
             direction: "right",
             children: [
               {
-                id: 8,
+                id: 9,
                 topic: "on GitHub",
                 direction: "right",
                 children: [],
               },
               {
-                id: 9,
+                id: 10,
                 topic: "BSD License",
                 direction: "right",
                 children: [],
@@ -84,24 +85,24 @@ test("complex", () => {
             ],
           },
           {
-            id: 10,
+            id: 11,
             topic: "Powerful",
             direction: "right",
             children: [
               {
-                id: 11,
+                id: 12,
                 topic: "Base on Javascript",
                 direction: "right",
                 children: [],
               },
               {
-                id: 12,
+                id: 13,
                 topic: "Base on HTML5",
                 direction: "right",
                 children: [],
               },
               {
-                id: 13,
+                id: 14,
                 topic: "Depends on you",
                 direction: "right",
                 children: [],
@@ -109,18 +110,18 @@ test("complex", () => {
             ],
           },
           {
-            id: 14,
+            id: 15,
             topic: "test node",
             direction: "right",
             children: [
               {
-                id: 15,
+                id: 16,
                 topic: "I'm from local variable",
                 direction: "right",
                 children: [],
               },
               {
-                id: 16,
+                id: 17,
                 topic: "I can do everything",
                 direction: "right",
                 children: [],
@@ -134,156 +135,165 @@ test("complex", () => {
 });
 
 test("basic", () => {
-  const md = ["- A", "\t- B", "- C"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const md = ["- top", "\t- A", "\t\t- B", "\t- C"].join("\n");
+  const mm = MD2MMConverter.convertMD2MM( md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
     children: [
       {
-        id: 1,
+        id: 2,
         topic: "A",
         direction: "right",
-        children: [{ id: 2, topic: "B", direction: "right", children: [] }],
+        children: [{ id: 3, topic: "B", direction: "right", children: [] }],
       },
-      { id: 3, topic: "C", direction: "right", children: [] },
+      { id: 4, topic: "C", direction: "right", children: [] },
     ],
   });
 });
 
 test("left", () => {
-  const md = ["- A", "\t- B", "+ C"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const md = ["- top", "\t- A", "\t\t- B", "\t+ C"].join("\n");
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
     children: [
       {
-        id: 1,
+        id: 2,
         topic: "A",
         direction: "right",
-        children: [{ id: 2, topic: "B", direction: "right", children: [] }],
+        children: [{ id: 3, topic: "B", direction: "right", children: [] }],
       },
-      { id: 3, topic: "C", direction: "left", children: [] },
+      { id: 4, topic: "C", direction: "left", children: [] },
     ],
   });
 });
 
 test("ignore yfm", () => {
-  const md = ["---", "aliases: []", "---", "", "- A"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const md = ["---", "aliases: []", "---", "", "- top", "\t- A"].join("\n");
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
-    children: [{ id: 1, topic: "A", direction: "right", children: [] }],
+    children: [{ id: 2, topic: "A", direction: "right", children: [] }],
   });
 });
 
 test("dedent 2 step", () => {
   const md = [
-    "- A1",
-    "- A2",
-    "\t- B1",
-    "\t- B2",
-    "\t\t- C1",
-    "\t\t- C2",
-    "- A3",
+    "- top",
+    "\t- A1",
+    "\t- A2",
+    "\t\t- B1",
+    "\t\t- B2",
+    "\t\t\t- C1",
+    "\t\t\t- C2",
+    "\t- A3",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
     children: [
-      { id: 1, topic: "A1", direction: "right", children: [] },
+      { id: 2, topic: "A1", direction: "right", children: [] },
       {
-        id: 2,
+        id: 3,
         topic: "A2",
         direction: "right",
         children: [
-          { id: 3, topic: "B1", direction: "right", children: [] },
+          { id: 4, topic: "B1", direction: "right", children: [] },
           {
-            id: 4,
+            id: 5,
             topic: "B2",
             direction: "right",
             children: [
-              { id: 5, topic: "C1", direction: "right", children: [] },
-              { id: 6, topic: "C2", direction: "right", children: [] },
+              { id: 6, topic: "C1", direction: "right", children: [] },
+              { id: 7, topic: "C2", direction: "right", children: [] },
             ],
           },
         ],
       },
-      { id: 7, topic: "A3", direction: "right", children: [] },
+      { id: 8, topic: "A3", direction: "right", children: [] },
     ],
   });
 });
 
 test("dedent 3 step", () => {
   const md = [
-    "- A1",
-    "- A2",
-    "\t- B1",
-    "\t- B2",
-    "\t\t- C1",
-    "\t\t- C2",
-    "\t\t\t- D1",
-    "\t\t\t- D2",
-    "- A3",
+    "- top",
+    "\t- A1",
+    "\t- A2",
+    "\t\t- B1",
+    "\t\t- B2",
+    "\t\t\t- C1",
+    "\t\t\t- C2",
+    "\t\t\t\t- D1",
+    "\t\t\t\t- D2",
+    "\t- A3",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
     children: [
-      { id: 1, topic: "A1", direction: "right", children: [] },
+      { id: 2, topic: "A1", direction: "right", children: [] },
       {
-        id: 2,
+        id: 3,
         topic: "A2",
         direction: "right",
         children: [
-          { id: 3, topic: "B1", direction: "right", children: [] },
+          { id: 4, topic: "B1", direction: "right", children: [] },
           {
-            id: 4,
+            id: 5,
             topic: "B2",
             direction: "right",
             children: [
-              { id: 5, topic: "C1", direction: "right", children: [] },
+              { id: 6, topic: "C1", direction: "right", children: [] },
               {
-                id: 6,
+                id: 7,
                 topic: "C2",
                 direction: "right",
                 children: [
-                  { id: 7, topic: "D1", direction: "right", children: [] },
-                  { id: 8, topic: "D2", direction: "right", children: [] },
+                  { id: 8, topic: "D1", direction: "right", children: [] },
+                  { id: 9, topic: "D2", direction: "right", children: [] },
                 ],
               },
             ],
           },
         ],
       },
-      { id: 9, topic: "A3", direction: "right", children: [] },
+      { id: 10, topic: "A3", direction: "right", children: [] },
     ],
   });
 });
 
 test("Multiline", () => {
-  const md = ["- A1 \\", "  A2", "\t- B1 \\", "\t  B2 \\", "\t  B3"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM("top", md);
+  const md = [
+    "- top",
+    "\t- A1 \\",
+    "\t  A2",
+    "\t\t- B1 \\",
+    "\t\t  B2 \\",
+    "\t\t  B3"
+  ].join("\n");
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
-    id: "root",
+    id: 1,
     topic: "top",
     children: [
       {
-        id: 1,
+        id: 2,
         topic: "A1\nA2",
         direction: "right",
         children: [
-          { id: 2, topic: "B1\nB2\nB3", direction: "right", children: [] },
+          { id: 3, topic: "B1\nB2\nB3", direction: "right", children: [] },
         ],
       },
     ],

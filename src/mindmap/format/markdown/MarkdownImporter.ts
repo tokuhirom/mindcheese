@@ -9,8 +9,8 @@ export default class MarkdownImporter {
     this.nodeTreeImporter = new NodeTreeImporter();
   }
 
-  getMind(title: string, markdown: string): Mind {
-    const tree = convertMD2MM(title, markdown);
+  getMind(markdown: string): Mind {
+    const tree = convertMD2MM(markdown);
     return this.nodeTreeImporter.getMind(tree);
   }
 }

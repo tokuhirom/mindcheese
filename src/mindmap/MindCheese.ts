@@ -253,10 +253,10 @@ export default class MindCheese {
     this.doShow(mind);
   }
 
-  showMarkdown(title: string, body: string): void {
+  showMarkdown(body: string): void {
     this.doReset();
 
-    const mind = this.markdownImporter.getMind(title, body);
+    const mind = this.markdownImporter.getMind(body);
     this.doShow(mind);
   }
 
