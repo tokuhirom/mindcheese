@@ -1,13 +1,7 @@
 import Mind from "./mindmap/Mind";
 import MindNode from "./mindmap/MindNode";
-import {Direction} from "./mindmap/MindmapConstants";
+import { Direction } from "./mindmap/MindmapConstants";
 import NodeTreeImporter from "./mindmap/format/node_tree/NodeTreeImporter";
-
-// DEPRECATED
-export function convertMM2MD(data: any): string {
-  const mind = new NodeTreeImporter().getMind(data)
-  return mind2markdown(mind);
-}
 
 export function mind2markdown(mind: Mind): string {
   return renderMarkdown(mind.root, 0);

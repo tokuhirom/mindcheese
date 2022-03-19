@@ -12,7 +12,7 @@ import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import { MindOption } from "./MindOption";
-import {convertMM2MD, mind2markdown} from "../MM2MDConverter";
+import { mind2markdown } from "../MM2MDConverter";
 
 function isEmpty(s: string) {
   if (!s) {
