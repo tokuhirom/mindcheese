@@ -37,7 +37,11 @@ export default class MindCheese {
   private nodeTreeImporter = new NodeTreeImporter();
   private markdownImporter = new MarkdownImporter();
 
-  constructor(id: number, container: HTMLElement, options: MindOption = new MindOption()) {
+  constructor(
+    id: number,
+    container: HTMLElement,
+    options: MindOption = new MindOption()
+  ) {
     this.container = container;
 
     this.options = options;
@@ -46,8 +50,8 @@ export default class MindCheese {
     this.editable = true;
 
     // create instance of function provider
-    console.log("LAYOUT")
-    console.log(`options.layout=${options}`)
+    console.log("LAYOUT");
+    console.log(`options.layout=${options}`);
     this.layout = new LayoutProvider(
       this,
       options.layout.hspace,
