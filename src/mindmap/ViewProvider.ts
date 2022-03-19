@@ -111,7 +111,6 @@ export default class ViewProvider {
     this.container.appendChild(this.mindCheeseInnerElement);
   }
 
-
   adjustEditorElementSize() {
     const el = this.textAreaElement;
     el.style.width = "";
@@ -119,12 +118,14 @@ export default class ViewProvider {
     const lineHeight = 1.3;
     const fontSize = 14;
     el.style.width = `${(() => {
-      const lines = el.value.split(/\n/g)
+      const lines = el.value.split(/\n/g);
       let max = 0;
-      lines.map(line => line.length).forEach(it => {
-        max = Math.max(it, max)
-      })
-      return max * fontSize
+      lines
+        .map((line) => line.length)
+        .forEach((it) => {
+          max = Math.max(it, max);
+        });
+      return max * fontSize;
     })()}px`;
     el.style.height = el.value.split(/\n/).length * lineHeight + "em";
     this.editingNode.data.view.width = this.textAreaElement.clientWidth;
