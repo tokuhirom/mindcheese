@@ -19,7 +19,9 @@ export default class UndoManager {
         this.undoStack.shift();
       }
       console.log(`UndoManager: callback event pushing. ${data.evt}`);
-      this.undoStack.push([data.evt, this.mindCheese.getData("nodeTree")]);
+      // TODO At here, there's no reason to use nodeTree.
+      // We can use the "Mind" object itself.
+      this.undoStack.push([data.evt, this.mindCheese.getNodeTree()]);
     });
   }
 

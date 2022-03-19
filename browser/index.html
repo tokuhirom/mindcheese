@@ -118,14 +118,14 @@
       document
         .getElementById("dump_to_console")
         .addEventListener("click", () => {
-          const data = jsmind.getData("nodeTree");
+          const data = jsmind.getNodeTree();
           console.log(data);
           return false;
         });
       document
         .getElementById("dump_to_console_markdown")
         .addEventListener("click", () => {
-          const data = jsmind.getData("markdown");
+          const data = jsmind.getMarkdown();
           console.log(data);
           return false;
         });

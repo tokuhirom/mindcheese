@@ -75,8 +75,8 @@ export default class MindCheese {
   private editable: boolean;
   private readonly container: HTMLElement;
 
-  private nodeTreeImporter = new NodeTreeImporter()
-  private markdownImporter = new MarkdownImporter()
+  private nodeTreeImporter = new NodeTreeImporter();
+  private markdownImporter = new MarkdownImporter();
 
   constructor(id: number, container: HTMLElement, options: any = {}) {
     this.container = container;
@@ -298,7 +298,7 @@ export default class MindCheese {
     this.layout.layout();
     this.view.show();
     this.view.centerRoot();
-    this.eventRouter.invokeEventHandler(EventType.Show, {data: [mind]});
+    this.eventRouter.invokeEventHandler(EventType.Show, { data: [mind] });
   }
 
   showNodeTree(nodeTree: any): void {
@@ -315,16 +315,12 @@ export default class MindCheese {
     this.doShow(mind);
   }
 
-  getData(dataFormat: string): any {
-    // TODO split method
-    switch (dataFormat) {
-      case "markdown":
-        return new MarkdownExporter().getData(this.mind)
-      case "nodeTree":
-        return new NodeTreeExporter().getData(this.mind)
-      default:
-        throw new Error(`Unknown format: ${dataFormat}`);
-    }
+  getMarkdown(): string {
+    return new MarkdownExporter().getData(this.mind);
+  }
+
+  getNodeTree(): Record<string, any> {
+    return new NodeTreeExporter().getData(this.mind);
   }
 
   getRoot(): MindNode {
