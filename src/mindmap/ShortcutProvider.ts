@@ -1,6 +1,5 @@
 import MindCheese from "./MindCheese";
 import { KeyModifier } from "./MindmapConstants";
-import ShortcutHandlers from "./ShortcutHandlers";
 
 export default class ShortcutProvider {
   private readonly jm: MindCheese;
