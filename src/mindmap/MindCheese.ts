@@ -57,7 +57,6 @@ const DEFAULT_OPTIONS: any = {
 
 export default class MindCheese {
   options: any;
-  private inited: boolean;
   public mind: Mind;
   layout: LayoutProvider;
   view: ViewProvider;
@@ -81,16 +80,6 @@ export default class MindCheese {
     this.mind = null; // TODO original では null が入っていた
     this.id = id;
     this.editable = true;
-    this.init();
-  }
-
-  init(): void {
-    if (this.inited) {
-      return;
-    }
-    this.inited = true;
-
-    const opts = this.options;
 
     // create instance of function provider
     this.layout = new LayoutProvider(
