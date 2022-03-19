@@ -5,7 +5,7 @@ import MindNode from "./MindNode";
 import { KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
-import {Renderer} from "./renderer/Renderer";
+import { Renderer } from "./renderer/Renderer";
 
 function isEmpty(s: string) {
   // TODO inlining?

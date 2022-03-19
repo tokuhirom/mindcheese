@@ -1,9 +1,8 @@
-import {Renderer} from "./Renderer";
+import { Renderer } from "./Renderer";
 
 export default class PlainTextRenderer implements Renderer {
   render(src: string): string {
-    return PlainTextRenderer.escapeHtml(src)
-      .replace(/\n/g, "<br>");
+    return PlainTextRenderer.escapeHtml(src).replace(/\n/g, "<br>");
   }
 
   private static escapeHtml(src: string): string {

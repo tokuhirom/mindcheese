@@ -1,3 +1,3 @@
 export interface Renderer {
-  render(src: string) : string
+  render(src: string): string;
 }
