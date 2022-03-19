@@ -6,14 +6,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {BEFOREID_LAST, Direction} from "./MindmapConstants";
+import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import MarkdownExporter from "./format/markdown/MarkdownExporter";
 import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
-import {MindOption} from "./MindOption";
+import { MindOption } from "./MindOption";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -52,7 +52,10 @@ export default class MindCheese {
       options.layout.vspace,
       options.layout.pspace
     );
-    const graph = new GraphCanvas(options.view.lineColor, options.view.lineWidth);
+    const graph = new GraphCanvas(
+      options.view.lineColor,
+      options.view.lineWidth
+    );
     this.view = new ViewProvider(
       this,
       this.container,
