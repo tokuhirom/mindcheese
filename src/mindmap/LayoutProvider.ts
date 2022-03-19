@@ -304,22 +304,12 @@ export default class LayoutProvider {
     node.expanded = true;
     this.partLayout(node);
     this.setVisible(node.children, true);
-    this.eventRouter.invokeEventHandler(EventType.Show, {
-      evt: "expand_node",
-      data: [],
-      node: node.id,
-    });
   }
 
   collapseNode(node: MindNode): void {
     node.expanded = false;
     this.partLayout(node);
     this.setVisible(node.children, false);
-    this.eventRouter.invokeEventHandler(EventType.Show, {
-      evt: "collapse_node",
-      data: [],
-      node: node.id,
-    });
   }
 
   expandAll(): void {

@@ -7,10 +7,7 @@ export const enum Direction {
 }
 
 export const enum EventType {
-  Show = 1,
   Resize = 2,
-  AfterEdit = 3,
-  Select = 4,
   BeforeEdit = 5,
 }
 

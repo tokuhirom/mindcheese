@@ -298,7 +298,6 @@ export default class MindCheese {
     this.layout.layout();
     this.view.show();
     this.view.centerRoot();
-    this.eventRouter.invokeEventHandler(EventType.Show, { data: [mind] });
   }
 
   showNodeTree(nodeTree: any): void {
@@ -352,11 +351,6 @@ export default class MindCheese {
       this.layout.layout();
       this.view.show();
       this.expandNode(parentNode);
-      this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
-        evt: "add_node",
-        data: [parentNode.id, nodeid, topic],
-        node: nodeid,
-      });
     }
     return node;
   }
@@ -381,11 +375,6 @@ export default class MindCheese {
       this.view.addNode(node);
       this.layout.layout();
       this.view.show();
-      this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
-        evt: "insert_node_before",
-        data: [nodeBefore.id, nodeid, topic],
-        node: nodeid,
-      });
     }
     return node;
   }
@@ -410,11 +399,6 @@ export default class MindCheese {
       this.view.addNode(node);
       this.layout.layout();
       this.view.show();
-      this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
-        evt: "insert_node_after",
-        data: [nodeAfter.id, nodeid, topic],
-        node: nodeid,
-      });
     }
     return node;
   }
@@ -452,11 +436,6 @@ export default class MindCheese {
       this.view.selectNode(nextSelectedNode);
     }
     this.view.restoreLocation(parentNode, location);
-    this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
-      evt: "remove_node",
-      data: [nodeid],
-      node: parentid,
-    });
     return true;
   }
 
@@ -509,11 +488,6 @@ export default class MindCheese {
     this.view.updateNode(node);
     this.layout.layout();
     this.view.show();
-    this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
-      evt: "update_node",
-      data: [nodeid, topic],
-      node: nodeid,
-    });
   }
 
   /**
@@ -545,11 +519,6 @@ export default class MindCheese {
     this.view.updateNode(node);
     this.layout.layout();
     this.view.show();
-    this.eventRouter.invokeEventHandler(EventType.AfterEdit, {
-      evt: "move_node",
-      data: [node.id, beforeid, parent.id, direction],
-      node: node.id,
-    });
   }
 
   selectNode(node: MindNode): void {
@@ -558,11 +527,6 @@ export default class MindCheese {
     }
     this.mind.selected = node;
     this.view.selectNode(node);
-    this.eventRouter.invokeEventHandler(EventType.Select, {
-      evt: "select_node",
-      data: [],
-      node: node.id,
-    });
   }
 
   getSelectedNode(): MindNode {
