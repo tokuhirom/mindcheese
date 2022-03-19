@@ -1,6 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
 
-import DataProvider from "./DataProvider";
 import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
@@ -17,6 +16,10 @@ import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
 import EventRouter from "./EventRouter";
 import GraphCanvas from "./GraphCanvas";
+import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
+import MarkdownImporter from "./format/markdown/MarkdownImporter";
+import MarkdownExporter from "./format/markdown/MarkdownExporter";
+import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -62,7 +65,6 @@ export default class MindCheese {
   options: any;
   private inited: boolean;
   public mind: Mind;
-  private data: DataProvider;
   layout: LayoutProvider;
   view: ViewProvider;
   shortcut: ShortcutProvider;
@@ -72,6 +74,9 @@ export default class MindCheese {
   private readonly eventRouter: EventRouter;
   private editable: boolean;
   private readonly container: HTMLElement;
+
+  private nodeTreeImporter = new NodeTreeImporter()
+  private markdownImporter = new MarkdownImporter()
 
   constructor(id: number, container: HTMLElement, options: any = {}) {
     this.container = container;
@@ -96,7 +101,6 @@ export default class MindCheese {
     const opts = this.options;
 
     // create instance of function provider
-    this.data = new DataProvider();
     this.layout = new LayoutProvider(
       this,
       this.eventRouter,
@@ -294,28 +298,33 @@ export default class MindCheese {
     this.layout.layout();
     this.view.show();
     this.view.centerRoot();
-    this.eventRouter.invokeEventHandler(EventType.Show, { data: [mind] });
+    this.eventRouter.invokeEventHandler(EventType.Show, {data: [mind]});
   }
 
   showNodeTree(nodeTree: any): void {
     this.doReset();
 
-    const mind = this.data.load("nodeTree", nodeTree)
+    const mind = this.nodeTreeImporter.getMind(nodeTree);
     this.doShow(mind);
   }
 
   showMarkdown(title: string, body: string): void {
     this.doReset();
 
-    const mind = this.data.load("markdown", {
-      title: title,
-      markdown: body,
-    })
+    const mind = this.markdownImporter.getMind(title, body);
     this.doShow(mind);
   }
 
   getData(dataFormat: string): any {
-    return this.data.getData(dataFormat, this.mind);
+    // TODO split method
+    switch (dataFormat) {
+      case "markdown":
+        return new MarkdownExporter().getData(this.mind)
+      case "nodeTree":
+        return new NodeTreeExporter().getData(this.mind)
+      default:
+        throw new Error(`Unknown format: ${dataFormat}`);
+    }
   }
 
   getRoot(): MindNode {

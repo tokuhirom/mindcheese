@@ -3,15 +3,15 @@ import Mind from "../../Mind";
 import NodeTreeImporter from "../node_tree/NodeTreeImporter";
 import { convertMD2MM } from "../../../MD2MMConverter";
 
-export default class MarkdownImporter implements MindmapImporter {
+export default class MarkdownImporter {
   private readonly nodeTreeImporter: NodeTreeImporter;
 
   constructor() {
     this.nodeTreeImporter = new NodeTreeImporter();
   }
 
-  getMind(source: any): Mind {
-    const tree = convertMD2MM(source.title, source.markdown);
+  getMind(title: string, markdown: string): Mind {
+    const tree = convertMD2MM(title, markdown);
     return this.nodeTreeImporter.getMind(tree);
   }
 }
