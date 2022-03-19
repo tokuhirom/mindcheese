@@ -39,7 +39,7 @@ export default class GraphCanvas {
     ctx.lineWidth = this.lineWidth;
     ctx.lineCap = "round";
 
-    this.bezierTo(
+    GraphCanvas.bezierTo(
       ctx,
       pin.x + offset.x,
       pin.y + offset.y,
@@ -48,7 +48,7 @@ export default class GraphCanvas {
     );
   }
 
-  private bezierTo(
+  private static bezierTo(
     ctx: CanvasRenderingContext2D,
     x1: number,
     y1: number,
