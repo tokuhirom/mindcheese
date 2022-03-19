@@ -12,7 +12,7 @@ import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import { MindOption } from "./MindOption";
-import { convertMM2MD } from "../MM2MDConverter";
+import {convertMM2MD, mind2markdown} from "../MM2MDConverter";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -261,7 +261,8 @@ export default class MindCheese {
   }
 
   getMarkdown(): string {
-    return convertMM2MD(this.mind.root.toObject());
+    // return convertMM2MD(this.mind.root.toObject());
+    return mind2markdown(this.mind);
   }
 
   getNodeTree(): Record<string, any> {

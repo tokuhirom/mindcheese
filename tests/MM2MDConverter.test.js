@@ -1,4 +1,6 @@
 const MM2MDConverter = require("../src/MM2MDConverter");
+const {mind2markdown} = require("../src/MM2MDConverter");
+const NodeTreeImporter = require("../src/mindmap/format/node_tree/NodeTreeImporter").default;
 const mind = {
   id: "root",
   topic: "jsMind",
@@ -46,24 +48,28 @@ const mind = {
 };
 
 test("basic", () => {
-  const md = MM2MDConverter.convertMM2MD(mind);
+  console.log(NodeTreeImporter)
+  const mindobj = new NodeTreeImporter().getMind(mind)
+  console.log(JSON.stringify(mindobj.root.toObject(), null, 2))
+  const md = mind2markdown(mindobj);
   expect(md).toBe(
     [
-      "+ Easy",
-      "\t- Easy to show",
-      "\t- Easy to edit",
-      "\t- Easy to store",
-      "\t- Easy to embed",
-      "- Open Source",
-      "\t- on GitHub",
-      "\t- BSD License",
-      "- Powerful",
-      "\t- Base on Javascript",
-      "\t- Base on HTML5",
-      "\t- Depends on you",
-      "+ test node",
-      "\t- I'm from local variable",
-      "\t- I can do everything",
+      "- jsMind",
+      "\t+ Easy",
+      "\t\t+ Easy to show",
+      "\t\t+ Easy to edit",
+      "\t\t+ Easy to store",
+      "\t\t+ Easy to embed",
+      "\t- Open Source",
+      "\t\t- on GitHub",
+      "\t\t- BSD License",
+      "\t- Powerful",
+      "\t\t- Base on Javascript",
+      "\t\t- Base on HTML5",
+      "\t\t- Depends on you",
+      "\t+ test node",
+      "\t\t+ I'm from local variable",
+      "\t\t+ I can do everything",
       "",
     ].join("\n")
   );
@@ -91,12 +97,13 @@ test("multiline", () => {
   const md = MM2MDConverter.convertMM2MD(mind);
   expect(md).toBe(
     [
-      "+ Easy 1 \\",
-      "  Easy 2 \\",
-      "  Easy 3",
-      "\t+ Abc 1 \\",
-      "\t  Abc 2 \\",
-      "\t  Abc 3",
+      "- jsMind",
+      "\t+ Easy 1 \\",
+      "\t  Easy 2 \\",
+      "\t  Easy 3",
+      "\t\t+ Abc 1 \\",
+      "\t\t  Abc 2 \\",
+      "\t\t  Abc 3",
       "",
     ].join("\n")
   );

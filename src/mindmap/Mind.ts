@@ -62,9 +62,9 @@ export default class Mind {
       } else {
         d = direction === Direction.LEFT ? Direction.LEFT : Direction.RIGHT;
       }
-      console.log(
-        `add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`
-      );
+      // console.log(
+      //   `add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`
+      // );
       node = new MindNode(
         nodeid,
         nodeindex,
@@ -290,17 +290,17 @@ export default class Mind {
   }
 
   private reindex(node: MindNode): void {
-    console.debug(
-      `Before Mind._reindex: ` +
-        node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
-    );
+    // console.debug(
+    //   `Before Mind._reindex: ` +
+    //     node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
+    // );
     node.children.sort(MindNode.compare);
     for (let i = 0; i < node.children.length; i++) {
       node.children[i].index = i + 1;
     }
-    console.debug(
-      `After Mind._reindex: ` +
-        node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
-    );
+    // console.debug(
+    //   `After Mind._reindex: ` +
+    //     node.children.map((n) => `${n.topic}: ${n.index}`).join("\n")
+    // );
   }
 }

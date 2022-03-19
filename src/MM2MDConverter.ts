@@ -1,8 +1,19 @@
-function renderMd(node: any, level: number): string {
-  if (node == null) {
-    return "";
-  }
+import Mind from "./mindmap/Mind";
+import MindNode from "./mindmap/MindNode";
+import {Direction} from "./mindmap/MindmapConstants";
+import NodeTreeImporter from "./mindmap/format/node_tree/NodeTreeImporter";
 
+// DEPRECATED
+export function convertMM2MD(data: any): string {
+  const mind = new NodeTreeImporter().getMind(data)
+  return mind2markdown(mind);
+}
+
+export function mind2markdown(mind: Mind): string {
+  return renderMarkdown(mind.root, 0);
+}
+
+function renderMarkdown(node: MindNode, level: number): string {
   let result = "";
   if (node.topic) {
     const lines = node.topic.split("\n");
@@ -11,7 +22,7 @@ function renderMd(node: any, level: number): string {
         result += "\t";
       }
       if (i === 0) {
-        result += node.direction == "left" ? "+ " : "- ";
+        result += node.direction == Direction.LEFT ? "+ " : "- ";
       } else {
         result += "  ";
       }
@@ -24,17 +35,10 @@ function renderMd(node: any, level: number): string {
   }
 
   if (node.children) {
-    for (const a of node.children) {
-      result += renderMd(a, level + 1);
-    }
+    const children = node.children;
+    for (let i = 0, l = children.length; i < l; i++)
+      result += renderMarkdown(children[i], level + 1);
   }
-  return result;
-}
 
-export function convertMM2MD(data: any): string {
-  const p = {
-    // Skip the root node。
-    children: data.children,
-  };
-  return renderMd(p, -1);
+  return result;
 }

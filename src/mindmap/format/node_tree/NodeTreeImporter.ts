@@ -36,9 +36,9 @@ export default class NodeTreeImporter {
     if (nodeParent.isroot) {
       d = nodeJson.direction == "left" ? Direction.LEFT : Direction.RIGHT;
     }
-    console.log(
-      `_extract_subnode node_json.direction DIRECTION=${nodeJson.direction} d=${d} ${nodeJson.topic}`
-    );
+    // console.log(
+    //   `_extract_subnode node_json.direction DIRECTION=${nodeJson.direction} d=${d} ${nodeJson.topic}`
+    // );
     const node = mind.addNode(
       nodeParent,
       nodeJson.id,
