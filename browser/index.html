@@ -10,7 +10,6 @@
       <button id="layout">layout.layout()</button>
       <button id="viewShow">view.show()</button>
       <button id="expandSize">view.expand_size()</button>
-      <button id="view_show">view._show()</button>
       <button id="dump_to_console">dump_to_console()</button>
       <button id="dump_to_console_markdown">dump_to_console_markdown()</button>
       <button id="load_markdown">load_markdown()</button>
@@ -103,11 +102,6 @@
       document.getElementById("expandSize").addEventListener("click", () => {
         console.log("viewShow");
         jsmind.view.expandSize();
-        return false;
-      });
-      document.getElementById("view_show").addEventListener("click", () => {
-        console.log("view_show");
-        jsmind.view._show();
         return false;
       });
       document
