@@ -22,12 +22,7 @@ export default class LayoutProvider {
   private readonly vSpace: number;
   private readonly pSpace: number;
 
-  constructor(
-    mindCheese: MindCheese,
-    hspace = 30,
-    vspace = 20,
-    pspace = 13
-  ) {
+  constructor(mindCheese: MindCheese, hspace = 30, vspace = 20, pspace = 13) {
     this.hSpace = hspace;
     this.vSpace = vspace;
     this.pSpace = pspace;

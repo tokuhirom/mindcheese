@@ -17,11 +17,7 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./MindNode";
-import {
-  BEFOREID_FIRST,
-  BEFOREID_LAST,
-  Direction,
-} from "./MindmapConstants";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { Point } from "./LayoutProvider";
 
 export default class Draggable {

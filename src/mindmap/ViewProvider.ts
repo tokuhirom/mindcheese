@@ -418,7 +418,7 @@ export default class ViewProvider {
     this.showNodes();
     this.showLines();
     //this.layout.cache_valid = true;
-    this.jm.draggable.resize()
+    this.jm.draggable.resize();
   }
 
   centerRoot(): void {

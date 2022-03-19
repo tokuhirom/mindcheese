@@ -6,11 +6,7 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {
-  BEFOREID_LAST,
-  Direction,
-  KeyModifier,
-} from "./MindmapConstants";
+import { BEFOREID_LAST, Direction, KeyModifier } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import ShortcutHandlers from "./ShortcutHandlers";
 import GraphCanvas from "./GraphCanvas";
