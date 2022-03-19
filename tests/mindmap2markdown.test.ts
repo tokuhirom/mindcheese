@@ -1,5 +1,5 @@
 import NodeTreeImporter from "../src/mindmap/format/node_tree/NodeTreeImporter";
-import {mind2markdown} from "../src/MM2MDConverter";
+import { mind2markdown } from "../src/MM2MDConverter";
 
 const mind = {
   id: "root",

@@ -1,6 +1,6 @@
 "use strict";
 
-import {convertMD2MM} from "../src/MD2MMConverter";
+import { convertMD2MM } from "../src/MD2MMConverter";
 
 test("complex", () => {
   const md = [
