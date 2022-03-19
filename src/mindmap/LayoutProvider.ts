@@ -218,7 +218,8 @@ export default class LayoutProvider {
     const offsetPoint = this.getNodeOffset(node);
     const x =
       offsetPoint.x + (viewData.width * (node.data.layout.direction - 1)) / 2;
-    const y = offsetPoint.y - viewData.height / 2;
+    // ↓ Destination of the line.
+    const y = offsetPoint.y - viewData.height;
     return new Point(x, y);
   }
 
