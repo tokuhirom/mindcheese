@@ -38,5 +38,6 @@ class ShortcutOption {
     [KeyModifier.NONE, "ArrowLeft", ShortcutHandlers.left],
     [KeyModifier.NONE, "ArrowRight", ShortcutHandlers.right],
     [KeyModifier.CTRL, "KeyZ", ShortcutHandlers.undo],
+    [KeyModifier.META, "KeyZ", ShortcutHandlers.undo], // for mac
   ];
 }
