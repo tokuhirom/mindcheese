@@ -40,6 +40,7 @@ const DEFAULT_OPTIONS: any = {
     enable: true,
     mappings: [
       [KeyModifier.NONE, "Delete", ShortcutHandlers.delete],
+      [KeyModifier.NONE, "Backspace", ShortcutHandlers.delete], // for Mac
       [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],
       [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
       [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode],
