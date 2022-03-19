@@ -1,6 +1,6 @@
 // noinspection JSUnfilteredForInLoop
 
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
