@@ -517,20 +517,17 @@ export default class ViewProvider {
   showLines(): void {
     this.graph.clear();
     const nodes = this.mindCheese.mind.nodes;
-    let node = null; // TODO make this const
-    let pin = null; // TODO make this const
-    let pout = null; // TODO make this const
     const offset = this.getViewOffset();
     for (const nodeid in nodes) {
-      node = nodes[nodeid];
+      const node = nodes[nodeid];
       if (node.isroot) {
         continue;
       }
       if ("visible" in node.data.layout && !node.data.layout.visible) {
         continue;
       }
-      pin = this.layout.getNodePointIn(node);
-      pout = this.layout.getNodePointOut(node.parent);
+      const pin = this.layout.getNodePointIn(node);
+      const pout = this.layout.getNodePointOut(node.parent);
       this.graph.drawLine(pout, pin, offset);
     }
   }
