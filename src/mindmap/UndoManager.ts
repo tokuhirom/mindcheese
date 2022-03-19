@@ -3,7 +3,7 @@ import { EventType } from "./MindmapConstants";
 
 export default class UndoManager {
   private readonly mindCheese: MindCheese;
-  private undoStack: [string, any][];
+  private undoStack: any[];
   private readonly undoStackLimit: number;
 
   constructor(jm: MindCheese, undoStackLimit = 10000) {
@@ -21,15 +21,15 @@ export default class UndoManager {
       console.log(`UndoManager: callback event pushing. ${data.evt}`);
       // TODO At here, there's no reason to use nodeTree.
       // We can use the "Mind" object itself.
-      this.undoStack.push([data.evt, this.mindCheese.getNodeTree()]);
+      this.undoStack.push(this.mindCheese.getNodeTree());
     });
   }
 
   undo(): void {
     const item = this.undoStack.pop();
     if (item) {
-      const [evt, data] = item;
-      console.log(`UndoManager: undo. evt=${evt} data=${data}`);
+      const data = item;
+      console.log(`UndoManager: undo. data=${data}`);
       this.mindCheese.showNodeTree(data);
     } else {
       console.log(`UndoManager: undo. stack is empty.`);
