@@ -6,14 +6,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { BEFOREID_LAST, Direction, KeyModifier } from "./MindmapConstants";
+import {BEFOREID_LAST, Direction} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
-import ShortcutHandlers from "./ShortcutHandlers";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import MarkdownExporter from "./format/markdown/MarkdownExporter";
 import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
+import {MindOption} from "./MindOption";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -21,40 +21,6 @@ function isEmpty(s: string) {
   }
   return s.replace(/\s*/, "").length == 0;
 }
-
-const DEFAULT_OPTIONS: any = {
-  theme: "primary",
-
-  view: {
-    hmargin: 100,
-    vmargin: 50,
-    lineWidth: 2,
-    lineColor: "#555",
-  },
-  layout: {
-    hspace: 30,
-    vspace: 20,
-    pspace: 13,
-  },
-  shortcut: {
-    enable: true,
-    mappings: [
-      [KeyModifier.NONE, "Delete", ShortcutHandlers.delete],
-      [KeyModifier.NONE, "Backspace", ShortcutHandlers.delete], // for Mac
-      [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],
-      [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
-      [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode],
-      [KeyModifier.NONE, "Space", ShortcutHandlers.toggle],
-      [KeyModifier.SHIFT, "ArrowUp", ShortcutHandlers.moveUp],
-      [KeyModifier.SHIFT, "ArrowDown", ShortcutHandlers.moveDown],
-      [KeyModifier.NONE, "ArrowUp", ShortcutHandlers.up],
-      [KeyModifier.NONE, "ArrowDown", ShortcutHandlers.down],
-      [KeyModifier.NONE, "ArrowLeft", ShortcutHandlers.left],
-      [KeyModifier.NONE, "ArrowRight", ShortcutHandlers.right],
-      [KeyModifier.CTRL, "KeyZ", ShortcutHandlers.undo],
-    ],
-  },
-};
 
 export default class MindCheese {
   options: any;
@@ -71,12 +37,10 @@ export default class MindCheese {
   private nodeTreeImporter = new NodeTreeImporter();
   private markdownImporter = new MarkdownImporter();
 
-  constructor(id: number, container: HTMLElement, options: any = {}) {
+  constructor(id: number, container: HTMLElement, options: MindOption) {
     this.container = container;
 
-    let opts = Object.assign({}, DEFAULT_OPTIONS);
-    opts = Object.assign(opts, options);
-    this.options = opts;
+    this.options = options;
     this.mind = null; // TODO original では null が入っていた
     this.id = id;
     this.editable = true;
@@ -84,22 +48,22 @@ export default class MindCheese {
     // create instance of function provider
     this.layout = new LayoutProvider(
       this,
-      opts.layout.hspace,
-      opts.layout.vspace,
-      opts.layout.pspace
+      options.layout.hspace,
+      options.layout.vspace,
+      options.layout.pspace
     );
-    const graph = new GraphCanvas(opts.view.line_color, opts.view.line_width);
+    const graph = new GraphCanvas(options.view.lineColor, options.view.lineWidth);
     this.view = new ViewProvider(
       this,
       this.container,
-      opts.view.hmargin,
-      opts.view.vmargin,
+      options.view.hmargin,
+      options.view.vmargin,
       graph
     );
     this.shortcut = new ShortcutProvider(
       this,
-      opts.shortcut.enable,
-      opts.shortcut.mappings
+      options.shortcut.enable,
+      options.shortcut.mappings
     );
     this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
