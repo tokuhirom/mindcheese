@@ -28,7 +28,7 @@ export default class UndoManager {
     if (item) {
       const [evt, data] = item;
       console.log(`UndoManager: undo. evt=${evt} data=${data}`);
-      this.mindCheese.show("nodeTree", data);
+      this.mindCheese.showNodeTree(data);
     } else {
       console.log(`UndoManager: undo. stack is empty.`);
     }

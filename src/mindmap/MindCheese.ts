@@ -284,8 +284,8 @@ export default class MindCheese {
     this.layout.reset();
   }
 
-  private doShow(format: string, mind: any): void {
-    this.mind = this.data.load(format, mind);
+  private doShow(mind: any): void {
+    this.mind = mind;
     if (!this.mind) {
       throw new Error("data.load error");
     }
@@ -297,9 +297,21 @@ export default class MindCheese {
     this.eventRouter.invokeEventHandler(EventType.Show, { data: [mind] });
   }
 
-  show(format: string, mind: any): void {
+  showNodeTree(nodeTree: any): void {
     this.doReset();
-    this.doShow(format, mind);
+
+    const mind = this.data.load("nodeTree", nodeTree)
+    this.doShow(mind);
+  }
+
+  showMarkdown(title: string, body: string): void {
+    this.doReset();
+
+    const mind = this.data.load("markdown", {
+      title: title,
+      markdown: body,
+    })
+    this.doShow(mind);
   }
 
   getData(dataFormat: string): any {
