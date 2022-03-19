@@ -1,6 +1,6 @@
 "use strict";
 
-import { markdown2mindmap } from "../src/MD2MMConverter";
+import { markdown2mindmap } from "../src/mindmap/format/markdown/markdown2mindmap";
 
 test("complex", () => {
   const md = [

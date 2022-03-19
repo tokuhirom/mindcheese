@@ -4,8 +4,7 @@ import { Direction } from "../../MindmapConstants";
 
 /*
 {
-    "format": "node_tree",
-    "data": { "id": "root", "topic": "jsMind Example" }
+    { "id": "root", "topic": "jsMind Example" }
 }
  */
 

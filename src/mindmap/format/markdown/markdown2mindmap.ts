@@ -1,5 +1,5 @@
-import NodeTreeImporter from "./mindmap/format/node_tree/NodeTreeImporter";
-import Mind from "./mindmap/Mind";
+import NodeTreeImporter from "../node_tree/NodeTreeImporter";
+import Mind from "../../Mind";
 
 function parse(md: string) {
   if (md == null) {

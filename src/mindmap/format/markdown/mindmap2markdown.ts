@@ -1,8 +1,8 @@
-import Mind from "./mindmap/Mind";
-import MindNode from "./mindmap/MindNode";
-import { Direction } from "./mindmap/MindmapConstants";
+import Mind from "../../Mind";
+import MindNode from "../../MindNode";
+import { Direction } from "../../MindmapConstants";
 
-export function mind2markdown(mind: Mind): string {
+export function mindmap2markdown(mind: Mind): string {
   return renderMarkdown(mind.root, 0);
 }
 

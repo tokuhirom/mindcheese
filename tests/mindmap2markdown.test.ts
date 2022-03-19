@@ -1,5 +1,5 @@
 import NodeTreeImporter from "../src/mindmap/format/node_tree/NodeTreeImporter";
-import { mind2markdown } from "../src/MM2MDConverter";
+import { mindmap2markdown } from "../src/mindmap/format/markdown/mindmap2markdown";
 
 const mind = {
   id: "root",
@@ -50,7 +50,7 @@ const mind = {
 test("basic", () => {
   const mindobj = new NodeTreeImporter().getMind(mind);
   console.log(JSON.stringify(mindobj.root.toObject(), null, 2));
-  const md = mind2markdown(mindobj);
+  const md = mindmap2markdown(mindobj);
   expect(md).toBe(
     [
       "- jsMind",
@@ -94,7 +94,7 @@ test("multiline", () => {
     ],
   };
   const mindobj = new NodeTreeImporter().getMind(mind);
-  const md = mind2markdown(mindobj);
+  const md = mindmap2markdown(mindobj);
   expect(md).toBe(
     [
       "- jsMind",

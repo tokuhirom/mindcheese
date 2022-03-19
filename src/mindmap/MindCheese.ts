@@ -11,8 +11,8 @@ import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import { MindOption } from "./MindOption";
-import { mind2markdown } from "../MM2MDConverter";
-import { markdown2mindmap } from "../MD2MMConverter";
+import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
+import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -258,7 +258,7 @@ export default class MindCheese {
 
   getMarkdown(): string {
     // return convertMM2MD(this.mind.root.toObject());
-    return mind2markdown(this.mind);
+    return mindmap2markdown(this.mind);
   }
 
   getNodeTree(): Record<string, any> {
