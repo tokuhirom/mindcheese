@@ -132,8 +132,6 @@ mcnode code {
 mcnodes.theme-primary mcnode {
   background-color: white;
   color: black;
-  /* TODO: render underline in canvas. */
-  border-bottom: 2px solid black;
 }
 
 mcnodes.theme-primary mcnode:hover {

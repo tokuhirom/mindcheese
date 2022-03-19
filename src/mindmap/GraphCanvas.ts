@@ -33,12 +33,14 @@ export default class GraphCanvas {
     pout: { x: number; y: number },
     pin: { x: number; y: number },
     offset: { x: number; y: number },
-    color: string
+    color: string,
+    lineWidth = this.lineWidth,
+    lineCap: CanvasLineCap = "round"
   ): void {
     const ctx = this.canvasContext;
     ctx.strokeStyle = color;
-    ctx.lineWidth = this.lineWidth;
-    ctx.lineCap = "round";
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = lineCap;
 
     GraphCanvas.bezierTo(
       ctx,

@@ -2,7 +2,7 @@
 
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { KEYCODE_ENTER } from "./MindmapConstants";
+import { Direction, KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
 import { Renderer } from "./renderer/Renderer";
@@ -533,9 +533,22 @@ export default class ViewProvider {
       if ("visible" in node.data.layout && !node.data.layout.visible) {
         continue;
       }
-      const pin = this.layout.getNodePointIn(node);
-      const pout = this.layout.getNodePointOut(node.parent);
-      this.graph.drawLine(pout, pin, offset, node.color);
+      {
+        // Draw line between previous node and next node
+        const pin = this.layout.getNodePointIn(node);
+        const pout = this.layout.getNodePointOut(node.parent);
+        this.graph.drawLine(pout, pin, offset, node.color);
+      }
+      {
+        // Draw line under the bottom of the node
+        const pin: Point = this.layout.getNodePointIn(node);
+        const pout = new Point(
+          pin.x -
+            node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
+          pin.y
+        );
+        this.graph.drawLine(pout, pin, offset, node.color, 4, "butt");
+      }
     }
   }
 }
