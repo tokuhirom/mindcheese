@@ -17,8 +17,22 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./MindNode";
-import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
-import { Point } from "./LayoutProvider";
+import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
+import {Point} from "./LayoutProvider";
+
+class ClosePoint {
+  node: MindNode;
+  np: Point;
+  sp: Point;
+  direction: Direction;
+
+  constructor(node: MindNode, direction: Direction, sp: Point, np: Point) {
+    this.node = node;
+    this.direction = direction;
+    this.sp = sp;
+    this.np = np;
+  }
+}
 
 export default class Draggable {
   private jm: MindCheese;
@@ -118,19 +132,12 @@ export default class Draggable {
     this.shadow.style.visibility = "hidden";
   }
 
-  private magnetShadow(node: {
-    node: any;
-    np: any;
-    sp: any;
-    direction: number;
-  }): void {
-    if (node) {
-      this.canvasContext.lineWidth = this.lineWidth;
-      this.canvasContext.strokeStyle = "rgba(0,0,0,0.3)";
-      this.canvasContext.lineCap = "round";
-      this.clearLines();
-      this.canvasLineTo(node.sp.x, node.sp.y, node.np.x, node.np.y);
-    }
+  private magnetShadow(sp: Point, np: Point): void {
+    this.canvasContext.lineWidth = this.lineWidth;
+    this.canvasContext.strokeStyle = "rgba(0,0,0,0.3)";
+    this.canvasContext.lineCap = "round";
+    this.clearLines();
+    this.canvasLineTo(sp.x, sp.y, np.x, np.y);
   }
 
   private clearLines(): void {
@@ -149,12 +156,7 @@ export default class Draggable {
     this.canvasContext.stroke();
   }
 
-  private doLookupCloseNode(): {
-    node: MindNode;
-    np: any;
-    sp: any;
-    direction: Direction;
-  } {
+  private doLookupCloseNode(): ClosePoint | null {
     const root = this.jm.getRoot();
     const rootLocation = root.getLocation();
     const rootSize = root.getSize();
@@ -191,16 +193,16 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.w) +
             Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h / 2 };
-          sp = { x: sx + this.lineWidth, y: sy + sh / 2 };
+          np = {x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h / 2};
+          sp = {x: sx + this.lineWidth, y: sy + sh / 2};
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
           }
           distance =
             Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + this.lineWidth, y: nl.y + ns.h / 2 };
-          sp = { x: sx + sw - this.lineWidth, y: sy + sh / 2 };
+          np = {x: nl.x + this.lineWidth, y: nl.y + ns.h / 2};
+          sp = {x: sx + sw - this.lineWidth, y: sy + sh / 2};
         }
         if (distance < minDistance) {
           closestNode = node;
@@ -211,28 +213,23 @@ export default class Draggable {
       }
     }
     if (closestNode) {
-      return {
-        node: closestNode,
-        direction: direct,
-        sp: shadowPoint,
-        np: closestPoint,
-      };
+      return new ClosePoint(
+        closestNode,
+        direct,
+        shadowPoint,
+        closestPoint,
+      );
     } else {
       return null;
     }
   }
 
   lookupCloseNode(): void {
-    const nodeData: {
-      node: MindNode;
-      np: any;
-      sp: any;
-      direction: Direction;
-    } = this.doLookupCloseNode();
-    if (nodeData) {
-      this.magnetShadow(nodeData);
-      this.targetNode = nodeData.node;
-      this.targetDirect = nodeData.direction;
+    const closePointOrNull = this.doLookupCloseNode();
+    if (closePointOrNull) {
+      this.magnetShadow(closePointOrNull.sp, closePointOrNull.np);
+      this.targetNode = closePointOrNull.node;
+      this.targetDirect = closePointOrNull.direction;
     }
   }
 
