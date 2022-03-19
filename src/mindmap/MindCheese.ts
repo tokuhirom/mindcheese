@@ -115,7 +115,6 @@ export default class MindCheese {
     this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
 
-    this.layout.init();
     this.view.init();
     this.shortcut.init();
     this.draggable.init(this.container);

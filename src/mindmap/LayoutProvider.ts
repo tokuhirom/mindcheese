@@ -30,11 +30,6 @@ export default class LayoutProvider {
     this.bounds = null;
   }
 
-  init(): void {
-    // TODO remove this
-    console.debug("layout.init");
-  }
-
   reset(): void {
     console.debug("layout.reset");
     this.bounds = { n: 0, s: 0, w: 0, e: 0 };
