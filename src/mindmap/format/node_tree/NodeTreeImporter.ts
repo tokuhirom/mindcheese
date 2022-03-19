@@ -9,14 +9,15 @@ import { Direction } from "../../MindmapConstants";
 }
  */
 
+// Convert plain node tree to Mind object.
 export default class NodeTreeImporter {
-  getMind(source: any): Mind {
+  getMind(source: Record<string, any>): Mind {
     const mind = new Mind();
-    this.parse(mind, source.data);
+    this.parse(mind, source);
     return mind;
   }
 
-  private parse(mind: Mind, nodeRoot: MindNode): void {
+  private parse(mind: Mind, nodeRoot: Record<string, any>): void {
     mind.setRoot(nodeRoot.id, nodeRoot.topic);
     if ("children" in nodeRoot) {
       const children = nodeRoot.children;
@@ -29,7 +30,7 @@ export default class NodeTreeImporter {
   private extractSubNode(
     mind: Mind,
     nodeParent: MindNode,
-    nodeJson: any
+    nodeJson: Record<string, any>
   ): void {
     let d: Direction = null;
     if (nodeParent.isroot) {

@@ -81,8 +81,5 @@ function parse(title: string, md: string) {
 }
 
 export function convertMD2MM(title: string, md: string): any {
-  return {
-    format: "node_tree",
-    data: parse(title, md.replace(/^---$.*^---$/ms, "")),
-  };
+  return parse(title, md.replace(/^---$.*^---$/ms, ""))
 }
