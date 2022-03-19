@@ -1,7 +1,6 @@
-const MM2MDConverter = require("../src/MM2MDConverter");
-const { mind2markdown } = require("../src/MM2MDConverter");
-const NodeTreeImporter =
-  require("../src/mindmap/format/node_tree/NodeTreeImporter").default;
+import NodeTreeImporter from "../src/mindmap/format/node_tree/NodeTreeImporter";
+import {mind2markdown} from "../src/MM2MDConverter";
+
 const mind = {
   id: "root",
   topic: "jsMind",
@@ -49,7 +48,6 @@ const mind = {
 };
 
 test("basic", () => {
-  console.log(NodeTreeImporter);
   const mindobj = new NodeTreeImporter().getMind(mind);
   console.log(JSON.stringify(mindobj.root.toObject(), null, 2));
   const md = mind2markdown(mindobj);

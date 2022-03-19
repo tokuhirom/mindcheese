@@ -1,6 +1,6 @@
 "use strict";
 
-const MD2MMConverter = require("../src/MD2MMConverter");
+import {convertMD2MM} from "../src/MD2MMConverter";
 
 test("complex", () => {
   const md = [
@@ -23,7 +23,7 @@ test("complex", () => {
     "\t\t\t- I can do everything",
     "",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -136,7 +136,7 @@ test("complex", () => {
 
 test("basic", () => {
   const md = ["- top", "\t- A", "\t\t- B", "\t- C"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -155,7 +155,7 @@ test("basic", () => {
 
 test("left", () => {
   const md = ["- top", "\t- A", "\t\t- B", "\t+ C"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -174,7 +174,7 @@ test("left", () => {
 
 test("ignore yfm", () => {
   const md = ["---", "aliases: []", "---", "", "- top", "\t- A"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -194,7 +194,7 @@ test("dedent 2 step", () => {
     "\t\t\t- C2",
     "\t- A3",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -236,7 +236,7 @@ test("dedent 3 step", () => {
     "\t\t\t\t- D2",
     "\t- A3",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -282,7 +282,7 @@ test("Multiline", () => {
     "\t\t  B2 \\",
     "\t\t  B3",
   ].join("\n");
-  const mm = MD2MMConverter.convertMD2MM(md);
+  const mm = convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
