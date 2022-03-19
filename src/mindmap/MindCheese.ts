@@ -6,14 +6,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {BEFOREID_LAST, Direction} from "./MindmapConstants";
+import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
 import NodeTreeImporter from "./format/node_tree/NodeTreeImporter";
 import MarkdownImporter from "./format/markdown/MarkdownImporter";
 import MarkdownExporter from "./format/markdown/MarkdownExporter";
 import NodeTreeExporter from "./format/node_tree/NodeTreeExporter";
-import {MindOption} from "./MindOption";
+import { MindOption } from "./MindOption";
 
 function isEmpty(s: string) {
   if (!s) {
@@ -45,7 +45,7 @@ export default class MindCheese {
     this.container = container;
 
     this.options = options;
-    this.mind = new Mind()
+    this.mind = new Mind();
     this.id = id;
     this.editable = true;
 
@@ -277,11 +277,7 @@ export default class MindCheese {
     return this.mind.getNodeById(nodeid);
   }
 
-  addNode(
-    parentNode: MindNode,
-    nodeid: string,
-    topic: string
-  ): MindNode {
+  addNode(parentNode: MindNode, nodeid: string, topic: string): MindNode {
     this.checkEditable();
 
     this.undoManager.recordSnapshot();
