@@ -17,8 +17,8 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
-import {Point} from "./LayoutProvider";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import { Point } from "./LayoutProvider";
 
 class ClosePoint {
   node: MindNode;
@@ -193,16 +193,16 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.w) +
             Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = {x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h / 2};
-          sp = {x: sx + this.lineWidth, y: sy + sh / 2};
+          np = { x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h / 2 };
+          sp = { x: sx + this.lineWidth, y: sy + sh / 2 };
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
           }
           distance =
             Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = {x: nl.x + this.lineWidth, y: nl.y + ns.h / 2};
-          sp = {x: sx + sw - this.lineWidth, y: sy + sh / 2};
+          np = { x: nl.x + this.lineWidth, y: nl.y + ns.h / 2 };
+          sp = { x: sx + sw - this.lineWidth, y: sy + sh / 2 };
         }
         if (distance < minDistance) {
           closestNode = node;
@@ -213,12 +213,7 @@ export default class Draggable {
       }
     }
     if (closestNode) {
-      return new ClosePoint(
-        closestNode,
-        direct,
-        shadowPoint,
-        closestPoint,
-      );
+      return new ClosePoint(closestNode, direct, shadowPoint, closestPoint);
     } else {
       return null;
     }
