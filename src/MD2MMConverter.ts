@@ -78,10 +78,13 @@ function parse(md: string) {
     }
   }
   const realRoot = root.children[0];
-  if ('direction' in realRoot) {
-    delete realRoot['direction']
+  if (!realRoot) {
+    throw new Error("MindCheese can't parse this markdown as a mindmap: '" + md + "'")
   }
-  return realRoot
+  if ("direction" in realRoot) {
+    delete realRoot["direction"];
+  }
+  return realRoot;
 }
 
 export function convertMD2MM(md: string): any {

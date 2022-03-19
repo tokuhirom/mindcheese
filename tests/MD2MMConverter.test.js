@@ -136,7 +136,7 @@ test("complex", () => {
 
 test("basic", () => {
   const md = ["- top", "\t- A", "\t\t- B", "\t- C"].join("\n");
-  const mm = MD2MMConverter.convertMD2MM( md);
+  const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
   expect(mm).toStrictEqual({
     id: 1,
@@ -280,7 +280,7 @@ test("Multiline", () => {
     "\t  A2",
     "\t\t- B1 \\",
     "\t\t  B2 \\",
-    "\t\t  B3"
+    "\t\t  B3",
   ].join("\n");
   const mm = MD2MMConverter.convertMD2MM(md);
   console.log(JSON.stringify(mm, null, 2));
