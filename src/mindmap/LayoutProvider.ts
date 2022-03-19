@@ -1,6 +1,6 @@
 // noinspection JSUnfilteredForInLoop
 
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
@@ -42,10 +42,6 @@ export default class LayoutProvider {
   }
 
   layoutDirection(): void {
-    this.layoutDirectionRoot();
-  }
-
-  private layoutDirectionRoot(): void {
     const node = this.mindCheese.mind.root;
 
     // console.debug(node);
@@ -65,7 +61,6 @@ export default class LayoutProvider {
       }
     }
   }
-
   private layoutDirectionSide(node: MindNode, direction: Direction): void {
     const layoutData = node.data.layout;
     const children = node.children;
