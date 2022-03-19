@@ -1,4 +1,3 @@
-import MindmapImporter from "../MindmapImporter";
 import Mind from "../../Mind";
 import MindNode from "../../MindNode";
 import { Direction } from "../../MindmapConstants";
@@ -10,7 +9,7 @@ import { Direction } from "../../MindmapConstants";
 }
  */
 
-export default class NodeTreeImporter implements MindmapImporter {
+export default class NodeTreeImporter {
   getMind(source: any): Mind {
     const mind = new Mind();
     this.parse(mind, source.data);

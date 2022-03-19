@@ -1,9 +1,8 @@
-import MindmapExporter from "../MindmapExporter";
 import Mind from "../../Mind";
 import MindNode from "../../MindNode";
 import { Direction } from "../../MindmapConstants";
 
-export default class NodeTreeExporter implements MindmapExporter {
+export default class NodeTreeExporter {
   getData(mind: Mind): Record<string, any> {
     const json: Record<string, any> = {};
     json.format = "node_tree";

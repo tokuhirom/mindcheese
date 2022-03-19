@@ -1,4 +1,3 @@
-import MindmapImporter from "../MindmapImporter";
 import Mind from "../../Mind";
 import NodeTreeImporter from "../node_tree/NodeTreeImporter";
 import { convertMD2MM } from "../../../MD2MMConverter";

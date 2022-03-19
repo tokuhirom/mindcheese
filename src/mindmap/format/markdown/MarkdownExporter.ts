@@ -1,9 +1,8 @@
-import MindmapExporter from "../MindmapExporter";
 import Mind from "../../Mind";
 import NodeTreeExporter from "../node_tree/NodeTreeExporter";
 import { convertMM2MD } from "../../../MM2MDConverter";
 
-export default class MarkdownExporter implements MindmapExporter {
+export default class MarkdownExporter {
   private nodeTreeExporter: NodeTreeExporter;
 
   constructor() {
