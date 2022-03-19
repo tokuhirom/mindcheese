@@ -120,18 +120,6 @@ mcexpander:hover {
   border-color: #000;
 }
 
-@media screen and (max-device-width: 1024px) {
-  mcnode {
-    padding: 5px;
-    border-radius: 3px;
-    font-size: 14px;
-  }
-
-  mcnode.root {
-    font-size: 21px;
-  }
-}
-
 /* primary theme */
 mcnodes.theme-primary mcnode {
   background-color: white;
