@@ -122,6 +122,12 @@ mcexpander:hover {
   border-color: #000;
 }
 
+mcnode code {
+  border: 1px solid antiquewhite;
+  background-color: antiquewhite;
+  color: indianred;
+}
+
 /* primary theme */
 mcnodes.theme-primary mcnode {
   background-color: white;
