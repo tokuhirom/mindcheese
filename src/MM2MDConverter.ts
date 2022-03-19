@@ -1,7 +1,6 @@
 import Mind from "./mindmap/Mind";
 import MindNode from "./mindmap/MindNode";
 import { Direction } from "./mindmap/MindmapConstants";
-import NodeTreeImporter from "./mindmap/format/node_tree/NodeTreeImporter";
 
 export function mind2markdown(mind: Mind): string {
   return renderMarkdown(mind.root, 0);
