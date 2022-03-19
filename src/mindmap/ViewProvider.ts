@@ -114,8 +114,9 @@ export default class ViewProvider {
     const el = this.textAreaElement;
     el.style.width = "";
     el.style.height = "";
+    const lineHeight = 1.3;
     el.style.width = el.scrollWidth + "px";
-    el.style.height = el.scrollHeight + "px";
+    el.style.height = (el.value.split(/\n/).length * lineHeight) + "em";
     this.editingNode.data.view.width = this.textAreaElement.clientWidth;
     this.editingNode.data.view.height = this.textAreaElement.clientHeight;
     this.layout.layout();
@@ -361,7 +362,9 @@ export default class ViewProvider {
     const topic = node.topic;
     this.textAreaElement.value = topic;
     this.textAreaElement.style.width = "380px";
-    this.textAreaElement.style.height = topic.split(/\n/).length + "em";
+    // TODO I don't know to get the line height from element object.
+    const lineHeight = 1.3;
+    this.textAreaElement.style.height = (topic.split(/\n/).length * lineHeight) + "em";
     element.innerHTML = "";
     element.appendChild(this.textAreaElement);
     element.style.zIndex = "5";
