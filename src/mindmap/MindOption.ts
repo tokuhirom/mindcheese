@@ -1,7 +1,7 @@
 import { KeyModifier } from "./MindmapConstants";
 import ShortcutHandlers from "./ShortcutHandlers";
 import MindCheese from "./MindCheese";
-import { Renderer } from "./renderer/Renderer";
+import { TextFormatter } from "./renderer/TextFormatter";
 import PlainTextRenderer from "./renderer/PlainTextRenderer";
 import MarkdownRenderer from "./renderer/MarkdownRenderer";
 
@@ -17,7 +17,7 @@ class ViewOption {
   vmargin = 50;
   lineWidth = 2;
   lineColor = "#555";
-  renderer: Renderer = new MarkdownRenderer();
+  renderer: TextFormatter = new MarkdownRenderer();
 }
 
 class LayoutOption {

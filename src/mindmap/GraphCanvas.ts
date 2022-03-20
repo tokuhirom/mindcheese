@@ -1,3 +1,6 @@
+/**
+ * GraphCanvas renders bezier lines between nodes on the canvas element.
+ */
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
@@ -5,7 +8,13 @@ export default class GraphCanvas {
   private readonly lineColor: string;
   private readonly lineWidth: number;
 
-  constructor(lineColor = "#555", lineWidth = 2) {
+  /**
+   * Create new instance of GraphCanvas.
+   *
+   * @param lineColor color of lines. CSS compatible colors are ok. e.g. "#ffffff"
+   * @param lineWidth Pixel of line width.
+   */
+  constructor(lineColor: string, lineWidth: number) {
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
     this.canvasElement = document.createElement("canvas");

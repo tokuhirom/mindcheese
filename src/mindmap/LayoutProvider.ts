@@ -22,7 +22,12 @@ export default class LayoutProvider {
   private readonly vSpace: number;
   private readonly pSpace: number;
 
-  constructor(mindCheese: MindCheese, hspace = 30, vspace = 20, pspace = 13) {
+  constructor(
+    mindCheese: MindCheese,
+    hspace: number,
+    vspace: number,
+    pspace: number
+  ) {
     this.hSpace = hspace;
     this.vSpace = vspace;
     this.pSpace = pspace;
@@ -61,6 +66,7 @@ export default class LayoutProvider {
       }
     }
   }
+
   private layoutDirectionSide(node: MindNode, direction: Direction): void {
     const layoutData = node.data.layout;
     const children = node.children;

@@ -11,7 +11,7 @@ export default class ShortcutProvider {
 
   constructor(
     mindCheese: MindCheese,
-    enable = true,
+    enable: boolean,
     mappings: [number, string, (jm: MindCheese, e: Event) => boolean][]
   ) {
     this.mindCheese = mindCheese;

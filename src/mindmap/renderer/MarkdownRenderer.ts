@@ -1,4 +1,4 @@
-import { Renderer } from "./Renderer";
+import { TextFormatter } from "./TextFormatter";
 
 const SPECIAL: Record<string, string> = {
   "&": "&amp;",
@@ -17,7 +17,7 @@ function escapeHtml(src: string): string {
   });
 }
 
-export default class MarkdownRenderer implements Renderer {
+export default class MarkdownRenderer implements TextFormatter {
   render(src: string): string {
     return src.replace(
       /(\n)|\*\*(.*?)\*\*|\*(.*?)\*|`(.*?)`|([&><"'`{}])|(.)/g,
