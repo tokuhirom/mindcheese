@@ -22,15 +22,25 @@ jsMind is a great library to implement the mindmap editor.
 Large library written in pure JavaScript is hard to modify.
 As a result, I port whole of the jsMind to TypeScript. And I added some features, what I want.
 
+### Difference between original jsmind
+
+- Ported to TypeScript.
+- Better look and feel
+
 ## Hacking
 
     rollup -c
     rollup -c browser/rollup.config.js
 
-## Difference between original jsmind
+## Keyboard shortcuts
 
-- Ported to TypeScript.
-- add `BEFORE_EDIT` event.
+Please look at [ShortuctOption](https://github.com/tokuhirom/mindcheese/blob/main/src/mindmap/MindOption.ts#L32-L45)
+
+## FAQ
+
+### How do I input multiple lines in the node?
+
+You can type Shift+Enter.
 
 ## LICENSE
 
