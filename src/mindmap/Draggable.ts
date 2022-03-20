@@ -171,15 +171,14 @@ export default class Draggable {
 
     const direct = sx + sw / 2 >= rootX ? Direction.RIGHT : Direction.LEFT;
     const nodes = this.mindCheese.mind.nodes;
-    let node = null;
     let minDistance = Number.MAX_VALUE;
-    let distance = 0;
     let closestNode = null;
     let closestPoint: Point = null;
     let shadowPoint: Point = null;
     for (const nodeid in nodes) {
       let np, sp;
-      node = nodes[nodeid];
+      const node = nodes[nodeid];
+      let distance = 0;
       if (node.isroot || node.direction == direct) {
         if (node.id == this.activeNode.id) {
           continue;
