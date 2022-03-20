@@ -22,9 +22,12 @@ jobs:
         run: |
           npm install
           npm run build
+          perl -i -pe 's!../styles.css!styles.css!' browser/index.html
+          cp styles.css browser/
+          ls browser/
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: .
+          folder: browser

@@ -5,7 +5,7 @@ Portable Mindmap library written in TypeScript.
 - Written in TypeScript
   - easy to maintain
 
-Here's a demo site: https://tokuhirom.github.io/mindcheese/browser/index.html
+Here's a demo site: https://tokuhirom.github.io/mindcheese/index.html
 
 ## **Note**
 
