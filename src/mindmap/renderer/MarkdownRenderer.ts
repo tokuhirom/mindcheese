@@ -6,6 +6,7 @@ const SPECIAL: Record<string, string> = {
   "<": "&lt;",
   '"': "&quot;",
   "'": "&#39;",
+  "`": "&#96;",
   "{": "&#123;",
   "}": "&#125;",
 };
@@ -21,9 +22,7 @@ export default class MarkdownRenderer implements Renderer {
     return src.replace(
       /(\n)|\*\*(.*?)\*\*|\*(.*?)\*|`(.*?)`|([&><"'`{}])|(.)/g,
       (_, nl, bold, italic, code, sp, dot) => {
-        if (sp) {
-          return SPECIAL[sp];
-        } else if (nl) {
+        if (nl) {
           return "<br>";
         } else if (bold) {
           return `<b>${escapeHtml(bold)}</b>`;
@@ -31,6 +30,8 @@ export default class MarkdownRenderer implements Renderer {
           return `<i>${escapeHtml(italic)}</i>`;
         } else if (code) {
           return `<code>${escapeHtml(code)}</code>`;
+        } else if (sp) {
+          return SPECIAL[sp];
         } else if (dot) {
           return dot;
         }
