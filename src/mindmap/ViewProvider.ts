@@ -154,9 +154,9 @@ export default class ViewProvider {
   resetTheme(): void {
     const themeName = this.mindCheese.options.theme;
     if (themeName) {
-      this.mcnodes.className = "theme-" + themeName;
+      this.mcnodes.parentElement.className = "theme-" + themeName;
     } else {
-      this.mcnodes.className = "";
+      this.mcnodes.parentElement.className = "";
     }
   }
 
@@ -420,8 +420,8 @@ export default class ViewProvider {
 
   private doShow(): void {
     this.graph.setSize(this.size.w, this.size.h);
-    this.mcnodes.style.width = this.size.w + "px";
-    this.mcnodes.style.height = this.size.h + "px";
+    this.mcnodes.parentElement.style.width = this.size.w + "px";
+    this.mcnodes.parentElement.style.height = this.size.h + "px";
     this.showNodes();
     this.showLines();
     //this.layout.cache_valid = true;

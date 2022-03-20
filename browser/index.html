@@ -15,6 +15,7 @@
       <button id="load_markdown">load_markdown()</button>
       <button id="resize">resize()</button>
       <button id="undo">undo()</button>
+      <button id="dark">theme(dark)</button>
     </div>
     <div id="container"></div>
 
@@ -185,6 +186,10 @@
   + aaa
           `
         );
+        return false;
+      });
+      document.getElementById("dark").addEventListener("click", () => {
+        mindCheese.setTheme("dark");
         return false;
       });
     </script>
