@@ -192,16 +192,16 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.w) +
             Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h / 2 };
-          sp = { x: sx + this.lineWidth, y: sy + sh / 2 };
+          np = { x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h };
+          sp = { x: sx + this.lineWidth, y: sy + sh };
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
           }
           distance =
             Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + this.lineWidth, y: nl.y + ns.h / 2 };
-          sp = { x: sx + sw - this.lineWidth, y: sy + sh / 2 };
+          np = { x: nl.x + this.lineWidth, y: nl.y + ns.h };
+          sp = { x: sx + sw - this.lineWidth, y: sy + sh };
         }
         if (distance < minDistance) {
           closestNode = node;
