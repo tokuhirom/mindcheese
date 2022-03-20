@@ -43,7 +43,7 @@ function extractSubNode(
     nodeJson.topic,
     null,
     d,
-    nodeJson.expanded
+    typeof nodeJson.expanded === "undefined" ? true : !!nodeJson.expanded
   );
   if ("children" in nodeJson) {
     const children = nodeJson.children;
