@@ -1,5 +1,4 @@
 import MarkdownRenderer from "../../src/mindmap/renderer/MarkdownRenderer";
-import { markdown2mindmap } from "../../src/mindmap/format/markdown/markdown2mindmap";
 
 const renderer = new MarkdownRenderer();
 
