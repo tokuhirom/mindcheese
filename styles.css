@@ -1,0 +1,181 @@
+/* From https://raw.githubusercontent.com/hizzgdev/jsmind/master/style/jsmind.css */
+/*
+ * Original jsmind's css is licensed by BSD License
+ * Copyright (c) 2014-2015 hizzgdev@163.com
+ *
+ * Project Home:
+ *   https://github.com/hizzgdev/jsmind/
+ */
+
+#mindcheese_container {
+  width: 100%;
+  height: 100%;
+}
+
+canvas.mindcheese-draggable {
+  vertical-align: top;
+}
+
+textarea.mindcheese-editor {
+  padding: 10px;
+  max-width: 380px;
+  font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
+  border-width: 0;
+  line-height: 1.3;
+  resize: none;
+  outline: none; /* remove the border */
+}
+
+mcnode {
+  max-width: 400px;
+}
+
+/* important section */
+.mindcheese-inner {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.mindcheese-inner {
+  moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+canvas.mindCheese {
+  position: absolute;
+  z-index: 1;
+}
+
+/* z-index:2 */
+mcnodes {
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/*background color is necessary*/
+mcnode {
+  position: absolute;
+  cursor: default;
+  /*max-width: 400px;*/
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+mcexpander {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  display: block;
+  overflow: hidden;
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+}
+
+/* default theme */
+mcnode {
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 2px;
+  /*box-shadow: 0px 0px 1px #666;*/
+  font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
+}
+
+mcnode.editing {
+  padding: 0;
+}
+
+mcnode:hover {
+  box-shadow: 2px 2px 8px #000;
+  background-color: #ebebeb;
+  color: #333;
+}
+
+mcnode.selected {
+  color: #fff;
+  box-shadow: 2px 2px 8px #000;
+}
+
+mcnode.root {
+  font-size: 24px;
+}
+
+mcexpander {
+  border-color: gray;
+}
+
+mcexpander:hover {
+  border-color: #000;
+}
+
+mcnode code {
+  border: 1px solid antiquewhite;
+  background-color: antiquewhite;
+  color: indianred;
+}
+
+/* primary theme */
+div.theme-primary mcnode {
+  background-color: white;
+  color: black;
+}
+
+div.theme-primary mcnode:hover {
+}
+
+div.theme-primary mcnode.selected {
+  color: black;
+}
+
+div.theme-primary mcnode.root {
+  background-color: black;
+  color: white;
+}
+
+div.theme-primary mcexpander {
+}
+
+div.theme-primary mcexpander:hover {
+}
+
+/* dark theme */
+div.theme-dark {
+  background-color: rgb(74, 89, 99);
+}
+
+div.theme-dark mcnode {
+  background-color: rgb(74, 89, 99);
+  color: white;
+}
+
+div.theme-dark mcnode:hover {
+}
+
+div.theme-dark mcnode.selected {
+  color: white;
+}
+
+div.theme-dark mcnode.root {
+  background-color: white;
+  color: black;
+}
+
+div.theme-dark mcexpander {
+}
+
+div.theme-dark mcexpander:hover {
+}

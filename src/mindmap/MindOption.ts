@@ -1,0 +1,48 @@
+import { KeyModifier } from "./MindmapConstants";
+import ShortcutHandlers from "./ShortcutHandlers";
+import MindCheese from "./MindCheese";
+import { Renderer } from "./renderer/Renderer";
+import PlainTextRenderer from "./renderer/PlainTextRenderer";
+import MarkdownRenderer from "./renderer/MarkdownRenderer";
+
+export class MindOption {
+  theme = "primary";
+  view = new ViewOption();
+  layout = new LayoutOption();
+  shortcut = new ShortcutOption();
+}
+
+class ViewOption {
+  hmargin = 100;
+  vmargin = 50;
+  lineWidth = 2;
+  lineColor = "#555";
+  renderer: Renderer = new MarkdownRenderer();
+}
+
+class LayoutOption {
+  hspace = 30;
+  vspace = 20;
+  pspace = 13;
+}
+
+class ShortcutOption {
+  enable = true;
+  mappings: [number, string, (jm: MindCheese, e: Event) => boolean][] = [
+    [KeyModifier.NONE, "Delete", ShortcutHandlers.delete], // windows
+    [KeyModifier.NONE, "Backspace", ShortcutHandlers.delete], // for Mac
+    [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],
+    [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
+    [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode], // windows
+    [KeyModifier.META, "Enter", ShortcutHandlers.editNode], // mac
+    [KeyModifier.NONE, "Space", ShortcutHandlers.toggle],
+    [KeyModifier.SHIFT, "ArrowUp", ShortcutHandlers.moveUp],
+    [KeyModifier.SHIFT, "ArrowDown", ShortcutHandlers.moveDown],
+    [KeyModifier.NONE, "ArrowUp", ShortcutHandlers.up],
+    [KeyModifier.NONE, "ArrowDown", ShortcutHandlers.down],
+    [KeyModifier.NONE, "ArrowLeft", ShortcutHandlers.left],
+    [KeyModifier.NONE, "ArrowRight", ShortcutHandlers.right],
+    [KeyModifier.CTRL, "KeyZ", ShortcutHandlers.undo],
+    [KeyModifier.META, "KeyZ", ShortcutHandlers.undo], // for mac
+  ];
+}
