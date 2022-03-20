@@ -154,11 +154,11 @@ div.theme-primary mcexpander:hover {
 
 /* dark theme */
 div.theme-dark {
-  background-color: rgb(74,89,99);
+  background-color: rgb(74, 89, 99);
 }
 
 div.theme-dark mcnode {
-  background-color: rgb(74,89,99);
+  background-color: rgb(74, 89, 99);
   color: white;
 }
 
