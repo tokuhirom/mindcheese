@@ -119,12 +119,10 @@
         });
       document.getElementById("resize").addEventListener("click", () => {
         mindCheese.resize();
-        resize();
         return false;
       });
       document.getElementById("undo").addEventListener("click", () => {
         mindCheese.undo();
-        resize();
         return false;
       });
       document.getElementById("load_markdown").addEventListener("click", () => {
@@ -187,7 +185,6 @@
   + aaa
           `
         );
-        resize();
         return false;
       });
     </script>
