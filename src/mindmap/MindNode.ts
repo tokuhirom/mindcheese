@@ -158,4 +158,11 @@ export default class MindNode {
     }
     return o;
   }
+
+  applyColor(color: string) {
+    this.color = color;
+    for (let i = 0, l = this.children.length; i < l; i++) {
+      this.children[i].applyColor(color);
+    }
+  }
 }

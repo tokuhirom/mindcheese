@@ -162,6 +162,20 @@ export default class Mind {
     console.assert(node instanceof MindNode, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parent.id} ${direction}`);
     this.doMoveNode(node, beforeid, parent, direction);
+    if (parent.color && node.color != parent.color) {
+      /*
+        - root
+          - A: yellow
+          - B: red
+
+        in this case, move A as a child of B, then the expected result is:
+
+        - root
+          - A: yellow
+            - B: yellow
+       */
+      node.applyColor(parent.color);
+    }
   }
 
   private flowNodeDirection(node: MindNode, direction: Direction): void {
