@@ -29,11 +29,12 @@ class LayoutOption {
 class ShortcutOption {
   enable = true;
   mappings: [number, string, (jm: MindCheese, e: Event) => boolean][] = [
-    [KeyModifier.NONE, "Delete", ShortcutHandlers.delete],
+    [KeyModifier.NONE, "Delete", ShortcutHandlers.delete], // windows
     [KeyModifier.NONE, "Backspace", ShortcutHandlers.delete], // for Mac
     [KeyModifier.NONE, "Tab", ShortcutHandlers.addChild],
     [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
-    [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode],
+    [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode], // windows
+    [KeyModifier.META, "Enter", ShortcutHandlers.editNode], // mac
     [KeyModifier.NONE, "Space", ShortcutHandlers.toggle],
     [KeyModifier.SHIFT, "ArrowUp", ShortcutHandlers.moveUp],
     [KeyModifier.SHIFT, "ArrowDown", ShortcutHandlers.moveDown],
