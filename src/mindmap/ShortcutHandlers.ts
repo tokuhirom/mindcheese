@@ -132,7 +132,11 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  private static handleDirection(mindCheese: MindCheese, e: Event, d: Direction): void {
+  private static handleDirection(
+    mindCheese: MindCheese,
+    e: Event,
+    d: Direction
+  ): void {
     let children; // TODO maybe optimizable
     const selectedNode = mindCheese.getSelectedNode();
     let node = null;
