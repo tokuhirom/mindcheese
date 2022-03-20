@@ -2,76 +2,76 @@ import MindCheese from "./MindCheese";
 import { Direction } from "./MindmapConstants";
 
 export default class ShortcutHandlers {
-  static delete(_jm: MindCheese): boolean {
-    const selectedNode = _jm.getSelectedNode();
+  static delete(mindCheese: MindCheese): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
     if (!!selectedNode && !selectedNode.isroot) {
-      _jm.selectNode(selectedNode.parent);
-      _jm.removeNode(selectedNode);
+      mindCheese.selectNode(selectedNode.parent);
+      mindCheese.removeNode(selectedNode);
     }
     return false;
   }
 
-  static addChild(_jm: MindCheese): boolean {
-    const selectedNode = _jm.getSelectedNode();
+  static addChild(mindCheese: MindCheese): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      const nodeid = _jm.generateNewId();
-      const node = _jm.addNode(selectedNode, nodeid, "New Node");
+      const nodeid = mindCheese.generateNewId();
+      const node = mindCheese.addNode(selectedNode, nodeid, "New Node");
       if (node) {
-        _jm.selectNode(node);
-        _jm.beginEdit(node);
+        mindCheese.selectNode(node);
+        mindCheese.beginEdit(node);
       }
     }
     return false;
   }
 
-  static addBrother(jm: MindCheese, e: Event): boolean {
+  static addBrother(mindCheese: MindCheese, e: Event): boolean {
     e.preventDefault();
 
-    const selectedNode = jm.getSelectedNode();
+    const selectedNode = mindCheese.getSelectedNode();
     if (!!selectedNode && !selectedNode.isroot) {
-      const nodeid = jm.generateNewId();
-      const node = jm.insertNodeAfter(selectedNode, nodeid, "New Node");
+      const nodeid = mindCheese.generateNewId();
+      const node = mindCheese.insertNodeAfter(selectedNode, nodeid, "New Node");
       if (node) {
-        jm.selectNode(node);
-        jm.beginEdit(node);
+        mindCheese.selectNode(node);
+        mindCheese.beginEdit(node);
       }
     }
     return false;
   }
 
-  static editNode(jm: MindCheese): boolean {
-    const selectedNode = jm.getSelectedNode();
+  static editNode(mindCheese: MindCheese): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      jm.beginEdit(selectedNode);
+      mindCheese.beginEdit(selectedNode);
     }
     return false;
   }
 
-  static toggle(jm: MindCheese, e: Event): boolean {
-    const selectedNode = jm.getSelectedNode();
+  static toggle(mindCheese: MindCheese, e: Event): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      jm.toggleNode(selectedNode);
+      mindCheese.toggleNode(selectedNode);
       e.stopPropagation();
       e.preventDefault();
     }
     return false;
   }
 
-  static moveUp(jm: MindCheese): boolean {
+  static moveUp(mindCheese: MindCheese): boolean {
     console.debug(`ShortcutProvider.handle_move_up`);
-    const selectedNode = jm.getSelectedNode();
+    const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      jm.moveUp(selectedNode);
-      jm.selectNode(selectedNode);
+      mindCheese.moveUp(selectedNode);
+      mindCheese.selectNode(selectedNode);
     }
     return false;
   }
 
-  static moveDown(jm: MindCheese): boolean {
-    const selectedNode = jm.getSelectedNode();
+  static moveDown(mindCheese: MindCheese): boolean {
+    const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      jm.moveDown(selectedNode);
-      jm.selectNode(selectedNode);
+      mindCheese.moveDown(selectedNode);
+      mindCheese.selectNode(selectedNode);
     }
     return false;
   }
@@ -122,19 +122,19 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static left(jm: MindCheese, e: Event): boolean {
-    ShortcutHandlers.handleDirection(jm, e, Direction.LEFT);
+  static left(mindCheese: MindCheese, e: Event): boolean {
+    ShortcutHandlers.handleDirection(mindCheese, e, Direction.LEFT);
     return false;
   }
 
-  static right(jm: MindCheese, e: Event): boolean {
-    ShortcutHandlers.handleDirection(jm, e, Direction.RIGHT);
+  static right(mindCheese: MindCheese, e: Event): boolean {
+    ShortcutHandlers.handleDirection(mindCheese, e, Direction.RIGHT);
     return false;
   }
 
-  private static handleDirection(jm: MindCheese, e: Event, d: Direction): void {
-    let children;
-    const selectedNode = jm.getSelectedNode();
+  private static handleDirection(mindCheese: MindCheese, e: Event, d: Direction): void {
+    let children; // TODO maybe optimizable
+    const selectedNode = mindCheese.getSelectedNode();
     let node = null;
     if (selectedNode) {
       if (selectedNode.isroot) {
@@ -156,16 +156,16 @@ export default class ShortcutHandlers {
         node = selectedNode.parent;
       }
       if (node) {
-        jm.selectNode(node);
+        mindCheese.selectNode(node);
       }
       e.stopPropagation();
       e.preventDefault();
     }
   }
 
-  static undo(jm: MindCheese, e: KeyboardEvent) {
+  static undo(mindCheese: MindCheese, e: KeyboardEvent) {
     console.log("UNDO!");
-    jm.undo();
+    mindCheese.undo();
     e.stopPropagation();
     e.preventDefault();
     return false;
