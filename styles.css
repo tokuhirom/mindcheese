@@ -24,6 +24,7 @@ textarea.mindcheese-editor {
   line-height: 1.3;
   resize: none;
   outline: none; /* remove the border */
+  box-sizing: content-box;
 }
 
 mcnode {
@@ -60,11 +61,9 @@ mcnodes {
   background-color: rgba(0, 0, 0, 0);
 }
 
-/*background color is necessary*/
 mcnode {
   position: absolute;
   cursor: default;
-  /*max-width: 400px;*/
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,7 +90,6 @@ mcnode {
   background-color: #fff;
   color: #333;
   border-radius: 2px;
-  /*box-shadow: 0px 0px 1px #666;*/
   font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
 
