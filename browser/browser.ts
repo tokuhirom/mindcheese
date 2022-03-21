@@ -29,21 +29,6 @@ function initDemo() {
   //     "px";
   // }
 
-  document.getElementById("layout").addEventListener("click", () => {
-    console.log("layout.layout");
-    mindCheese.layout.layout();
-    return false;
-  });
-  document.getElementById("viewShow").addEventListener("click", () => {
-    console.log("viewShow");
-    mindCheese.view.show();
-    return false;
-  });
-  document.getElementById("expandSize").addEventListener("click", () => {
-    console.log("viewShow");
-    mindCheese.view.expandSize();
-    return false;
-  });
   document.getElementById("dump_to_console").addEventListener("click", () => {
     const data = mindCheese.getNodeTree();
     console.log(data);
