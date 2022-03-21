@@ -312,13 +312,12 @@ export default class MindCheese {
   ): MindNode {
     this.checkEditable();
 
+    this.undoManager.recordSnapshot();
+
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
-    if (node) {
-      this.undoManager.recordSnapshot();
-      this.view.addNode(node);
-      this.layout.layout();
-      this.view.show();
-    }
+    this.view.addNode(node);
+    this.layout.layout();
+    this.view.show();
     return node;
   }
 

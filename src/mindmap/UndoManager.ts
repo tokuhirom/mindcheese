@@ -11,6 +11,9 @@ export default class UndoManager {
     this.undoStackLimit = undoStackLimit;
   }
 
+  /**
+   * Before every editing graph, call this method.
+   */
   recordSnapshot() {
     if (this.undoStack.length > this.undoStackLimit) {
       console.log(`UndoManager: callback event. too much stacks.`);
