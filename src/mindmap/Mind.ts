@@ -4,7 +4,7 @@ import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 export default class Mind {
   root: MindNode;
   selected: MindNode;
-  nodes: Record<string, MindNode>;
+  readonly nodes: Record<string, MindNode>;
 
   constructor() {
     this.root = null;

@@ -2,7 +2,7 @@ import MindCheese from "./MindCheese";
 
 export default class UndoManager {
   private readonly mindCheese: MindCheese;
-  private undoStack: any[];
+  private readonly undoStack: any[];
   private readonly undoStackLimit: number;
 
   constructor(jm: MindCheese, undoStackLimit = 10000) {

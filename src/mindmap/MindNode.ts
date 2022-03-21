@@ -47,16 +47,16 @@ const COLORS = new RoundRobin([
 ]);
 
 export default class MindNode {
-  public id: string;
+  public readonly id: string;
   public index: number;
   public topic: string;
-  public isroot: boolean;
+  public readonly isroot: boolean;
   public parent: MindNode;
   public direction: Direction;
   public expanded: boolean;
-  public children: MindNode[];
+  public readonly children: MindNode[];
   public color: string;
-  public data: {
+  public readonly data: {
     view: ViewData;
     layout: LayoutData;
   };

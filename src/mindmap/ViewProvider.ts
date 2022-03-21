@@ -11,13 +11,13 @@ import { TextFormatter } from "./renderer/TextFormatter";
 export default class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layout: LayoutProvider;
-  mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
-  mcnodes: HTMLElement; // <mcnodes>
+  readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
+  readonly mcnodes: HTMLElement; // <mcnodes>
   size: Size;
   private selectedNode: MindNode;
   private editingNode: MindNode;
   private readonly graph: GraphCanvas;
-  private textAreaElement: HTMLTextAreaElement;
+  private readonly textAreaElement: HTMLTextAreaElement;
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
   private readonly vMargin: number;

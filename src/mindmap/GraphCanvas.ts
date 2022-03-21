@@ -6,7 +6,7 @@ import { Size } from "./MindNode";
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
-  private size: Size;
+  private readonly size: Size;
   private readonly lineColor: string;
   readonly lineWidth: number;
 
