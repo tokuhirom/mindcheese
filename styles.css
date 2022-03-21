@@ -16,17 +16,6 @@ canvas.mindcheese-draggable-graph {
   vertical-align: top;
 }
 
-textarea.mindcheese-editor {
-  padding: 10px;
-  max-width: 380px;
-  font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
-  border-width: 0;
-  line-height: 1.3;
-  resize: none;
-  outline: none; /* remove the border */
-  box-sizing: content-box;
-}
-
 mcnode {
   max-width: 400px;
 }
@@ -93,13 +82,8 @@ mcnode {
   font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
 
-mcnode.editing {
-  padding: 0;
-}
-
 mcnode.selected {
   color: #fff;
-  box-shadow: 2px 2px 8px #000;
 }
 
 mcnode.root {
@@ -128,6 +112,7 @@ div.theme-primary mcnode {
 
 div.theme-primary mcnode.selected {
   color: black;
+  background-color: #cccccc;
 }
 
 div.theme-primary mcnode.root {
@@ -147,6 +132,7 @@ div.theme-dark mcnode {
 
 div.theme-dark mcnode.selected {
   color: white;
+  background-color: #7070c0;
 }
 
 div.theme-dark mcnode.root {
