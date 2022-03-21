@@ -48,7 +48,7 @@ mcnode {
   user-select: none;
 }
 
-canvas.mindCheese {
+canvas.mindcheese-graph-canvas {
   position: absolute;
   z-index: 1;
 }

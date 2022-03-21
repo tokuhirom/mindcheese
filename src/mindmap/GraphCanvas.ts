@@ -20,7 +20,7 @@ export default class GraphCanvas {
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
     this.canvasElement = document.createElement("canvas");
-    this.canvasElement.className = "mindCheese";
+    this.canvasElement.className = "mindcheese-graph-canvas";
     this.canvasContext = this.canvasElement.getContext("2d");
     this.size = new Size(0, 0);
   }
