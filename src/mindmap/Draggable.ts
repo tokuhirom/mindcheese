@@ -33,10 +33,10 @@ class ClosePoint {
 }
 
 export default class Draggable {
-  private mindCheese: MindCheese;
-  private canvasElement: HTMLCanvasElement;
-  private canvasContext: CanvasRenderingContext2D;
-  private shadow: HTMLElement;
+  private readonly mindCheese: MindCheese;
+  private readonly canvasElement: HTMLCanvasElement;
+  private readonly canvasContext: CanvasRenderingContext2D;
+  private readonly shadow: HTMLElement;
   private shadowW: number;
   private shadowH: number;
   private activeNode: MindNode;
@@ -58,9 +58,10 @@ export default class Draggable {
 
   constructor(mindCheese: MindCheese) {
     this.mindCheese = mindCheese;
-    this.canvasElement = null;
-    this.canvasContext = null;
-    this.shadow = null;
+    this.canvasElement = Draggable.createCanvas();
+    this.mindCheese.view.mindCheeseInnerElement.appendChild(this.canvasElement);
+    this.canvasContext = this.canvasElement.getContext("2d");
+    this.shadow = Draggable.createShadow();
     this.shadowW = 0;
     this.shadowH = 0;
     this.activeNode = null;
@@ -77,8 +78,6 @@ export default class Draggable {
   }
 
   init(container: HTMLElement): void {
-    this.createCanvas();
-    this.createShadow();
     this.eventBind(container);
   }
 
@@ -88,23 +87,19 @@ export default class Draggable {
     this.canvasElement.height = this.mindCheese.view.size.h;
   }
 
-  private createCanvas(): void {
+  private static createCanvas(): HTMLCanvasElement {
     const canvasElement = document.createElement("canvas");
     canvasElement.className = "mindcheese-draggable-graph";
-    this.canvasElement = canvasElement;
-
-    this.mindCheese.view.mindCheeseInnerElement.appendChild(canvasElement);
-
-    this.canvasContext = canvasElement.getContext("2d");
+    return canvasElement;
   }
 
-  private createShadow(): void {
-    const s: HTMLElement = document.createElement("mcnode");
-    s.style.visibility = "hidden";
-    s.style.zIndex = "3";
-    s.style.cursor = "move";
-    s.style.opacity = "0.7";
-    this.shadow = s;
+  private static createShadow(): HTMLElement {
+    const mcnode = document.createElement("mcnode");
+    mcnode.style.visibility = "hidden";
+    mcnode.style.zIndex = "3";
+    mcnode.style.cursor = "move";
+    mcnode.style.opacity = "0.7";
+    return mcnode;
   }
 
   resetShadow(el: HTMLElement): void {
