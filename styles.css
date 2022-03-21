@@ -99,12 +99,6 @@ mcnode.editing {
   padding: 0;
 }
 
-mcnode:hover {
-  box-shadow: 2px 2px 8px #000;
-  background-color: #ebebeb;
-  color: #333;
-}
-
 mcnode.selected {
   color: #fff;
   box-shadow: 2px 2px 8px #000;
