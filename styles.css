@@ -134,9 +134,6 @@ div.theme-primary mcnode {
   color: black;
 }
 
-div.theme-primary mcnode:hover {
-}
-
 div.theme-primary mcnode.selected {
   color: black;
 }
@@ -144,12 +141,6 @@ div.theme-primary mcnode.selected {
 div.theme-primary mcnode.root {
   background-color: black;
   color: white;
-}
-
-div.theme-primary mcexpander {
-}
-
-div.theme-primary mcexpander:hover {
 }
 
 /* dark theme */
@@ -162,9 +153,6 @@ div.theme-dark mcnode {
   color: white;
 }
 
-div.theme-dark mcnode:hover {
-}
-
 div.theme-dark mcnode.selected {
   color: white;
 }
@@ -172,10 +160,4 @@ div.theme-dark mcnode.selected {
 div.theme-dark mcnode.root {
   background-color: white;
   color: black;
-}
-
-div.theme-dark mcexpander {
-}
-
-div.theme-dark mcexpander:hover {
 }
