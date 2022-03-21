@@ -8,7 +8,7 @@ function initDemo() {
   const mindCheese = new MindCheese(1, container);
   mindCheese.showNodeTree({
     id: "root",
-    topic: "mindCheese",
+    topic: "mindCheese 🧀",
     children: [
       {
         id: "easy",
@@ -39,7 +39,10 @@ function initDemo() {
           {
             id: "powerful2",
             topic: "Base on **jsMind**",
-            children: [{ id: "jsMind1", topic: "Base on HTML5" }],
+            children: [
+              { id: "jsMind1", topic: "Base on HTML5" },
+              { id: "jsMind2", topic: "Supported CJK chars" },
+            ],
           },
           { id: "powerful4", topic: "Depends on you" },
         ],
