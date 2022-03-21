@@ -19,7 +19,7 @@ export default class ShortcutProvider {
     this.mappings = this.compileHandlers(mappings);
   }
 
-  init(): void {
+  bindKeyEvents(): void {
     document.addEventListener("keydown", this.handler.bind(this));
   }
 

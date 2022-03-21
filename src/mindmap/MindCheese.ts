@@ -38,6 +38,10 @@ export default class MindCheese {
     container: HTMLElement,
     options: MindOption = new MindOption()
   ) {
+    if (!container) {
+      throw new Error("container shouldn't be null!");
+    }
+
     this.container = container;
 
     this.options = options;
@@ -58,7 +62,6 @@ export default class MindCheese {
     );
     this.view = new ViewProvider(
       this,
-      this.container,
       options.view.hmargin,
       options.view.vmargin,
       graph,
@@ -72,9 +75,10 @@ export default class MindCheese {
     this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
 
-    this.view.init();
-    this.shortcut.init();
+    this.view.init(this.container);
     this.draggable.init(this.container);
+
+    this.shortcut.bindKeyEvents();
 
     this.bindEvent();
   }

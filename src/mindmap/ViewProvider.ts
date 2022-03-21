@@ -22,7 +22,6 @@ function isEmpty(s: string) {
 export default class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layout: LayoutProvider;
-  private readonly container: HTMLElement;
   mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   mcnodes: HTMLElement; // <mcnodes>
   size: { w: number; h: number };
@@ -45,7 +44,6 @@ export default class ViewProvider {
    */
   constructor(
     mindCheese: MindCheese,
-    container: HTMLElement,
     hmargin: number,
     vmargin: number,
     graph: GraphCanvas,
@@ -55,40 +53,11 @@ export default class ViewProvider {
     this.textFormatter = textFormatter;
     this.layout = mindCheese.layout;
 
-    this.container = container;
-    this.mindCheeseInnerElement = null;
-    this.mcnodes = null;
-
-    this.size = { w: 0, h: 0 };
-
-    this.selectedNode = null;
-    this.editingNode = null;
-
-    this.hMargin = hmargin;
-    this.vMargin = vmargin;
-
-    this.graph = graph;
-  }
-
-  init(): void {
-    console.debug("view.init");
-
-    if (!this.container) {
-      console.error("the options.view.container was not be found in dom");
-      return;
-    }
-
-    this.mindCheeseInnerElement = document.createElement("div");
     this.mcnodes = document.createElement("mcnodes");
+
     this.textAreaElement = document.createElement("textarea");
-
-    this.mindCheeseInnerElement.className = "mindcheese-inner";
-    this.mindCheeseInnerElement.appendChild(this.graph.element());
-    this.mindCheeseInnerElement.appendChild(this.mcnodes);
-
     this.textAreaElement.className = "mindcheese-editor";
     this.textAreaElement.wrap = "off";
-
     this.textAreaElement.addEventListener("keydown", (e) => {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
@@ -110,7 +79,25 @@ export default class ViewProvider {
       this.adjustEditorElementSize.bind(this)
     );
 
-    this.container.appendChild(this.mindCheeseInnerElement);
+    this.mindCheeseInnerElement = document.createElement("div");
+    this.mindCheeseInnerElement.className = "mindcheese-inner";
+    this.mindCheeseInnerElement.appendChild(graph.element());
+    this.mindCheeseInnerElement.appendChild(this.mcnodes);
+
+    this.size = { w: 0, h: 0 };
+
+    this.selectedNode = null;
+    this.editingNode = null;
+
+    this.hMargin = hmargin;
+    this.vMargin = vmargin;
+
+    this.graph = graph;
+  }
+
+  init(container: HTMLElement): void {
+    console.debug("view.init");
+    container.appendChild(this.mindCheeseInnerElement);
   }
 
   adjustEditorElementSize() {
