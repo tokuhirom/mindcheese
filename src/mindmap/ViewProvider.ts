@@ -1,6 +1,6 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./MindNode";
-import { Direction, KEYCODE_ENTER } from "./MindmapConstants";
+import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
@@ -46,7 +46,7 @@ export default class ViewProvider {
 
     this.mcnodes.addEventListener("keydown", (e) => {
       const el = e.target as HTMLElement;
-      console.log(
+      console.debug(
         `keydown=${e.keyCode}==${KEYCODE_ENTER} tagName=${el.tagName} shiftkey=${e.shiftKey}`
       );
       if (el.tagName != "MCNODE") {
@@ -57,7 +57,10 @@ export default class ViewProvider {
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
       // noinspection JSDeprecatedSymbols
-      if (e.keyCode === KEYCODE_ENTER && !e.shiftKey) {
+      if (
+        (e.keyCode === KEYCODE_ENTER && !e.shiftKey) ||
+        e.keyCode == KEYCODE_ESC
+      ) {
         console.log("editNodeEnd");
         e.stopPropagation();
         e.preventDefault();
