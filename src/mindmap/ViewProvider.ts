@@ -415,7 +415,6 @@ export default class ViewProvider {
     this.mcnodes.parentElement.style.height = this.size.h + "px";
     this.showNodes();
     this.showLines();
-    //this.layout.cache_valid = true;
     this.mindCheese.draggable.resize();
   }
 

@@ -89,12 +89,13 @@ export default class Draggable {
   }
 
   private createCanvas(): void {
-    const c: HTMLCanvasElement = document.createElement("canvas");
-    c.className = "mindcheese-draggable";
-    this.mindCheese.view.mindCheeseInnerElement.appendChild(c);
-    const ctx: CanvasRenderingContext2D = c.getContext("2d");
-    this.canvasElement = c;
-    this.canvasContext = ctx;
+    const canvasElement = document.createElement("canvas");
+    canvasElement.className = "mindcheese-draggable-graph";
+    this.canvasElement = canvasElement;
+
+    this.mindCheese.view.mindCheeseInnerElement.appendChild(canvasElement);
+
+    this.canvasContext = canvasElement.getContext("2d");
   }
 
   private createShadow(): void {
