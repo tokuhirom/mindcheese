@@ -1,5 +1,3 @@
-// noinspection JSUnfilteredForInLoop
-
 import GraphCanvas from "./GraphCanvas";
 import MindNode, { Size } from "./MindNode";
 import { Direction, KEYCODE_ENTER } from "./MindmapConstants";
@@ -18,7 +16,6 @@ function isEmpty(s: string) {
 /**
  * View renderer
  */
-// noinspection JSUnusedGlobalSymbols
 export default class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layout: LayoutProvider;

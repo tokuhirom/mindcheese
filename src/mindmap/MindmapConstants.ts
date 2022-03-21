@@ -1,5 +1,3 @@
-// noinspection JSUnusedGlobalSymbols
-
 export const enum Direction {
   LEFT = -1,
   CENTER = 0,

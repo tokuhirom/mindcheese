@@ -1,5 +1,3 @@
-// noinspection JSUnfilteredForInLoop
-
 import { Direction } from "./MindmapConstants";
 
 import MindNode, { Size } from "./MindNode";

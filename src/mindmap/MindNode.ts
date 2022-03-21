@@ -1,5 +1,3 @@
-// noinspection JSUnusedGlobalSymbols
-
 import { Direction } from "./MindmapConstants";
 import { Point } from "./LayoutProvider";
 import { RoundRobin } from "./utils/RoundRobin";

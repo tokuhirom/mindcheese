@@ -1,5 +1,3 @@
-// noinspection JSUnusedGlobalSymbols
-
 import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";

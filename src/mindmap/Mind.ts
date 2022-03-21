@@ -1,5 +1,3 @@
-// noinspection JSUnfilteredForInLoop
-
 import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 

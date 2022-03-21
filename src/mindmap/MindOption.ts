@@ -2,7 +2,6 @@ import { KeyModifier } from "./MindmapConstants";
 import ShortcutHandlers from "./ShortcutHandlers";
 import MindCheese from "./MindCheese";
 import { TextFormatter } from "./renderer/TextFormatter";
-import PlainTextRenderer from "./renderer/PlainTextRenderer";
 import MarkdownRenderer from "./renderer/MarkdownRenderer";
 
 export class MindOption {
