@@ -400,7 +400,6 @@ export default class ViewProvider {
     return new Point(x, y);
   }
 
-  // TODO remove this method?
   resize(): void {
     this.graph.setSize(1, 1);
     this.mcnodes.style.width = "1px";

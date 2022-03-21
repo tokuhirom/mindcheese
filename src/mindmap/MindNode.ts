@@ -57,7 +57,6 @@ export default class MindNode {
   public children: MindNode[];
   public color: string;
   public data: {
-    // TODO extract this.data.view to this.view_data
     view: ViewData;
     layout: LayoutData;
   };
