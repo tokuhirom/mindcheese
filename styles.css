@@ -16,17 +16,6 @@ canvas.mindcheese-draggable-graph {
   vertical-align: top;
 }
 
-textarea.mindcheese-editor {
-  padding: 10px;
-  max-width: 380px;
-  font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
-  border-width: 0;
-  line-height: 1.3;
-  resize: none;
-  outline: none; /* remove the border */
-  box-sizing: content-box;
-}
-
 mcnode {
   max-width: 400px;
 }
@@ -91,10 +80,6 @@ mcnode {
   color: #333;
   border-radius: 2px;
   font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
-}
-
-mcnode.editing {
-  padding: 0;
 }
 
 mcnode.selected {

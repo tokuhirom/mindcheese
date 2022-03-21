@@ -80,7 +80,7 @@ export default class MindNode {
       layout: new LayoutData(),
     };
 
-    console.log(`ID: ${id}`);
+    // console.log(`ID: ${id}`);
     if (!parent) {
       this.color = null;
     } else if (parent && parent.color) {

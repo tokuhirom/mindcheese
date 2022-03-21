@@ -159,6 +159,8 @@ export default class MindCheese {
 
   dblclickHandle(e: Event): void {
     this.checkEditable();
+    e.preventDefault();
+    e.stopPropagation();
 
     const element = e.target as HTMLElement;
     const nodeid = this.view.getBindedNodeId(element);

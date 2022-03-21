@@ -18,7 +18,6 @@ export default class ViewProvider {
   private selectedNode: MindNode;
   private editingNode: MindNode;
   private readonly graph: GraphCanvas;
-  private readonly textAreaElement: HTMLTextAreaElement;
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
   private readonly vMargin: number;
@@ -45,29 +44,45 @@ export default class ViewProvider {
 
     this.mcnodes = document.createElement("mcnodes");
 
-    this.textAreaElement = document.createElement("textarea");
-    this.textAreaElement.className = "mindcheese-editor";
-    this.textAreaElement.wrap = "off";
-    this.textAreaElement.addEventListener("keydown", (e) => {
+    this.mcnodes.addEventListener("keydown", (e) => {
+      const el = e.target as HTMLElement;
+      console.log(
+        `keydown=${e.keyCode}==${KEYCODE_ENTER} tagName=${el.tagName} shiftkey=${e.shiftKey}`
+      );
+      if (el.tagName != "MCNODE") {
+        console.log(`It's not MCNODE. ${el.tagName}`);
+        return;
+      }
+
       // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
       // keyCode is deprecated field. But it's a hack for Japanese IME.
       // noinspection JSDeprecatedSymbols
       if (e.keyCode === KEYCODE_ENTER && !e.shiftKey) {
-        this.editNodeEnd();
+        console.log("editNodeEnd");
         e.stopPropagation();
+        e.preventDefault();
+        this.editNodeEnd();
       }
     });
     // adjust size dynamically.
-    this.textAreaElement.addEventListener(
-      "keyup",
-      this.adjustEditorElementSize.bind(this)
-    );
+    this.mcnodes.addEventListener("keyup", () => {
+      this.layout.layout();
+      this.show();
+    });
+    this.mcnodes.addEventListener("input", () => {
+      // TODO is this required?
+      this.layout.layout();
+      this.show();
+    });
     // when the element lost focus.
-    this.textAreaElement.addEventListener("blur", this.editNodeEnd.bind(this));
-    this.textAreaElement.addEventListener(
-      "input",
-      this.adjustEditorElementSize.bind(this)
-    );
+    this.mcnodes.addEventListener("blur", (e: FocusEvent) => {
+      const el = e.target as HTMLElement;
+      if (el.tagName != "mcnode") {
+        return;
+      }
+
+      this.editNodeEnd();
+    });
 
     this.mindCheeseInnerElement = document.createElement("div");
     this.mindCheeseInnerElement.className = "mindcheese-inner";
@@ -91,24 +106,6 @@ export default class ViewProvider {
   }
 
   adjustEditorElementSize() {
-    const el = this.textAreaElement;
-    el.style.width = "";
-    el.style.height = "";
-    const lineHeight = 1.3;
-    const fontSize = 14;
-    el.style.width = `${(() => {
-      const lines = el.value.split(/\n/g);
-      let max = 0;
-      lines
-        .map((line) => line.length)
-        .forEach((it) => {
-          max = Math.max(it, max);
-        });
-      return max * fontSize;
-    })()}px`;
-    el.style.height = el.value.split(/\n/).length * lineHeight + "em";
-    this.editingNode.data.view.width = this.textAreaElement.clientWidth;
-    this.editingNode.data.view.height = this.textAreaElement.clientHeight;
     this.layout.layout();
     this.show();
   }
@@ -160,11 +157,11 @@ export default class ViewProvider {
     const minHeight = minSize.h + this.vMargin * 2;
     let clientW = this.mindCheeseInnerElement.clientWidth;
     let clientH = this.mindCheeseInnerElement.clientHeight;
-    console.debug(`ViewProvider.expand_size:
-    min_width=${minWidth}
-    min_height=${minHeight}
-    client_w=${clientW}
-    client_h=${clientH}`);
+    // console.debug(`ViewProvider.expand_size:
+    // min_width=${minWidth}
+    // min_height=${minHeight}
+    // client_w=${clientW}
+    // client_h=${clientH}`);
     if (clientW < minWidth) {
       clientW = minWidth;
     }
@@ -226,7 +223,7 @@ export default class ViewProvider {
       this.selectedNode = null;
     }
     if (this.editingNode != null && this.editingNode.id == node.id) {
-      node.data.view.element.removeChild(this.textAreaElement);
+      node.data.view.element.contentEditable = "false";
       this.editingNode = null;
     }
     const children = node.children;
@@ -346,49 +343,43 @@ export default class ViewProvider {
     if (this.editingNode != null) {
       this.editNodeEnd();
     }
+    console.log("editNodeBegin");
     this.editingNode = node;
-    const viewData = node.data.view;
-    const element: HTMLElement = viewData.element;
-    const topic = node.topic;
-    this.textAreaElement.value = topic;
-    this.textAreaElement.style.width = "380px";
-    // TODO I don't know to get the line height from element object.
-    const lineHeight = 1.3;
-    this.textAreaElement.style.height =
-      topic.split(/\n/).length * lineHeight + "em";
-    element.innerHTML = "";
-    element.appendChild(this.textAreaElement);
-    element.style.zIndex = "5";
-    element.classList.add("editing");
-    this.textAreaElement.focus();
-    this.textAreaElement.select();
+
+    const element: HTMLElement = node.data.view.element;
+    element.contentEditable = "true";
+    element.innerText = node.topic;
+    if (element.getAttribute("mc-initialized") !== "done") {
+      element.addEventListener("blur", (e) => {
+        this.editNodeEnd();
+      });
+      element.setAttribute("mc-initialized", "done");
+    }
+    element.focus();
 
     setTimeout(this.adjustEditorElementSize.bind(this), 0);
   }
 
   editNodeEnd(): void {
+    console.log(`editNodeEnd(editingNode=${this.editingNode})`);
     if (this.editingNode != null) {
       const node = this.editingNode;
       this.editingNode = null;
-      const viewData = node.data.view;
-      const element = viewData.element;
-      const topic = this.textAreaElement.value;
-      element.style.zIndex = "auto";
-      element.classList.remove("editing");
-      element.removeChild(this.textAreaElement);
+
+      const element = node.data.view.element;
+      element.contentEditable = "false";
+      const topic = element.innerText;
       if (
         !topic ||
         topic.replace(/\s*/, "").length == 0 ||
         node.topic === topic
       ) {
+        console.debug("Calling updateNode");
         element.innerHTML = this.textFormatter.render(node.topic);
-        setTimeout(() => {
-          viewData.width = element.clientWidth;
-          viewData.height = element.clientHeight;
-          this.layout.layout();
-          this.show();
-        }, 0);
+        this.layout.layout();
+        this.show();
       } else {
+        console.debug("Calling updateNode");
         this.mindCheese.updateNode(node.id, topic);
       }
     }
