@@ -527,7 +527,7 @@ export default class ViewProvider {
         // Draw line between previous node and next node
         const pin = this.layout.getNodePointIn(node);
         const pout = this.layout.getNodePointOut(node.parent);
-        this.graph.drawLine(pout, pin, offset, node.color);
+        this.graph.drawLine(pout, pin, offset, node.color, "round");
       }
       {
         // Draw line under the bottom of the node
@@ -537,7 +537,7 @@ export default class ViewProvider {
             node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
           pin.y
         );
-        this.graph.drawLine(pout, pin, offset, node.color, 4, "butt");
+        this.graph.drawLine(pout, pin, offset, node.color, "butt");
       }
     }
   }

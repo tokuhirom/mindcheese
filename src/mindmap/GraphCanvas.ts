@@ -8,7 +8,7 @@ export default class GraphCanvas {
   private readonly canvasContext: CanvasRenderingContext2D;
   private size: Size;
   private readonly lineColor: string;
-  private readonly lineWidth: number;
+  readonly lineWidth: number;
 
   /**
    * Create new instance of GraphCanvas.
@@ -45,12 +45,11 @@ export default class GraphCanvas {
     pin: { x: number; y: number },
     offset: { x: number; y: number },
     color: string,
-    lineWidth = this.lineWidth,
-    lineCap: CanvasLineCap = "round"
+    lineCap: CanvasLineCap
   ): void {
     const ctx = this.canvasContext;
     ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
+    ctx.lineWidth = this.lineWidth;
     ctx.lineCap = lineCap;
 
     GraphCanvas.bezierTo(

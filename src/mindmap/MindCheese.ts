@@ -48,15 +48,16 @@ export default class MindCheese {
     this.editable = true;
 
     // create instance of function provider
+    const graph = new GraphCanvas(
+      options.view.lineColor,
+      options.view.lineWidth
+    );
     this.layout = new LayoutProvider(
       this,
       options.layout.hspace,
       options.layout.vspace,
-      options.layout.pspace
-    );
-    const graph = new GraphCanvas(
-      options.view.lineColor,
-      options.view.lineWidth
+      options.layout.pspace,
+      graph
     );
     this.view = new ViewProvider(
       this,

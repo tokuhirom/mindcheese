@@ -2,6 +2,7 @@ import { Direction } from "./MindmapConstants";
 
 import MindNode, { Size } from "./MindNode";
 import MindCheese from "./MindCheese";
+import GraphCanvas from "./GraphCanvas";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -19,6 +20,7 @@ export default class LayoutProvider {
   private readonly hSpace: number;
   private readonly vSpace: number;
   private readonly pSpace: number;
+  private readonly graphCanvas: GraphCanvas;
 
   /**
    * The constructor
@@ -26,17 +28,20 @@ export default class LayoutProvider {
    * @param hspace horizontal spacing between nodes
    * @param vspace vertical spacing between nodes
    * @param pspace Horizontal spacing between node and connection line (to place node expander)
+   * @param graphCanvas
    */
   constructor(
     mindCheese: MindCheese,
     hspace: number,
     vspace: number,
-    pspace: number
+    pspace: number,
+    graphCanvas: GraphCanvas
   ) {
     this.hSpace = hspace;
     this.vSpace = vspace;
     this.pSpace = pspace;
     this.mindCheese = mindCheese;
+    this.graphCanvas = graphCanvas;
     this.bounds = null;
   }
 
@@ -204,8 +209,6 @@ export default class LayoutProvider {
     while (i--) {
       node = nodes[i];
       node.data.layout.offsetY += middleHeight;
-      //console.debug(node.topic);
-      //console.debug(node._data.layout.offset_y);
     }
     return totalHeight;
   }
@@ -230,7 +233,7 @@ export default class LayoutProvider {
     const x =
       offsetPoint.x + (viewData.width * (node.data.layout.direction - 1)) / 2;
     // ↓ Destination of the line.
-    const y = offsetPoint.y - viewData.height;
+    const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
     return new Point(x, y);
   }
 
