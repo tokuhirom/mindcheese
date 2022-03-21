@@ -1,6 +1,7 @@
 import { Direction } from "./MindmapConstants";
 import { Point } from "./LayoutProvider";
 import { RoundRobin } from "./utils/RoundRobin";
+import { Size } from "./Size";
 
 export class ViewData {
   element: HTMLElement;
@@ -25,16 +26,6 @@ export class LayoutData {
   rightNodes: MindNode[];
   outerHeightLeft: number;
   outerHeightRight: number;
-}
-
-export class Size {
-  w: number;
-  h: number;
-
-  constructor(width: number, height: number) {
-    this.w = width;
-    this.h = height;
-  }
 }
 
 const COLORS = new RoundRobin([

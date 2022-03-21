@@ -1,7 +1,7 @@
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.
  */
-import { Size } from "./MindNode";
+import { Size } from "./Size";
 
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;

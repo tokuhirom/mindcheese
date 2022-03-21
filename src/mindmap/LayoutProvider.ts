@@ -1,8 +1,9 @@
 import { Direction } from "./MindmapConstants";
 
-import MindNode, { Size } from "./MindNode";
+import MindNode from "./MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {

@@ -1,9 +1,10 @@
 import GraphCanvas from "./GraphCanvas";
-import MindNode, { Size } from "./MindNode";
+import MindNode from "./MindNode";
 import { Direction, KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
+import { Size } from "./Size";
 
 /**
  * View renderer
