@@ -1,4 +1,5 @@
 import MindCheese from "../src/mindmap/MindCheese";
+import { DEMO_MARKDOWN, DEMO_NODE_TREE } from "./DemoData";
 
 export default MindCheese;
 console.log("Loaded browser.ts");
@@ -6,55 +7,7 @@ console.log("Loaded browser.ts");
 function initDemo() {
   const container = document.getElementById("container");
   const mindCheese = new MindCheese(1, container);
-  mindCheese.showNodeTree({
-    id: "root",
-    topic: "mindCheese",
-    children: [
-      {
-        id: "easy",
-        topic: "Easy",
-        direction: "left",
-        children: [
-          { id: "easy1", topic: "Easy to show" },
-          { id: "easy2", topic: "Easy to edit" },
-          { id: "easy3", topic: "Easy to store" },
-          { id: "easy4", topic: "Easy to embed" },
-        ],
-      },
-      {
-        id: "open",
-        topic: "Open Source",
-        direction: "right",
-        children: [
-          { id: "open1", topic: "on GitHub" },
-          { id: "open2", topic: "BSD License" },
-        ],
-      },
-      {
-        id: "powerful",
-        topic: "Powerful",
-        direction: "right",
-        children: [
-          { id: "powerful1", topic: "Base on **TypeScript**" },
-          {
-            id: "powerful2",
-            topic: "Base on **jsMind**",
-            children: [{ id: "jsMind1", topic: "Base on HTML5" }],
-          },
-          { id: "powerful4", topic: "Depends on you" },
-        ],
-      },
-      {
-        id: "other",
-        topic: "test node",
-        direction: "left",
-        children: [
-          { id: "other1", topic: "I'm from local variable" },
-          { id: "other2", topic: "I can do everything: `3*2`" },
-        ],
-      },
-    ],
-  });
+  mindCheese.showNodeTree(DEMO_NODE_TREE);
 
   // window.addEventListener("resize", () => resize());
   // resize();
@@ -112,65 +65,7 @@ function initDemo() {
     return false;
   });
   document.getElementById("load_markdown").addEventListener("click", () => {
-    mindCheese.showMarkdown(
-      `
-- マークダウンのテスト
-  - a1
-    - b1
-        - dddddddddddddddddddd1
-          - eeeeeeeeeeeeeeeeeeeeee2
-            - ffffffffffffffffffffff3
-              - gggggggggggggggggggggggggg3
-                - hhhhhhhhhhhhhhhhhhhhhh2
-                  - iiiiiiiiiiiiii52iiiiiiiiiii
-                    - jjjjjjjjjjjjjj25jjjjjjjjjjjj
-                      - kkkkkkkkk2342kkkkkkkkkkkkkkkkk2
-                        - lllllllllll52llllllllllllllllllll
-    - b2
-    - b3
-      - c1
-      - c2
-        - dddddddddddddddddddd
-          - eeeeeeeeeeeeeeeeeeeeee
-            - ffffffffffffffffffffff
-              - gggggggggggggggggggggggggg
-                - hhhhhhhhhhhhhhhhhhhhhh
-                  - iiiiiiiiiiiiiiiiiiiiiiiii
-                    - jjjjjjjjjjjjjjjjjjjjjjjjjj
-                      - kkkkkkkkkkkkkkkkkkkkkkkkkk
-                        - lllllllllllllllllllllllllllllll
-  + a2 \\
-    複数行だよ
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-  + aaa
-          `
-    );
+    mindCheese.showMarkdown(DEMO_MARKDOWN);
     return false;
   });
   document.getElementById("dark").addEventListener("click", () => {
