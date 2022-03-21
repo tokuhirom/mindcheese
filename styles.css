@@ -90,6 +90,10 @@ mcnode.root {
   font-size: 24px;
 }
 
+mcnode.root.selected {
+  box-shadow: 2px 2px 8px #000;
+}
+
 mcexpander {
   border-color: gray;
 }
