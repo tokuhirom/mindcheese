@@ -84,7 +84,6 @@ mcnode {
 
 mcnode.selected {
   color: #fff;
-  box-shadow: 2px 2px 8px #000;
 }
 
 mcnode.root {
@@ -113,6 +112,7 @@ div.theme-primary mcnode {
 
 div.theme-primary mcnode.selected {
   color: black;
+  background-color: #cccccc;
 }
 
 div.theme-primary mcnode.root {
@@ -132,6 +132,7 @@ div.theme-dark mcnode {
 
 div.theme-dark mcnode.selected {
   color: white;
+  background-color: #7070c0;
 }
 
 div.theme-dark mcnode.root {
