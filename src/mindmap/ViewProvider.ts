@@ -5,14 +5,6 @@ import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 
-function isEmpty(s: string) {
-  // TODO inlining?
-  if (!s) {
-    return true;
-  }
-  return s.replace(/\s*/, "").length == 0;
-}
-
 /**
  * View renderer
  */
@@ -383,7 +375,11 @@ export default class ViewProvider {
       element.style.zIndex = "auto";
       element.classList.remove("editing");
       element.removeChild(this.textAreaElement);
-      if (isEmpty(topic) || node.topic === topic) {
+      if (
+        !topic ||
+        topic.replace(/\s*/, "").length == 0 ||
+        node.topic === topic
+      ) {
         element.innerHTML = this.textFormatter.render(node.topic);
         setTimeout(() => {
           viewData.width = element.clientWidth;
