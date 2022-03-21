@@ -521,7 +521,7 @@ export default class ViewProvider {
       {
         // Draw line between previous node and next node
         const pin = this.layout.getNodePointIn(node);
-        const pout = this.layout.getNodePointOut(node.parent);
+        const pout = this.layout.getNodePointOutSpecial(node.parent, node);
         this.graph.drawLine(pout, pin, offset, node.color, "round");
       }
       {

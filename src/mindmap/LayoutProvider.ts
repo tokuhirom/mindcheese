@@ -254,6 +254,19 @@ export default class LayoutProvider {
     }
   }
 
+  getNodePointOutSpecial(node: MindNode, n2: MindNode): Point {
+    if (node.isroot) {
+      const x = (node.data.view.width / 2) * n2.data.layout.direction;
+      return new Point(x, -(node.data.view.height / 2));
+    } else {
+      const offsetPoint = this.getNodeOffset(node);
+      const x =
+        offsetPoint.x +
+        (node.data.view.width + this.pSpace) * node.data.layout.direction;
+      return new Point(x, offsetPoint.y);
+    }
+  }
+
   getExpanderPoint(node: MindNode): Point {
     const p = this.getNodePointOut(node);
     let x: number;
