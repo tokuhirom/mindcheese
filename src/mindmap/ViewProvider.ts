@@ -1,7 +1,7 @@
 // noinspection JSUnfilteredForInLoop
 
 import GraphCanvas from "./GraphCanvas";
-import MindNode from "./MindNode";
+import MindNode, { Size } from "./MindNode";
 import { Direction, KEYCODE_ENTER } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";
@@ -24,7 +24,7 @@ export default class ViewProvider {
   private readonly layout: LayoutProvider;
   mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   mcnodes: HTMLElement; // <mcnodes>
-  size: { w: number; h: number };
+  size: Size;
   private selectedNode: MindNode;
   private editingNode: MindNode;
   private readonly graph: GraphCanvas;

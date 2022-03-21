@@ -29,6 +29,16 @@ export class LayoutData {
   outerHeightRight: number;
 }
 
+export class Size {
+  w: number;
+  h: number;
+
+  constructor(width: number, height: number) {
+    this.w = width;
+    this.h = height;
+  }
+}
+
 const COLORS = new RoundRobin([
   "#cc0000",
   "#00cc00",
@@ -138,12 +148,9 @@ export default class MindNode {
     return new Point(vd.absX, vd.absY);
   }
 
-  getSize(): { w: number; h: number } {
+  getSize(): Size {
     const vd = this.data.view;
-    return {
-      w: vd.width,
-      h: vd.height,
-    };
+    return new Size(vd.width, vd.height);
   }
 
   toObject(): Record<string, any> {

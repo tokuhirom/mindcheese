@@ -2,7 +2,7 @@
 
 import { Direction } from "./MindmapConstants";
 
-import MindNode from "./MindNode";
+import MindNode, { Size } from "./MindNode";
 import MindCheese from "./MindCheese";
 
 export class Point {
@@ -257,7 +257,7 @@ export default class LayoutProvider {
     return new Point(x, y);
   }
 
-  getMinSize(): { w: number; h: number } {
+  getMinSize(): Size {
     const nodes = this.mindCheese.mind.nodes;
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
@@ -271,10 +271,10 @@ export default class LayoutProvider {
         this.bounds.w = pout.x;
       }
     }
-    return {
-      w: this.bounds.e - this.bounds.w,
-      h: this.bounds.s - this.bounds.n,
-    };
+    return new Size(
+      this.bounds.e - this.bounds.w,
+      this.bounds.s - this.bounds.n
+    );
   }
 
   toggleNode(node: MindNode): void {
