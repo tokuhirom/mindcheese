@@ -267,14 +267,8 @@ export default class LayoutProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       const pout = this.getNodePointOut(node);
-      // e = Math.max(x, e)
-      if (pout.x > this.bounds.e) {
-        this.bounds.e = pout.x;
-      }
-      // w = Math.min(x, w)
-      if (pout.x < this.bounds.w) {
-        this.bounds.w = pout.x;
-      }
+      this.bounds.e = Math.max(pout.x, this.bounds.e);
+      this.bounds.w = Math.min(pout.x, this.bounds.w);
     }
     return new Size(
       this.bounds.e - this.bounds.w,
