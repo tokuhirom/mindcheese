@@ -20,6 +20,13 @@ export default class LayoutProvider {
   private readonly vSpace: number;
   private readonly pSpace: number;
 
+  /**
+   * The constructor
+   * @param mindCheese MindCheese instance
+   * @param hspace horizontal spacing between nodes
+   * @param vspace vertical spacing between nodes
+   * @param pspace Horizontal spacing between node and connection line (to place node expander)
+   */
   constructor(
     mindCheese: MindCheese,
     hspace: number,

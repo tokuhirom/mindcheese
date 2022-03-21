@@ -12,17 +12,17 @@ export class MindOption {
 }
 
 class ViewOption {
-  hmargin = 100;
-  vmargin = 50;
+  hmargin = 100; // Minimum horizontal distance of the mindmap from the outer frame of the container
+  vmargin = 50; // Minimum vertical distance of the mindmap from the outer frame of the container
   lineWidth = 2;
   lineColor = "#555";
   renderer: TextFormatter = new MarkdownRenderer();
 }
 
 class LayoutOption {
-  hspace = 30;
-  vspace = 20;
-  pspace = 13;
+  hspace = 30; // horizontal spacing between nodes
+  vspace = 20; // vspace vertical spacing between nodes
+  pspace = 13; // Horizontal spacing between node and connection line (to place node expander)
 }
 
 class ShortcutOption {
