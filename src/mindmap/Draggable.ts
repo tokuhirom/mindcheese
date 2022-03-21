@@ -230,6 +230,17 @@ export default class Draggable {
     container.addEventListener("touchend", this.dragend.bind(this), false);
   }
 
+  private static findMcnode(htmlElement: HTMLElement): HTMLElement | null {
+    let el = htmlElement;
+    while (el) {
+      if (el.tagName.toLowerCase() == "mcnode") {
+        return el;
+      }
+      el = el.parentElement;
+    }
+    return null;
+  }
+
   dragstart(e: DragEvent): void {
     if (!this.mindCheese.isEditable()) {
       return;
@@ -239,12 +250,12 @@ export default class Draggable {
     }
     this.activeNode = null;
 
-    const jview = this.mindCheese.view;
-    const el = e.target as HTMLElement;
-    if (el.tagName.toLowerCase() !== "mcnode") {
+    const viewProvider = this.mindCheese.view;
+    const el = Draggable.findMcnode(e.target as HTMLElement);
+    if (!el) {
       return;
     }
-    const nodeid = jview.getBindedNodeId(el);
+    const nodeid = viewProvider.getBindedNodeId(el);
     if (nodeid) {
       const node = this.mindCheese.getNodeById(nodeid);
       if (!node.isroot) {
