@@ -24,6 +24,7 @@ textarea.mindcheese-editor {
   line-height: 1.3;
   resize: none;
   outline: none; /* remove the border */
+  box-sizing: content-box;
 }
 
 mcnode {
