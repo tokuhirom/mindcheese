@@ -24,7 +24,7 @@ function initDemo() {
   const mindCheese = new MindCheese(1, container);
   mindCheese.showNodeTree(DEMO_NODE_TREE);
 
-  document.getElementById("dump_to_console").addEventListener("click", () => {
+  document.getElementById("download_json").addEventListener("click", () => {
     const data = mindCheese.getNodeTree();
     downloadText(
       encodeURIComponent(mindCheese.mind.root.topic) + ".json",
@@ -32,30 +32,29 @@ function initDemo() {
     );
     return false;
   });
-  document
-    .getElementById("dump_to_console_markdown")
-    .addEventListener("click", () => {
-      const data = mindCheese.getMarkdown();
-      downloadText(
-        encodeURIComponent(mindCheese.mind.root.topic) + ".md",
-        data
-      );
-      return false;
-    });
-  document.getElementById("resize").addEventListener("click", () => {
-    mindCheese.resize();
+  document.getElementById("download_markdown").addEventListener("click", () => {
+    const data = mindCheese.getMarkdown();
+    downloadText(encodeURIComponent(mindCheese.mind.root.topic) + ".md", data);
     return false;
   });
   document.getElementById("undo").addEventListener("click", () => {
     mindCheese.undo();
     return false;
   });
-  document.getElementById("load_markdown").addEventListener("click", () => {
-    mindCheese.showMarkdown(DEMO_MARKDOWN);
-    return false;
-  });
-  document.getElementById("dark").addEventListener("click", () => {
-    mindCheese.setTheme("dark");
+
+  if (process.env.BUILD == "development") {
+    document.getElementById("load_markdown").addEventListener("click", () => {
+      mindCheese.showMarkdown(DEMO_MARKDOWN);
+      return false;
+    });
+  } else {
+    document.getElementById("navItemDebug").style.display = "none";
+  }
+
+  let themeMode = true;
+  document.getElementById("toggle_theme").addEventListener("click", () => {
+    mindCheese.setTheme(themeMode ? "dark" : "primary");
+    themeMode = !themeMode;
     return false;
   });
 }
