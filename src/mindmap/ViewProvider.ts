@@ -152,21 +152,13 @@ export default class ViewProvider {
     const minSize = this.layout.getMinSize();
     const minWidth = minSize.w + this.hMargin * 2;
     const minHeight = minSize.h + this.vMargin * 2;
-    let clientW = this.mindCheeseInnerElement.clientWidth;
-    let clientH = this.mindCheeseInnerElement.clientHeight;
-    // console.debug(`ViewProvider.expand_size:
-    // min_width=${minWidth}
-    // min_height=${minHeight}
-    // client_w=${clientW}
-    // client_h=${clientH}`);
-    if (clientW < minWidth) {
-      clientW = minWidth;
-    }
-    if (clientH < minHeight) {
-      clientH = minHeight;
-    }
+    const clientW = this.mindCheeseInnerElement.clientWidth;
+    const clientH = this.mindCheeseInnerElement.clientHeight;
 
-    this.size = new Size(clientW, clientH);
+    this.size = new Size(
+      Math.max(clientW, minWidth),
+      Math.max(clientH, minHeight)
+    );
   }
 
   private initNodeSize(node: MindNode): void {
