@@ -1,6 +1,7 @@
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.
  */
+import { Point } from "./LayoutProvider";
 
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
@@ -41,9 +42,9 @@ export default class GraphCanvas {
   }
 
   drawLine(
-    pout: { x: number; y: number },
-    pin: { x: number; y: number },
-    offset: { x: number; y: number },
+    pout: Point,
+    pin: Point,
+    offset: Point,
     color: string,
     lineCap: CanvasLineCap
   ): void {
