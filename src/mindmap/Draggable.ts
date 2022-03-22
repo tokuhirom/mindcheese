@@ -18,6 +18,19 @@ import MindNode from "./MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { Point } from "./LayoutProvider";
 
+function getClientFromEvent(e: MouseEvent | TouchEvent): {
+  clientX: number;
+  clientY: number;
+} {
+  if (e instanceof MouseEvent) {
+    return e;
+  } else if (e instanceof TouchEvent) {
+    return e.touches[0];
+  } else {
+    throw new Error("Unknown event type");
+  }
+}
+
 class ClosePoint {
   node: MindNode;
   np: Point;
@@ -275,7 +288,7 @@ export default class Draggable {
     return null;
   }
 
-  dragstart(e: UIEvent): void {
+  dragstart(e: MouseEvent | TouchEvent): void {
     if (!this.mindCheese.isEditable()) {
       return;
     }
@@ -295,8 +308,9 @@ export default class Draggable {
       if (!node.isroot) {
         this.resetShadow(el);
         this.activeNode = node;
-        this.offsetX = e.clientX - el.offsetLeft;
-        this.offsetY = e.clientY - el.offsetTop;
+        const client = getClientFromEvent(e);
+        this.offsetX = client.clientX - el.offsetLeft;
+        this.offsetY = client.clientY - el.offsetTop;
         // this.offsetX = (e.clientX || e.touches[0].clientX) - el.offsetLeft;
         // this.offset_y = (e.clientY || e.touches[0].clientY) - el.offsetTop;
         this.clientHW = Math.floor(el.clientWidth / 2);
@@ -319,7 +333,7 @@ export default class Draggable {
     }
   }
 
-  drag(e: DragEvent): void {
+  drag(e: MouseEvent | TouchEvent): void {
     if (!this.mindCheese.isEditable()) {
       return;
     }
@@ -328,8 +342,9 @@ export default class Draggable {
       this.showShadow();
       this.moved = true;
       window.getSelection().removeAllRanges();
-      const px = e.clientX - this.offsetX;
-      const py = e.clientY - this.offsetY;
+      const client = getClientFromEvent(e);
+      const px = client.clientX - this.offsetX;
+      const py = client.clientY - this.offsetY;
       // const px = (e.clientX || e.touches[0].clientX) - this.offsetX;
       // const py = (e.clientY || e.touches[0].clientY) - this.offset_y;
       this.shadow.style.left = px + "px";
