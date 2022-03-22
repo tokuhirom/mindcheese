@@ -4,9 +4,7 @@
     "selector-type-no-unknown": [
       true,
       {
-        "ignoreTypes": [
-          "mcnode", "mcnodes","mcexpander"
-        ]
+        "ignoreTypes": ["mcnode", "mcnodes", "mcexpander"]
       }
     ]
   }
