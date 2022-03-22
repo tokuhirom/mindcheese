@@ -370,19 +370,21 @@ export default class ViewProvider {
   }
 
   takeLocation(node: MindNode): Point {
-    const vd = node.data.view;
+    const viewData = node.data.view;
     return new Point(
-      parseInt(vd.element.style.left) - this.mindCheeseInnerElement.scrollLeft,
-      parseInt(vd.element.style.top) - this.mindCheeseInnerElement.scrollTop
+      parseInt(viewData.element.style.left) -
+        this.mindCheeseInnerElement.scrollLeft,
+      parseInt(viewData.element.style.top) -
+        this.mindCheeseInnerElement.scrollTop
     );
   }
 
   restoreLocation(node: MindNode, location: Point): void {
-    const vd = node.data.view;
+    const viewData = node.data.view;
     this.mindCheeseInnerElement.scrollLeft =
-      parseInt(vd.element.style.left) - location.x;
+      parseInt(viewData.element.style.left) - location.x;
     this.mindCheeseInnerElement.scrollTop =
-      parseInt(vd.element.style.top) - location.y;
+      parseInt(viewData.element.style.top) - location.y;
   }
 
   clearNodes(): void {
@@ -391,9 +393,8 @@ export default class ViewProvider {
       return;
     }
     const nodes = mind.nodes;
-    let node = null;
     for (const nodeid in nodes) {
-      node = nodes[nodeid];
+      const node = nodes[nodeid];
       node.data.view.element = null;
       node.data.view.expander = null;
     }
@@ -402,18 +403,12 @@ export default class ViewProvider {
 
   showNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
-    let node = null;
-    let nodeElement = null;
-    let expander = null;
-    let expanderPoint = null;
-    let expanderText = "-";
-    let viewData = null;
     const offset = this.getViewOffset();
     for (const nodeid in nodes) {
-      node = nodes[nodeid];
-      viewData = node.data.view;
-      nodeElement = viewData.element;
-      expander = viewData.expander;
+      const node = nodes[nodeid];
+      const viewData = node.data.view;
+      const nodeElement = viewData.element;
+      const expander = viewData.expander;
       if (!node.data.layout.visible) {
         nodeElement.style.display = "none";
         expander.style.display = "none";
@@ -427,8 +422,8 @@ export default class ViewProvider {
       nodeElement.style.display = "";
       nodeElement.style.visibility = "visible";
       if (!node.isroot && node.children.length > 0) {
-        expanderText = node.expanded ? "-" : "+";
-        expanderPoint = this.layout.getExpanderPoint(node);
+        const expanderText = node.expanded ? "-" : "+";
+        const expanderPoint = this.layout.getExpanderPoint(node);
         expander.style.left = offset.x + expanderPoint.x + "px";
         expander.style.top = offset.y + expanderPoint.y + "px";
         expander.style.display = "";
