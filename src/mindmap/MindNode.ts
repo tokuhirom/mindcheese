@@ -21,10 +21,6 @@ export class LayoutData {
   visible: boolean;
   offsetX: number;
   offsetY: number;
-  leftNodes: MindNode[];
-  rightNodes: MindNode[];
-  outerHeightLeft: number;
-  outerHeightRight: number;
 }
 
 const COLORS = new RoundRobin([

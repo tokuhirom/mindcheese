@@ -108,18 +108,13 @@ export default class LayoutProvider {
         leftNodes.unshift(subnode);
       }
     }
-    layoutData.leftNodes = leftNodes;
-    layoutData.rightNodes = rightNodes;
-    layoutData.outerHeightLeft = this.layoutOffsetSubNodes(leftNodes);
-    layoutData.outerHeightRight = this.layoutOffsetSubNodes(rightNodes);
+    const outerHeightLeft = this.layoutOffsetSubNodes(leftNodes);
+    const outerHeightRight = this.layoutOffsetSubNodes(rightNodes);
+
     this.bounds.e = node.data.view.width / 2;
     this.bounds.w = 0 - this.bounds.e;
-    //console.debug(this.bounds.w);
     this.bounds.n = 0;
-    this.bounds.s = Math.max(
-      layoutData.outerHeightLeft,
-      layoutData.outerHeightRight
-    );
+    this.bounds.s = Math.max(outerHeightLeft, outerHeightRight);
   }
 
   // layout both the x and y axis
