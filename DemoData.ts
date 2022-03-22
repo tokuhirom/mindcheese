@@ -49,12 +49,12 @@ export const DEMO_NODE_TREE = {
         {
           id: "other3",
           topic:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget mauris pharetra et ultrices neque ornare aenean euismod elementum. Tempus egestas sed sed risus. Lacus vel facilisis volutpat est velit egestas. Odio aenean sed adipiscing diam donec adipiscing tristique risus. Eu ultrices vitae auctor eu augue ut lectus. Nulla pharetra diam sit amet. Integer quis auctor elit sed vulputate mi sit amet. Interdum varius sit amet mattis vulputate enim nulla aliquet. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Sed euismod nisi porta lorem. Suspendisse potenti nullam ac tortor. Curabitur gravida arcu ac tortor.",
+            "Multi line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line",
         },
         {
           id: "other4",
           topic:
-            "Multi line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget mauris pharetra et ultrices neque ornare aenean euismod elementum. Tempus egestas sed sed risus. Lacus vel facilisis volutpat est velit egestas. Odio aenean sed adipiscing diam donec adipiscing tristique risus. Eu ultrices vitae auctor eu augue ut lectus. Nulla pharetra diam sit amet. Integer quis auctor elit sed vulputate mi sit amet. Interdum varius sit amet mattis vulputate enim nulla aliquet. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Sed euismod nisi porta lorem. Suspendisse potenti nullam ac tortor. Curabitur gravida arcu ac tortor.",
         },
       ],
     },
