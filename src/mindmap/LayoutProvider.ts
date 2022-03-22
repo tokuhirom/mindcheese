@@ -127,50 +127,53 @@ export default class LayoutProvider {
   private layoutOffsetSubNodes(nodes: MindNode[]): number {
     let totalHeight = 0;
     const nodesCount = nodes.length;
-    let i = nodesCount;
-    let node = null;
-    let nodeOuterHeight = 0;
-    let layoutData = null;
-    let baseY = 0;
-    let pd = null; // parent._data
-    while (i--) {
-      node = nodes[i];
-      layoutData = node.data.layout;
-      if (pd == null) {
-        pd = node.parent.data;
+
+    {
+      let i = nodesCount;
+      let baseY = 0;
+      let pd = null; // parent._data
+      while (i--) {
+        const node = nodes[i];
+        const layoutData = node.data.layout;
         if (pd == null) {
-          throw new Error("Cannot get parent's data");
+          pd = node.parent.data;
+          if (pd == null) {
+            throw new Error("Cannot get parent's data");
+          }
         }
-      }
 
-      nodeOuterHeight = this.layoutOffsetSubNodes(node.children);
-      if (!node.expanded) {
-        nodeOuterHeight = 0;
-        this.setVisible(node.children, false);
-      }
-      nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
+        let nodeOuterHeight = this.layoutOffsetSubNodes(node.children);
+        if (!node.expanded) {
+          nodeOuterHeight = 0;
+          this.setVisible(node.children, false);
+        }
+        nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
 
-      layoutData.outerHeight = nodeOuterHeight;
-      layoutData.offsetY = baseY - nodeOuterHeight / 2;
-      layoutData.offsetX =
-        this.hSpace * layoutData.direction +
-        (pd.view.width * (pd.layout.direction + layoutData.direction)) / 2;
-      if (!node.parent.isroot) {
-        layoutData.offsetX += this.pSpace * layoutData.direction;
-      }
+        layoutData.outerHeight = nodeOuterHeight;
+        layoutData.offsetY = baseY - nodeOuterHeight / 2;
+        layoutData.offsetX =
+          this.hSpace * layoutData.direction +
+          (pd.view.width * (pd.layout.direction + layoutData.direction)) / 2;
+        if (!node.parent.isroot) {
+          layoutData.offsetX += this.pSpace * layoutData.direction;
+        }
 
-      baseY = baseY - nodeOuterHeight - this.vSpace;
-      totalHeight += nodeOuterHeight;
+        baseY = baseY - nodeOuterHeight - this.vSpace;
+        totalHeight += nodeOuterHeight;
+      }
     }
+
     if (nodesCount > 1) {
       totalHeight += this.vSpace * (nodesCount - 1);
     }
-    i = nodesCount;
-    const middleHeight = totalHeight / 2;
-    while (i--) {
-      node = nodes[i];
-      node.data.layout.offsetY += middleHeight;
+
+    {
+      const middleHeight = totalHeight / 2;
+      for (let i = 0, l = nodes.length; i < l; i++) {
+        nodes[i].data.layout.offsetY += middleHeight;
+      }
     }
+
     return totalHeight;
   }
 
