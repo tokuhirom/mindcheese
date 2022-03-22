@@ -107,12 +107,6 @@ export default class ViewProvider {
     console.debug("view.init");
     container.appendChild(this.mindCheeseInnerElement);
   }
-
-  adjustEditorElementSize() {
-    this.layout.layout();
-    this.show();
-  }
-
   getBindedNodeId(element: HTMLElement): string | null {
     if (element == null) {
       return null;
@@ -295,9 +289,11 @@ export default class ViewProvider {
       });
       element.setAttribute("mc-initialized", "done");
     }
+    node.data.view.width = element.clientWidth;
     element.focus();
 
-    setTimeout(this.adjustEditorElementSize.bind(this), 0);
+    this.layout.layout();
+    this.show();
   }
 
   editNodeEnd(): void {
@@ -316,6 +312,7 @@ export default class ViewProvider {
       ) {
         console.debug("Calling updateNode");
         element.innerHTML = this.textFormatter.render(node.topic);
+        node.data.view.width = element.clientWidth;
         this.layout.layout();
         this.show();
       } else {
