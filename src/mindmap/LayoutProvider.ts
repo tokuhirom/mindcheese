@@ -238,6 +238,9 @@ export default class LayoutProvider {
     return new Point(x, y);
   }
 
+  /**
+   * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
+   */
   getNodePointIn(node: MindNode): Point {
     return this.getNodeOffset(node);
   }
@@ -254,9 +257,12 @@ export default class LayoutProvider {
     }
   }
 
-  getNodePointOutSpecial(node: MindNode, n2: MindNode): Point {
+  /**
+   * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointout.png?raw=true
+   */
+  getNodePointOutWithDestination(node: MindNode, destination: MindNode): Point {
     if (node.isroot) {
-      const x = (node.data.view.width / 2) * n2.data.layout.direction;
+      const x = (node.data.view.width / 2) * destination.data.layout.direction;
       return new Point(x, -(node.data.view.height / 2));
     } else {
       const offsetPoint = this.getNodeOffset(node);
