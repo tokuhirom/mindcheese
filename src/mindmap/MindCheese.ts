@@ -166,6 +166,10 @@ export default class MindCheese {
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
       const theNode = this.getNodeById(nodeid);
+      if (theNode.data.view.element.contentEditable == "true") {
+        // The node is already in the editing mode.
+        return;
+      }
 
       if (!theNode) {
         throw new Error(`the node[id=${nodeid}] can not be found.`);
