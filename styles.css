@@ -1,4 +1,5 @@
 /* From https://raw.githubusercontent.com/hizzgdev/jsmind/master/style/jsmind.css */
+
 /*
  * Original jsmind's css is licensed by BSD License
  * Copyright (c) 2014-2015 hizzgdev@163.com
@@ -7,17 +8,22 @@
  *   https://github.com/hizzgdev/jsmind/
  */
 
-#mindcheese_container {
-  width: 100%;
-  height: 100%;
-}
-
 canvas.mindcheese-draggable-graph {
   vertical-align: top;
 }
 
 mcnode {
   max-width: 400px;
+  position: absolute;
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 2px;
+  font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
 }
 
 /* important section */
@@ -26,15 +32,6 @@ mcnode {
   overflow: auto;
   width: 100%;
   height: 100%;
-}
-
-.mindcheese-inner {
-  moz-user-select: -moz-none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -47,15 +44,7 @@ canvas.mindcheese-graph-canvas {
 mcnodes {
   position: absolute;
   z-index: 2;
-  background-color: rgba(0, 0, 0, 0);
-}
-
-mcnode {
-  position: absolute;
-  cursor: default;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  background-color: #000;
 }
 
 mcexpander {
@@ -71,16 +60,10 @@ mcexpander {
   border-width: 1px;
   border-style: solid;
   cursor: pointer;
+  border-color: gray;
 }
 
 /* default theme */
-mcnode {
-  padding: 10px;
-  background-color: #fff;
-  color: #333;
-  border-radius: 2px;
-  font: 16px/1.125 Verdana, Arial, Helvetica, sans-serif;
-}
 
 mcnode.selected {
   color: #fff;
@@ -92,10 +75,6 @@ mcnode.root {
 
 mcnode.root.selected {
   box-shadow: 2px 2px 8px #000;
-}
-
-mcexpander {
-  border-color: gray;
 }
 
 mcexpander:hover {
@@ -116,7 +95,7 @@ div.theme-primary mcnode {
 
 div.theme-primary mcnode.selected {
   color: black;
-  background-color: #cccccc;
+  background-color: #ccc;
 }
 
 div.theme-primary mcnode.root {
@@ -126,11 +105,11 @@ div.theme-primary mcnode.root {
 
 /* dark theme */
 div.theme-dark {
-  background-color: rgb(74, 89, 99);
+  background-color: #4a5963;
 }
 
 div.theme-dark mcnode {
-  background-color: rgb(74, 89, 99);
+  background-color: #4a5963;
   color: white;
 }
 

@@ -22,6 +22,7 @@ function downloadText(filename: string, text: string) {
 function initDemo() {
   const container = document.getElementById("container");
   const mindCheese = new MindCheese(1, container);
+  this.mindCheese = mindCheese;
   mindCheese.showNodeTree(DEMO_NODE_TREE);
 
   document.getElementById("download_json").addEventListener("click", () => {
