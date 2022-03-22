@@ -21,7 +21,6 @@ export class LayoutData {
   visible: boolean;
   offsetX: number;
   offsetY: number;
-  outerHeight: number;
   leftNodes: MindNode[];
   rightNodes: MindNode[];
   outerHeightLeft: number;

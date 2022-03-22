@@ -95,7 +95,6 @@ export default class LayoutProvider {
     const layoutData = node.data.layout;
     layoutData.offsetX = 0;
     layoutData.offsetY = 0;
-    layoutData.outerHeight = 0;
     const children = node.children;
     let i = children.length;
     const leftNodes = [];
@@ -149,7 +148,6 @@ export default class LayoutProvider {
         }
         nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
 
-        layoutData.outerHeight = nodeOuterHeight;
         layoutData.offsetY = baseY - nodeOuterHeight / 2;
         layoutData.offsetX =
           this.hSpace * layoutData.direction +
@@ -196,7 +194,6 @@ export default class LayoutProvider {
         }
         nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
 
-        layoutData.outerHeight = nodeOuterHeight;
         layoutData.offsetY = baseY - nodeOuterHeight / 2;
         baseY = baseY - nodeOuterHeight - this.vSpace;
         totalHeight += nodeOuterHeight;
