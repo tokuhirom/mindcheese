@@ -165,15 +165,13 @@ export default class MindCheese {
     const element = e.target as HTMLElement;
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
-      if (nodeid) {
-        const theNode = this.getNodeById(nodeid);
+      const theNode = this.getNodeById(nodeid);
 
-        if (!theNode) {
-          throw new Error(`the node[id=${nodeid}] can not be found.`);
-        }
-
-        return this.beginEdit(theNode);
+      if (!theNode) {
+        throw new Error(`the node[id=${nodeid}] can not be found.`);
       }
+
+      return this.beginEdit(theNode);
     }
   }
 
