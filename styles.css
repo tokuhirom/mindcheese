@@ -14,9 +14,11 @@ canvas.mindcheese-draggable-graph {
 
 mcnode {
   max-width: 400px;
+  width: max-content;
+
   position: absolute;
+
   cursor: default;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 10px;
