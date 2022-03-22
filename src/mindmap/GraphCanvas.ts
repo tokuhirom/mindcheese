@@ -1,12 +1,10 @@
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.
  */
-import { Size } from "./Size";
 
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
-  private readonly size: Size;
   private readonly lineColor: string;
   readonly lineWidth: number;
 
@@ -22,7 +20,6 @@ export default class GraphCanvas {
     this.canvasElement = document.createElement("canvas");
     this.canvasElement.className = "mindcheese-graph-canvas";
     this.canvasContext = this.canvasElement.getContext("2d");
-    this.size = new Size(0, 0);
   }
 
   element(): HTMLCanvasElement {
@@ -30,14 +27,17 @@ export default class GraphCanvas {
   }
 
   setSize(w: number, h: number): void {
-    this.size.w = w;
-    this.size.h = h;
     this.canvasElement.width = w;
     this.canvasElement.height = h;
   }
 
   clear(): void {
-    this.canvasContext.clearRect(0, 0, this.size.w, this.size.h);
+    this.canvasContext.clearRect(
+      0,
+      0,
+      this.canvasElement.width,
+      this.canvasElement.height
+    );
   }
 
   drawLine(

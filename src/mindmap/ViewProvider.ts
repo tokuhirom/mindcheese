@@ -165,8 +165,8 @@ export default class ViewProvider {
     if (clientH < minHeight) {
       clientH = minHeight;
     }
-    this.size.w = clientW;
-    this.size.h = clientH;
+
+    this.size = new Size(clientW, clientH);
   }
 
   private initNodeSize(node: MindNode): void {
