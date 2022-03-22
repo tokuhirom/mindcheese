@@ -120,50 +120,43 @@ export default class LayoutProvider {
   // layout both the x and y axis
   private layoutOffsetSubNodes(nodes: MindNode[]): number {
     let totalHeight = 0;
-    const nodesCount = nodes.length;
-
     {
-      let i = nodesCount;
       let baseY = 0;
-      let pd = null; // parent._data
-      while (i--) {
+      for (let i = 0, l = nodes.length; i < l; i++) {
         const node = nodes[i];
         const layoutData = node.data.layout;
-        if (pd == null) {
-          pd = node.parent.data;
-          if (pd == null) {
-            throw new Error("Cannot get parent's data");
-          }
-        }
 
-        let nodeOuterHeight = this.layoutOffsetSubNodes(node.children);
+        const nodeOuterHeight = Math.max(
+          node.data.view.height,
+          node.expanded ? this.layoutOffsetSubNodes(node.children) : 0
+        );
         if (!node.expanded) {
-          nodeOuterHeight = 0;
+          // TODO split the non-related tasks.
           this.setVisible(node.children, false);
         }
-        nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
-
-        layoutData.offsetY = baseY - nodeOuterHeight / 2;
+        layoutData.offsetY = baseY + nodeOuterHeight / 2;
         layoutData.offsetX =
           this.hSpace * layoutData.direction +
-          (pd.view.width * (pd.layout.direction + layoutData.direction)) / 2;
+          (node.parent.data.view.width *
+            (node.parent.data.layout.direction + layoutData.direction)) /
+            2;
         if (!node.parent.isroot) {
           layoutData.offsetX += this.pSpace * layoutData.direction;
         }
 
-        baseY = baseY - nodeOuterHeight - this.vSpace;
+        baseY += nodeOuterHeight + this.vSpace;
         totalHeight += nodeOuterHeight;
       }
     }
 
-    if (nodesCount > 1) {
-      totalHeight += this.vSpace * (nodesCount - 1);
+    if (nodes.length > 1) {
+      totalHeight += this.vSpace * (nodes.length - 1);
     }
 
     {
       const middleHeight = totalHeight / 2;
       for (let i = 0, l = nodes.length; i < l; i++) {
-        nodes[i].data.layout.offsetY += middleHeight;
+        nodes[i].data.layout.offsetY -= middleHeight;
       }
     }
 
