@@ -181,8 +181,6 @@ export default class Draggable {
     const sx = this.shadow.offsetLeft; // offset of the moving node
     const sy = this.shadow.offsetTop;
 
-    let ns, nl;
-
     const direct = sx + sw / 2 >= rootX ? Direction.RIGHT : Direction.LEFT;
     const nodes = this.mindCheese.mind.nodes;
     let minDistance = Number.MAX_VALUE;
@@ -197,8 +195,8 @@ export default class Draggable {
         if (node.id == this.activeNode.id) {
           continue;
         }
-        ns = node.getSize();
-        nl = node.data.view.location;
+        const ns = node.getSize();
+        const nl = node.data.view.location;
         if (direct == Direction.RIGHT) {
           if (sx - nl.x - ns.w <= 0) {
             continue;
