@@ -174,7 +174,7 @@ export default class LayoutProvider {
       y += offsetPoint.y;
     }
 
-    return new Point(x, y);
+    return new Point(x, y + (node.isroot ? 0 : node.data.view.height / 2));
   }
 
   getNodePoint(node: MindNode): Point {
