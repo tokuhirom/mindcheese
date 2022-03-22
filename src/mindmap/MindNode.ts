@@ -6,10 +6,11 @@ import { Size } from "./Size";
 export class ViewData {
   element: HTMLElement;
   expander: HTMLElement;
-  absX: number;
-  absY: number;
+
   width: number;
   height: number;
+
+  location: Point;
 }
 
 export class LayoutData {
@@ -126,14 +127,9 @@ export default class MindNode {
     return false;
   }
 
-  getLocation(): Point {
-    const vd = this.data.view;
-    return new Point(vd.absX, vd.absY);
-  }
-
   getSize(): Size {
-    const vd = this.data.view;
-    return new Size(vd.width, vd.height);
+    const viewData = this.data.view;
+    return new Size(viewData.width, viewData.height);
   }
 
   toObject(): Record<string, any> {

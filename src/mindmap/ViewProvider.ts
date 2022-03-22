@@ -412,8 +412,7 @@ export default class ViewProvider {
         continue;
       }
       const p = this.layout.getNodePoint(node);
-      viewData.absX = offset.x + p.x;
-      viewData.absY = offset.y + p.y;
+      viewData.location = new Point(offset.x + p.x, offset.y + p.y);
       nodeElement.style.left = offset.x + p.x + "px";
       nodeElement.style.top = offset.y + p.y + "px";
       nodeElement.style.display = "";
