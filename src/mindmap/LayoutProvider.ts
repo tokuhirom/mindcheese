@@ -178,42 +178,44 @@ export default class LayoutProvider {
   }
 
   // layout the y axis only, for collapse/expand a node
+  // Partial update version of layoutOffsetSubNodes.
   private layoutOffsetSubNodesHeight(nodes: MindNode[]): number {
     let totalHeight = 0;
     const nodesCount = nodes.length;
-    let i = nodesCount;
-    let node = null;
-    let nodeOuterHeight = 0;
-    let layoutData = null;
-    let baseY = 0;
-    let pd = null; // parent._data
-    while (i--) {
-      node = nodes[i];
-      layoutData = node.data.layout;
-      if (pd == null) {
-        pd = node.parent.data;
-      }
 
-      nodeOuterHeight = this.layoutOffsetSubNodesHeight(node.children);
-      if (!node.expanded) {
-        nodeOuterHeight = 0;
-      }
-      nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
+    {
+      let i = nodesCount;
+      let baseY = 0;
+      while (i--) {
+        const node = nodes[i];
+        const layoutData = node.data.layout;
 
-      layoutData.outerHeight = nodeOuterHeight;
-      layoutData.offsetY = baseY - nodeOuterHeight / 2;
-      baseY = baseY - nodeOuterHeight - this.vSpace;
-      totalHeight += nodeOuterHeight;
+        let nodeOuterHeight = this.layoutOffsetSubNodesHeight(node.children);
+        if (!node.expanded) {
+          nodeOuterHeight = 0;
+        }
+        nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
+
+        layoutData.outerHeight = nodeOuterHeight;
+        layoutData.offsetY = baseY - nodeOuterHeight / 2;
+        baseY = baseY - nodeOuterHeight - this.vSpace;
+        totalHeight += nodeOuterHeight;
+      }
     }
+
     if (nodesCount > 1) {
       totalHeight += this.vSpace * (nodesCount - 1);
     }
-    i = nodesCount;
-    const middleHeight = totalHeight / 2;
-    while (i--) {
-      node = nodes[i];
-      node.data.layout.offsetY += middleHeight;
+
+    {
+      let i = nodesCount;
+      const middleHeight = totalHeight / 2;
+      while (i--) {
+        const node = nodes[i];
+        node.data.layout.offsetY += middleHeight;
+      }
     }
+
     return totalHeight;
   }
 
@@ -237,6 +239,11 @@ export default class LayoutProvider {
     const x =
       offsetPoint.x + (viewData.width * (node.data.layout.direction - 1)) / 2;
     // ↓ Destination of the line.
+    if (node.id == "other4") {
+      console.log(
+        `NNN ${node.id} offsetPoint.y=${offsetPoint.y} viewData.height=${viewData.height} this.graphCanvas.lineWidth=${this.graphCanvas.lineWidth}`
+      );
+    }
     const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
     return new Point(x, y);
   }
