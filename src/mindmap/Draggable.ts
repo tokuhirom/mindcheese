@@ -238,7 +238,28 @@ export default class Draggable {
     container.addEventListener("mousedown", this.dragstart.bind(this), false);
     container.addEventListener("mousemove", this.drag.bind(this), false);
     container.addEventListener("mouseup", this.dragend.bind(this), false);
-    container.addEventListener("touchstart", this.dragstart.bind(this), false);
+    {
+      let tapCount = 0;
+      container.addEventListener(
+        "touchstart",
+        (e: TouchEvent) => {
+          if (!tapCount) {
+            // single tap
+            ++tapCount;
+
+            this.dragstart(e);
+
+            setTimeout(function () {
+              tapCount = 0;
+            }, 350);
+          } else {
+            // double tap
+            this.mindCheese.dblclickHandle(e);
+          }
+        },
+        false
+      );
+    }
     container.addEventListener("touchmove", this.drag.bind(this), false);
     container.addEventListener("touchend", this.dragend.bind(this), false);
   }
@@ -254,7 +275,7 @@ export default class Draggable {
     return null;
   }
 
-  dragstart(e: DragEvent): void {
+  dragstart(e: UIEvent): void {
     if (!this.mindCheese.isEditable()) {
       return;
     }
