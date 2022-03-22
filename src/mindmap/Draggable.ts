@@ -146,7 +146,14 @@ export default class Draggable {
   private canvasLineTo(x1: number, y1: number, x2: number, y2: number): void {
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(x1, y1);
-    this.canvasContext.lineTo(x2, y2);
+    this.canvasContext.bezierCurveTo(
+      x1 + ((x2 - x1) * 2) / 3,
+      y1,
+      x1,
+      y2,
+      x2,
+      y2
+    );
     this.canvasContext.stroke();
   }
 
@@ -158,7 +165,7 @@ export default class Draggable {
 
     const sw = this.shadowW;
     const sh = this.shadowH;
-    const sx = this.shadow.offsetLeft;
+    const sx = this.shadow.offsetLeft; // offset of the moving node
     const sy = this.shadow.offsetTop;
 
     let ns, nl;
@@ -186,7 +193,10 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.w) +
             Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + ns.w - this.lineWidth, y: nl.y + ns.h };
+          np = {
+            x: nl.x + ns.w - this.lineWidth,
+            y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
+          };
           sp = { x: sx + this.lineWidth, y: sy + sh };
         } else {
           if (nl.x - sx - sw <= 0) {
@@ -194,7 +204,10 @@ export default class Draggable {
           }
           distance =
             Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
-          np = { x: nl.x + this.lineWidth, y: nl.y + ns.h };
+          np = {
+            x: nl.x + this.lineWidth,
+            y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
+          };
           sp = { x: sx + sw - this.lineWidth, y: sy + sh };
         }
         if (distance < minDistance) {
