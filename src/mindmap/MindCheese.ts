@@ -157,7 +157,7 @@ export default class MindCheese {
     }
   }
 
-  dblclickHandle(e: Event): void {
+  dblclickHandle(e: Event): boolean {
     this.checkEditable();
     e.preventDefault();
     e.stopPropagation();
@@ -168,14 +168,15 @@ export default class MindCheese {
       const theNode = this.getNodeById(nodeid);
       if (theNode.data.view.element.contentEditable == "true") {
         // The node is already in the editing mode.
-        return;
+        return false;
       }
 
       if (!theNode) {
         throw new Error(`the node[id=${nodeid}] can not be found.`);
       }
 
-      return this.beginEdit(theNode);
+      this.beginEdit(theNode);
+      return false;
     }
   }
 
