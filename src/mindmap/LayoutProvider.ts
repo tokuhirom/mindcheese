@@ -175,47 +175,6 @@ export default class LayoutProvider {
     return totalHeight;
   }
 
-  // layout the y axis only, for collapse/expand a node
-  // Partial update version of layoutOffsetSubNodes.
-  private layoutOffsetSubNodesHeight(nodes: MindNode[]): number {
-    let totalHeight = 0;
-    const nodesCount = nodes.length;
-
-    {
-      let i = nodesCount;
-      let baseY = 0;
-      while (i--) {
-        const node = nodes[i];
-        const layoutData = node.data.layout;
-
-        let nodeOuterHeight = this.layoutOffsetSubNodesHeight(node.children);
-        if (!node.expanded) {
-          nodeOuterHeight = 0;
-        }
-        nodeOuterHeight = Math.max(node.data.view.height, nodeOuterHeight);
-
-        layoutData.offsetY = baseY - nodeOuterHeight / 2;
-        baseY = baseY - nodeOuterHeight - this.vSpace;
-        totalHeight += nodeOuterHeight;
-      }
-    }
-
-    if (nodesCount > 1) {
-      totalHeight += this.vSpace * (nodesCount - 1);
-    }
-
-    {
-      let i = nodesCount;
-      const middleHeight = totalHeight / 2;
-      while (i--) {
-        const node = nodes[i];
-        node.data.layout.offsetY += middleHeight;
-      }
-    }
-
-    return totalHeight;
-  }
-
   getNodeOffset(node: MindNode): Point {
     const layoutData = node.data.layout;
 
@@ -319,13 +278,13 @@ export default class LayoutProvider {
 
   expandNode(node: MindNode): void {
     node.expanded = true;
-    this.partLayout(node);
+    this.layout();
     this.setVisible(node.children, true);
   }
 
   collapseNode(node: MindNode): void {
     node.expanded = false;
-    this.partLayout(node);
+    this.layout();
     this.setVisible(node.children, false);
   }
 
@@ -341,7 +300,7 @@ export default class LayoutProvider {
     }
     if (c > 0) {
       const root = this.mindCheese.mind.root;
-      this.partLayout(root);
+      this.layout();
       this.setVisible(root.children, true);
     }
   }
@@ -359,7 +318,7 @@ export default class LayoutProvider {
     }
     if (c > 0) {
       const root = this.mindCheese.mind.root;
-      this.partLayout(root);
+      this.layout();
       this.setVisible(root.children, true);
     }
   }
@@ -389,37 +348,6 @@ export default class LayoutProvider {
           this.collapseNode(node);
         }
       }
-    }
-  }
-
-  partLayout(node: MindNode): void {
-    const root = this.mindCheese.mind.root;
-    if (root) {
-      const rootLayoutData = root.data.layout;
-      if (node.isroot) {
-        rootLayoutData.outerHeightRight = this.layoutOffsetSubNodesHeight(
-          rootLayoutData.rightNodes
-        );
-        rootLayoutData.outerHeightLeft = this.layoutOffsetSubNodesHeight(
-          rootLayoutData.leftNodes
-        );
-      } else {
-        if (node.data.layout.direction == Direction.RIGHT) {
-          rootLayoutData.outerHeightRight = this.layoutOffsetSubNodesHeight(
-            rootLayoutData.rightNodes
-          );
-        } else {
-          rootLayoutData.outerHeightLeft = this.layoutOffsetSubNodesHeight(
-            rootLayoutData.leftNodes
-          );
-        }
-      }
-      this.bounds.s = Math.max(
-        rootLayoutData.outerHeightLeft,
-        rootLayoutData.outerHeightRight
-      );
-    } else {
-      console.warn("can not found root node");
     }
   }
 
