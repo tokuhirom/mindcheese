@@ -210,26 +210,6 @@ export default class MindCheese {
     this.view.restoreLocation(node, location);
   }
 
-  collapseNode(node: MindNode): void {
-    if (node.isroot) {
-      return;
-    }
-    const location = this.view.takeLocation(node);
-    this.layout.collapseNode(node);
-    this.view.show();
-    this.view.restoreLocation(node, location);
-  }
-
-  expandAll(): void {
-    this.layout.expandAll();
-    this.view.show();
-  }
-
-  collapseAll(): void {
-    this.layout.collapseAll();
-    this.view.show();
-  }
-
   private doReset(): void {
     this.view.reset();
     this.layout.reset();
@@ -282,23 +262,6 @@ export default class MindCheese {
       this.layout.layout();
       this.view.show();
       this.expandNode(parentNode);
-    }
-    return node;
-  }
-
-  insertNodeBefore(
-    nodeBefore: MindNode,
-    nodeid: string,
-    topic: string
-  ): MindNode {
-    this.checkEditable();
-
-    this.undoManager.recordSnapshot();
-    const node = this.mind.insertNodeBefore(nodeBefore, nodeid, topic);
-    if (node) {
-      this.view.addNode(node);
-      this.layout.layout();
-      this.view.show();
     }
     return node;
   }

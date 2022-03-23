@@ -144,8 +144,17 @@ export default class ViewProvider {
   }
 
   load(): void {
-    console.debug("view.load");
-    this.initNodes();
+    const nodes = this.mindCheese.mind.nodes;
+
+    const documentFragment = document.createDocumentFragment();
+    for (const node of Object.values(nodes)) {
+      this.createNodeElement(node, documentFragment);
+    }
+    this.mcnodes.appendChild(documentFragment);
+
+    for (const node of Object.values(nodes)) {
+      ViewProvider.initNodeSize(node);
+    }
   }
 
   expandSize(): void {
@@ -161,27 +170,15 @@ export default class ViewProvider {
     );
   }
 
-  private initNodeSize(node: MindNode): void {
+  private static initNodeSize(node: MindNode): void {
     const viewData = node.data.view;
     viewData.width = viewData.element.clientWidth;
     viewData.height = viewData.element.clientHeight;
   }
 
-  private initNodes(): void {
-    const nodes = this.mindCheese.mind.nodes;
-    const documentFragment = document.createDocumentFragment();
-    for (const node of Object.values(nodes)) {
-      this.createNodeElement(node, documentFragment);
-    }
-    this.mcnodes.appendChild(documentFragment);
-    for (const node of Object.values(nodes)) {
-      this.initNodeSize(node);
-    }
-  }
-
   addNode(node: MindNode): void {
     this.createNodeElement(node, this.mcnodes);
-    this.initNodeSize(node);
+    ViewProvider.initNodeSize(node);
   }
 
   private createNodeElement(node: MindNode, parentNode: Node): void {
