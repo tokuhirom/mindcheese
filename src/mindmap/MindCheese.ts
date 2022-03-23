@@ -230,11 +230,6 @@ export default class MindCheese {
     this.view.show();
   }
 
-  expandToDepth(depth: number): void {
-    this.layout.expandToDepth(depth, null, null);
-    this.view.show();
-  }
-
   private doReset(): void {
     this.view.reset();
     this.layout.reset();

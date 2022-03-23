@@ -267,34 +267,6 @@ export default class LayoutProvider {
     }
   }
 
-  expandToDepth(
-    targetDepth: number,
-    currNodes: MindNode[],
-    currDepth: number
-  ): void {
-    if (targetDepth < 1) {
-      return;
-    }
-    const nodes = currNodes || this.mindCheese.mind.root.children;
-    const depth = currDepth || 1;
-    let i = nodes.length;
-    let node = null;
-    while (i--) {
-      node = nodes[i];
-      if (depth < targetDepth) {
-        if (!node.expanded) {
-          this.expandNode(node);
-        }
-        this.expandToDepth(targetDepth, node.children, depth + 1);
-      }
-      if (depth == targetDepth) {
-        if (node.expanded) {
-          this.collapseNode(node);
-        }
-      }
-    }
-  }
-
   setVisible(nodes: MindNode[], visible: boolean): void {
     let i = nodes.length;
     let node = null;
