@@ -23,6 +23,7 @@ export default class MindCheese {
   private undoManager: UndoManager;
   private editable: boolean;
   private readonly container: HTMLElement;
+  private zoomScale = 1.0;
 
   constructor(
     id: number,
@@ -111,6 +112,21 @@ export default class MindCheese {
       "dblclick",
       this.dblclickHandle.bind(this)
     );
+    this.view.mindCheeseInnerElement.addEventListener(
+      "wheel",
+      (e) => {
+        if (e.ctrlKey) {
+          if (e.deltaY > 0) {
+            this.zoomScale -= 0.1;
+          } else {
+            this.zoomScale += 0.1;
+          }
+          this.zoomScale = Math.max(Math.max(this.zoomScale, 0.2), 20);
+          this.zoom(this.zoomScale);
+        }
+      },
+      { passive: true }
+    );
     window.addEventListener("resize", () => {
       this.resize();
       return false;
@@ -177,6 +193,10 @@ export default class MindCheese {
     this.checkEditable();
 
     this.view.editNodeBegin(node);
+  }
+
+  zoom(n: number): void {
+    this.view.mindCheeseInnerElement.style.transform = `scale(${n})`;
   }
 
   endEdit(): void {
