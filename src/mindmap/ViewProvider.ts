@@ -169,8 +169,7 @@ export default class ViewProvider {
 
   private initNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
-    const documentFragment: DocumentFragment =
-      document.createDocumentFragment();
+    const documentFragment = document.createDocumentFragment();
     for (const node of Object.values(nodes)) {
       this.createNodeElement(node, documentFragment);
     }
@@ -339,8 +338,8 @@ export default class ViewProvider {
     this.mindCheese.draggable.resize();
   }
 
+  // Display root position at center of container element.
   centerRoot(): void {
-    // center root node
     const outerW = this.mindCheeseInnerElement.clientWidth;
     const outerH = this.mindCheeseInnerElement.clientHeight;
     if (this.size.w > outerW) {
