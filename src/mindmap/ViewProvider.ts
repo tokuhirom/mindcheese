@@ -92,7 +92,7 @@ export default class ViewProvider {
     this.mindCheeseInnerElement.appendChild(graph.element());
     this.mindCheeseInnerElement.appendChild(this.mcnodes);
 
-    this.size = { w: 0, h: 0 };
+    this.size = new Size(0, 0);
 
     this.selectedNode = null;
     this.editingNode = null;

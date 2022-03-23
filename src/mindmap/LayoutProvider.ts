@@ -81,6 +81,10 @@ export default class LayoutProvider {
 
   // layout both the x and y axis
   private layoutOffsetSubNodes(nodes: MindNode[]): number {
+    if (nodes.length == 0) {
+      return 0;
+    }
+
     let totalHeight = 0;
     {
       let baseY = 0;
@@ -88,13 +92,13 @@ export default class LayoutProvider {
         const node = nodes[i];
         const layoutData = node.data.layout;
 
+        const childrenHeight = this.layoutOffsetSubNodes(node.children);
         const nodeOuterHeight = Math.max(
           node.data.view.height,
-          node.expanded ? this.layoutOffsetSubNodes(node.children) : 0
+          node.expanded ? childrenHeight : 0
         );
         if (!node.expanded) {
           // TODO split the non-related tasks.
-          this.layoutOffsetSubNodes(node.children);
           this.setVisible(node.children, false);
         }
         layoutData.offsetY = baseY + nodeOuterHeight / 2;
@@ -107,7 +111,10 @@ export default class LayoutProvider {
           layoutData.offsetX += this.pSpace * node.direction;
         }
 
-        baseY += nodeOuterHeight + this.vSpace;
+        baseY +=
+          nodeOuterHeight +
+          (node.expanded ? childrenHeight / 2 : 0) +
+          this.vSpace;
         totalHeight += nodeOuterHeight;
       }
     }
