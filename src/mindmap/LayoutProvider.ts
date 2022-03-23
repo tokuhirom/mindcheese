@@ -60,16 +60,10 @@ export default class LayoutProvider {
   layoutDirection(): void {
     const node = this.mindCheese.mind.root;
 
-    // console.debug(node);
-    const layoutData = node.data.layout;
-    const children = node.children;
-    const childrenCount = children.length;
-    layoutData.direction = Direction.CENTER;
+    node.data.layout.direction = Direction.CENTER;
 
-    let i = childrenCount;
-    let subnode = null;
-    while (i--) {
-      subnode = children[i];
+    for (let i = 0, l = node.children.length; i < l; i++) {
+      const subnode = node.children[i];
       if (subnode.direction == Direction.LEFT) {
         this.layoutDirectionSide(subnode, Direction.LEFT);
       } else {
