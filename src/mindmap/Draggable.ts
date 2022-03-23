@@ -268,10 +268,12 @@ export default class Draggable {
             this.mindCheese.dblclickHandle(e);
           }
         },
-        false
+        { passive: true }
       );
     }
-    container.addEventListener("touchmove", this.drag.bind(this), false);
+    container.addEventListener("touchmove", this.drag.bind(this), {
+      passive: true,
+    });
     container.addEventListener("touchend", this.dragend.bind(this), false);
   }
 
