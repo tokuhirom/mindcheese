@@ -43,6 +43,7 @@ export const DEMO_NODE_TREE = {
       id: "other",
       topic: "test node",
       direction: "left",
+      // expanded: false,
       children: [
         { id: "other1", topic: "I'm from local variable" },
         { id: "other2", topic: "I can do everything: `3*2`" },
@@ -50,6 +51,20 @@ export const DEMO_NODE_TREE = {
           id: "other3",
           topic:
             "Multi line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line\nMulti line",
+          children: [
+            {
+              id: "hello1",
+              topic: "こんにちは",
+            },
+            {
+              id: "hello2",
+              topic: "Hello",
+            },
+            {
+              id: "hello3",
+              topic: "Здравствуйте",
+            },
+          ],
         },
         {
           id: "other4",
