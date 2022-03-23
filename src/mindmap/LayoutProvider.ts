@@ -53,25 +53,8 @@ export default class LayoutProvider {
 
   layout(): void {
     console.debug("layout.layout");
-    this.layoutDirection();
+    this.mindCheese.mind.root.direction = Direction.CENTER;
     this.layoutOffset();
-  }
-
-  private layoutDirection(): void {
-    const rootNode = this.mindCheese.mind.root;
-    rootNode.data.layout.direction = Direction.CENTER;
-
-    for (let i = 0, l = rootNode.children.length; i < l; i++) {
-      this.layoutDirectionSide(rootNode.children[i]);
-    }
-  }
-
-  private layoutDirectionSide(node: MindNode): void {
-    node.data.layout.direction = node.direction;
-
-    for (let i = 0, l = node.children.length; i < l; i++) {
-      this.layoutDirectionSide(node.children[i]);
-    }
   }
 
   layoutOffset(): void {
@@ -86,7 +69,7 @@ export default class LayoutProvider {
     let subnode = null;
     while (i--) {
       subnode = children[i];
-      if (subnode.data.layout.direction == Direction.RIGHT) {
+      if (subnode.direction == Direction.RIGHT) {
         rightNodes.unshift(subnode);
       } else {
         leftNodes.unshift(subnode);
@@ -120,12 +103,12 @@ export default class LayoutProvider {
         }
         layoutData.offsetY = baseY + nodeOuterHeight / 2;
         layoutData.offsetX =
-          this.hSpace * layoutData.direction +
+          this.hSpace * node.direction +
           (node.parent.data.view.width *
-            (node.parent.data.layout.direction + layoutData.direction)) /
+            (node.parent.direction + node.direction)) /
             2;
         if (!node.parent.isroot) {
-          layoutData.offsetX += this.pSpace * layoutData.direction;
+          layoutData.offsetX += this.pSpace * node.direction;
         }
 
         baseY += nodeOuterHeight + this.vSpace;
@@ -164,8 +147,7 @@ export default class LayoutProvider {
   getNodePoint(node: MindNode): Point {
     const viewData = node.data.view;
     const offsetPoint = this.getNodeOffset(node);
-    const x =
-      offsetPoint.x + (viewData.width * (node.data.layout.direction - 1)) / 2;
+    const x = offsetPoint.x + (viewData.width * (node.direction - 1)) / 2;
     // ↓ Destination of the line.
     if (node.id == "other4") {
       console.log(
@@ -189,8 +171,7 @@ export default class LayoutProvider {
     } else {
       const offsetPoint = this.getNodeOffset(node);
       const x =
-        offsetPoint.x +
-        (node.data.view.width + this.pSpace) * node.data.layout.direction;
+        offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
       return new Point(x, offsetPoint.y);
     }
   }
@@ -200,13 +181,12 @@ export default class LayoutProvider {
    */
   getNodePointOutWithDestination(node: MindNode, destination: MindNode): Point {
     if (node.isroot) {
-      const x = (node.data.view.width / 2) * destination.data.layout.direction;
+      const x = (node.data.view.width / 2) * destination.direction;
       return new Point(x, -(node.data.view.height / 2));
     } else {
       const offsetPoint = this.getNodeOffset(node);
       const x =
-        offsetPoint.x +
-        (node.data.view.width + this.pSpace) * node.data.layout.direction;
+        offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
       return new Point(x, offsetPoint.y);
     }
   }
@@ -214,7 +194,7 @@ export default class LayoutProvider {
   getExpanderPoint(node: MindNode): Point {
     const p = this.getNodePointOut(node);
     let x: number;
-    if (node.data.layout.direction == Direction.RIGHT) {
+    if (node.direction == Direction.RIGHT) {
       x = p.x - this.pSpace;
     } else {
       x = p.x;
