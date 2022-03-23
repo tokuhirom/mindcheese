@@ -12,13 +12,6 @@ import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 
-function isEmpty(s: string) {
-  if (!s) {
-    return true;
-  }
-  return s.replace(/\s*/, "").length == 0;
-}
-
 export default class MindCheese {
   options: MindOption;
   public mind: Mind;
@@ -332,7 +325,7 @@ export default class MindCheese {
   updateNode(nodeid: string, topic: string): void {
     this.checkEditable();
 
-    if (isEmpty(topic)) {
+    if (!topic || topic.replace(/\s*/, "").length == 0) {
       throw new Error("fail, topic can not be empty");
     }
 
