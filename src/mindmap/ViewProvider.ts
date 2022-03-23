@@ -270,9 +270,7 @@ export default class ViewProvider {
     element.contentEditable = "true";
     element.innerText = node.topic;
     if (element.getAttribute("mc-initialized") !== "done") {
-      element.addEventListener("blur", (e) => {
-        this.editNodeEnd();
-      });
+      element.addEventListener("blur", () => this.editNodeEnd());
       element.setAttribute("mc-initialized", "done");
     }
     node.data.view.width = element.clientWidth;
