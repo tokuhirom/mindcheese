@@ -62,24 +62,15 @@ export default class LayoutProvider {
     rootNode.data.layout.direction = Direction.CENTER;
 
     for (let i = 0, l = rootNode.children.length; i < l; i++) {
-      const subnode = rootNode.children[i];
-      if (subnode.direction == Direction.LEFT) {
-        this.layoutDirectionSide(subnode, Direction.LEFT);
-      } else {
-        this.layoutDirectionSide(subnode, Direction.RIGHT);
-      }
+      this.layoutDirectionSide(rootNode.children[i]);
     }
   }
 
-  private layoutDirectionSide(node: MindNode, direction: Direction): void {
-    const layoutData = node.data.layout;
-    const children = node.children;
-    const childrenCount = children.length;
+  private layoutDirectionSide(node: MindNode): void {
+    node.data.layout.direction = node.direction;
 
-    layoutData.direction = direction;
-    let i = childrenCount;
-    while (i--) {
-      this.layoutDirectionSide(children[i], direction);
+    for (let i = 0, l = node.children.length; i < l; i++) {
+      this.layoutDirectionSide(node.children[i]);
     }
   }
 
