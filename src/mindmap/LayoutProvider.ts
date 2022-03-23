@@ -57,13 +57,12 @@ export default class LayoutProvider {
     this.layoutOffset();
   }
 
-  layoutDirection(): void {
-    const node = this.mindCheese.mind.root;
+  private layoutDirection(): void {
+    const rootNode = this.mindCheese.mind.root;
+    rootNode.data.layout.direction = Direction.CENTER;
 
-    node.data.layout.direction = Direction.CENTER;
-
-    for (let i = 0, l = node.children.length; i < l; i++) {
-      const subnode = node.children[i];
+    for (let i = 0, l = rootNode.children.length; i < l; i++) {
+      const subnode = rootNode.children[i];
       if (subnode.direction == Direction.LEFT) {
         this.layoutDirectionSide(subnode, Direction.LEFT);
       } else {
