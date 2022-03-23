@@ -268,10 +268,8 @@ export default class LayoutProvider {
   }
 
   setVisible(nodes: MindNode[], visible: boolean): void {
-    let i = nodes.length;
-    let node = null;
-    while (i--) {
-      node = nodes[i];
+    for (let i = 0, l = nodes.length; i < l; i++) {
+      const node = nodes[i];
       if (node.expanded) {
         this.setVisible(node.children, visible);
       } else {
