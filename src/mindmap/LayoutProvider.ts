@@ -58,27 +58,19 @@ export default class LayoutProvider {
   }
 
   layoutOffset(): void {
-    const node = this.mindCheese.mind.root;
-    const layoutData = node.data.layout;
-    layoutData.offsetX = 0;
-    layoutData.offsetY = 0;
-    const children = node.children;
-    let i = children.length;
-    const leftNodes = [];
-    const rightNodes = [];
-    let subnode = null;
-    while (i--) {
-      subnode = children[i];
-      if (subnode.direction == Direction.RIGHT) {
-        rightNodes.unshift(subnode);
-      } else {
-        leftNodes.unshift(subnode);
-      }
-    }
-    const outerHeightLeft = this.layoutOffsetSubNodes(leftNodes);
-    const outerHeightRight = this.layoutOffsetSubNodes(rightNodes);
+    const rootNode = this.mindCheese.mind.root;
 
-    this.bounds.e = node.data.view.width / 2;
+    rootNode.data.layout.offsetX = 0;
+    rootNode.data.layout.offsetY = 0;
+
+    const outerHeightLeft = this.layoutOffsetSubNodes(
+      rootNode.children.filter((it) => it.direction == Direction.LEFT)
+    );
+    const outerHeightRight = this.layoutOffsetSubNodes(
+      rootNode.children.filter((it) => it.direction == Direction.RIGHT)
+    );
+
+    this.bounds.e = rootNode.data.view.width / 2;
     this.bounds.w = 0 - this.bounds.e;
     this.bounds.n = 0;
     this.bounds.s = Math.max(outerHeightLeft, outerHeightRight);
