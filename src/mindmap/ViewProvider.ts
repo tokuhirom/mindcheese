@@ -214,10 +214,8 @@ export default class ViewProvider {
       node.data.view.element.contentEditable = "false";
       this.editingNode = null;
     }
-    const children = node.children;
-    let i = children.length;
-    while (i--) {
-      this.removeNode(children[i]);
+    for (let i = 0, l = node.children.length; i < l; i++) {
+      this.removeNode(node.children[i]);
     }
     if (node.data.view) {
       const element = node.data.view.element;
