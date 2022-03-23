@@ -213,58 +213,10 @@ export default class LayoutProvider {
     if (node.isroot) {
       return;
     }
-    if (node.expanded) {
-      this.collapseNode(node);
-    } else {
-      this.expandNode(node);
-    }
-  }
 
-  expandNode(node: MindNode): void {
-    node.expanded = true;
+    node.expanded = !node.expanded;
     this.layout();
-    this.setVisible(node.children, true);
-  }
-
-  collapseNode(node: MindNode): void {
-    node.expanded = false;
-    this.layout();
-    this.setVisible(node.children, false);
-  }
-
-  expandAll(): void {
-    const nodes = this.mindCheese.mind.nodes;
-    let c = 0;
-    for (const nodeid in nodes) {
-      const node = nodes[nodeid];
-      if (!node.expanded) {
-        node.expanded = true;
-        c++;
-      }
-    }
-    if (c > 0) {
-      const root = this.mindCheese.mind.root;
-      this.layout();
-      this.setVisible(root.children, true);
-    }
-  }
-
-  collapseAll(): void {
-    const nodes = this.mindCheese.mind.nodes;
-    let c = 0;
-    let node;
-    for (const nodeid in nodes) {
-      node = nodes[nodeid];
-      if (node.expanded && !node.isroot) {
-        node.expanded = false;
-        c++;
-      }
-    }
-    if (c > 0) {
-      const root = this.mindCheese.mind.root;
-      this.layout();
-      this.setVisible(root.children, true);
-    }
+    this.setVisible(node.children, node.expanded);
   }
 
   setVisible(nodes: MindNode[], visible: boolean): void {

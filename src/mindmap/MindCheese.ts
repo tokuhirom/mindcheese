@@ -205,7 +205,9 @@ export default class MindCheese {
       return;
     }
     const location = this.view.takeLocation(node);
-    this.layout.expandNode(node);
+    node.expanded = true;
+    this.layout.layout();
+    this.layout.setVisible(node.children, true);
     this.view.show();
     this.view.restoreLocation(node, location);
   }
