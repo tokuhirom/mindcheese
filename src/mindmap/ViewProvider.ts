@@ -164,6 +164,7 @@ export default class ViewProvider {
     const clientW = this.mindCheeseInnerElement.clientWidth;
     const clientH = this.mindCheeseInnerElement.clientHeight;
 
+    console.log(`expandSize: ${clientH} ${minHeight}`);
     this.size = new Size(
       Math.max(clientW, minWidth),
       Math.max(clientH, minHeight)
@@ -326,6 +327,7 @@ export default class ViewProvider {
   }
 
   private doShow(): void {
+    console.log(`doShow: ${this.size.w} ${this.size.h}`);
     this.graph.setSize(this.size.w, this.size.h);
     this.mcnodes.parentElement.style.width = this.size.w + "px";
     this.mcnodes.parentElement.style.height = this.size.h + "px";

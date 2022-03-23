@@ -71,7 +71,7 @@ export default class LayoutProvider {
     );
 
     console.debug(
-      `layoutOffset: rootNode.data.view.width=${rootNode.data.view.width}`
+      `layoutOffset: rootNode.data.view.width=${rootNode.data.view.width} outerHeightLeft=${outerHeightLeft} outerHeightRight=${outerHeightRight}`
     );
     this.bounds.e = rootNode.data.view.width / 2;
     this.bounds.w = 0 - this.bounds.e;
@@ -115,7 +115,8 @@ export default class LayoutProvider {
           nodeOuterHeight +
           (node.expanded ? childrenHeight / 2 : 0) +
           this.vSpace;
-        totalHeight += nodeOuterHeight;
+        totalHeight +=
+          nodeOuterHeight + (node.expanded ? childrenHeight / 2 : 0);
       }
     }
 
