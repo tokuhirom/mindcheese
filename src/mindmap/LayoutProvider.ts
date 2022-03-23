@@ -70,6 +70,9 @@ export default class LayoutProvider {
       rootNode.children.filter((it) => it.direction == Direction.RIGHT)
     );
 
+    console.debug(
+      `layoutOffset: rootNode.data.view.width=${rootNode.data.view.width}`
+    );
     this.bounds.e = rootNode.data.view.width / 2;
     this.bounds.w = 0 - this.bounds.e;
     this.bounds.n = 0;
@@ -91,6 +94,7 @@ export default class LayoutProvider {
         );
         if (!node.expanded) {
           // TODO split the non-related tasks.
+          this.layoutOffsetSubNodes(node.children);
           this.setVisible(node.children, false);
         }
         layoutData.offsetY = baseY + nodeOuterHeight / 2;
@@ -132,6 +136,9 @@ export default class LayoutProvider {
       x += offsetPoint.x;
       y += offsetPoint.y;
     }
+    if (isNaN(layoutData.offsetX)) {
+      console.log(`getNodeOffset: node=${node.topic} x=${layoutData.offsetX}`);
+    }
 
     return new Point(x, y + (node.isroot ? 0 : node.data.view.height / 2));
   }
@@ -164,6 +171,11 @@ export default class LayoutProvider {
       const offsetPoint = this.getNodeOffset(node);
       const x =
         offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
+      if (isNaN(x)) {
+        console.debug(
+          `getNodePointOut: x=${x} offsetPoint.x=${offsetPoint.x} node.data.view.width=${node.data.view.width} thhis.pSpace=${this.pSpace} node.direction=${node.direction}`
+        );
+      }
       return new Point(x, offsetPoint.y);
     }
   }
@@ -200,6 +212,7 @@ export default class LayoutProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       const pout = this.getNodePointOut(node);
+      console.debug(`getMinSize: pout.x=${pout.x}`);
       this.bounds.e = Math.max(pout.x, this.bounds.e);
       this.bounds.w = Math.min(pout.x, this.bounds.w);
     }

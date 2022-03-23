@@ -308,6 +308,9 @@ export default class ViewProvider {
 
   getViewOffset(): Point {
     const bounds = this.layout.bounds;
+    console.log(
+      `getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`
+    );
     const x = (this.size.w - bounds.e - bounds.w) / 2;
     const y = this.size.h / 2;
     return new Point(x, y);
@@ -397,6 +400,7 @@ export default class ViewProvider {
       }
       const p = this.layout.getNodePoint(node);
       viewData.location = new Point(offset.x + p.x, offset.y + p.y);
+      console.debug(`NNN node=${node.id} offset.x=${offset.x} p.x=${p.x}`);
       nodeElement.style.left = offset.x + p.x + "px";
       nodeElement.style.top = offset.y + p.y + "px";
       nodeElement.style.display = "";
