@@ -43,7 +43,7 @@ export const DEMO_NODE_TREE = {
       id: "other",
       topic: "test node",
       direction: "left",
-      expanded: false,
+      // expanded: false,
       children: [
         { id: "other1", topic: "I'm from local variable" },
         { id: "other2", topic: "I can do everything: `3*2`" },

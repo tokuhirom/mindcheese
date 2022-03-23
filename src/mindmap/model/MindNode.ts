@@ -1,37 +1,8 @@
-import { Direction } from "./MindmapConstants";
-import { Point } from "./LayoutProvider";
-import { RoundRobin } from "./utils/RoundRobin";
-import { Size } from "./Size";
-
-export class ViewData {
-  element: HTMLElement;
-  expander: HTMLElement;
-
-  width: number;
-  height: number;
-
-  location: Point;
-}
-
-export class LayoutData {
-  constructor() {
-    this.visible = true;
-  }
-
-  direction: Direction;
-  visible: boolean;
-  offsetX: number;
-  offsetY: number;
-}
-
-const COLORS = new RoundRobin([
-  "#cc0000",
-  "#00cc00",
-  "#0000cc",
-  "#00cccc",
-  "#cc00cc",
-  "#cccc00",
-]);
+import { Direction } from "../MindmapConstants";
+import { Size } from "../Size";
+import { ViewData } from "./ViewData";
+import { LayoutData } from "./LayoutData";
+import { COLORS } from "./COLORS";
 
 export default class MindNode {
   public readonly id: string;

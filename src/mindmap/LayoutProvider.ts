@@ -1,6 +1,6 @@
 import { Direction } from "./MindmapConstants";
 
-import MindNode from "./MindNode";
+import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
 import { Size } from "./Size";

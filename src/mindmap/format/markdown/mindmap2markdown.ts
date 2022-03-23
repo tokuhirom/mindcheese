@@ -1,5 +1,5 @@
 import Mind from "../../Mind";
-import MindNode from "../../MindNode";
+import MindNode from "../../model/MindNode";
 import { Direction } from "../../MindmapConstants";
 
 export function mindmap2markdown(mind: Mind): string {

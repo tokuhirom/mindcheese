@@ -1,5 +1,5 @@
 import GraphCanvas from "./GraphCanvas";
-import MindNode from "./MindNode";
+import MindNode from "./model/MindNode";
 import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, { Point } from "./LayoutProvider";

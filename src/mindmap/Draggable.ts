@@ -14,7 +14,7 @@
  */
 
 import MindCheese from "./MindCheese";
-import MindNode from "./MindNode";
+import MindNode from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { Point } from "./LayoutProvider";
 
