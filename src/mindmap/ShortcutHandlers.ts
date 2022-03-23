@@ -1,5 +1,6 @@
 import MindCheese from "./MindCheese";
 import { Direction } from "./MindmapConstants";
+import { generateNewId } from "./utils/RandomID";
 
 export default class ShortcutHandlers {
   static delete(mindCheese: MindCheese): boolean {
@@ -14,7 +15,7 @@ export default class ShortcutHandlers {
   static addChild(mindCheese: MindCheese): boolean {
     const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      const nodeid = mindCheese.generateNewId();
+      const nodeid = generateNewId();
       const node = mindCheese.addNode(selectedNode, nodeid, "New Node");
       if (node) {
         mindCheese.selectNode(node);
@@ -29,7 +30,7 @@ export default class ShortcutHandlers {
 
     const selectedNode = mindCheese.getSelectedNode();
     if (!!selectedNode && !selectedNode.isroot) {
-      const nodeid = mindCheese.generateNewId();
+      const nodeid = generateNewId();
       const node = mindCheese.insertNodeAfter(selectedNode, nodeid, "New Node");
       if (node) {
         mindCheese.selectNode(node);

@@ -294,7 +294,7 @@ export default class MindCheese {
     const nodeid = node.id;
     const parentNode = node.parent;
     this.undoManager.recordSnapshot();
-    const nextSelectedNode = this.findUpperBrotherOrParentNode(
+    const nextSelectedNode = MindCheese.findUpperBrotherOrParentNode(
       parentNode,
       nodeid
     );
@@ -311,7 +311,7 @@ export default class MindCheese {
     return true;
   }
 
-  private findUpperBrotherOrParentNode(
+  private static findUpperBrotherOrParentNode(
     parentNode: MindNode,
     targetNodeId: string
   ) {
@@ -529,11 +529,5 @@ export default class MindCheese {
         }
       }
     }
-  }
-
-  generateNewId(): string {
-    return (
-      new Date().getTime().toString(16) + Math.random().toString(16).substr(2)
-    ).substr(2, 16);
   }
 }
