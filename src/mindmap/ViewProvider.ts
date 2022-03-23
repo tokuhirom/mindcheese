@@ -275,6 +275,17 @@ export default class ViewProvider {
       element.setAttribute("mc-initialized", "done");
     }
     node.data.view.width = element.clientWidth;
+
+    // https://stackoverflow.com/questions/6139107/programmatically-select-text-in-a-contenteditable-html-element
+    function selectElementContents(el: HTMLElement) {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    selectElementContents(element);
     element.focus();
 
     this.layout.layout();
