@@ -356,6 +356,7 @@ export default class ViewProvider {
     }
   }
 
+  // get the center point offset
   getViewOffset(): Point {
     const bounds = this.layout.bounds;
     console.log(
