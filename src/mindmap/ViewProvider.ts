@@ -78,14 +78,18 @@ export default class ViewProvider {
       this.show();
     });
     // when the element lost focus.
-    this.mcnodes.addEventListener("blur", (e: FocusEvent) => {
-      const el = e.target as HTMLElement;
-      if (el.tagName != "mcnode") {
-        return;
-      }
+    this.mcnodes.addEventListener(
+      "blur",
+      (e: FocusEvent) => {
+        const el = e.target as HTMLElement;
+        if (el.tagName.toLowerCase() != "mcnode") {
+          return;
+        }
 
-      this.editNodeEnd();
-    });
+        this.editNodeEnd();
+      },
+      true
+    );
 
     this.mindCheeseInnerElement = document.createElement("div");
     this.mindCheeseInnerElement.className = "mindcheese-inner";
@@ -270,10 +274,6 @@ export default class ViewProvider {
     const element: HTMLElement = node.data.view.element;
     element.contentEditable = "true";
     element.innerText = node.topic;
-    if (element.getAttribute("mc-initialized") !== "done") {
-      element.addEventListener("blur", () => this.editNodeEnd());
-      element.setAttribute("mc-initialized", "done");
-    }
     node.data.view.width = element.clientWidth;
 
     // https://stackoverflow.com/questions/6139107/programmatically-select-text-in-a-contenteditable-html-element
