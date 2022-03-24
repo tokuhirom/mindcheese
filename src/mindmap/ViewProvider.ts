@@ -1,10 +1,10 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, { Point } from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import LayoutProvider, {Point} from "./LayoutProvider";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -109,6 +109,7 @@ export default class ViewProvider {
     console.debug("view.init");
     container.appendChild(this.mindCheeseInnerElement);
   }
+
   getBindedNodeId(element: HTMLElement): string | null {
     if (element == null) {
       return null;
@@ -145,7 +146,7 @@ export default class ViewProvider {
     }
   }
 
-  load(): void {
+  createNodes() {
     const nodes = this.mindCheese.mind.nodes;
 
     const documentFragment = document.createDocumentFragment();
@@ -153,6 +154,10 @@ export default class ViewProvider {
       this.createNodeElement(node, documentFragment);
     }
     this.mcnodes.appendChild(documentFragment);
+  }
+
+  cacheNodeSize() {
+    const nodes = this.mindCheese.mind.nodes;
 
     for (const node of Object.values(nodes)) {
       ViewProvider.initNodeSize(node);
@@ -265,10 +270,10 @@ export default class ViewProvider {
       console.debug("select_node! right adjust");
       panelEl.scrollLeft = Math.max(
         panelEl.scrollLeft +
-          (nodeEl.offsetLeft +
-            nodeEl.clientWidth +
-            30 -
-            (panelEl.scrollLeft + panelEl.clientWidth)),
+        (nodeEl.offsetLeft +
+          nodeEl.clientWidth +
+          30 -
+          (panelEl.scrollLeft + panelEl.clientWidth)),
         0
       );
     }
@@ -283,10 +288,10 @@ export default class ViewProvider {
       console.debug("select_node! bottom adjust");
       panelEl.scrollTop = Math.max(
         panelEl.scrollTop +
-          (nodeEl.offsetTop +
-            nodeEl.clientHeight +
-            30 -
-            (panelEl.scrollTop + panelEl.clientHeight)),
+        (nodeEl.offsetTop +
+          nodeEl.clientHeight +
+          30 -
+          (panelEl.scrollTop + panelEl.clientHeight)),
         0
       );
     }
@@ -409,9 +414,9 @@ export default class ViewProvider {
     const viewData = node.data.view;
     return new Point(
       parseInt(viewData.element.style.left) -
-        this.mindCheeseInnerElement.scrollLeft,
+      this.mindCheeseInnerElement.scrollLeft,
       parseInt(viewData.element.style.top) -
-        this.mindCheeseInnerElement.scrollTop
+      this.mindCheeseInnerElement.scrollTop
     );
   }
 
@@ -499,7 +504,7 @@ export default class ViewProvider {
         const pin: Point = this.layout.getNodePointIn(node);
         const pout = new Point(
           pin.x -
-            node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
+          node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
           pin.y
         );
         this.graph.drawLine(pout, pin, offset, node.color, "butt");
