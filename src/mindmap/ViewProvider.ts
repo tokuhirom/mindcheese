@@ -69,13 +69,11 @@ export default class ViewProvider {
     });
     // adjust size dynamically.
     this.mcnodes.addEventListener("keyup", () => {
-      this.layout.layout();
-      this.show();
+      this.layoutAgain();
     });
     this.mcnodes.addEventListener("input", () => {
       // TODO is this required?
-      this.layout.layout();
-      this.show();
+      this.layoutAgain();
     });
     // when the element lost focus.
     this.mcnodes.addEventListener(
@@ -161,7 +159,7 @@ export default class ViewProvider {
     }
   }
 
-  expandSize(): void {
+  private expandSize(): void {
     const minSize = this.layout.getMinSize();
     const minWidth = minSize.w + this.hMargin * 2;
     const minHeight = minSize.h + this.vMargin * 2;
@@ -330,8 +328,7 @@ export default class ViewProvider {
     selectElementContents(element);
     element.focus();
 
-    this.layout.layout();
-    this.show();
+    this.layoutAgain();
   }
 
   editNodeEnd(): void {
@@ -351,8 +348,7 @@ export default class ViewProvider {
         console.debug("Calling updateNode");
         element.innerHTML = this.textFormatter.render(node.topic);
         node.data.view.width = element.clientWidth;
-        this.layout.layout();
-        this.show();
+        this.layoutAgain();
       } else {
         console.debug("Calling updateNode");
         this.mindCheese.updateNode(node.id, topic);
@@ -375,8 +371,7 @@ export default class ViewProvider {
     this.mcnodes.style.width = "1px";
     this.mcnodes.style.height = "1px";
 
-    this.expandSize();
-    this.doShow();
+    this.layoutAgain();
   }
 
   private doShow(): void {
@@ -402,8 +397,8 @@ export default class ViewProvider {
     }
   }
 
-  show(): void {
-    console.debug("view.show");
+  layoutAgain(): void {
+    this.layout.layout();
     this.expandSize();
     this.doShow();
   }
@@ -455,7 +450,6 @@ export default class ViewProvider {
       }
       const p = this.layout.getNodePoint(node);
       viewData.location = new Point(offset.x + p.x, offset.y + p.y);
-      console.debug(`NNN node=${node.id} offset.x=${offset.x} p.x=${p.x}`);
       nodeElement.style.left = offset.x + p.x + "px";
       nodeElement.style.top = offset.y + p.y + "px";
       nodeElement.style.display = "";

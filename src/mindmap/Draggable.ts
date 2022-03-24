@@ -49,7 +49,7 @@ export default class Draggable {
   private readonly mindCheese: MindCheese;
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
-  private readonly shadow: HTMLElement;
+  private readonly shadow: HTMLElement; // <mcnode>
   private shadowW: number;
   private shadowH: number;
   private activeNode: MindNode;

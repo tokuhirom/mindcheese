@@ -212,7 +212,7 @@ export default class MindCheese {
     }
     const location = this.view.takeLocation(node);
     this.layout.toggleNode(node);
-    this.view.show();
+    this.view.layoutAgain();
     this.view.restoreLocation(node, location);
   }
 
@@ -222,8 +222,7 @@ export default class MindCheese {
     }
     const location = this.view.takeLocation(node);
     node.expanded = true;
-    this.layout.layout();
-    this.view.show();
+    this.view.layoutAgain();
     this.view.restoreLocation(node, location);
   }
 
@@ -236,8 +235,7 @@ export default class MindCheese {
     this.mind = mind;
 
     this.view.load();
-    this.layout.layout();
-    this.view.show();
+    this.view.layoutAgain();
     this.view.centerRoot();
   }
 
@@ -276,8 +274,7 @@ export default class MindCheese {
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null, true);
     if (node) {
       this.view.addNode(node);
-      this.layout.layout();
-      this.view.show();
+      this.view.layoutAgain();
       this.expandNode(parentNode);
     }
     return node;
@@ -294,8 +291,7 @@ export default class MindCheese {
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
     this.view.addNode(node);
-    this.layout.layout();
-    this.view.show();
+    this.view.layoutAgain();
     return node;
   }
 
@@ -316,8 +312,7 @@ export default class MindCheese {
     const location = this.view.takeLocation(node);
     this.view.removeNode(node);
     this.mind.removeNode(node);
-    this.layout.layout();
-    this.view.show();
+    this.view.layoutAgain();
     if (parentNode.children.length > 0) {
       this.mind.selected = nextSelectedNode;
       this.view.selectNode(nextSelectedNode);
@@ -364,8 +359,7 @@ export default class MindCheese {
     }
     node.topic = topic;
     this.view.updateNode(node);
-    this.layout.layout();
-    this.view.show();
+    this.view.layoutAgain();
   }
 
   /**
@@ -388,8 +382,7 @@ export default class MindCheese {
     this.undoManager.recordSnapshot();
     this.mind.moveNode(node, beforeid, parent, direction);
     this.view.updateNode(node);
-    this.layout.layout();
-    this.view.show();
+    this.view.layoutAgain();
   }
 
   selectNode(node: MindNode): void {

@@ -1,9 +1,9 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import {Size} from "./Size";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -228,7 +228,6 @@ export default class LayoutProvider {
 
     node.expanded = !node.expanded;
     this.layout();
-    this.setVisibleRecursively(this.mindCheese.mind.root, true);
   }
 
   private setVisibleRecursively(node: MindNode, visible: boolean) {
