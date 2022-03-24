@@ -63,6 +63,8 @@ export default class LayoutProvider {
     rootNode.data.layout.offsetX = 0;
     rootNode.data.layout.offsetY = 0;
 
+    this.setVisibleRecursively(rootNode, true);
+
     const outerHeightLeft = this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.LEFT)
     );
@@ -97,10 +99,6 @@ export default class LayoutProvider {
           node.data.view.height,
           node.expanded ? childrenHeight : 0
         );
-        if (!node.expanded) {
-          // TODO split the non-related tasks.
-          this.setVisible(node.children, false);
-        }
         layoutData.offsetY = baseY + nodeOuterHeight / 2;
         layoutData.offsetX =
           this.hSpace * node.direction +
@@ -237,19 +235,16 @@ export default class LayoutProvider {
 
     node.expanded = !node.expanded;
     this.layout();
-    this.setVisible(node.children, node.expanded);
+    this.setVisibleRecursively(this.mindCheese.mind.root, true);
   }
 
-  setVisible(nodes: MindNode[], visible: boolean): void {
-    for (let i = 0, l = nodes.length; i < l; i++) {
-      const node = nodes[i];
-      if (node.expanded) {
-        this.setVisible(node.children, visible);
+  private setVisibleRecursively(node: MindNode, visible: boolean) {
+    node.data.layout.visible = visible;
+    for (let i = 0, l = node.children.length; i < l; i++) {
+      if (!visible) {
+        this.setVisibleRecursively(node.children[i], false);
       } else {
-        this.setVisible(node.children, false);
-      }
-      if (!node.isroot) {
-        node.data.layout.visible = visible;
+        this.setVisibleRecursively(node.children[i], node.expanded);
       }
     }
   }
