@@ -247,6 +247,7 @@ export default class ViewProvider {
     if (node) {
       this.selectedNode = node;
       node.data.view.element.classList.add("selected");
+      // Note: scrollIntoView is not the best method.
       this.adjustScrollBar(node);
     }
   }
@@ -255,28 +256,6 @@ export default class ViewProvider {
   adjustScrollBar(node: MindNode): void {
     const nodeEl = node.data.view.element;
     const panelEl = this.mindCheeseInnerElement;
-    // console.debug(`select_node!
-    // panelEl.scrollLeft=${panelEl.scrollLeft}
-    // panelEl.clientWidth=${panelEl.clientWidth}
-    // e_panel.sL+cW=${panelEl.scrollLeft+panelEl.clientWidth}
-    // node.offsetLeft=${nodeEl.offsetLeft}
-    // node.clientWidth=${nodeEl.clientWidth}
-    // node.oL+cW=${nodeEl.offsetLeft+nodeEl.clientWidth}
-    //
-    // panelEl.scrollTop=${panelEl.scrollTop}
-    // panelEl.clientHeight=${panelEl.clientHeight}
-    // panelEl.offsetHeight=${panelEl.offsetHeight}
-    // panelEl.scrollHeight=${panelEl.scrollHeight}
-    // panelEl.getBoundingClientRect().top=${panelEl.getBoundingClientRect().top}
-    // panelEl.getBoundingClientRect().y=${panelEl.getBoundingClientRect().y}
-    // panelEl.getBoundingClientRect().height=${panelEl.getBoundingClientRect().height}
-    // getComputedStyle(panelEl).height=${getComputedStyle(panelEl).height}
-    // getComputedStyle(panelEl).maxHeight=${getComputedStyle(panelEl).maxHeight}
-    // e_panel.sT+cH=${panelEl.scrollTop+panelEl.clientHeight}
-    // node.offsetTop=${nodeEl.offsetTop}
-    // node.clientHeight=${nodeEl.clientHeight}
-    // node.oT+cH=${nodeEl.offsetTop+nodeEl.clientHeight}
-    // `);
     if (panelEl.scrollLeft > nodeEl.offsetLeft) {
       console.debug(`select_node! left adjust`);
       panelEl.scrollLeft = Math.max(nodeEl.offsetLeft - 10, 0);
