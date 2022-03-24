@@ -116,12 +116,14 @@ export default class MindCheese {
       "wheel",
       (e) => {
         if (e.ctrlKey) {
+          e.stopPropagation();
+          e.preventDefault();
           if (e.deltaY > 0) {
             this.zoomScale -= 0.1;
           } else {
             this.zoomScale += 0.1;
           }
-          this.zoomScale = Math.max(Math.max(this.zoomScale, 0.2), 20);
+          this.zoomScale = Math.min(Math.max(this.zoomScale, 0.2), 20);
           this.zoom(this.zoomScale);
         }
       },
@@ -196,6 +198,7 @@ export default class MindCheese {
   }
 
   zoom(n: number): void {
+    console.log(`set zoom scale to ${n}`);
     this.view.mindCheeseInnerElement.style.transform = `scale(${n})`;
   }
 
