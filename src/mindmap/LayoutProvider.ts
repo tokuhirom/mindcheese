@@ -56,8 +56,6 @@ export default class LayoutProvider {
     rootNode.data.layout.offsetX = 0;
     rootNode.data.layout.offsetY = 0;
 
-    this.setVisibleRecursively(rootNode, true);
-
     const outerHeightLeft = this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.LEFT)
     );
@@ -227,10 +225,9 @@ export default class LayoutProvider {
     }
 
     node.expanded = !node.expanded;
-    this.layout();
   }
 
-  private setVisibleRecursively(node: MindNode, visible: boolean) {
+  setVisibleRecursively(node: MindNode, visible: boolean) {
     node.data.layout.visible = visible;
     for (let i = 0, l = node.children.length; i < l; i++) {
       if (!visible) {

@@ -398,6 +398,7 @@ export default class ViewProvider {
   }
 
   layoutAgain(): void {
+    this.layout.setVisibleRecursively(this.mindCheese.mind.root, true);
     this.layout.layout();
     this.expandSize();
     this.doShow();
