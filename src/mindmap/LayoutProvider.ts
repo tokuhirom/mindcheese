@@ -1,9 +1,9 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import { Size } from "./Size";
+import {Size} from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -52,14 +52,7 @@ export default class LayoutProvider {
   }
 
   layout(): void {
-    console.debug("layout.layout");
-    this.mindCheese.mind.root.direction = Direction.CENTER;
-    this.layoutOffset();
-  }
-
-  layoutOffset(): void {
     const rootNode = this.mindCheese.mind.root;
-
     rootNode.data.layout.offsetX = 0;
     rootNode.data.layout.offsetY = 0;
 
