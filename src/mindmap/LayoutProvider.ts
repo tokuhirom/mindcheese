@@ -1,9 +1,9 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import { Size } from "./Size";
+import {Size} from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -15,9 +15,29 @@ export class Point {
   readonly y: number;
 }
 
+export class Bounds {
+  constructor(n: number, e: number, w: number, s: number) {
+    this.n = n;
+    this.e = e;
+    this.w = w;
+    this.s = s;
+  }
+
+  size(): Size {
+    return new Size(
+      this.e + (this.w * -1),
+      this.s + (this.n * -1)
+    );
+  }
+
+  readonly n: number;
+  readonly e: number;
+  readonly w: number;
+  readonly s: number;
+}
+
 export default class LayoutProvider {
   private readonly mindCheese: MindCheese;
-  bounds: { n: number; s: number; w: number; e: number };
   private readonly hSpace: number;
   private readonly vSpace: number;
   private readonly pSpace: number;
@@ -43,12 +63,10 @@ export default class LayoutProvider {
     this.pSpace = pspace;
     this.mindCheese = mindCheese;
     this.graphCanvas = graphCanvas;
-    this.bounds = null;
   }
 
   reset(): void {
     console.debug("layout.reset");
-    this.bounds = { n: 0, s: 0, w: 0, e: 0 };
   }
 
   layout(): void {
@@ -56,20 +74,12 @@ export default class LayoutProvider {
     rootNode.data.layout.offsetX = 0;
     rootNode.data.layout.offsetY = 0;
 
-    const outerHeightLeft = this.layoutOffsetSubNodes(
+    this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.LEFT)
     );
-    const outerHeightRight = this.layoutOffsetSubNodes(
+    this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.RIGHT)
     );
-
-    console.debug(
-      `layoutOffset: rootNode.data.view.width=${rootNode.data.view.width} outerHeightLeft=${outerHeightLeft} outerHeightRight=${outerHeightRight}`
-    );
-    this.bounds.e = rootNode.data.view.width / 2;
-    this.bounds.w = 0 - this.bounds.e;
-    this.bounds.n = 0;
-    this.bounds.s = Math.max(outerHeightLeft, outerHeightRight);
   }
 
   // layout both the x and y axis
@@ -95,7 +105,7 @@ export default class LayoutProvider {
           this.hSpace * node.direction +
           (node.parent.data.view.width *
             (node.parent.direction + node.direction)) /
-            2;
+          2;
         if (!node.parent.isroot) {
           layoutData.offsetX += this.pSpace * node.direction;
         }
@@ -133,11 +143,10 @@ export default class LayoutProvider {
       x += offsetPoint.x;
       y += offsetPoint.y;
     }
-    if (isNaN(layoutData.offsetX)) {
-      console.log(`getNodeOffset: node=${node.topic} x=${layoutData.offsetX}`);
-    }
+    y += node.isroot ? 0 : node.data.view.height / 2;
+    console.log(`getNodeOffset: node=${node.id} x=${x} y=${y}`);
 
-    return new Point(x, y + (node.isroot ? 0 : node.data.view.height / 2));
+    return new Point(x, y);
   }
 
   getNodePoint(node: MindNode): Point {
@@ -161,10 +170,27 @@ export default class LayoutProvider {
     return this.getNodeOffset(node);
   }
 
+  // x is outer side.
+  // y is bottom.
+  /*
+   * ┌────────┐                       ┌──────────┐
+   * │        │                       │          │
+   * └────────┘xxx                  xx└──────────┘
+   *           ▲ xx               xxx▲
+   *           │  xxx  ┌────────┐ x  │
+   *           │    xxx│  Root  │xx  │
+   *           │       └────────┘    │
+   *           │                     │
+   *           │                     │
+   *                                 │
+   */
   getNodePointOut(node: MindNode): Point {
     if (node.isroot) {
       return new Point(0, 0);
     } else {
+      // at left side, west edge.
+      // at right side, east edge.
+      // bottom of the rectangle.
       const offsetPoint = this.getNodeOffset(node);
       const x =
         offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
@@ -194,29 +220,41 @@ export default class LayoutProvider {
 
   getExpanderPoint(node: MindNode): Point {
     const p = this.getNodePointOut(node);
-    let x: number;
-    if (node.direction == Direction.RIGHT) {
-      x = p.x - this.pSpace;
-    } else {
-      x = p.x;
-    }
+    const x = node.direction == Direction.RIGHT
+      ? p.x - this.pSpace
+      : p.x;
     const y = p.y - Math.ceil(this.pSpace / 2);
     return new Point(x, y);
   }
 
-  getMinSize(): Size {
+  getBounds(): Bounds {
     const nodes = this.mindCheese.mind.nodes;
+    let n = 0;
+    let e = 0;
+    let w = 0;
+    let s = 0;
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
-      const pout = this.getNodePointOut(node);
-      console.debug(`getMinSize: pout.x=${pout.x}`);
-      this.bounds.e = Math.max(pout.x, this.bounds.e);
-      this.bounds.w = Math.min(pout.x, this.bounds.w);
+      if (node.data.layout.visible) {
+        const pout = this.getNodePointOut(node);
+        console.log(`getMinSize: id=${node.id}, x=${pout.x}, y=${pout.y}`)
+        e = Math.max(pout.x, e);
+        w = Math.min(pout.x, w);
+        if (!node.isroot) {
+          // pout.y is bottom of the node.
+          n = Math.min(
+            pout.y - node.data.view.height,
+            n
+          );
+          s = Math.max(
+            pout.y + node.data.view.height,
+            s
+          );
+        }
+      }
     }
-    return new Size(
-      this.bounds.e - this.bounds.w,
-      this.bounds.s - this.bounds.n
-    );
+    console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`)
+    return new Bounds(n, e, w, s);
   }
 
   toggleNode(node: MindNode): void {
