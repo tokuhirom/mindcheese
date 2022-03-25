@@ -24,10 +24,7 @@ export class Bounds {
   }
 
   size(): Size {
-    return new Size(
-      this.e + (this.w * -1),
-      this.s + (this.n * -1)
-    );
+    return new Size(this.e + this.w * -1, this.s + this.n * -1);
   }
 
   readonly n: number;
@@ -103,9 +100,7 @@ export default class LayoutProvider {
         layoutData.offsetY = baseY + nodeOuterHeight / 2;
         layoutData.offsetX =
           this.hSpace * node.direction +
-          (node.parent.data.view.width *
-            (node.parent.direction + node.direction)) /
-          2;
+          (node.parent.data.view.width * (node.parent.direction + node.direction)) / 2;
         if (!node.parent.isroot) {
           layoutData.offsetX += this.pSpace * node.direction;
         }
@@ -220,9 +215,7 @@ export default class LayoutProvider {
 
   getExpanderPoint(node: MindNode): Point {
     const p = this.getNodePointOut(node);
-    const x = node.direction == Direction.RIGHT
-      ? p.x - this.pSpace
-      : p.x;
+    const x = node.direction == Direction.RIGHT ? p.x - this.pSpace : p.x;
     const y = p.y - Math.ceil(this.pSpace / 2);
     return new Point(x, y);
   }
@@ -237,23 +230,17 @@ export default class LayoutProvider {
       const node = nodes[nodeid];
       if (node.data.layout.visible) {
         const pout = this.getNodePointOut(node);
-        console.log(`getMinSize: id=${node.id}, x=${pout.x}, y=${pout.y}`)
+        console.log(`getMinSize: id=${node.id}, x=${pout.x}, y=${pout.y}`);
         e = Math.max(pout.x, e);
         w = Math.min(pout.x, w);
         if (!node.isroot) {
           // pout.y is bottom of the node.
-          n = Math.min(
-            pout.y - node.data.view.height,
-            n
-          );
-          s = Math.max(
-            pout.y + node.data.view.height,
-            s
-          );
+          n = Math.min(pout.y - node.data.view.height, n);
+          s = Math.max(pout.y + node.data.view.height, s);
         }
       }
     }
-    console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`)
+    console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
     return new Bounds(n, e, w, s);
   }
 
