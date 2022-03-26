@@ -196,7 +196,7 @@ export default class LayoutProvider {
   /**
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointout.png?raw=true
    */
-  getNodePointOutWithDestination(
+  getNodePointOut(
     node: MindNode,
     destination: MindNode
   ): CenterOfNodeOffsetFromRootNode {
