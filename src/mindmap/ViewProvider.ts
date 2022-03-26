@@ -1,13 +1,13 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
   OffsetFromTopLeftOfMcnodes,
   Point,
 } from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -18,8 +18,8 @@ export default class ViewProvider {
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   readonly mcnodes: HTMLElement; // <mcnodes>
   size: Size;
-  private selectedNode: MindNode;
-  private editingNode: MindNode;
+  private selectedNode: MindNode | null;
+  private editingNode: MindNode | null;
   private readonly graph: GraphCanvas;
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
@@ -124,7 +124,7 @@ export default class ViewProvider {
     if (tagName === "mcnode" || tagName === "mcexpander") {
       return element.getAttribute("nodeid");
     } else {
-      return this.getBindedNodeId(element.parentElement);
+      return this.getBindedNodeId(element.parentElement!);
     }
   }
 
@@ -143,9 +143,9 @@ export default class ViewProvider {
   resetTheme(): void {
     const themeName = this.mindCheese.options.theme;
     if (themeName) {
-      this.mcnodes.parentElement.className = "theme-" + themeName;
+      this.mcnodes.parentElement!.className = "theme-" + themeName;
     } else {
-      this.mcnodes.parentElement.className = "";
+      this.mcnodes.parentElement!.className = "";
     }
   }
 
@@ -184,8 +184,8 @@ export default class ViewProvider {
 
   private static initNodeSize(node: MindNode): void {
     const viewData = node.data.view;
-    viewData.width = viewData.element.clientWidth;
-    viewData.height = viewData.element.clientHeight;
+    viewData.width = viewData.element!.clientWidth;
+    viewData.height = viewData.element!.clientHeight;
   }
 
   addNode(node: MindNode): void {
@@ -220,15 +220,15 @@ export default class ViewProvider {
       this.selectedNode = null;
     }
     if (this.editingNode != null && this.editingNode.id == node.id) {
-      node.data.view.element.contentEditable = "false";
+      node.data.view.element!.contentEditable = "false";
       this.editingNode = null;
     }
     for (let i = 0, l = node.children.length; i < l; i++) {
       this.removeNode(node.children[i]);
     }
     if (node.data.view) {
-      const element = node.data.view.element;
-      const expander = node.data.view.expander;
+      const element = node.data.view.element!;
+      const expander = node.data.view.expander!;
       this.mcnodes.removeChild(element);
       this.mcnodes.removeChild(expander);
       node.data.view.element = null;
@@ -238,7 +238,7 @@ export default class ViewProvider {
 
   updateNode(node: MindNode): void {
     const viewData = node.data.view;
-    const element = viewData.element;
+    const element = viewData.element!;
     if (node.topic) {
       element.innerHTML = this.textFormatter.render(node.topic);
     }
@@ -246,14 +246,18 @@ export default class ViewProvider {
     viewData.height = element.clientHeight;
   }
 
-  selectNode(node: MindNode): void {
+  private _selectClear(): void {
     if (this.selectedNode) {
-      const el = this.selectedNode.data.view.element;
+      const el = this.selectedNode.data.view.element!;
       el.classList.remove("selected");
     }
+  }
+
+  selectNode(node: MindNode | null): void {
+    this._selectClear();
     if (node) {
       this.selectedNode = node;
-      node.data.view.element.classList.add("selected");
+      node.data.view.element!.classList.add("selected");
       // Note: scrollIntoView is not the best method.
       this.adjustScrollBar(node);
     }
@@ -261,7 +265,7 @@ export default class ViewProvider {
 
   // Adjust the scroll bar. show node in the browser.
   adjustScrollBar(node: MindNode): void {
-    const nodeEl = node.data.view.element;
+    const nodeEl = node.data.view.element!;
     const panelEl = this.mindCheeseInnerElement;
     if (panelEl.scrollLeft > nodeEl.offsetLeft) {
       console.debug(`select_node! left adjust`);
@@ -274,10 +278,10 @@ export default class ViewProvider {
       console.debug("select_node! right adjust");
       panelEl.scrollLeft = Math.max(
         panelEl.scrollLeft +
-          (nodeEl.offsetLeft +
-            nodeEl.clientWidth +
-            30 -
-            (panelEl.scrollLeft + panelEl.clientWidth)),
+        (nodeEl.offsetLeft +
+          nodeEl.clientWidth +
+          30 -
+          (panelEl.scrollLeft + panelEl.clientWidth)),
         0
       );
     }
@@ -292,17 +296,17 @@ export default class ViewProvider {
       console.debug("select_node! bottom adjust");
       panelEl.scrollTop = Math.max(
         panelEl.scrollTop +
-          (nodeEl.offsetTop +
-            nodeEl.clientHeight +
-            30 -
-            (panelEl.scrollTop + panelEl.clientHeight)),
+        (nodeEl.offsetTop +
+          nodeEl.clientHeight +
+          30 -
+          (panelEl.scrollTop + panelEl.clientHeight)),
         0
       );
     }
   }
 
   selectClear(): void {
-    this.selectNode(null);
+    this._selectClear();
   }
 
   isEditing(): boolean {
@@ -320,7 +324,7 @@ export default class ViewProvider {
     console.log("editNodeBegin");
     this.editingNode = node;
 
-    const element: HTMLElement = node.data.view.element;
+    const element = node.data.view.element!;
     element.contentEditable = "true";
     element.innerText = node.topic;
     node.data.view.width = element.clientWidth;
@@ -329,7 +333,7 @@ export default class ViewProvider {
     function selectElementContents(el: HTMLElement) {
       const range = document.createRange();
       range.selectNodeContents(el);
-      const sel = window.getSelection();
+      const sel = window.getSelection()!;
       sel.removeAllRanges();
       sel.addRange(range);
     }
@@ -346,7 +350,7 @@ export default class ViewProvider {
       const node = this.editingNode;
       this.editingNode = null;
 
-      const element = node.data.view.element;
+      const element = node.data.view.element!;
       element.contentEditable = "false";
       const topic = element.innerText;
       if (
@@ -371,9 +375,9 @@ export default class ViewProvider {
     console.log(
       `getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`
     );
-    const x = -bounds.w + this.mindCheese.mind.root.data.view.width / 2;
+    const x = -bounds.w + this.mindCheese.mind.root!.data.view.width / 2;
     // const x = (this.size.w - bounds.e - bounds.w) / 2;
-    const y = -bounds.n + this.mindCheese.mind.root.data.view.height / 2;
+    const y = -bounds.n + this.mindCheese.mind.root!.data.view.height / 2;
     return new OffsetFromTopLeftOfMcnodes(x, y);
   }
 
@@ -388,8 +392,8 @@ export default class ViewProvider {
   private doShow(): void {
     console.log(`doShow: ${this.size.w} ${this.size.h}`);
     this.graph.setSize(this.size.w, this.size.h);
-    this.mcnodes.parentElement.style.width = this.size.w + "px";
-    this.mcnodes.parentElement.style.height = this.size.h + "px";
+    this.mcnodes.parentElement!.style.width = this.size.w + "px";
+    this.mcnodes.parentElement!.style.height = this.size.h + "px";
     this.showNodes();
     this.showLines();
     this.mindCheese.draggable.resize();
@@ -409,7 +413,7 @@ export default class ViewProvider {
   }
 
   layoutAgain(): void {
-    this.layout.setVisibleRecursively(this.mindCheese.mind.root, true);
+    this.layout.setVisibleRecursively(this.mindCheese.mind.root!, true);
     this.layout.layout();
     this.expandSize();
     this.doShow();
@@ -418,19 +422,19 @@ export default class ViewProvider {
   takeLocation(node: MindNode): Point {
     const viewData = node.data.view;
     return new Point(
-      parseInt(viewData.element.style.left) -
-        this.mindCheeseInnerElement.scrollLeft,
-      parseInt(viewData.element.style.top) -
-        this.mindCheeseInnerElement.scrollTop
+      parseInt(viewData.element!.style.left) -
+      this.mindCheeseInnerElement.scrollLeft,
+      parseInt(viewData.element!.style.top) -
+      this.mindCheeseInnerElement.scrollTop
     );
   }
 
   restoreLocation(node: MindNode, location: Point): void {
     const viewData = node.data.view;
     this.mindCheeseInnerElement.scrollLeft =
-      parseInt(viewData.element.style.left) - location.x;
+      parseInt(viewData.element!.style.left) - location.x;
     this.mindCheeseInnerElement.scrollTop =
-      parseInt(viewData.element.style.top) - location.y;
+      parseInt(viewData.element!.style.top) - location.y;
   }
 
   clearNodes(): void {
@@ -453,8 +457,8 @@ export default class ViewProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       const viewData = node.data.view;
-      const nodeElement = viewData.element;
-      const expander = viewData.expander;
+      const nodeElement = viewData.element!;
+      const expander = viewData.expander!;
       if (!node.data.layout.visible) {
         nodeElement.style.display = "none";
         expander.style.display = "none";
@@ -499,20 +503,20 @@ export default class ViewProvider {
         // Draw line between previous node and next node
         const pin = this.layout.getNodePointIn(node);
         const pout = this.layout.getNodePointOutWithDestination(
-          node.parent,
+          node.parent!,
           node
         );
-        this.graph.drawLine(pout, pin, offset, node.color, "round");
+        this.graph.drawLine(pout, pin, offset, node.color!, "round");
       }
       {
         // Draw line under the bottom of the node
         const pin: Point = this.layout.getNodePointIn(node);
         const pout = new Point(
           pin.x -
-            node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
+          node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
           pin.y
         );
-        this.graph.drawLine(pout, pin, offset, node.color, "butt");
+        this.graph.drawLine(pout, pin, offset, node.color!, "butt");
       }
     }
   }

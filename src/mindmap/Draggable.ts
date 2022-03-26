@@ -15,8 +15,8 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./model/MindNode";
-import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
-import { Point } from "./LayoutProvider";
+import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
+import {Point} from "./LayoutProvider";
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -52,9 +52,9 @@ export default class Draggable {
   private readonly shadow: HTMLElement; // <mcnode>
   private shadowW: number;
   private shadowH: number;
-  private activeNode: MindNode;
-  private targetNode: MindNode;
-  private targetDirect: Direction;
+  private activeNode: MindNode | null;
+  private targetNode: MindNode | null;
+  private targetDirect: Direction | null;
   private clientW: number;
   private clientH: number;
   private offsetX: number;
@@ -63,8 +63,8 @@ export default class Draggable {
   private hlookupTimer: number;
   private capture: boolean;
   private moved: boolean;
-  private clientHW: number;
-  private clientHH: number;
+  private clientHW: number = 0;
+  private clientHH: number = 0;
   private readonly lineWidth = 5;
   private readonly lookupDelay = 500;
   private readonly lookupInterval = 80;
@@ -73,7 +73,7 @@ export default class Draggable {
     this.mindCheese = mindCheese;
     this.canvasElement = Draggable.createCanvas();
     this.mindCheese.view.mindCheeseInnerElement.appendChild(this.canvasElement);
-    this.canvasContext = this.canvasElement.getContext("2d");
+    this.canvasContext = this.canvasElement.getContext("2d")!;
     this.shadow = Draggable.createShadow();
     this.shadowW = 0;
     this.shadowH = 0;
@@ -171,7 +171,7 @@ export default class Draggable {
   }
 
   private doLookupCloseNode(): ClosePoint | null {
-    const root = this.mindCheese.getRoot();
+    const root = this.mindCheese.getRoot()!;
     const rootLocation = root.data.view.location;
     const rootSize = root.getSize();
     const rootX = rootLocation.x + rootSize.w / 2;
@@ -185,14 +185,14 @@ export default class Draggable {
     const nodes = this.mindCheese.mind.nodes;
     let minDistance = Number.MAX_VALUE;
     let closestNode = null;
-    let closestPoint: Point = null;
-    let shadowPoint: Point = null;
+    let closestPoint: Point | null = null;
+    let shadowPoint: Point | null = null;
     for (const nodeid in nodes) {
       let np, sp;
       const node = nodes[nodeid];
       let distance = 0;
       if (node.isroot || node.direction == direct) {
-        if (node.id == this.activeNode.id) {
+        if (node.id == this.activeNode!.id) {
           continue;
         }
         const ns = node.getSize();
@@ -208,7 +208,7 @@ export default class Draggable {
             x: nl.x + ns.w - this.lineWidth,
             y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
           };
-          sp = { x: sx + this.lineWidth, y: sy + sh };
+          sp = {x: sx + this.lineWidth, y: sy + sh};
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
@@ -219,7 +219,7 @@ export default class Draggable {
             x: nl.x + this.lineWidth,
             y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
           };
-          sp = { x: sx + sw - this.lineWidth, y: sy + sh };
+          sp = {x: sx + sw - this.lineWidth, y: sy + sh};
         }
         if (distance < minDistance) {
           closestNode = node;
@@ -230,7 +230,7 @@ export default class Draggable {
       }
     }
     if (closestNode) {
-      return new ClosePoint(closestNode, direct, shadowPoint, closestPoint);
+      return new ClosePoint(closestNode, direct, shadowPoint!, closestPoint!);
     } else {
       return null;
     }
@@ -268,7 +268,7 @@ export default class Draggable {
             this.mindCheese.dblclickHandle(e);
           }
         },
-        { passive: true }
+        {passive: true}
       );
     }
     container.addEventListener("touchmove", this.drag.bind(this), {
@@ -278,7 +278,7 @@ export default class Draggable {
   }
 
   private static findMcnode(htmlElement: HTMLElement): HTMLElement | null {
-    let el = htmlElement;
+    let el: HTMLElement | null = htmlElement;
     while (el) {
       if (el.tagName.toLowerCase() == "mcnode") {
         return el;
@@ -341,7 +341,7 @@ export default class Draggable {
       e.preventDefault();
       this.showShadow();
       this.moved = true;
-      window.getSelection().removeAllRanges();
+      window.getSelection()!.removeAllRanges();
       const client = getClientFromEvent(e);
       const px = client.clientX - this.offsetX;
       const py = client.clientY - this.offsetY;
@@ -349,7 +349,7 @@ export default class Draggable {
       // const py = (e.clientY || e.touches[0].clientY) - this.offset_y;
       this.shadow.style.left = px + "px";
       this.shadow.style.top = py + "px";
-      window.getSelection().removeAllRanges();
+      window.getSelection()!.removeAllRanges();
     }
   }
 
@@ -372,7 +372,7 @@ export default class Draggable {
         const srcNode = this.activeNode;
         const targetNode = this.targetNode;
         const targetDirect = this.targetDirect;
-        this.moveNode(srcNode, targetNode, targetDirect);
+        this.moveNode(srcNode!, targetNode!, targetDirect!);
       }
       this.hideShadow();
     }

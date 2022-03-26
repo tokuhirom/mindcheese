@@ -4,13 +4,13 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_LAST, Direction} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import { object2mindmap } from "./format/node_tree/object2mindmap";
-import { MindOption } from "./MindOption";
-import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
-import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
+import {object2mindmap} from "./format/node_tree/object2mindmap";
+import {MindOption} from "./MindOption";
+import {mindmap2markdown} from "./format/markdown/mindmap2markdown";
+import {markdown2mindmap} from "./format/markdown/markdown2mindmap";
 
 export default class MindCheese {
   options: MindOption;
@@ -96,7 +96,7 @@ export default class MindCheese {
 
   setTheme(theme: string): void {
     const themeOld = this.options.theme;
-    this.options.theme = theme ? theme : null;
+    this.options.theme = theme;
     if (themeOld !== this.options.theme) {
       this.view.resetTheme();
     }
@@ -127,7 +127,7 @@ export default class MindCheese {
           this.zoom(this.zoomScale);
         }
       },
-      { passive: true }
+      {passive: true}
     );
     window.addEventListener("resize", () => {
       this.resize();
@@ -177,7 +177,7 @@ export default class MindCheese {
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
       const theNode = this.getNodeById(nodeid);
-      if (theNode.data.view.element.contentEditable == "true") {
+      if (theNode.data.view.element!.contentEditable == "true") {
         // The node is already in the editing mode.
         return false;
       }
@@ -189,6 +189,7 @@ export default class MindCheese {
       this.beginEdit(theNode);
       return false;
     }
+    return true;
   }
 
   beginEdit(node: MindNode): void {
@@ -257,10 +258,10 @@ export default class MindCheese {
   }
 
   getNodeTree(): Record<string, any> {
-    return this.mind.root.toObject();
+    return this.mind.root!.toObject();
   }
 
-  getRoot(): MindNode {
+  getRoot(): MindNode | null {
     return this.mind.root;
   }
 
@@ -304,7 +305,7 @@ export default class MindCheese {
     }
 
     const nodeid = node.id;
-    const parentNode = node.parent;
+    const parentNode = node.parent!;
     this.undoManager.recordSnapshot();
     const nextSelectedNode = MindCheese.findUpperBrotherOrParentNode(
       parentNode,
@@ -394,7 +395,7 @@ export default class MindCheese {
     this.view.selectNode(node);
   }
 
-  getSelectedNode(): MindNode {
+  getSelectedNode(): MindNode | null {
     if (this.mind) {
       return this.mind.selected;
     } else {
@@ -414,8 +415,8 @@ export default class MindCheese {
       return null;
     }
 
-    if (node.parent.isroot) {
-      const children = node.parent.children.filter(
+    if (node.parent!.isroot) {
+      const children = node.parent!.children.filter(
         (it) => it.direction === node.direction
       );
       for (let i = 0; i < children.length; i++) {
@@ -439,8 +440,8 @@ export default class MindCheese {
       return null;
     }
 
-    if (node.parent.isroot) {
-      const children = node.parent.children.filter(
+    if (node.parent!.isroot) {
+      const children = node.parent!.children.filter(
         (it) => it.direction == node.direction
       );
       for (let i = 0; i < children.length; i++) {
@@ -484,13 +485,13 @@ export default class MindCheese {
      */
     const upNode = this.findNodeBefore(node);
     if (upNode) {
-      this.moveNode(node, upNode.id, node.parent, node.direction);
+      this.moveNode(node, upNode.id, node.parent!, node.direction);
       return;
     }
   }
 
   moveDown(node: MindNode) {
-    const children = node.parent.children.filter(
+    const children = node.parent!.children.filter(
       (it) => it.direction === node.direction
     );
     for (let i = 0; i < children.length; i++) {
@@ -511,7 +512,7 @@ export default class MindCheese {
            *     - c = 2
            *     - b = LAST
            */
-          this.moveNode(node, BEFOREID_LAST, node.parent, node.direction);
+          this.moveNode(node, BEFOREID_LAST, node.parent!, node.direction);
           return; // Put on last element.
         } else {
           /*
@@ -532,7 +533,7 @@ export default class MindCheese {
               children[i + 1].topic
             } direction=${node.direction}`
           );
-          this.moveNode(node, children[i + 2].id, node.parent, node.direction);
+          this.moveNode(node, children[i + 2].id, node.parent!, node.direction);
           console.log(this.mind);
           return;
         }

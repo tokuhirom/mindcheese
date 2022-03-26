@@ -49,7 +49,7 @@ const mind = {
 
 test("basic", () => {
   const mindobj = object2mindmap(mind);
-  console.log(JSON.stringify(mindobj.root.toObject(), null, 2));
+  console.log(JSON.stringify(mindobj.root!.toObject(), null, 2));
   const md = mindmap2markdown(mindobj);
   expect(md).toBe(
     [

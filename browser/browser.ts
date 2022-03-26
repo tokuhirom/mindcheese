@@ -21,40 +21,40 @@ function downloadText(filename: string, text: string) {
 
 function initDemo() {
   const container = document.getElementById("container");
-  const mindCheese = new MindCheese(1, container);
+  const mindCheese = new MindCheese(1, container!);
   // @ts-ignore
   this.mindCheese = mindCheese;
   mindCheese.showNodeTree(DEMO_NODE_TREE);
 
-  document.getElementById("download_json").addEventListener("click", () => {
+  document.getElementById("download_json")!.addEventListener("click", () => {
     const data = mindCheese.getNodeTree();
     downloadText(
-      encodeURIComponent(mindCheese.mind.root.topic) + ".json",
+      encodeURIComponent(mindCheese.mind.root!.topic) + ".json",
       JSON.stringify(data, null, 2)
     );
     return false;
   });
-  document.getElementById("download_markdown").addEventListener("click", () => {
+  document.getElementById("download_markdown")!.addEventListener("click", () => {
     const data = mindCheese.getMarkdown();
-    downloadText(encodeURIComponent(mindCheese.mind.root.topic) + ".md", data);
+    downloadText(encodeURIComponent(mindCheese.mind.root!.topic) + ".md", data);
     return false;
   });
-  document.getElementById("undo").addEventListener("click", () => {
+  document.getElementById("undo")!.addEventListener("click", () => {
     mindCheese.undo();
     return false;
   });
 
   if (process.env.BUILD == "development") {
-    document.getElementById("load_markdown").addEventListener("click", () => {
+    document.getElementById("load_markdown")!.addEventListener("click", () => {
       mindCheese.showMarkdown(DEMO_MARKDOWN);
       return false;
     });
   } else {
-    document.getElementById("navItemDebug").style.display = "none";
+    document.getElementById("navItemDebug")!.style.display = "none";
   }
 
   let themeMode = true;
-  document.getElementById("toggle_theme").addEventListener("click", () => {
+  document.getElementById("toggle_theme")!.addEventListener("click", () => {
     mindCheese.setTheme(themeMode ? "dark" : "primary");
     themeMode = !themeMode;
     return false;

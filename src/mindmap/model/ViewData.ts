@@ -1,11 +1,11 @@
-import { Point } from "../LayoutProvider";
+import {Point} from "../LayoutProvider";
 
 export class ViewData {
-  element: HTMLElement;
-  expander: HTMLElement;
+  element: HTMLElement | null = null;
+  expander: HTMLElement | null = null;
 
-  width: number;
-  height: number;
+  width: number = 0;
+  height: number = 0;
 
-  location: Point;
+  location: Point = new Point(0, 0);
 }

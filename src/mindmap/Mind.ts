@@ -1,9 +1,9 @@
 import MindNode from "./model/MindNode";
-import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
 
 export default class Mind {
-  root: MindNode;
-  selected: MindNode;
+  root: MindNode | null;
+  selected: MindNode | null;
   readonly nodes: Record<string, MindNode>;
 
   constructor() {
@@ -25,7 +25,7 @@ export default class Mind {
       throw new Error("root node is already exist");
     }
 
-    this.root = new MindNode(nodeid, 0, topic, true, null, null, true);
+    this.root = new MindNode(nodeid, 0, topic, true, null, Direction.CENTER, true);
     this.putNode(this.root);
   }
 
@@ -33,7 +33,7 @@ export default class Mind {
     parentNode: MindNode,
     nodeid: string,
     topic: string,
-    idx: number,
+    idx: number | null,
     direction: Direction | null,
     expanded: boolean
   ): MindNode {
@@ -94,7 +94,7 @@ export default class Mind {
   ): MindNode {
     const nodeIndex = nodeBefore.index - 0.5;
     return this.addNode(
-      nodeBefore.parent,
+      nodeBefore.parent!,
       nodeid,
       topic,
       nodeIndex,
@@ -103,14 +103,14 @@ export default class Mind {
     );
   }
 
-  getNodeBefore(node: MindNode): MindNode {
+  getNodeBefore(node: MindNode): MindNode | null {
     if (node.isroot) {
       return null;
     }
 
     const idx = node.index - 2;
     if (idx >= 0) {
-      return node.parent.children[idx];
+      return node.parent!.children[idx];
     } else {
       return null;
     }
@@ -125,7 +125,7 @@ export default class Mind {
     const nodeIndex = nodeAfter.index + 0.5;
     // follow current direction.
     return this.addNode(
-      nodeAfter.parent,
+      nodeAfter.parent!,
       nodeid,
       topic,
       nodeIndex,
@@ -134,14 +134,14 @@ export default class Mind {
     );
   }
 
-  getNodeAfter(node: MindNode): MindNode {
+  getNodeAfter(node: MindNode): MindNode | null {
     if (node.isroot) {
       return null;
     }
     const idx = node.index;
-    const brothers = node.parent.children;
+    const brothers = node.parent!.children;
     if (brothers.length >= idx) {
-      return node.parent.children[idx];
+      return node.parent!.children[idx];
     } else {
       return null;
     }
@@ -188,10 +188,10 @@ export default class Mind {
     if (!!node && !!beforeid) {
       if (beforeid === BEFOREID_LAST) {
         node.index = -1;
-        this.reindex(node.parent);
+        this.reindex(node.parent!);
       } else if (beforeid === BEFOREID_FIRST) {
         node.index = 0;
-        this.reindex(node.parent);
+        this.reindex(node.parent!);
       } else {
         /*
          * Before:
@@ -206,10 +206,10 @@ export default class Mind {
         if (
           nodeBefore != null &&
           nodeBefore.parent != null &&
-          nodeBefore.parent.id === node.parent.id
+          nodeBefore.parent.id === node.parent!.id
         ) {
           node.index = nodeBefore.index - 0.5;
-          this.reindex(node.parent);
+          this.reindex(node.parent!);
         } else {
           console.error(`Missing node_before: ${beforeid}`);
         }
@@ -229,10 +229,10 @@ export default class Mind {
     );
     if (!!node && !!parent.id) {
       console.assert(node.parent, `node.parent is null: ${node}`);
-      if (node.parent.id !== parent.id) {
+      if (node.parent!.id !== parent.id) {
         console.log(`_move_node: node.parent.id!==parentid`);
         // remove from parent's children
-        const sibling = node.parent.children;
+        const sibling = node.parent!.children;
         let si = sibling.length;
         while (si--) {
           console.assert(sibling[si], "sibling[si] is null");
@@ -245,10 +245,10 @@ export default class Mind {
         node.parent.children.push(node);
       }
 
-      if (node.parent.isroot) {
+      if (node.parent!.isroot) {
         node.direction = direction;
       } else {
-        node.direction = node.parent.direction;
+        node.direction = node.parent!.direction;
       }
       this.moveNodeInternal(node, beforeid);
       this.flowNodeDirection(node, direction);
@@ -274,7 +274,7 @@ export default class Mind {
     children.length = 0;
 
     // remove from parent's children
-    const sibling = node.parent.children;
+    const sibling = node.parent!.children;
     let si = sibling.length;
     while (si--) {
       if (sibling[si].id === node.id) {

@@ -1,14 +1,14 @@
-import { Direction } from "../MindmapConstants";
+import {Direction} from "../MindmapConstants";
 
 export class LayoutData {
   constructor() {
     this.visible = true;
   }
 
-  direction: Direction;
+  direction: Direction = Direction.CENTER;
   visible: boolean;
 
   // relative position of the center of the node.
-  relativeCenterOffsetX: number;
-  relativeCenterOffsetY: number;
+  relativeCenterOffsetX: number = 0;
+  relativeCenterOffsetY: number = 0;
 }

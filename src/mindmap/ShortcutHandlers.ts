@@ -6,7 +6,7 @@ export default class ShortcutHandlers {
   static delete(mindCheese: MindCheese): boolean {
     const selectedNode = mindCheese.getSelectedNode();
     if (!!selectedNode && !selectedNode.isroot) {
-      mindCheese.selectNode(selectedNode.parent);
+      mindCheese.selectNode(selectedNode.parent!);
       mindCheese.removeNode(selectedNode);
     }
     return false;
@@ -79,14 +79,14 @@ export default class ShortcutHandlers {
 
   static up(mindCheese: MindCheese, e: Event): boolean {
     const selectedNode = mindCheese.getSelectedNode();
-    if (selectedNode.isroot) {
+    if (selectedNode!.isroot) {
       return false;
     }
 
     if (selectedNode) {
       let upNode = mindCheese.findNodeBefore(selectedNode);
       if (!upNode) {
-        const np = mindCheese.findNodeBefore(selectedNode.parent);
+        const np = mindCheese.findNodeBefore(selectedNode.parent!);
         if (!!np && np.children.length > 0) {
           upNode = np.children[np.children.length - 1];
         }
@@ -102,14 +102,14 @@ export default class ShortcutHandlers {
 
   static down(mindCheese: MindCheese, e: Event): boolean {
     const selectedNode = mindCheese.getSelectedNode();
-    if (selectedNode.isroot) {
+    if (selectedNode!.isroot) {
       return false;
     }
 
     if (selectedNode) {
       let downNode = mindCheese.findNodeAfter(selectedNode);
       if (!downNode) {
-        const np = mindCheese.findNodeAfter(selectedNode.parent);
+        const np = mindCheese.findNodeAfter(selectedNode.parent!);
         if (!!np && np.children.length > 0) {
           downNode = np.children[0];
         }
