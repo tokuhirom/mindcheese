@@ -93,11 +93,6 @@ export default class MindNode {
     return false;
   }
 
-  getSize(): Size {
-    const viewData = this.data.view;
-    return new Size(viewData.width, viewData.height);
-  }
-
   toObject(): Record<string, any> {
     const o: Record<string, any> = {
       id: this.id,

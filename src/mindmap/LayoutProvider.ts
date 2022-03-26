@@ -133,13 +133,17 @@ export default class LayoutProvider {
         const layoutData = node.data.layout;
 
         const childrenHeight = this.layoutOffsetSubNodes(node.children);
-        const nodeOuterHeight = Math.max(node.data.view.height, childrenHeight);
+        const nodeOuterHeight = Math.max(
+          node.data.view.elementSizeCache!.height,
+          childrenHeight
+        );
         layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
         layoutData.relativeCenterOffsetX =
           this.hSpace * node.direction +
-          (node.parent!.data.view.width / 2) * node.direction +
+          (node.parent!.data.view.elementSizeCache!.width / 2) *
+            node.direction +
           this.hSpace * node.direction +
-          (node.data.view.width / 2) * node.direction +
+          (node.data.view.elementSizeCache!.width / 2) * node.direction +
           (node.parent?.isroot ? 0 : this.pSpace * node.direction);
 
         baseY += nodeOuterHeight + this.vSpace;
@@ -162,18 +166,18 @@ export default class LayoutProvider {
   }
 
   getTopLeft(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const viewData = node.data.view;
+    const viewSize = node.data.view.elementSizeCache!;
     const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
     if (node.isroot) {
-      const x = offsetPoint.x + (viewData.width / 2) * -1;
-      const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
+      const x = offsetPoint.x + (viewSize.width / 2) * -1;
+      const y = offsetPoint.y - viewSize.height - this.graphCanvas.lineWidth;
       return new CenterOfNodeOffsetFromRootNode(x, y);
     } else {
       // XXX To be honest, I think we should think about the **direction**,
       // but it is buggy when used in calculations. A mystery.
-      const x = offsetPoint.x + (viewData.width / 2) * -1;
+      const x = offsetPoint.x + (viewSize.width / 2) * -1;
       const y =
-        offsetPoint.y - viewData.height / 2 - this.graphCanvas.lineWidth;
+        offsetPoint.y - viewSize.height / 2 - this.graphCanvas.lineWidth;
       return new CenterOfNodeOffsetFromRootNode(x, y);
     }
   }
@@ -184,8 +188,8 @@ export default class LayoutProvider {
   getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const point = node.getCenterOffsetOfTheNodeFromRootNode();
     return new CenterOfNodeOffsetFromRootNode(
-      point.x - (node.data.view.width / 2) * node.direction,
-      point.y + node.data.view.height / 2
+      point.x - (node.data.view.elementSizeCache!.width / 2) * node.direction,
+      point.y + node.data.view.elementSizeCache!.height / 2
     );
   }
 
@@ -197,17 +201,20 @@ export default class LayoutProvider {
     destination: MindNode
   ): CenterOfNodeOffsetFromRootNode {
     if (node.isroot) {
-      const x = (node.data.view.width / 2) * destination.direction;
+      const x =
+        (node.data.view.elementSizeCache!.width / 2) * destination.direction;
       return new CenterOfNodeOffsetFromRootNode(
         x,
-        -(node.data.view.height / 2)
+        -(node.data.view.elementSizeCache!.height / 2)
       );
     } else {
       const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
-      const x = offsetPoint.x + (node.data.view.width / 2) * node.direction;
+      const x =
+        offsetPoint.x +
+        (node.data.view.elementSizeCache!.width / 2) * node.direction;
       return new CenterOfNodeOffsetFromRootNode(
         x,
-        offsetPoint.y + node.data.view.height / 2
+        offsetPoint.y + node.data.view.elementSizeCache!.height / 2
       );
     }
   }
@@ -217,11 +224,14 @@ export default class LayoutProvider {
 
     const x =
       offsetPoint.x +
-      (node.data.view.width / 2 + this.pSpace) * node.direction -
+      (node.data.view.elementSizeCache!.width / 2 + this.pSpace) *
+        node.direction -
       (node.direction == Direction.RIGHT ? this.pSpace : 0);
 
     const y =
-      offsetPoint.y + node.data.view.height / 2 - Math.ceil(this.pSpace / 2);
+      offsetPoint.y +
+      node.data.view.elementSizeCache!.height / 2 -
+      Math.ceil(this.pSpace / 2);
 
     return new CenterOfNodeOffsetFromRootNode(x, y);
   }
@@ -239,10 +249,11 @@ export default class LayoutProvider {
       console.log(
         `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
       );
-      e = Math.max(offsetPoint.x + node.data.view.width / 2 + this.hSpace, e);
-      w = Math.min(offsetPoint.x - node.data.view.width / 2 - this.hSpace, w);
-      n = Math.min(offsetPoint.y - node.data.view.height / 2 - this.vSpace, n);
-      s = Math.max(offsetPoint.y + node.data.view.height / 2 - this.vSpace, s);
+      const viewSize = node.data.view.elementSizeCache!;
+      e = Math.max(offsetPoint.x + viewSize.width / 2 + this.hSpace, e);
+      w = Math.min(offsetPoint.x - viewSize.width / 2 - this.hSpace, w);
+      n = Math.min(offsetPoint.y - viewSize.height / 2 - this.vSpace, n);
+      s = Math.max(offsetPoint.y + viewSize.height / 2 - this.vSpace, s);
     }
     // maximum distance from center of root node.
     console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
