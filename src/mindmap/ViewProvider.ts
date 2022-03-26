@@ -166,7 +166,7 @@ export default class ViewProvider {
 
   private expandSize(): void {
     const bounds = this.layout.getBounds();
-    const minSize = bounds.size();
+    const minSize = bounds.size;
     const minWidth = minSize.w + this.hMargin * 2;
     const minHeight = minSize.h + this.vMargin * 2;
     const clientW = this.mindCheeseInnerElement.clientWidth;

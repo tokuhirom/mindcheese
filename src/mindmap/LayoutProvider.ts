@@ -21,16 +21,15 @@ export class Bounds {
     this.e = e;
     this.w = w;
     this.s = s;
-  }
-
-  size(): Size {
-    return new Size(this.e + this.w * -1, this.s + this.n * -1);
+    this.size = new Size(this.e + this.w * -1, this.s + this.n * -1);
+    console.log(`size: e=${e},w=${w},s=${s},n=${n} w=${this.size.w},h=${this.size.h}`)
   }
 
   readonly n: number;
   readonly e: number;
   readonly w: number;
   readonly s: number;
+  readonly size: Size;
 }
 
 export default class LayoutProvider {
@@ -231,12 +230,12 @@ export default class LayoutProvider {
       if (node.data.layout.visible) {
         const pout = this.getNodePointOut(node);
         console.log(`getMinSize: id=${node.id}, x=${pout.x}, y=${pout.y}`);
-        e = Math.max(pout.x, e);
-        w = Math.min(pout.x, w);
+        e = Math.max(pout.x + node.data.view.width / 2, e);
+        w = Math.min(pout.x - node.data.view.width / 2, w);
         if (!node.isroot) {
           // pout.y is bottom of the node.
-          n = Math.min(pout.y - node.data.view.height, n);
-          s = Math.max(pout.y + node.data.view.height, s);
+          n = Math.min(pout.y - node.data.view.height / 2, n);
+          s = Math.max(pout.y + node.data.view.height / 2, s);
         }
       }
     }
