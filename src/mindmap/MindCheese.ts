@@ -4,14 +4,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_LAST, Direction} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import { object2mindmap } from "./format/node_tree/object2mindmap";
-import { MindOption } from "./MindOption";
-import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
-import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
-import { generateNewId } from "./utils/RandomID";
+import {object2mindmap} from "./format/node_tree/object2mindmap";
+import {MindOption} from "./MindOption";
+import {mindmap2markdown} from "./format/markdown/mindmap2markdown";
+import {markdown2mindmap} from "./format/markdown/markdown2mindmap";
+import {generateNewId} from "./utils/RandomID";
 
 export default class MindCheese {
   options: MindOption;
@@ -127,7 +127,7 @@ export default class MindCheese {
           this.zoom(this.zoomScale);
         }
       },
-      { passive: true }
+      {passive: true}
     );
     window.addEventListener("resize", () => {
       this.resize();
@@ -140,12 +140,8 @@ export default class MindCheese {
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
       if (element.tagName.toLowerCase() === "mcnode") {
-        const theNode = this.getNodeById(nodeid);
-        if (!theNode) {
-          throw new Error("the node[id=" + nodeid + "] can not be found.");
-        } else {
-          return this.selectNode(theNode);
-        }
+        const theNode = this.mind.getNodeById(nodeid);
+        return this.selectNode(theNode);
       }
     } else {
       this.selectClear();
@@ -158,7 +154,7 @@ export default class MindCheese {
       case "mcadder": {
         const nodeid = this.view.getBindedNodeId(element);
         if (nodeid) {
-          const theNode = this.getNodeById(nodeid);
+          const theNode = this.mind.getNodeById(nodeid);
           if (!theNode) {
             throw new Error("the node[id=" + nodeid + "] can not be found.");
           } else {
@@ -185,7 +181,7 @@ export default class MindCheese {
     const element = e.target as HTMLElement;
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
-      const theNode = this.getNodeById(nodeid);
+      const theNode = this.mind.getNodeById(nodeid);
       if (theNode.data.view.element!.contentEditable == "true") {
         // The node is already in the editing mode.
         return false;
@@ -247,15 +243,6 @@ export default class MindCheese {
 
   getNodeTree(): Record<string, any> {
     return this.mind.root!.toObject();
-  }
-
-  getRoot(): MindNode | null {
-    return this.mind.root;
-  }
-
-  getNodeById(nodeid: string): MindNode {
-    // TODO `| null`
-    return this.mind.getNodeById(nodeid);
   }
 
   addNode(parentNode: MindNode, nodeid: string, topic: string): MindNode {
@@ -339,10 +326,7 @@ export default class MindCheese {
       throw new Error("fail, topic can not be empty");
     }
 
-    const node = this.getNodeById(nodeid)!;
-    if (!node) {
-      throw new Error(`Unknown node: ${nodeid}`);
-    }
+    const node = (this.mind.getNodeById(nodeid))!;
 
     this.undoManager.recordSnapshot();
     if (node.topic === topic) {
