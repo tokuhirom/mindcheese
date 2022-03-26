@@ -1,8 +1,8 @@
-import {Direction} from "../MindmapConstants";
-import {Size} from "../Size";
-import {ViewData} from "./ViewData";
-import {LayoutData} from "./LayoutData";
-import {COLORS} from "./COLORS";
+import { Direction } from "../MindmapConstants";
+import { Size } from "../Size";
+import { ViewData } from "./ViewData";
+import { LayoutData } from "./LayoutData";
+import { COLORS } from "./COLORS";
 
 export default class MindNode {
   public readonly id: string;

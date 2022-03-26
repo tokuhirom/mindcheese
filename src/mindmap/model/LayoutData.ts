@@ -1,4 +1,4 @@
-import {Direction} from "../MindmapConstants";
+import { Direction } from "../MindmapConstants";
 
 export class LayoutData {
   constructor() {

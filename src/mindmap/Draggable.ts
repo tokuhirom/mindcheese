@@ -15,8 +15,8 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./model/MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
-import {Point} from "./LayoutProvider";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import { Point } from "./LayoutProvider";
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -208,7 +208,7 @@ export default class Draggable {
             x: nl.x + ns.w - this.lineWidth,
             y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
           };
-          sp = {x: sx + this.lineWidth, y: sy + sh};
+          sp = { x: sx + this.lineWidth, y: sy + sh };
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
@@ -219,7 +219,7 @@ export default class Draggable {
             x: nl.x + this.lineWidth,
             y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
           };
-          sp = {x: sx + sw - this.lineWidth, y: sy + sh};
+          sp = { x: sx + sw - this.lineWidth, y: sy + sh };
         }
         if (distance < minDistance) {
           closestNode = node;
@@ -268,7 +268,7 @@ export default class Draggable {
             this.mindCheese.dblclickHandle(e);
           }
         },
-        {passive: true}
+        { passive: true }
       );
     }
     container.addEventListener("touchmove", this.drag.bind(this), {

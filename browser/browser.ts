@@ -34,11 +34,16 @@ function initDemo() {
     );
     return false;
   });
-  document.getElementById("download_markdown")!.addEventListener("click", () => {
-    const data = mindCheese.getMarkdown();
-    downloadText(encodeURIComponent(mindCheese.mind.root!.topic) + ".md", data);
-    return false;
-  });
+  document
+    .getElementById("download_markdown")!
+    .addEventListener("click", () => {
+      const data = mindCheese.getMarkdown();
+      downloadText(
+        encodeURIComponent(mindCheese.mind.root!.topic) + ".md",
+        data
+      );
+      return false;
+    });
   document.getElementById("undo")!.addEventListener("click", () => {
     mindCheese.undo();
     return false;

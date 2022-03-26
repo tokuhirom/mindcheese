@@ -1,5 +1,5 @@
 import MindNode from "./model/MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
 export default class Mind {
   root: MindNode | null;
@@ -25,7 +25,15 @@ export default class Mind {
       throw new Error("root node is already exist");
     }
 
-    this.root = new MindNode(nodeid, 0, topic, true, null, Direction.CENTER, true);
+    this.root = new MindNode(
+      nodeid,
+      0,
+      topic,
+      true,
+      null,
+      Direction.CENTER,
+      true
+    );
     this.putNode(this.root);
   }
 

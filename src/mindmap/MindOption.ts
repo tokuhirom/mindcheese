@@ -1,7 +1,7 @@
-import {KeyModifier} from "./MindmapConstants";
+import { KeyModifier } from "./MindmapConstants";
 import ShortcutHandlers from "./ShortcutHandlers";
 import MindCheese from "./MindCheese";
-import {TextFormatter} from "./renderer/TextFormatter";
+import { TextFormatter } from "./renderer/TextFormatter";
 import MarkdownRenderer from "./renderer/MarkdownRenderer";
 
 export class MindOption {

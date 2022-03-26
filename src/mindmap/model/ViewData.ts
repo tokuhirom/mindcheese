@@ -1,4 +1,4 @@
-import {Point} from "../LayoutProvider";
+import { Point } from "../LayoutProvider";
 
 export class ViewData {
   element: HTMLElement | null = null;

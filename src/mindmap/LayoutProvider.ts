@@ -1,9 +1,9 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import {Size} from "./Size";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -130,12 +130,18 @@ export default class LayoutProvider {
         );
         layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
         layoutData.relativeCenterOffsetX =
-          this.hSpace * node.direction + (node.parent!.data.view.width * (node.parent!.direction + node.direction)) / 2;
+          this.hSpace * node.direction +
+          (node.parent!.data.view.width *
+            (node.parent!.direction + node.direction)) /
+            2;
         if (!node.parent!.isroot) {
           layoutData.relativeCenterOffsetX += this.pSpace * node.direction;
         }
 
-        baseY += nodeOuterHeight + (node.expanded ? childrenHeight / 2 : 0) + this.vSpace;
+        baseY +=
+          nodeOuterHeight +
+          (node.expanded ? childrenHeight / 2 : 0) +
+          this.vSpace;
         totalHeight += nodeOuterHeight;
       }
     }
