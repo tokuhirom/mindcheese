@@ -1,9 +1,9 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import {Size} from "./Size";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -22,7 +22,9 @@ export class Bounds {
     this.w = w;
     this.s = s;
     this.size = new Size(this.e + this.w * -1, this.s + this.n * -1);
-    console.log(`size: e=${e},w=${w},s=${s},n=${n} w=${this.size.w},h=${this.size.h}`)
+    console.log(
+      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.w},h=${this.size.h}`
+    );
   }
 
   readonly n: number;
@@ -99,7 +101,9 @@ export default class LayoutProvider {
         layoutData.offsetY = baseY + nodeOuterHeight / 2;
         layoutData.offsetX =
           this.hSpace * node.direction +
-          (node.parent.data.view.width * (node.parent.direction + node.direction)) / 2;
+          (node.parent.data.view.width *
+            (node.parent.direction + node.direction)) /
+            2;
         if (!node.parent.isroot) {
           layoutData.offsetX += this.pSpace * node.direction;
         }

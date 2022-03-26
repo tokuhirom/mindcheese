@@ -1,10 +1,10 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, { Point } from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import LayoutProvider, {Point} from "./LayoutProvider";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -165,8 +165,8 @@ export default class ViewProvider {
   }
 
   private expandSize(): void {
-    const bounds = this.layout.getBounds();
-    const minSize = bounds.size;
+    const minSize = this.layout.getBounds().size;
+
     const minWidth = minSize.w + this.hMargin * 2;
     const minHeight = minSize.h + this.vMargin * 2;
     const clientW = this.mindCheeseInnerElement.clientWidth;
