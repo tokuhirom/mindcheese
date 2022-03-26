@@ -1,14 +1,14 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
   CenterOfNodeOffsetFromRootNode,
   Point,
   RootNodeOffsetFromTopLeftOfMcnodes,
 } from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -238,16 +238,11 @@ export default class ViewProvider {
     viewData.width = element.clientWidth;
     viewData.height = element.clientHeight;
   }
-
-  private _selectClear(): void {
+  selectNode(node: MindNode | null): void {
     if (this.selectedNode) {
       const el = this.selectedNode.data.view.element!;
       el.classList.remove("selected");
     }
-  }
-
-  selectNode(node: MindNode | null): void {
-    this._selectClear();
     if (node) {
       this.selectedNode = node;
       node.data.view.element!.classList.add("selected");
@@ -299,7 +294,10 @@ export default class ViewProvider {
   }
 
   selectClear(): void {
-    this._selectClear();
+    if (this.selectedNode) {
+      const el = this.selectedNode.data.view.element!;
+      el.classList.remove("selected");
+    }
   }
 
   isEditing(): boolean {
