@@ -1,10 +1,9 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
   CenterOfNodeOffsetFromRootNode,
-  OffsetFromTopLeftOfMcnodes,
   Point,
   RootNodeOffsetFromTopLeftOfMcnodes,
 } from "./LayoutProvider";

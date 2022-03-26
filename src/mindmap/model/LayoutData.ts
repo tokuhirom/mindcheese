@@ -9,6 +9,6 @@ export class LayoutData {
   visible: boolean;
 
   // relative position of the center of the node.
-  relativeCenterOffsetX: number = 0;
-  relativeCenterOffsetY: number = 0;
+  relativeCenterOffsetX = 0;
+  relativeCenterOffsetY = 0;
 }

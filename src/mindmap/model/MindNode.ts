@@ -127,6 +127,7 @@ export default class MindNode {
   getCenterOffsetOfTheNodeFromRootNode(): CenterOfNodeOffsetFromRootNode {
     let x = 0;
     let y = 0;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let n: MindNode | null = this;
 
     do {

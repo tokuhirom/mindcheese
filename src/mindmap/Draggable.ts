@@ -63,8 +63,8 @@ export default class Draggable {
   private hlookupTimer: number;
   private capture: boolean;
   private moved: boolean;
-  private clientHW: number = 0;
-  private clientHH: number = 0;
+  private clientHW = 0;
+  private clientHH = 0;
   private readonly lineWidth = 5;
   private readonly lookupDelay = 500;
   private readonly lookupInterval = 80;

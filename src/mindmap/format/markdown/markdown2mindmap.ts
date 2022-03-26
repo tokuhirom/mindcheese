@@ -86,9 +86,6 @@ function parse(md: string) {
       "MindCheese can't parse this markdown as a mindmap: '" + md + "'"
     );
   }
-  if ("direction" in realRoot) {
-    delete realRoot["direction"];
-  }
   return realRoot;
 }
 
