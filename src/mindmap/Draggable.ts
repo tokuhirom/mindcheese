@@ -214,7 +214,8 @@ export default class Draggable {
             continue;
           }
           distance =
-            Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
+            Math.abs(sx + sw - nl.x) +
+            Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = {
             x: nl.x + this.lineWidth,
             y: nl.y + (node.isroot ? ns.height / 2 : ns.height),

@@ -1,10 +1,14 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
+import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, {OffsetFromTopLeftOfMcnodes, Point, RootNodeOffsetFromTopLeftOfMcnodes,} from "./LayoutProvider";
-import {TextFormatter} from "./renderer/TextFormatter";
-import {Size} from "./Size";
+import LayoutProvider, {
+  OffsetFromTopLeftOfMcnodes,
+  Point,
+  RootNodeOffsetFromTopLeftOfMcnodes,
+} from "./LayoutProvider";
+import { TextFormatter } from "./renderer/TextFormatter";
+import { Size } from "./Size";
 
 /**
  * View renderer
@@ -173,10 +177,7 @@ export default class ViewProvider {
     const clientH = this.mindCheeseInnerElement.clientHeight;
 
     console.log(`expandSize: ${clientH} ${minHeight}`);
-    return new Size(
-      Math.max(clientW, minWidth),
-      Math.max(clientH, minHeight)
-    );
+    return new Size(Math.max(clientW, minWidth), Math.max(clientH, minHeight));
   }
 
   private static initNodeSize(node: MindNode): void {

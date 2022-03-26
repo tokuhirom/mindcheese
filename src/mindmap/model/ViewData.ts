@@ -1,4 +1,4 @@
-import {OffsetFromTopLeftOfMcnodes, Point} from "../LayoutProvider";
+import { OffsetFromTopLeftOfMcnodes, Point } from "../LayoutProvider";
 
 export class ViewData {
   element: HTMLElement | null = null;
