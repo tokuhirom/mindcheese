@@ -1,6 +1,6 @@
 import MindCheese from "./MindCheese";
-import { Direction } from "./MindmapConstants";
-import { generateNewId } from "./utils/RandomID";
+import {Direction} from "./MindmapConstants";
+import {generateNewId} from "./utils/RandomID";
 
 export default class ShortcutHandlers {
   static delete(mindCheese: MindCheese): boolean {
@@ -19,7 +19,9 @@ export default class ShortcutHandlers {
       const node = mindCheese.addNode(selectedNode, nodeid, "New Node");
       if (node) {
         mindCheese.selectNode(node);
-        mindCheese.beginEdit(node);
+        mindCheese.checkEditable();
+
+        mindCheese.view.editNodeBegin(node);
       }
     }
     return false;
@@ -34,7 +36,9 @@ export default class ShortcutHandlers {
       const node = mindCheese.insertNodeAfter(selectedNode, nodeid, "New Node");
       if (node) {
         mindCheese.selectNode(node);
-        mindCheese.beginEdit(node);
+        mindCheese.checkEditable();
+
+        mindCheese.view.editNodeBegin(node);
       }
     }
     return false;
@@ -43,7 +47,9 @@ export default class ShortcutHandlers {
   static editNode(mindCheese: MindCheese): boolean {
     const selectedNode = mindCheese.getSelectedNode();
     if (selectedNode) {
-      mindCheese.beginEdit(selectedNode);
+      mindCheese.checkEditable();
+
+      mindCheese.view.editNodeBegin(selectedNode);
     }
     return false;
   }

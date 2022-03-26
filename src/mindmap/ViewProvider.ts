@@ -314,7 +314,6 @@ export default class ViewProvider {
     if (this.editingNode != null) {
       this.editNodeEnd();
     }
-    console.log("editNodeBegin");
     this.editingNode = node;
 
     const element = node.data.view.element!;
