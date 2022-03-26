@@ -1,9 +1,9 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import {Size} from "./Size";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -133,7 +133,7 @@ export default class LayoutProvider {
           this.hSpace * node.direction +
           (node.parent.data.view.width *
             (node.parent.direction + node.direction)) /
-          2;
+            2;
         if (!node.parent.isroot) {
           layoutData.relativeCenterOffsetX += this.pSpace * node.direction;
         }
@@ -161,13 +161,17 @@ export default class LayoutProvider {
     return totalHeight;
   }
 
-  getCenterOffsetOfTheNodeFromRootNode(node: MindNode): CenterOfNodeOffsetFromRootNode {
+  getCenterOffsetOfTheNodeFromRootNode(
+    node: MindNode
+  ): CenterOfNodeOffsetFromRootNode {
     const layoutData = node.data.layout;
 
     let x = layoutData.relativeCenterOffsetX;
     let y = layoutData.relativeCenterOffsetY;
     if (!node.isroot) {
-      const offsetPoint = this.getCenterOffsetOfTheNodeFromRootNode(node.parent);
+      const offsetPoint = this.getCenterOffsetOfTheNodeFromRootNode(
+        node.parent
+      );
       x += offsetPoint.x;
       y += offsetPoint.y;
     }
@@ -215,7 +219,8 @@ export default class LayoutProvider {
       x -= this.pSpace;
     }
 
-    const y = offsetPoint.y + node.data.view.height / 2 - Math.ceil(this.pSpace / 2);
+    const y =
+      offsetPoint.y + node.data.view.height / 2 - Math.ceil(this.pSpace / 2);
 
     return new Point(x, y);
   }
@@ -230,7 +235,9 @@ export default class LayoutProvider {
       const node = nodes[nodeid];
       if (node.data.layout.visible) {
         const offsetPoint = this.getCenterOffsetOfTheNodeFromRootNode(node);
-        console.log(`getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`);
+        console.log(
+          `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
+        );
         e = Math.max(offsetPoint.x + node.data.view.width / 2, e);
         w = Math.min(offsetPoint.x - node.data.view.width / 2, w);
         n = Math.min(offsetPoint.y - node.data.view.height / 2, n);
