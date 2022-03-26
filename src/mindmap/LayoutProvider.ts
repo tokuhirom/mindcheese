@@ -69,8 +69,8 @@ export default class LayoutProvider {
 
   layout(): void {
     const rootNode = this.mindCheese.mind.root;
-    rootNode.data.layout.offsetX = 0;
-    rootNode.data.layout.offsetY = 0;
+    rootNode.data.layout.relativeCenterOffsetX = 0;
+    rootNode.data.layout.relativeCenterOffsetY = 0;
 
     this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.LEFT)
@@ -98,14 +98,14 @@ export default class LayoutProvider {
           node.data.view.height,
           node.expanded ? childrenHeight : 0
         );
-        layoutData.offsetY = baseY + nodeOuterHeight / 2;
-        layoutData.offsetX =
+        layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
+        layoutData.relativeCenterOffsetX =
           this.hSpace * node.direction +
           (node.parent.data.view.width *
             (node.parent.direction + node.direction)) /
             2;
         if (!node.parent.isroot) {
-          layoutData.offsetX += this.pSpace * node.direction;
+          layoutData.relativeCenterOffsetX += this.pSpace * node.direction;
         }
 
         baseY +=
@@ -124,23 +124,26 @@ export default class LayoutProvider {
     {
       const middleHeight = totalHeight / 2;
       for (let i = 0, l = nodes.length; i < l; i++) {
-        nodes[i].data.layout.offsetY -= middleHeight;
+        nodes[i].data.layout.relativeCenterOffsetY -= middleHeight;
       }
     }
 
     return totalHeight;
   }
 
-  getNodeOffset(node: MindNode): Point {
+  getCenterOfTheNode(node: MindNode): Point {
     const layoutData = node.data.layout;
 
-    let x = layoutData.offsetX;
-    let y = layoutData.offsetY;
+    let x = layoutData.relativeCenterOffsetX;
+    let y = layoutData.relativeCenterOffsetY;
     if (!node.isroot) {
-      const offsetPoint = this.getNodeOffset(node.parent);
+      const offsetPoint = this.getCenterOfTheNode(node.parent);
       x += offsetPoint.x;
       y += offsetPoint.y;
     }
+    // y is center of the node.
+    // then, add half of height.
+    // as a result, y would be a bottom of the node.
     y += node.isroot ? 0 : node.data.view.height / 2;
     console.log(`getNodeOffset: node=${node.id} x=${x} y=${y}`);
 
@@ -149,7 +152,7 @@ export default class LayoutProvider {
 
   getNodePoint(node: MindNode): Point {
     const viewData = node.data.view;
-    const offsetPoint = this.getNodeOffset(node);
+    const offsetPoint = this.getCenterOfTheNode(node);
     const x = offsetPoint.x + (viewData.width * (node.direction - 1)) / 2;
     // ↓ Destination of the line.
     if (node.id == "other4") {
@@ -165,7 +168,7 @@ export default class LayoutProvider {
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
    */
   getNodePointIn(node: MindNode): Point {
-    return this.getNodeOffset(node);
+    return this.getCenterOfTheNode(node);
   }
 
   // x is outer side.
@@ -189,7 +192,7 @@ export default class LayoutProvider {
       // at left side, west edge.
       // at right side, east edge.
       // bottom of the rectangle.
-      const offsetPoint = this.getNodeOffset(node);
+      const offsetPoint = this.getCenterOfTheNode(node);
       const x =
         offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
       if (isNaN(x)) {
@@ -209,7 +212,7 @@ export default class LayoutProvider {
       const x = (node.data.view.width / 2) * destination.direction;
       return new Point(x, -(node.data.view.height / 2));
     } else {
-      const offsetPoint = this.getNodeOffset(node);
+      const offsetPoint = this.getCenterOfTheNode(node);
       const x =
         offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
       return new Point(x, offsetPoint.y);
@@ -232,14 +235,14 @@ export default class LayoutProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       if (node.data.layout.visible) {
-        const pout = this.getNodePointOut(node);
-        console.log(`getMinSize: id=${node.id}, x=${pout.x}, y=${pout.y}`);
-        e = Math.max(pout.x + node.data.view.width / 2, e);
-        w = Math.min(pout.x - node.data.view.width / 2, w);
+        const offsetPoint = this.getCenterOfTheNode(node);
+        console.log(`getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`);
+        e = Math.max(offsetPoint.x + node.data.view.width / 2, e);
+        w = Math.min(offsetPoint.x - node.data.view.width / 2, w);
         if (!node.isroot) {
           // pout.y is bottom of the node.
-          n = Math.min(pout.y - node.data.view.height / 2, n);
-          s = Math.max(pout.y + node.data.view.height / 2, s);
+          n = Math.min(offsetPoint.y - node.data.view.height / 2, n);
+          s = Math.max(offsetPoint.y + node.data.view.height / 2, s);
         }
       }
     }

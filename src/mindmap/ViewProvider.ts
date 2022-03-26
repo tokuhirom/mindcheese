@@ -1,10 +1,10 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
+import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, {Point} from "./LayoutProvider";
-import {TextFormatter} from "./renderer/TextFormatter";
-import {Size} from "./Size";
+import LayoutProvider, { Point } from "./LayoutProvider";
+import { TextFormatter } from "./renderer/TextFormatter";
+import { Size } from "./Size";
 
 /**
  * View renderer
@@ -363,12 +363,13 @@ export default class ViewProvider {
   }
 
   // get the center point offset
-  getViewOffset(): Point {
+  getOffsetOfTheRootNode(): Point {
     const bounds = this.layout.getBounds();
     console.log(
       `getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`
     );
     const x = (this.size.w - bounds.e - bounds.w) / 2;
+    // const x = (this.size.w - bounds.e - bounds.w) / 2;
     const y = this.size.h / 2;
     return new Point(x, y);
   }
@@ -396,7 +397,7 @@ export default class ViewProvider {
     const outerW = this.mindCheeseInnerElement.clientWidth;
     const outerH = this.mindCheeseInnerElement.clientHeight;
     if (this.size.w > outerW) {
-      const offset = this.getViewOffset();
+      const offset = this.getOffsetOfTheRootNode();
       this.mindCheeseInnerElement.scrollLeft = offset.x - outerW / 2;
     }
     if (this.size.h > outerH) {
@@ -445,7 +446,7 @@ export default class ViewProvider {
 
   showNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
-    const offset = this.getViewOffset();
+    const offset = this.getOffsetOfTheRootNode();
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       const viewData = node.data.view;
@@ -482,7 +483,7 @@ export default class ViewProvider {
   showLines(): void {
     this.graph.clear();
     const nodes = this.mindCheese.mind.nodes;
-    const offset = this.getViewOffset();
+    const offset = this.getOffsetOfTheRootNode();
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       if (node.isroot) {
