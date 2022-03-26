@@ -37,13 +37,7 @@ function extractSubNode(
   // console.log(
   //   `_extract_subnode node_json.direction DIRECTION=${nodeJson.direction} d=${d} ${nodeJson.topic}`
   // );
-  const node = mind.addNode(
-    nodeParent,
-    nodeJson.id,
-    nodeJson.topic,
-    null,
-    d
-  );
+  const node = mind.addNode(nodeParent, nodeJson.id, nodeJson.topic, null, d);
   if ("children" in nodeJson) {
     const children = nodeJson.children;
     for (let i = 0; i < children.length; i++) {

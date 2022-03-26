@@ -253,7 +253,8 @@ export default class MindCheese {
     return this.mind.root;
   }
 
-  getNodeById(nodeid: string): MindNode { // TODO `| null`
+  getNodeById(nodeid: string): MindNode {
+    // TODO `| null`
     return this.mind.getNodeById(nodeid);
   }
 

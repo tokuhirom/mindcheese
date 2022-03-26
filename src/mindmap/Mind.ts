@@ -1,5 +1,5 @@
 import MindNode from "./model/MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
 export default class Mind {
   root: MindNode | null;
@@ -25,14 +25,7 @@ export default class Mind {
       throw new Error("root node is already exist");
     }
 
-    this.root = new MindNode(
-      nodeid,
-      0,
-      topic,
-      true,
-      null,
-      Direction.CENTER
-    );
+    this.root = new MindNode(nodeid, 0, topic, true, null, Direction.CENTER);
     this.putNode(this.root);
   }
 
@@ -41,7 +34,7 @@ export default class Mind {
     nodeid: string,
     topic: string,
     idx: number | null,
-    direction: Direction | null,
+    direction: Direction | null
   ): MindNode {
     const nodeindex: number = idx || -1;
     let node;
@@ -65,14 +58,7 @@ export default class Mind {
       // console.log(
       //   `add_node source DIRECTION=${direction} DIRECTION=${d} ${topic}`
       // );
-      node = new MindNode(
-        nodeid,
-        nodeindex,
-        topic,
-        false,
-        parentNode,
-        d,
-      );
+      node = new MindNode(nodeid, nodeindex, topic, false, parentNode, d);
     } else {
       node = new MindNode(
         nodeid,
@@ -80,7 +66,7 @@ export default class Mind {
         topic,
         false,
         parentNode,
-        parentNode.direction,
+        parentNode.direction
       );
     }
 
@@ -97,13 +83,7 @@ export default class Mind {
     topic: string
   ): MindNode {
     const nodeIndex = nodeBefore.index - 0.5;
-    return this.addNode(
-      nodeBefore.parent!,
-      nodeid,
-      topic,
-      nodeIndex,
-      null
-    );
+    return this.addNode(nodeBefore.parent!, nodeid, topic, nodeIndex, null);
   }
 
   getNodeBefore(node: MindNode): MindNode | null {

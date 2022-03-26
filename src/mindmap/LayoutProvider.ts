@@ -1,9 +1,9 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import {Size} from "./Size";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -245,14 +245,8 @@ export default class LayoutProvider {
       );
       e = Math.max(offsetPoint.x + node.data.view.width / 2 + this.hSpace, e);
       w = Math.min(offsetPoint.x - node.data.view.width / 2 - this.hSpace, w);
-      n = Math.min(
-        offsetPoint.y - node.data.view.height / 2 - this.vSpace,
-        n
-      );
-      s = Math.max(
-        offsetPoint.y + node.data.view.height / 2 - this.vSpace,
-        s
-      );
+      n = Math.min(offsetPoint.y - node.data.view.height / 2 - this.vSpace, n);
+      s = Math.max(offsetPoint.y + node.data.view.height / 2 - this.vSpace, s);
     }
     // maximum distance from center of root node.
     console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);

@@ -1,6 +1,6 @@
 "use strict";
 
-import {markdown2mindmap} from "../src/mindmap/format/markdown/markdown2mindmap";
+import { markdown2mindmap } from "../src/mindmap/format/markdown/markdown2mindmap";
 
 test("complex", () => {
   const md = [
@@ -131,9 +131,9 @@ test("basic", () => {
         id: 2,
         topic: "A",
         direction: "right",
-        children: [{id: 3, topic: "B", children: []}],
+        children: [{ id: 3, topic: "B", children: [] }],
       },
-      {id: 4, topic: "C", direction: "right", children: []},
+      { id: 4, topic: "C", direction: "right", children: [] },
     ],
   });
 });
@@ -150,9 +150,9 @@ test("left", () => {
         id: 2,
         topic: "A",
         direction: "right",
-        children: [{id: 3, topic: "B", children: []}],
+        children: [{ id: 3, topic: "B", children: [] }],
       },
-      {id: 4, topic: "C", direction: "left", children: []},
+      { id: 4, topic: "C", direction: "left", children: [] },
     ],
   });
 });
@@ -165,9 +165,7 @@ test("ignore yfm", () => {
     id: 1,
     topic: "top",
 
-    children: [
-      {id: 2, topic: "A", direction: "right", children: []},
-    ],
+    children: [{ id: 2, topic: "A", direction: "right", children: [] }],
   });
 });
 
@@ -188,24 +186,24 @@ test("dedent 2 step", () => {
     id: 1,
     topic: "top",
     children: [
-      {id: 2, topic: "A1", direction: "right", children: []},
+      { id: 2, topic: "A1", direction: "right", children: [] },
       {
         id: 3,
         topic: "A2",
         direction: "right",
         children: [
-          {id: 4, topic: "B1", children: []},
+          { id: 4, topic: "B1", children: [] },
           {
             id: 5,
             topic: "B2",
             children: [
-              {id: 6, topic: "C1", children: []},
-              {id: 7, topic: "C2", children: []},
+              { id: 6, topic: "C1", children: [] },
+              { id: 7, topic: "C2", children: [] },
             ],
           },
         ],
       },
-      {id: 8, topic: "A3", direction: "right", children: []},
+      { id: 8, topic: "A3", direction: "right", children: [] },
     ],
   });
 });
@@ -229,31 +227,31 @@ test("dedent 3 step", () => {
     id: 1,
     topic: "top",
     children: [
-      {id: 2, topic: "A1", direction: "right", children: []},
+      { id: 2, topic: "A1", direction: "right", children: [] },
       {
         id: 3,
         topic: "A2",
         direction: "right",
         children: [
-          {id: 4, topic: "B1", children: []},
+          { id: 4, topic: "B1", children: [] },
           {
             id: 5,
             topic: "B2",
             children: [
-              {id: 6, topic: "C1", children: []},
+              { id: 6, topic: "C1", children: [] },
               {
                 id: 7,
                 topic: "C2",
                 children: [
-                  {id: 8, topic: "D1", children: []},
-                  {id: 9, topic: "D2", children: []},
+                  { id: 8, topic: "D1", children: [] },
+                  { id: 9, topic: "D2", children: [] },
                 ],
               },
             ],
           },
         ],
       },
-      {id: 10, topic: "A3", direction: "right", children: []},
+      { id: 10, topic: "A3", direction: "right", children: [] },
     ],
   });
 });
@@ -277,9 +275,7 @@ test("Multiline", () => {
         id: 2,
         topic: "A1\nA2",
         direction: "right",
-        children: [
-          {id: 3, topic: "B1\nB2\nB3", children: []},
-        ],
+        children: [{ id: 3, topic: "B1\nB2\nB3", children: [] }],
       },
     ],
   });

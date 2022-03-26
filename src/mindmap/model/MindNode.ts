@@ -25,7 +25,7 @@ export default class MindNode {
     topic: string,
     isRoot: boolean,
     parent: MindNode | null,
-    direction: Direction,
+    direction: Direction
   ) {
     if (!id) {
       throw new Error("invalid nodeid");
