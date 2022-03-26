@@ -3,7 +3,7 @@ import { Size } from "../Size";
 import { ViewData } from "./ViewData";
 import { LayoutData } from "./LayoutData";
 import { COLORS } from "./COLORS";
-import {CenterOfNodeOffsetFromRootNode} from "../LayoutProvider";
+import { CenterOfNodeOffsetFromRootNode } from "../LayoutProvider";
 
 export default class MindNode {
   public readonly id: string;
@@ -128,12 +128,13 @@ export default class MindNode {
     let x = 0;
     let y = 0;
     let n: MindNode | null = this;
+
     do {
       x += n!.data.layout.relativeCenterOffsetX;
       y += n!.data.layout.relativeCenterOffsetY;
 
-      n = n!.parent
-    } while (n)
+      n = n!.parent;
+    } while (n);
 
     return new CenterOfNodeOffsetFromRootNode(x, y);
   }

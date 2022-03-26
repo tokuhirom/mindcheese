@@ -94,10 +94,10 @@ export default class Draggable {
     this.eventBind(container);
   }
 
-  resize(): void {
+  resize(width: number, height: number): void {
     this.mindCheese.view.mcnodes.appendChild(this.shadow);
-    this.canvasElement.width = this.mindCheese.view.size.width;
-    this.canvasElement.height = this.mindCheese.view.size.height;
+    this.canvasElement.width = width;
+    this.canvasElement.height = height;
   }
 
   private static createCanvas(): HTMLCanvasElement {
