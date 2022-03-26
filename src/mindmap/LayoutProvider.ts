@@ -1,9 +1,9 @@
-import {Direction} from "./MindmapConstants";
+import { Direction } from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import {Size} from "./Size";
+import { Size } from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -172,16 +172,13 @@ export default class LayoutProvider {
     const viewData = node.data.view;
     const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
     if (node.isroot) {
-      const x = offsetPoint.x
-        + (viewData.width / 2) * -1;
-      const y = offsetPoint.y
-        - viewData.height - this.graphCanvas.lineWidth;
+      const x = offsetPoint.x + (viewData.width / 2) * -1;
+      const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
       return new CenterOfNodeOffsetFromRootNode(x, y);
     } else {
       // XXX To be honest, I think we should think about the **direction**,
       // but it is buggy when used in calculations. A mystery.
-      const x = offsetPoint.x
-        + (viewData.width / 2) * -1;
+      const x = offsetPoint.x + (viewData.width / 2) * -1;
       const y =
         offsetPoint.y - viewData.height / 2 - this.graphCanvas.lineWidth;
       return new CenterOfNodeOffsetFromRootNode(x, y);
