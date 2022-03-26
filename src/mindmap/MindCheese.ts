@@ -4,14 +4,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {BEFOREID_LAST, Direction} from "./MindmapConstants";
+import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import {object2mindmap} from "./format/node_tree/object2mindmap";
-import {MindOption} from "./MindOption";
-import {mindmap2markdown} from "./format/markdown/mindmap2markdown";
-import {markdown2mindmap} from "./format/markdown/markdown2mindmap";
-import {generateNewId} from "./utils/RandomID";
+import { object2mindmap } from "./format/node_tree/object2mindmap";
+import { MindOption } from "./MindOption";
+import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
+import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
+import { generateNewId } from "./utils/RandomID";
 
 export default class MindCheese {
   options: MindOption;
@@ -128,7 +128,7 @@ export default class MindCheese {
           this.zoom(this.zoomScale);
         }
       },
-      {passive: true}
+      { passive: true }
     );
     window.addEventListener("resize", () => {
       this.resize();
@@ -163,7 +163,7 @@ export default class MindCheese {
           if (!theNode) {
             throw new Error("the node[id=" + nodeid + "] can not be found.");
           } else {
-            console.log(`element: ${element.tagName.toLowerCase()}`)
+            console.log(`element: ${element.tagName.toLowerCase()}`);
             this.toggleNode(theNode);
           }
         }
@@ -176,7 +176,7 @@ export default class MindCheese {
           if (!theNode) {
             throw new Error("the node[id=" + nodeid + "] can not be found.");
           } else {
-            console.log(`element: ${element.tagName.toLowerCase()}`)
+            console.log(`element: ${element.tagName.toLowerCase()}`);
             const nodeid = generateNewId();
             const node = this.addNode(theNode, nodeid, "New Node");
             if (node) {
