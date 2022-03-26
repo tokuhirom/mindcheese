@@ -1,7 +1,7 @@
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.
  */
-import {OffsetFromTopLeftOfMcnodes, Point} from "./LayoutProvider";
+import { OffsetFromTopLeftOfMcnodes, Point } from "./LayoutProvider";
 
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
@@ -52,11 +52,7 @@ export default class GraphCanvas {
     ctx.lineWidth = this.lineWidth;
     ctx.lineCap = lineCap;
 
-    GraphCanvas.bezierTo(
-      ctx,
-      pin.x, pin.y,
-      pout.x, pout.y
-    );
+    GraphCanvas.bezierTo(ctx, pin.x, pin.y, pout.x, pout.y);
   }
 
   private static bezierTo(

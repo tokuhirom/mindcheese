@@ -1,6 +1,6 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
+import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
   CenterOfNodeOffsetFromRootNode,
@@ -8,8 +8,8 @@ import LayoutProvider, {
   Point,
   RootNodeOffsetFromTopLeftOfMcnodes,
 } from "./LayoutProvider";
-import {TextFormatter} from "./renderer/TextFormatter";
-import {Size} from "./Size";
+import { TextFormatter } from "./renderer/TextFormatter";
+import { Size } from "./Size";
 
 /**
  * View renderer
@@ -277,10 +277,10 @@ export default class ViewProvider {
       console.debug("select_node! right adjust");
       panelEl.scrollLeft = Math.max(
         panelEl.scrollLeft +
-        (nodeEl.offsetLeft +
-          nodeEl.clientWidth +
-          30 -
-          (panelEl.scrollLeft + panelEl.clientWidth)),
+          (nodeEl.offsetLeft +
+            nodeEl.clientWidth +
+            30 -
+            (panelEl.scrollLeft + panelEl.clientWidth)),
         0
       );
     }
@@ -295,10 +295,10 @@ export default class ViewProvider {
       console.debug("select_node! bottom adjust");
       panelEl.scrollTop = Math.max(
         panelEl.scrollTop +
-        (nodeEl.offsetTop +
-          nodeEl.clientHeight +
-          30 -
-          (panelEl.scrollTop + panelEl.clientHeight)),
+          (nodeEl.offsetTop +
+            nodeEl.clientHeight +
+            30 -
+            (panelEl.scrollTop + panelEl.clientHeight)),
         0
       );
     }
@@ -371,7 +371,9 @@ export default class ViewProvider {
   // get the center point offset
   getOffsetOfTheRootNode(): RootNodeOffsetFromTopLeftOfMcnodes {
     const bounds = this.layout.getBounds();
-    console.log(`getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`);
+    console.log(
+      `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
+    );
 
     const x = -bounds.w + this.mindCheese.mind.root!.data.view.width / 2;
     // const x = (this.size.w - bounds.e - bounds.w) / 2;
@@ -419,9 +421,9 @@ export default class ViewProvider {
     const viewData = node.data.view;
     return new Point(
       parseInt(viewData.element!.style.left) -
-      this.mindCheeseInnerElement.scrollLeft,
+        this.mindCheeseInnerElement.scrollLeft,
       parseInt(viewData.element!.style.top) -
-      this.mindCheeseInnerElement.scrollTop
+        this.mindCheeseInnerElement.scrollTop
     );
   }
 
@@ -470,7 +472,9 @@ export default class ViewProvider {
 
       if (!node.isroot && node.children.length > 0) {
         const expanderText = node.expanded ? "-" : "+";
-        const expanderPoint = offset.convertCenterOfNodeOffsetFromRootNode(this.layout.getExpanderPoint(node));
+        const expanderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
+          this.layout.getExpanderPoint(node)
+        );
         expander.style.left = expanderPoint.x + "px";
         expander.style.top = expanderPoint.y + "px";
         expander.style.display = "";
@@ -507,7 +511,9 @@ export default class ViewProvider {
         this.graph.drawLine(
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),
-          node.color!, "round");
+          node.color!,
+          "round"
+        );
       }
       {
         // Draw line under the bottom of the node
@@ -519,7 +525,9 @@ export default class ViewProvider {
         this.graph.drawLine(
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),
-          node.color!, "butt");
+          node.color!,
+          "butt"
+        );
       }
     }
   }
