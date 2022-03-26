@@ -1,14 +1,14 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import {KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
+import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
   CenterOfNodeOffsetFromRootNode,
   Point,
   RootNodeOffsetFromTopLeftOfMcnodes,
 } from "./LayoutProvider";
-import {TextFormatter} from "./renderer/TextFormatter";
-import {Size} from "./Size";
+import { TextFormatter } from "./renderer/TextFormatter";
+import { Size } from "./Size";
 
 /**
  * View renderer

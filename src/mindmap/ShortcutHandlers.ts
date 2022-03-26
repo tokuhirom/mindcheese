@@ -1,6 +1,6 @@
 import MindCheese from "./MindCheese";
-import {Direction} from "./MindmapConstants";
-import {generateNewId} from "./utils/RandomID";
+import { Direction } from "./MindmapConstants";
+import { generateNewId } from "./utils/RandomID";
 
 export default class ShortcutHandlers {
   static delete(mindCheese: MindCheese): boolean {
