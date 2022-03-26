@@ -32,9 +32,6 @@ export default class MindNode {
     if (!id) {
       throw new Error("invalid nodeid");
     }
-    if (typeof index != "number") {
-      throw new Error("invalid node index");
-    }
     this.id = id;
     this.index = index;
     this.topic = topic;
