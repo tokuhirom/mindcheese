@@ -208,10 +208,6 @@ export default class MindCheese {
     this.view.mindCheeseInnerElement.style.transform = `scale(${n})`;
   }
 
-  endEdit(): void {
-    this.view.editNodeEnd();
-  }
-
   private showMind(mind: Mind): void {
     this.view.reset();
     this.layout.reset();
