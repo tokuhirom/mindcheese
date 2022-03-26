@@ -7,5 +7,5 @@ export class ViewData {
   width = 0;
   height = 0;
 
-  location: OffsetFromTopLeftOfMcnodes = new OffsetFromTopLeftOfMcnodes(0, 0);
+  location: OffsetFromTopLeftOfMcnodes | null = null;
 }
