@@ -3,17 +3,18 @@ import { Size } from "../Size";
 import { ViewData } from "./ViewData";
 import { LayoutData } from "./LayoutData";
 import { COLORS } from "./COLORS";
+import { CenterOfNodeOffsetFromRootNode } from "../LayoutProvider";
 
 export default class MindNode {
   public readonly id: string;
   public index: number;
   public topic: string;
   public readonly isroot: boolean;
-  public parent: MindNode;
+  public parent: MindNode | null;
   public direction: Direction;
   public expanded: boolean;
   public readonly children: MindNode[];
-  public color: string;
+  public color: string | null;
   public readonly data: {
     view: ViewData;
     layout: LayoutData;
@@ -24,7 +25,7 @@ export default class MindNode {
     index: number,
     topic: string,
     isRoot: boolean,
-    parent: MindNode,
+    parent: MindNode | null,
     direction: Direction,
     expanded: boolean
   ) {
@@ -87,10 +88,10 @@ export default class MindNode {
         return true;
       }
       const pid = pnode.id;
-      let p = node;
-      while (!p.isroot) {
-        p = p.parent;
-        if (p.id === pid) {
+      let p: MindNode | null = node;
+      while (!p!.isroot) {
+        p = p!.parent;
+        if (p!.id === pid) {
           return true;
         }
       }
@@ -121,5 +122,20 @@ export default class MindNode {
     for (let i = 0, l = this.children.length; i < l; i++) {
       this.children[i].applyColor(color);
     }
+  }
+
+  getCenterOffsetOfTheNodeFromRootNode(): CenterOfNodeOffsetFromRootNode {
+    let x = 0;
+    let y = 0;
+    let n: MindNode | null = this;
+
+    do {
+      x += n!.data.layout.relativeCenterOffsetX;
+      y += n!.data.layout.relativeCenterOffsetY;
+
+      n = n!.parent;
+    } while (n);
+
+    return new CenterOfNodeOffsetFromRootNode(x, y);
   }
 }

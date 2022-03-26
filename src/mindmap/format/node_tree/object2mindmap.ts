@@ -20,7 +20,7 @@ function parse(mind: Mind, nodeRoot: Record<string, any>): void {
   if ("children" in nodeRoot) {
     const children = nodeRoot.children;
     for (let i = 0; i < children.length; i++) {
-      extractSubNode(mind, mind.root, children[i]);
+      extractSubNode(mind, mind.root!, children[i]);
     }
   }
 }
@@ -30,7 +30,7 @@ function extractSubNode(
   nodeParent: MindNode,
   nodeJson: Record<string, any>
 ): void {
-  let d: Direction = null;
+  let d: Direction | null = null;
   if (nodeParent.isroot) {
     d = nodeJson.direction == "left" ? Direction.LEFT : Direction.RIGHT;
   }

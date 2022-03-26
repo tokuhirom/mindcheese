@@ -5,10 +5,10 @@ export class LayoutData {
     this.visible = true;
   }
 
-  direction: Direction;
+  direction: Direction = Direction.CENTER;
   visible: boolean;
 
   // relative position of the center of the node.
-  relativeCenterOffsetX: number;
-  relativeCenterOffsetY: number;
+  relativeCenterOffsetX: number = 0;
+  relativeCenterOffsetY: number = 0;
 }

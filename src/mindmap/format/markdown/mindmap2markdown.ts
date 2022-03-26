@@ -3,7 +3,7 @@ import MindNode from "../../model/MindNode";
 import { Direction } from "../../MindmapConstants";
 
 export function mindmap2markdown(mind: Mind): string {
-  return renderMarkdown(mind.root, 0);
+  return renderMarkdown(mind.root!, 0);
 }
 
 function renderMarkdown(node: MindNode, level: number): string {

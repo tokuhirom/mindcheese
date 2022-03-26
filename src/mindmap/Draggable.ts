@@ -52,9 +52,9 @@ export default class Draggable {
   private readonly shadow: HTMLElement; // <mcnode>
   private shadowW: number;
   private shadowH: number;
-  private activeNode: MindNode;
-  private targetNode: MindNode;
-  private targetDirect: Direction;
+  private activeNode: MindNode | null;
+  private targetNode: MindNode | null;
+  private targetDirect: Direction | null;
   private clientW: number;
   private clientH: number;
   private offsetX: number;
@@ -63,8 +63,8 @@ export default class Draggable {
   private hlookupTimer: number;
   private capture: boolean;
   private moved: boolean;
-  private clientHW: number;
-  private clientHH: number;
+  private clientHW: number = 0;
+  private clientHH: number = 0;
   private readonly lineWidth = 5;
   private readonly lookupDelay = 500;
   private readonly lookupInterval = 80;
@@ -73,7 +73,7 @@ export default class Draggable {
     this.mindCheese = mindCheese;
     this.canvasElement = Draggable.createCanvas();
     this.mindCheese.view.mindCheeseInnerElement.appendChild(this.canvasElement);
-    this.canvasContext = this.canvasElement.getContext("2d");
+    this.canvasContext = this.canvasElement.getContext("2d")!;
     this.shadow = Draggable.createShadow();
     this.shadowW = 0;
     this.shadowH = 0;
@@ -94,10 +94,10 @@ export default class Draggable {
     this.eventBind(container);
   }
 
-  resize(): void {
+  resize(width: number, height: number): void {
     this.mindCheese.view.mcnodes.appendChild(this.shadow);
-    this.canvasElement.width = this.mindCheese.view.size.w;
-    this.canvasElement.height = this.mindCheese.view.size.h;
+    this.canvasElement.width = width;
+    this.canvasElement.height = height;
   }
 
   private static createCanvas(): HTMLCanvasElement {
@@ -151,8 +151,8 @@ export default class Draggable {
     this.canvasContext.clearRect(
       0,
       0,
-      this.mindCheese.view.size.w,
-      this.mindCheese.view.size.h
+      this.mindCheese.view.size.width,
+      this.mindCheese.view.size.height
     );
   }
 
@@ -171,10 +171,10 @@ export default class Draggable {
   }
 
   private doLookupCloseNode(): ClosePoint | null {
-    const root = this.mindCheese.getRoot();
+    const root = this.mindCheese.getRoot()!;
     const rootLocation = root.data.view.location;
     const rootSize = root.getSize();
-    const rootX = rootLocation.x + rootSize.w / 2;
+    const rootX = rootLocation.x + rootSize.width / 2;
 
     const sw = this.shadowW;
     const sh = this.shadowH;
@@ -185,28 +185,28 @@ export default class Draggable {
     const nodes = this.mindCheese.mind.nodes;
     let minDistance = Number.MAX_VALUE;
     let closestNode = null;
-    let closestPoint: Point = null;
-    let shadowPoint: Point = null;
+    let closestPoint: Point | null = null;
+    let shadowPoint: Point | null = null;
     for (const nodeid in nodes) {
       let np, sp;
       const node = nodes[nodeid];
       let distance = 0;
       if (node.isroot || node.direction == direct) {
-        if (node.id == this.activeNode.id) {
+        if (node.id == this.activeNode!.id) {
           continue;
         }
         const ns = node.getSize();
         const nl = node.data.view.location;
         if (direct == Direction.RIGHT) {
-          if (sx - nl.x - ns.w <= 0) {
+          if (sx - nl.x - ns.width <= 0) {
             continue;
           }
           distance =
-            Math.abs(sx - nl.x - ns.w) +
-            Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            Math.abs(sx - nl.x - ns.width) +
+            Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = {
-            x: nl.x + ns.w - this.lineWidth,
-            y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
+            x: nl.x + ns.width - this.lineWidth,
+            y: nl.y + (node.isroot ? ns.height / 2 : ns.height),
           };
           sp = { x: sx + this.lineWidth, y: sy + sh };
         } else {
@@ -214,10 +214,11 @@ export default class Draggable {
             continue;
           }
           distance =
-            Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            Math.abs(sx + sw - nl.x) +
+            Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = {
             x: nl.x + this.lineWidth,
-            y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
+            y: nl.y + (node.isroot ? ns.height / 2 : ns.height),
           };
           sp = { x: sx + sw - this.lineWidth, y: sy + sh };
         }
@@ -230,7 +231,7 @@ export default class Draggable {
       }
     }
     if (closestNode) {
-      return new ClosePoint(closestNode, direct, shadowPoint, closestPoint);
+      return new ClosePoint(closestNode, direct, shadowPoint!, closestPoint!);
     } else {
       return null;
     }
@@ -278,7 +279,7 @@ export default class Draggable {
   }
 
   private static findMcnode(htmlElement: HTMLElement): HTMLElement | null {
-    let el = htmlElement;
+    let el: HTMLElement | null = htmlElement;
     while (el) {
       if (el.tagName.toLowerCase() == "mcnode") {
         return el;
@@ -341,7 +342,7 @@ export default class Draggable {
       e.preventDefault();
       this.showShadow();
       this.moved = true;
-      window.getSelection().removeAllRanges();
+      window.getSelection()!.removeAllRanges();
       const client = getClientFromEvent(e);
       const px = client.clientX - this.offsetX;
       const py = client.clientY - this.offsetY;
@@ -349,7 +350,7 @@ export default class Draggable {
       // const py = (e.clientY || e.touches[0].clientY) - this.offset_y;
       this.shadow.style.left = px + "px";
       this.shadow.style.top = py + "px";
-      window.getSelection().removeAllRanges();
+      window.getSelection()!.removeAllRanges();
     }
   }
 
@@ -372,7 +373,7 @@ export default class Draggable {
         const srcNode = this.activeNode;
         const targetNode = this.targetNode;
         const targetDirect = this.targetDirect;
-        this.moveNode(srcNode, targetNode, targetDirect);
+        this.moveNode(srcNode!, targetNode!, targetDirect!);
       }
       this.hideShadow();
     }

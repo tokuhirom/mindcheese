@@ -15,6 +15,49 @@ export class Point {
   readonly y: number;
 }
 
+export class CenterOfNodeOffsetFromParentNode {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  // https://ageek.dev/ts-nominal-typing
+  __CenterOfNodeOffsetFromParentNodeBrand: any;
+  readonly x: number;
+  readonly y: number;
+}
+
+export class CenterOfNodeOffsetFromRootNode {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  // https://ageek.dev/ts-nominal-typing
+  __CenterOfNodeOffsetFromRootNodeBrand: any;
+  readonly x: number;
+  readonly y: number;
+}
+
+export class OffsetFromTopLeftOfMcnodes {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  __OffsetFromTopLeftOfMcnodesBrand: any;
+  readonly x: number;
+  readonly y: number;
+}
+
+export class RootNodeOffsetFromTopLeftOfMcnodes extends OffsetFromTopLeftOfMcnodes {
+  convertCenterOfNodeOffsetFromRootNode(
+    offset: CenterOfNodeOffsetFromRootNode
+  ): OffsetFromTopLeftOfMcnodes {
+    return new OffsetFromTopLeftOfMcnodes(this.x + offset.x, this.y + offset.y);
+  }
+}
+
 export class Bounds {
   constructor(n: number, e: number, w: number, s: number) {
     this.n = n;
@@ -23,13 +66,13 @@ export class Bounds {
     this.s = s;
     this.size = new Size(this.e + this.w * -1, this.s + this.n * -1);
     console.log(
-      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.w},h=${this.size.h}`
+      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.width},h=${this.size.height}`
     );
   }
 
-  readonly n: number;
+  readonly n: number; // negative
   readonly e: number;
-  readonly w: number;
+  readonly w: number; // negative
   readonly s: number;
   readonly size: Size;
 }
@@ -68,7 +111,7 @@ export default class LayoutProvider {
   }
 
   layout(): void {
-    const rootNode = this.mindCheese.mind.root;
+    const rootNode = this.mindCheese.mind.root!;
     rootNode.data.layout.relativeCenterOffsetX = 0;
     rootNode.data.layout.relativeCenterOffsetY = 0;
 
@@ -101,19 +144,13 @@ export default class LayoutProvider {
         layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
         layoutData.relativeCenterOffsetX =
           this.hSpace * node.direction +
-          (node.parent.data.view.width *
-            (node.parent.direction + node.direction)) /
-            2;
-        if (!node.parent.isroot) {
-          layoutData.relativeCenterOffsetX += this.pSpace * node.direction;
-        }
+          (node.parent!.data.view.width / 2) * node.direction +
+          this.hSpace * node.direction +
+          (node.data.view.width / 2) * node.direction +
+          (node.parent?.isroot ? 0 : this.pSpace * node.direction);
 
-        baseY +=
-          nodeOuterHeight +
-          (node.expanded ? childrenHeight / 2 : 0) +
-          this.vSpace;
-        totalHeight +=
-          nodeOuterHeight + (node.expanded ? childrenHeight / 2 : 0);
+        baseY += nodeOuterHeight + this.vSpace;
+        totalHeight += nodeOuterHeight;
       }
     }
 
@@ -131,99 +168,71 @@ export default class LayoutProvider {
     return totalHeight;
   }
 
-  getCenterOfTheNode(node: MindNode): Point {
-    const layoutData = node.data.layout;
-
-    let x = layoutData.relativeCenterOffsetX;
-    let y = layoutData.relativeCenterOffsetY;
-    if (!node.isroot) {
-      const offsetPoint = this.getCenterOfTheNode(node.parent);
-      x += offsetPoint.x;
-      y += offsetPoint.y;
-    }
-    // y is center of the node.
-    // then, add half of height.
-    // as a result, y would be a bottom of the node.
-    y += node.isroot ? 0 : node.data.view.height / 2;
-    console.log(`getNodeOffset: node=${node.id} x=${x} y=${y}`);
-
-    return new Point(x, y);
-  }
-
-  getNodePoint(node: MindNode): Point {
+  getTopLeft(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const viewData = node.data.view;
-    const offsetPoint = this.getCenterOfTheNode(node);
-    const x = offsetPoint.x + (viewData.width * (node.direction - 1)) / 2;
-    // ↓ Destination of the line.
-    if (node.id == "other4") {
-      console.log(
-        `NNN ${node.id} offsetPoint.y=${offsetPoint.y} viewData.height=${viewData.height} this.graphCanvas.lineWidth=${this.graphCanvas.lineWidth}`
-      );
+    const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+    if (node.isroot) {
+      const x = offsetPoint.x + (viewData.width / 2) * -1;
+      const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
+      return new CenterOfNodeOffsetFromRootNode(x, y);
+    } else {
+      // XXX To be honest, I think we should think about the **direction**,
+      // but it is buggy when used in calculations. A mystery.
+      const x = offsetPoint.x + (viewData.width / 2) * -1;
+      const y =
+        offsetPoint.y - viewData.height / 2 - this.graphCanvas.lineWidth;
+      return new CenterOfNodeOffsetFromRootNode(x, y);
     }
-    const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
-    return new Point(x, y);
   }
 
   /**
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
    */
-  getNodePointIn(node: MindNode): Point {
-    return this.getCenterOfTheNode(node);
-  }
-
-  // x is outer side.
-  // y is bottom.
-  /*
-   * ┌────────┐                       ┌──────────┐
-   * │        │                       │          │
-   * └────────┘xxx                  xx└──────────┘
-   *           ▲ xx               xxx▲
-   *           │  xxx  ┌────────┐ x  │
-   *           │    xxx│  Root  │xx  │
-   *           │       └────────┘    │
-   *           │                     │
-   *           │                     │
-   *                                 │
-   */
-  getNodePointOut(node: MindNode): Point {
-    if (node.isroot) {
-      return new Point(0, 0);
-    } else {
-      // at left side, west edge.
-      // at right side, east edge.
-      // bottom of the rectangle.
-      const offsetPoint = this.getCenterOfTheNode(node);
-      const x =
-        offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
-      if (isNaN(x)) {
-        console.debug(
-          `getNodePointOut: x=${x} offsetPoint.x=${offsetPoint.x} node.data.view.width=${node.data.view.width} thhis.pSpace=${this.pSpace} node.direction=${node.direction}`
-        );
-      }
-      return new Point(x, offsetPoint.y);
-    }
+  getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
+    const point = node.getCenterOffsetOfTheNodeFromRootNode();
+    return new CenterOfNodeOffsetFromRootNode(
+      point.x - (node.data.view.width / 2) * node.direction,
+      point.y + node.data.view.height / 2
+    );
   }
 
   /**
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointout.png?raw=true
    */
-  getNodePointOutWithDestination(node: MindNode, destination: MindNode): Point {
+  getNodePointOutWithDestination(
+    node: MindNode,
+    destination: MindNode
+  ): CenterOfNodeOffsetFromRootNode {
     if (node.isroot) {
       const x = (node.data.view.width / 2) * destination.direction;
-      return new Point(x, -(node.data.view.height / 2));
+      return new CenterOfNodeOffsetFromRootNode(
+        x,
+        -(node.data.view.height / 2)
+      );
     } else {
-      const offsetPoint = this.getCenterOfTheNode(node);
+      const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
       const x =
-        offsetPoint.x + (node.data.view.width + this.pSpace) * node.direction;
-      return new Point(x, offsetPoint.y);
+        offsetPoint.x +
+        (node.data.view.width / 2 + this.pSpace) * node.direction;
+      return new CenterOfNodeOffsetFromRootNode(
+        x,
+        offsetPoint.y + node.data.view.height / 2
+      );
     }
   }
 
-  getExpanderPoint(node: MindNode): Point {
-    const p = this.getNodePointOut(node);
-    const x = node.direction == Direction.RIGHT ? p.x - this.pSpace : p.x;
-    const y = p.y - Math.ceil(this.pSpace / 2);
-    return new Point(x, y);
+  getExpanderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
+    const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+
+    const x =
+      offsetPoint.x +
+      (node.data.view.width / 2 + this.pSpace) * node.direction -
+      (node.direction == Direction.RIGHT ? this.pSpace : 0);
+
+    const y =
+      offsetPoint.y + node.data.view.height / 2 - Math.ceil(this.pSpace / 2);
+
+    return new CenterOfNodeOffsetFromRootNode(x, y);
   }
 
   getBounds(): Bounds {
@@ -235,17 +244,23 @@ export default class LayoutProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       if (node.data.layout.visible) {
-        const offsetPoint = this.getCenterOfTheNode(node);
-        console.log(`getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`);
-        e = Math.max(offsetPoint.x + node.data.view.width / 2, e);
-        w = Math.min(offsetPoint.x - node.data.view.width / 2, w);
-        if (!node.isroot) {
-          // pout.y is bottom of the node.
-          n = Math.min(offsetPoint.y - node.data.view.height / 2, n);
-          s = Math.max(offsetPoint.y + node.data.view.height / 2, s);
-        }
+        const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+        console.log(
+          `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
+        );
+        e = Math.max(offsetPoint.x + node.data.view.width / 2 + this.hSpace, e);
+        w = Math.min(offsetPoint.x - node.data.view.width / 2 - this.hSpace, w);
+        n = Math.min(
+          offsetPoint.y - node.data.view.height / 2 - this.vSpace,
+          n
+        );
+        s = Math.max(
+          offsetPoint.y + node.data.view.height / 2 - this.vSpace,
+          s
+        );
       }
     }
+    // maximum distance from center of root node.
     console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
     return new Bounds(n, e, w, s);
   }

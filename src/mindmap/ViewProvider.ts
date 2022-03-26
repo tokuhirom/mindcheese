@@ -2,7 +2,12 @@ import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
 import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, { Point } from "./LayoutProvider";
+import LayoutProvider, {
+  CenterOfNodeOffsetFromRootNode,
+  OffsetFromTopLeftOfMcnodes,
+  Point,
+  RootNodeOffsetFromTopLeftOfMcnodes,
+} from "./LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
 
@@ -15,8 +20,8 @@ export default class ViewProvider {
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   readonly mcnodes: HTMLElement; // <mcnodes>
   size: Size;
-  private selectedNode: MindNode;
-  private editingNode: MindNode;
+  private selectedNode: MindNode | null;
+  private editingNode: MindNode | null;
   private readonly graph: GraphCanvas;
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
@@ -121,7 +126,7 @@ export default class ViewProvider {
     if (tagName === "mcnode" || tagName === "mcexpander") {
       return element.getAttribute("nodeid");
     } else {
-      return this.getBindedNodeId(element.parentElement);
+      return this.getBindedNodeId(element.parentElement!);
     }
   }
 
@@ -140,9 +145,9 @@ export default class ViewProvider {
   resetTheme(): void {
     const themeName = this.mindCheese.options.theme;
     if (themeName) {
-      this.mcnodes.parentElement.className = "theme-" + themeName;
+      this.mcnodes.parentElement!.className = "theme-" + themeName;
     } else {
-      this.mcnodes.parentElement.className = "";
+      this.mcnodes.parentElement!.className = "";
     }
   }
 
@@ -164,25 +169,22 @@ export default class ViewProvider {
     }
   }
 
-  private expandSize(): void {
+  private getCanvasSize(): Size {
     const minSize = this.layout.getBounds().size;
 
-    const minWidth = minSize.w + this.hMargin * 2;
-    const minHeight = minSize.h + this.vMargin * 2;
+    const minWidth = minSize.width + this.hMargin * 2;
+    const minHeight = minSize.height + this.vMargin * 2;
     const clientW = this.mindCheeseInnerElement.clientWidth;
     const clientH = this.mindCheeseInnerElement.clientHeight;
 
     console.log(`expandSize: ${clientH} ${minHeight}`);
-    this.size = new Size(
-      Math.max(clientW, minWidth),
-      Math.max(clientH, minHeight)
-    );
+    return new Size(Math.max(clientW, minWidth), Math.max(clientH, minHeight));
   }
 
   private static initNodeSize(node: MindNode): void {
     const viewData = node.data.view;
-    viewData.width = viewData.element.clientWidth;
-    viewData.height = viewData.element.clientHeight;
+    viewData.width = viewData.element!.clientWidth;
+    viewData.height = viewData.element!.clientHeight;
   }
 
   addNode(node: MindNode): void {
@@ -217,15 +219,15 @@ export default class ViewProvider {
       this.selectedNode = null;
     }
     if (this.editingNode != null && this.editingNode.id == node.id) {
-      node.data.view.element.contentEditable = "false";
+      node.data.view.element!.contentEditable = "false";
       this.editingNode = null;
     }
     for (let i = 0, l = node.children.length; i < l; i++) {
       this.removeNode(node.children[i]);
     }
     if (node.data.view) {
-      const element = node.data.view.element;
-      const expander = node.data.view.expander;
+      const element = node.data.view.element!;
+      const expander = node.data.view.expander!;
       this.mcnodes.removeChild(element);
       this.mcnodes.removeChild(expander);
       node.data.view.element = null;
@@ -235,7 +237,7 @@ export default class ViewProvider {
 
   updateNode(node: MindNode): void {
     const viewData = node.data.view;
-    const element = viewData.element;
+    const element = viewData.element!;
     if (node.topic) {
       element.innerHTML = this.textFormatter.render(node.topic);
     }
@@ -243,14 +245,18 @@ export default class ViewProvider {
     viewData.height = element.clientHeight;
   }
 
-  selectNode(node: MindNode): void {
+  private _selectClear(): void {
     if (this.selectedNode) {
-      const el = this.selectedNode.data.view.element;
+      const el = this.selectedNode.data.view.element!;
       el.classList.remove("selected");
     }
+  }
+
+  selectNode(node: MindNode | null): void {
+    this._selectClear();
     if (node) {
       this.selectedNode = node;
-      node.data.view.element.classList.add("selected");
+      node.data.view.element!.classList.add("selected");
       // Note: scrollIntoView is not the best method.
       this.adjustScrollBar(node);
     }
@@ -258,7 +264,7 @@ export default class ViewProvider {
 
   // Adjust the scroll bar. show node in the browser.
   adjustScrollBar(node: MindNode): void {
-    const nodeEl = node.data.view.element;
+    const nodeEl = node.data.view.element!;
     const panelEl = this.mindCheeseInnerElement;
     if (panelEl.scrollLeft > nodeEl.offsetLeft) {
       console.debug(`select_node! left adjust`);
@@ -299,7 +305,7 @@ export default class ViewProvider {
   }
 
   selectClear(): void {
-    this.selectNode(null);
+    this._selectClear();
   }
 
   isEditing(): boolean {
@@ -317,7 +323,7 @@ export default class ViewProvider {
     console.log("editNodeBegin");
     this.editingNode = node;
 
-    const element: HTMLElement = node.data.view.element;
+    const element = node.data.view.element!;
     element.contentEditable = "true";
     element.innerText = node.topic;
     node.data.view.width = element.clientWidth;
@@ -326,7 +332,7 @@ export default class ViewProvider {
     function selectElementContents(el: HTMLElement) {
       const range = document.createRange();
       range.selectNodeContents(el);
-      const sel = window.getSelection();
+      const sel = window.getSelection()!;
       sel.removeAllRanges();
       sel.addRange(range);
     }
@@ -343,7 +349,7 @@ export default class ViewProvider {
       const node = this.editingNode;
       this.editingNode = null;
 
-      const element = node.data.view.element;
+      const element = node.data.view.element!;
       element.contentEditable = "false";
       const topic = element.innerText;
       if (
@@ -363,15 +369,16 @@ export default class ViewProvider {
   }
 
   // get the center point offset
-  getOffsetOfTheRootNode(): Point {
+  getOffsetOfTheRootNode(): RootNodeOffsetFromTopLeftOfMcnodes {
     const bounds = this.layout.getBounds();
     console.log(
-      `getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`
+      `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
     );
-    const x = (this.size.w - bounds.e - bounds.w) / 2;
+
+    const x = -bounds.w + this.mindCheese.mind.root!.data.view.width / 2;
     // const x = (this.size.w - bounds.e - bounds.w) / 2;
-    const y = this.size.h / 2;
-    return new Point(x, y);
+    const y = -bounds.n + this.mindCheese.mind.root!.data.view.height / 2;
+    return new RootNodeOffsetFromTopLeftOfMcnodes(x, y);
   }
 
   resize(): void {
@@ -382,42 +389,40 @@ export default class ViewProvider {
     this.layoutAgain();
   }
 
-  private doShow(): void {
-    console.log(`doShow: ${this.size.w} ${this.size.h}`);
-    this.graph.setSize(this.size.w, this.size.h);
-    this.mcnodes.parentElement.style.width = this.size.w + "px";
-    this.mcnodes.parentElement.style.height = this.size.h + "px";
-    this.showNodes();
-    this.showLines();
-    this.mindCheese.draggable.resize();
-  }
-
   // Display root position at center of container element.
   centerRoot(): void {
     const outerW = this.mindCheeseInnerElement.clientWidth;
     const outerH = this.mindCheeseInnerElement.clientHeight;
-    if (this.size.w > outerW) {
+    if (this.size.width > outerW) {
       const offset = this.getOffsetOfTheRootNode();
       this.mindCheeseInnerElement.scrollLeft = offset.x - outerW / 2;
     }
-    if (this.size.h > outerH) {
-      this.mindCheeseInnerElement.scrollTop = (this.size.h - outerH) / 2;
+    if (this.size.height > outerH) {
+      this.mindCheeseInnerElement.scrollTop = (this.size.height - outerH) / 2;
     }
   }
 
   layoutAgain(): void {
-    this.layout.setVisibleRecursively(this.mindCheese.mind.root, true);
+    this.layout.setVisibleRecursively(this.mindCheese.mind.root!, true);
     this.layout.layout();
-    this.expandSize();
-    this.doShow();
+    this.size = this.getCanvasSize();
+
+    console.log(`doShow: ${this.size.width} ${this.size.height}`);
+    this.graph.setSize(this.size.width, this.size.height);
+    this.mindCheese.draggable.resize(this.size.width, this.size.height);
+    this.mcnodes.parentElement!.style.width = this.size.width + "px";
+    this.mcnodes.parentElement!.style.height = this.size.height + "px";
+
+    this.showNodes();
+    this.showLines();
   }
 
   takeLocation(node: MindNode): Point {
     const viewData = node.data.view;
     return new Point(
-      parseInt(viewData.element.style.left) -
+      parseInt(viewData.element!.style.left) -
         this.mindCheeseInnerElement.scrollLeft,
-      parseInt(viewData.element.style.top) -
+      parseInt(viewData.element!.style.top) -
         this.mindCheeseInnerElement.scrollTop
     );
   }
@@ -425,9 +430,9 @@ export default class ViewProvider {
   restoreLocation(node: MindNode, location: Point): void {
     const viewData = node.data.view;
     this.mindCheeseInnerElement.scrollLeft =
-      parseInt(viewData.element.style.left) - location.x;
+      parseInt(viewData.element!.style.left) - location.x;
     this.mindCheeseInnerElement.scrollTop =
-      parseInt(viewData.element.style.top) - location.y;
+      parseInt(viewData.element!.style.top) - location.y;
   }
 
   clearNodes(): void {
@@ -449,25 +454,29 @@ export default class ViewProvider {
     const offset = this.getOffsetOfTheRootNode();
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
+
       const viewData = node.data.view;
-      const nodeElement = viewData.element;
-      const expander = viewData.expander;
+      const nodeElement = viewData.element!;
+      const expander = viewData.expander!;
       if (!node.data.layout.visible) {
         nodeElement.style.display = "none";
         expander.style.display = "none";
         continue;
       }
-      const p = this.layout.getNodePoint(node);
-      viewData.location = new Point(offset.x + p.x, offset.y + p.y);
-      nodeElement.style.left = offset.x + p.x + "px";
-      nodeElement.style.top = offset.y + p.y + "px";
+      const p = this.layout.getTopLeft(node);
+      viewData.location = offset.convertCenterOfNodeOffsetFromRootNode(p);
+      nodeElement.style.left = viewData.location.x + "px";
+      nodeElement.style.top = viewData.location.y + "px";
       nodeElement.style.display = "";
       nodeElement.style.visibility = "visible";
+
       if (!node.isroot && node.children.length > 0) {
         const expanderText = node.expanded ? "-" : "+";
-        const expanderPoint = this.layout.getExpanderPoint(node);
-        expander.style.left = offset.x + expanderPoint.x + "px";
-        expander.style.top = offset.y + expanderPoint.y + "px";
+        const expanderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
+          this.layout.getExpanderPoint(node)
+        );
+        expander.style.left = expanderPoint.x + "px";
+        expander.style.top = expanderPoint.y + "px";
         expander.style.display = "";
         expander.style.visibility = "visible";
         expander.innerText = expanderText;
@@ -496,20 +505,29 @@ export default class ViewProvider {
         // Draw line between previous node and next node
         const pin = this.layout.getNodePointIn(node);
         const pout = this.layout.getNodePointOutWithDestination(
-          node.parent,
+          node.parent!,
           node
         );
-        this.graph.drawLine(pout, pin, offset, node.color, "round");
+        this.graph.drawLine(
+          offset.convertCenterOfNodeOffsetFromRootNode(pout),
+          offset.convertCenterOfNodeOffsetFromRootNode(pin),
+          node.color!,
+          "round"
+        );
       }
       {
         // Draw line under the bottom of the node
-        const pin: Point = this.layout.getNodePointIn(node);
-        const pout = new Point(
-          pin.x -
-            node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
+        const pin = this.layout.getNodePointIn(node);
+        const pout = new CenterOfNodeOffsetFromRootNode(
+          pin.x + node.data.view.width * node.direction,
           pin.y
         );
-        this.graph.drawLine(pout, pin, offset, node.color, "butt");
+        this.graph.drawLine(
+          offset.convertCenterOfNodeOffsetFromRootNode(pout),
+          offset.convertCenterOfNodeOffsetFromRootNode(pin),
+          node.color!,
+          "butt"
+        );
       }
     }
   }

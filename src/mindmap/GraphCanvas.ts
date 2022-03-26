@@ -1,7 +1,7 @@
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.
  */
-import { Point } from "./LayoutProvider";
+import { OffsetFromTopLeftOfMcnodes, Point } from "./LayoutProvider";
 
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
@@ -20,7 +20,7 @@ export default class GraphCanvas {
     this.lineWidth = lineWidth;
     this.canvasElement = document.createElement("canvas");
     this.canvasElement.className = "mindcheese-graph-canvas";
-    this.canvasContext = this.canvasElement.getContext("2d");
+    this.canvasContext = this.canvasElement.getContext("2d")!;
   }
 
   element(): HTMLCanvasElement {
@@ -42,9 +42,8 @@ export default class GraphCanvas {
   }
 
   drawLine(
-    pout: Point,
-    pin: Point,
-    offset: Point,
+    pout: OffsetFromTopLeftOfMcnodes,
+    pin: OffsetFromTopLeftOfMcnodes,
     color: string,
     lineCap: CanvasLineCap
   ): void {
@@ -53,13 +52,7 @@ export default class GraphCanvas {
     ctx.lineWidth = this.lineWidth;
     ctx.lineCap = lineCap;
 
-    GraphCanvas.bezierTo(
-      ctx,
-      pin.x + offset.x,
-      pin.y + offset.y,
-      pout.x + offset.x,
-      pout.y + offset.y
-    );
+    GraphCanvas.bezierTo(ctx, pin.x, pin.y, pout.x, pout.y);
   }
 
   private static bezierTo(

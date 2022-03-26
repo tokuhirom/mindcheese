@@ -37,7 +37,7 @@ export default class ShortcutProvider {
       e.preventDefault();
     } //prevent tab to change focus in browser
     if (this.mindCheese.view.isEditing()) {
-      return;
+      return true;
     }
     if (!this.enable) {
       return true;
@@ -59,6 +59,7 @@ export default class ShortcutProvider {
         return code(this.mindCheese, e);
       }
     }
+    return true;
   }
 
   private compileHandlers(
