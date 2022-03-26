@@ -1,9 +1,9 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import { Size } from "./Size";
+import {Size} from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -219,6 +219,10 @@ export default class LayoutProvider {
         offsetPoint.y + node.data.view.height / 2
       );
     }
+  }
+
+  getAdderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
+    return this.getExpanderPoint(node);
   }
 
   getExpanderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {

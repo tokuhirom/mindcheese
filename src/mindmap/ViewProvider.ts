@@ -1,14 +1,14 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
   CenterOfNodeOffsetFromRootNode,
   Point,
   RootNodeOffsetFromTopLeftOfMcnodes,
 } from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -122,17 +122,12 @@ export default class ViewProvider {
     if (tagName === "mcnodes" || tagName === "body" || tagName === "html") {
       return null;
     }
-    if (tagName === "mcnode" || tagName === "mcexpander") {
+    if (tagName === "mcnode" || tagName === "mcexpander" || tagName == "mcadder") {
       return element.getAttribute("nodeid");
     } else {
       return this.getBindedNodeId(element.parentElement!);
     }
   }
-
-  isExpander(element: HTMLElement): boolean {
-    return element.tagName.toLowerCase() === "mcexpander";
-  }
-
   reset(): void {
     console.debug("view.reset");
     this.selectedNode = null;
@@ -196,12 +191,22 @@ export default class ViewProvider {
     if (node.isroot) {
       nodeEl.className = "root";
     } else {
-      const expanderElement: HTMLElement = document.createElement("mcexpander");
-      expanderElement.innerText = "-";
-      expanderElement.setAttribute("nodeid", node.id);
-      expanderElement.style.visibility = "hidden";
-      parentNode.appendChild(expanderElement);
-      node.data.view.expander = expanderElement;
+      {
+        const expanderElement = document.createElement("mcexpander");
+        expanderElement.innerText = "-";
+        expanderElement.setAttribute("nodeid", node.id);
+        expanderElement.style.visibility = "hidden";
+        parentNode.appendChild(expanderElement);
+        node.data.view.expander = expanderElement;
+      }
+      {
+        const adderElement = document.createElement("mcadder");
+        adderElement.innerText = "-";
+        adderElement.setAttribute("nodeid", node.id);
+        adderElement.style.visibility = "hidden";
+        parentNode.appendChild(adderElement);
+        node.data.view.adder = adderElement;
+      }
     }
     if (node.topic) {
       nodeEl.innerHTML = this.textFormatter.render(node.topic);
@@ -227,10 +232,13 @@ export default class ViewProvider {
     if (node.data.view) {
       const element = node.data.view.element!;
       const expander = node.data.view.expander!;
+      const adder = node.data.view.adder!;
       this.mcnodes.removeChild(element);
       this.mcnodes.removeChild(expander);
+      this.mcnodes.removeChild(adder);
       node.data.view.element = null;
       node.data.view.expander = null;
+      node.data.view.adder = null;
     }
   }
 
@@ -276,10 +284,10 @@ export default class ViewProvider {
       console.debug("select_node! right adjust");
       panelEl.scrollLeft = Math.max(
         panelEl.scrollLeft +
-          (nodeEl.offsetLeft +
-            nodeEl.clientWidth +
-            30 -
-            (panelEl.scrollLeft + panelEl.clientWidth)),
+        (nodeEl.offsetLeft +
+          nodeEl.clientWidth +
+          30 -
+          (panelEl.scrollLeft + panelEl.clientWidth)),
         0
       );
     }
@@ -294,10 +302,10 @@ export default class ViewProvider {
       console.debug("select_node! bottom adjust");
       panelEl.scrollTop = Math.max(
         panelEl.scrollTop +
-          (nodeEl.offsetTop +
-            nodeEl.clientHeight +
-            30 -
-            (panelEl.scrollTop + panelEl.clientHeight)),
+        (nodeEl.offsetTop +
+          nodeEl.clientHeight +
+          30 -
+          (panelEl.scrollTop + panelEl.clientHeight)),
         0
       );
     }
@@ -420,9 +428,9 @@ export default class ViewProvider {
     const viewData = node.data.view;
     return new Point(
       parseInt(viewData.element!.style.left) -
-        this.mindCheeseInnerElement.scrollLeft,
+      this.mindCheeseInnerElement.scrollLeft,
       parseInt(viewData.element!.style.top) -
-        this.mindCheeseInnerElement.scrollTop
+      this.mindCheeseInnerElement.scrollTop
     );
   }
 
@@ -444,6 +452,7 @@ export default class ViewProvider {
       const node = nodes[nodeid];
       node.data.view.element = null;
       node.data.view.expander = null;
+      node.data.view.adder = null;
     }
     this.mcnodes.innerHTML = "";
   }
@@ -457,9 +466,11 @@ export default class ViewProvider {
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
       const expander = viewData.expander!;
+      const adder = viewData.adder!;
       if (!node.data.layout.visible) {
         nodeElement.style.display = "none";
         expander.style.display = "none";
+        adder.style.display = "none";
         continue;
       }
       const p = this.layout.getTopLeft(node);
@@ -484,6 +495,19 @@ export default class ViewProvider {
       if (!node.isroot && node.children.length == 0) {
         expander.style.display = "none";
         expander.style.visibility = "hidden";
+      }
+
+      if (!node.isroot && node.children.length == 0) {
+        const adder = viewData.adder!;
+        const adderText = "+";
+        const adderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
+          this.layout.getAdderPoint(node)
+        );
+        adder.style.left = adderPoint.x + "px";
+        adder.style.top = adderPoint.y + "px";
+        adder.style.display = "";
+        adder.style.visibility = "visible";
+        adder.innerText = adderText;
       }
     }
   }

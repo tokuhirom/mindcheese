@@ -4,13 +4,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import { BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_LAST, Direction} from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import { object2mindmap } from "./format/node_tree/object2mindmap";
-import { MindOption } from "./MindOption";
-import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
-import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
+import {object2mindmap} from "./format/node_tree/object2mindmap";
+import {MindOption} from "./MindOption";
+import {mindmap2markdown} from "./format/markdown/mindmap2markdown";
+import {markdown2mindmap} from "./format/markdown/markdown2mindmap";
+import {generateNewId} from "./utils/RandomID";
 
 export default class MindCheese {
   options: MindOption;
@@ -127,7 +128,7 @@ export default class MindCheese {
           this.zoom(this.zoomScale);
         }
       },
-      { passive: true }
+      {passive: true}
     );
     window.addEventListener("resize", () => {
       this.resize();
@@ -152,20 +153,42 @@ export default class MindCheese {
     }
   }
 
-  clickHandle(e: Event): void {
+  clickHandle(e: Event): boolean {
     const element = e.target as HTMLElement;
-    const isexpander = this.view.isExpander(element);
-    if (isexpander) {
-      const nodeid = this.view.getBindedNodeId(element);
-      if (nodeid) {
-        const theNode = this.getNodeById(nodeid);
-        if (!theNode) {
-          throw new Error("the node[id=" + nodeid + "] can not be found.");
-        } else {
-          return this.toggleNode(theNode);
+    switch (element.tagName.toLowerCase()) {
+      case "mcexpander": {
+        const nodeid = this.view.getBindedNodeId(element);
+        if (nodeid) {
+          const theNode = this.getNodeById(nodeid);
+          if (!theNode) {
+            throw new Error("the node[id=" + nodeid + "] can not be found.");
+          } else {
+            console.log(`element: ${element.tagName.toLowerCase()}`)
+            this.toggleNode(theNode);
+          }
         }
+        return false;
+      }
+      case "mcadder": {
+        const nodeid = this.view.getBindedNodeId(element);
+        if (nodeid) {
+          const theNode = this.getNodeById(nodeid);
+          if (!theNode) {
+            throw new Error("the node[id=" + nodeid + "] can not be found.");
+          } else {
+            console.log(`element: ${element.tagName.toLowerCase()}`)
+            const nodeid = generateNewId();
+            const node = this.addNode(theNode, nodeid, "New Node");
+            if (node) {
+              this.selectNode(node);
+              this.beginEdit(node);
+            }
+          }
+        }
+        return false;
       }
     }
+    return true;
   }
 
   dblclickHandle(e: Event): boolean {
@@ -273,6 +296,7 @@ export default class MindCheese {
     this.checkEditable();
 
     this.undoManager.recordSnapshot();
+    parentNode.data.view.adder!.style.display = "none";
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null, true);
     if (node) {
       this.view.addNode(node);
