@@ -15,8 +15,8 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./model/MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
-import {Point} from "./LayoutProvider";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import { Point } from "./LayoutProvider";
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -171,7 +171,7 @@ export default class Draggable {
   }
 
   private doLookupCloseNode(): ClosePoint | null {
-    const root = (this.mindCheese.mind.root)!;
+    const root = this.mindCheese.mind.root!;
     const rootLocation = root.data.view.location;
     const rootSize = root.getSize();
     const rootX = rootLocation.x + rootSize.width / 2;

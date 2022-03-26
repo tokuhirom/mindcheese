@@ -4,14 +4,14 @@ import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
 import Mind from "./Mind";
 import Draggable from "./Draggable";
-import {BEFOREID_LAST, Direction} from "./MindmapConstants";
+import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import UndoManager from "./UndoManager";
 import GraphCanvas from "./GraphCanvas";
-import {object2mindmap} from "./format/node_tree/object2mindmap";
-import {MindOption} from "./MindOption";
-import {mindmap2markdown} from "./format/markdown/mindmap2markdown";
-import {markdown2mindmap} from "./format/markdown/markdown2mindmap";
-import {generateNewId} from "./utils/RandomID";
+import { object2mindmap } from "./format/node_tree/object2mindmap";
+import { MindOption } from "./MindOption";
+import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
+import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
+import { generateNewId } from "./utils/RandomID";
 
 export default class MindCheese {
   options: MindOption;
@@ -127,7 +127,7 @@ export default class MindCheese {
           this.zoom(this.zoomScale);
         }
       },
-      {passive: true}
+      { passive: true }
     );
     window.addEventListener("resize", () => {
       this.resize();
@@ -326,7 +326,7 @@ export default class MindCheese {
       throw new Error("fail, topic can not be empty");
     }
 
-    const node = (this.mind.getNodeById(nodeid))!;
+    const node = this.mind.getNodeById(nodeid)!;
 
     this.undoManager.recordSnapshot();
     if (node.topic === topic) {
