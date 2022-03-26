@@ -128,6 +128,7 @@ export default class ViewProvider {
       return this.getBindedNodeId(element.parentElement!);
     }
   }
+
   reset(): void {
     console.debug("view.reset");
     this.selectedNode = null;
@@ -481,10 +482,7 @@ export default class ViewProvider {
       const pin = this.layout.getNodePointIn(node);
       {
         // Draw line between previous node and next node
-        const pout = this.layout.getNodePointOut(
-          node.parent!,
-          node
-        );
+        const pout = this.layout.getNodePointOut(node.parent!, node);
         this.graph.drawLine(
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),

@@ -106,10 +106,6 @@ export default class LayoutProvider {
     this.graphCanvas = graphCanvas;
   }
 
-  reset(): void {
-    console.debug("layout.reset");
-  }
-
   layout(): void {
     const rootNode = this.mindCheese.mind.root!;
     rootNode.data.layout.relativeCenterOffsetX = 0;
