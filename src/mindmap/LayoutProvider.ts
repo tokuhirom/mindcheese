@@ -1,9 +1,9 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import { Size } from "./Size";
+import {Size} from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -21,6 +21,8 @@ export class CenterOfNodeOffsetFromParentNode {
     this.y = y;
   }
 
+  // https://ageek.dev/ts-nominal-typing
+  __CenterOfNodeOffsetFromParentNodeBrand: any;
   readonly x: number;
   readonly y: number;
 }
@@ -31,6 +33,8 @@ export class CenterOfNodeOffsetFromRootNode {
     this.y = y;
   }
 
+  // https://ageek.dev/ts-nominal-typing
+  __CenterOfNodeOffsetFromRootNodeBrand: any;
   readonly x: number;
   readonly y: number;
 }
@@ -41,9 +45,20 @@ export class OffsetFromTopLeftOfMcnodes {
     this.y = y;
   }
 
+  __OffsetFromTopLeftOfMcnodesBrand: any;
   readonly x: number;
   readonly y: number;
 }
+
+export class RootNodeOffsetFromTopLeftOfMcnodes extends OffsetFromTopLeftOfMcnodes {
+  convertCenterOfNodeOffsetFromRootNode(offset: CenterOfNodeOffsetFromRootNode): OffsetFromTopLeftOfMcnodes {
+    return new OffsetFromTopLeftOfMcnodes(
+      this.x + offset.x,
+      this.y + offset.y
+    );
+  }
+}
+
 
 export class Bounds {
   constructor(n: number, e: number, w: number, s: number) {
@@ -53,13 +68,13 @@ export class Bounds {
     this.s = s;
     this.size = new Size(this.e + this.w * -1, this.s + this.n * -1);
     console.log(
-      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.w},h=${this.size.h}`
+      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.width},h=${this.size.height}`
     );
   }
 
-  readonly n: number;
+  readonly n: number; // negative
   readonly e: number;
-  readonly w: number;
+  readonly w: number; // negative
   readonly s: number;
   readonly size: Size;
 }
@@ -130,18 +145,13 @@ export default class LayoutProvider {
         );
         layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
         layoutData.relativeCenterOffsetX =
-          this.hSpace * node.direction +
-          (node.parent!.data.view.width *
-            (node.parent!.direction + node.direction)) /
-            2;
-        if (!node.parent!.isroot) {
-          layoutData.relativeCenterOffsetX += this.pSpace * node.direction;
-        }
+          this.hSpace * node.direction
+          + (node.parent!.data.view.width / 2 * node.direction)
+          + this.hSpace * node.direction
+          + (node.data.view.width / 2 * node.direction)
+          + (node.parent?.isroot ? 0 : this.pSpace * node.direction);
 
-        baseY +=
-          nodeOuterHeight +
-          (node.expanded ? childrenHeight / 2 : 0) +
-          this.vSpace;
+        baseY += nodeOuterHeight + this.vSpace;
         totalHeight += nodeOuterHeight;
       }
     }
@@ -175,15 +185,15 @@ export default class LayoutProvider {
       y += offsetPoint.y;
     }
 
-    return new Point(x, y);
+    return new CenterOfNodeOffsetFromRootNode(x, y);
   }
 
-  getNodePoint(node: MindNode): Point {
+  getNodePoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const viewData = node.data.view;
     const offsetPoint = this.getCenterOffsetOfTheNodeFromRootNode(node);
     const x = offsetPoint.x + (viewData.width * (node.direction - 1)) / 2;
     const y = offsetPoint.y - viewData.height - this.graphCanvas.lineWidth;
-    return new Point(x, y);
+    return new CenterOfNodeOffsetFromRootNode(x, y);
   }
 
   /**
@@ -237,10 +247,10 @@ export default class LayoutProvider {
         console.log(
           `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
         );
-        e = Math.max(offsetPoint.x + node.data.view.width / 2, e);
-        w = Math.min(offsetPoint.x - node.data.view.width / 2, w);
-        n = Math.min(offsetPoint.y - node.data.view.height / 2, n);
-        s = Math.max(offsetPoint.y + node.data.view.height / 2, s);
+        e = Math.max(offsetPoint.x + node.data.view.width / 2 + this.hSpace, e);
+        w = Math.min(offsetPoint.x - node.data.view.width / 2 - this.hSpace, w);
+        n = Math.min(offsetPoint.y - node.data.view.height / 2 - this.vSpace, n);
+        s = Math.max(offsetPoint.y + node.data.view.height / 2 - this.vSpace, s);
       }
     }
     // maximum distance from center of root node.

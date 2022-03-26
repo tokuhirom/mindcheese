@@ -96,8 +96,8 @@ export default class Draggable {
 
   resize(): void {
     this.mindCheese.view.mcnodes.appendChild(this.shadow);
-    this.canvasElement.width = this.mindCheese.view.size.w;
-    this.canvasElement.height = this.mindCheese.view.size.h;
+    this.canvasElement.width = this.mindCheese.view.size.width;
+    this.canvasElement.height = this.mindCheese.view.size.height;
   }
 
   private static createCanvas(): HTMLCanvasElement {
@@ -151,8 +151,8 @@ export default class Draggable {
     this.canvasContext.clearRect(
       0,
       0,
-      this.mindCheese.view.size.w,
-      this.mindCheese.view.size.h
+      this.mindCheese.view.size.width,
+      this.mindCheese.view.size.height
     );
   }
 
@@ -174,7 +174,7 @@ export default class Draggable {
     const root = this.mindCheese.getRoot()!;
     const rootLocation = root.data.view.location;
     const rootSize = root.getSize();
-    const rootX = rootLocation.x + rootSize.w / 2;
+    const rootX = rootLocation.x + rootSize.width / 2;
 
     const sw = this.shadowW;
     const sh = this.shadowH;
@@ -198,15 +198,15 @@ export default class Draggable {
         const ns = node.getSize();
         const nl = node.data.view.location;
         if (direct == Direction.RIGHT) {
-          if (sx - nl.x - ns.w <= 0) {
+          if (sx - nl.x - ns.width <= 0) {
             continue;
           }
           distance =
-            Math.abs(sx - nl.x - ns.w) +
-            Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            Math.abs(sx - nl.x - ns.width) +
+            Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = {
-            x: nl.x + ns.w - this.lineWidth,
-            y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
+            x: nl.x + ns.width - this.lineWidth,
+            y: nl.y + (node.isroot ? ns.height / 2 : ns.height),
           };
           sp = { x: sx + this.lineWidth, y: sy + sh };
         } else {
@@ -214,10 +214,10 @@ export default class Draggable {
             continue;
           }
           distance =
-            Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.h / 2);
+            Math.abs(sx + sw - nl.x) + Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = {
             x: nl.x + this.lineWidth,
-            y: nl.y + (node.isroot ? ns.h / 2 : ns.h),
+            y: nl.y + (node.isroot ? ns.height / 2 : ns.height),
           };
           sp = { x: sx + sw - this.lineWidth, y: sy + sh };
         }

@@ -1,9 +1,9 @@
 export class Size {
-  readonly w: number;
-  readonly h: number;
+  readonly width: number;
+  readonly height: number;
 
   constructor(width: number, height: number) {
-    this.w = width;
-    this.h = height;
+    this.width = width;
+    this.height = height;
   }
 }

@@ -1,13 +1,10 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, {
-  OffsetFromTopLeftOfMcnodes,
-  Point,
-} from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import LayoutProvider, {OffsetFromTopLeftOfMcnodes, Point, RootNodeOffsetFromTopLeftOfMcnodes,} from "./LayoutProvider";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -167,16 +164,16 @@ export default class ViewProvider {
     }
   }
 
-  private expandSize(): void {
+  private getCanvasSize(): Size {
     const minSize = this.layout.getBounds().size;
 
-    const minWidth = minSize.w + this.hMargin * 2;
-    const minHeight = minSize.h + this.vMargin * 2;
+    const minWidth = minSize.width + this.hMargin * 2;
+    const minHeight = minSize.height + this.vMargin * 2;
     const clientW = this.mindCheeseInnerElement.clientWidth;
     const clientH = this.mindCheeseInnerElement.clientHeight;
 
     console.log(`expandSize: ${clientH} ${minHeight}`);
-    this.size = new Size(
+    return new Size(
       Math.max(clientW, minWidth),
       Math.max(clientH, minHeight)
     );
@@ -370,15 +367,15 @@ export default class ViewProvider {
   }
 
   // get the center point offset
-  getOffsetOfTheRootNode(): OffsetFromTopLeftOfMcnodes {
+  getOffsetOfTheRootNode(): RootNodeOffsetFromTopLeftOfMcnodes {
     const bounds = this.layout.getBounds();
     console.log(
-      `getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`
+      `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
     );
     const x = -bounds.w + this.mindCheese.mind.root!.data.view.width / 2;
     // const x = (this.size.w - bounds.e - bounds.w) / 2;
     const y = -bounds.n + this.mindCheese.mind.root!.data.view.height / 2;
-    return new OffsetFromTopLeftOfMcnodes(x, y);
+    return new RootNodeOffsetFromTopLeftOfMcnodes(x, y);
   }
 
   resize(): void {
@@ -388,35 +385,31 @@ export default class ViewProvider {
 
     this.layoutAgain();
   }
-
-  private doShow(): void {
-    console.log(`doShow: ${this.size.w} ${this.size.h}`);
-    this.graph.setSize(this.size.w, this.size.h);
-    this.mcnodes.parentElement!.style.width = this.size.w + "px";
-    this.mcnodes.parentElement!.style.height = this.size.h + "px";
-    this.showNodes();
-    this.showLines();
-    this.mindCheese.draggable.resize();
-  }
-
   // Display root position at center of container element.
   centerRoot(): void {
     const outerW = this.mindCheeseInnerElement.clientWidth;
     const outerH = this.mindCheeseInnerElement.clientHeight;
-    if (this.size.w > outerW) {
+    if (this.size.width > outerW) {
       const offset = this.getOffsetOfTheRootNode();
       this.mindCheeseInnerElement.scrollLeft = offset.x - outerW / 2;
     }
-    if (this.size.h > outerH) {
-      this.mindCheeseInnerElement.scrollTop = (this.size.h - outerH) / 2;
+    if (this.size.height > outerH) {
+      this.mindCheeseInnerElement.scrollTop = (this.size.height - outerH) / 2;
     }
   }
 
   layoutAgain(): void {
     this.layout.setVisibleRecursively(this.mindCheese.mind.root!, true);
     this.layout.layout();
-    this.expandSize();
-    this.doShow();
+    this.size = this.getCanvasSize();
+
+    console.log(`doShow: ${this.size.width} ${this.size.height}`);
+    this.graph.setSize(this.size.width, this.size.height);
+    this.mcnodes.parentElement!.style.width = this.size.width + "px";
+    this.mcnodes.parentElement!.style.height = this.size.height + "px";
+    this.showNodes();
+    this.showLines();
+    this.mindCheese.draggable.resize();
   }
 
   takeLocation(node: MindNode): Point {
@@ -465,9 +458,9 @@ export default class ViewProvider {
         continue;
       }
       const p = this.layout.getNodePoint(node);
-      viewData.location = new Point(offset.x + p.x, offset.y + p.y);
-      nodeElement.style.left = offset.x + p.x + "px";
-      nodeElement.style.top = offset.y + p.y + "px";
+      viewData.location = offset.convertCenterOfNodeOffsetFromRootNode(p);
+      nodeElement.style.left = viewData.location.x + "px";
+      nodeElement.style.top = viewData.location.y + "px";
       nodeElement.style.display = "";
       nodeElement.style.visibility = "visible";
       if (!node.isroot && node.children.length > 0) {
