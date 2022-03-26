@@ -122,11 +122,7 @@ export default class ViewProvider {
     if (tagName === "mcnodes" || tagName === "body" || tagName === "html") {
       return null;
     }
-    if (
-      tagName === "mcnode" ||
-      tagName === "mcexpander" ||
-      tagName == "mcadder"
-    ) {
+    if (tagName === "mcnode" || tagName == "mcadder") {
       return element.getAttribute("nodeid");
     } else {
       return this.getBindedNodeId(element.parentElement!);
@@ -195,22 +191,12 @@ export default class ViewProvider {
     if (node.isroot) {
       nodeEl.className = "root";
     } else {
-      {
-        const expanderElement = document.createElement("mcexpander");
-        expanderElement.innerText = "-";
-        expanderElement.setAttribute("nodeid", node.id);
-        expanderElement.style.visibility = "hidden";
-        parentNode.appendChild(expanderElement);
-        node.data.view.expander = expanderElement;
-      }
-      {
-        const adderElement = document.createElement("mcadder");
-        adderElement.innerText = "-";
-        adderElement.setAttribute("nodeid", node.id);
-        adderElement.style.visibility = "hidden";
-        parentNode.appendChild(adderElement);
-        node.data.view.adder = adderElement;
-      }
+      const adderElement = document.createElement("mcadder");
+      adderElement.innerText = "-";
+      adderElement.setAttribute("nodeid", node.id);
+      adderElement.style.visibility = "hidden";
+      parentNode.appendChild(adderElement);
+      node.data.view.adder = adderElement;
     }
     if (node.topic) {
       nodeEl.innerHTML = this.textFormatter.render(node.topic);
@@ -235,13 +221,10 @@ export default class ViewProvider {
     }
     if (node.data.view) {
       const element = node.data.view.element!;
-      const expander = node.data.view.expander!;
       const adder = node.data.view.adder!;
       this.mcnodes.removeChild(element);
-      this.mcnodes.removeChild(expander);
       this.mcnodes.removeChild(adder);
       node.data.view.element = null;
-      node.data.view.expander = null;
       node.data.view.adder = null;
     }
   }
@@ -414,7 +397,6 @@ export default class ViewProvider {
   }
 
   layoutAgain(): void {
-    this.layout.setVisibleRecursively(this.mindCheese.mind.root!, true);
     this.layout.layout();
     this.size = this.getCanvasSize();
 
@@ -428,7 +410,7 @@ export default class ViewProvider {
     this.showLines();
   }
 
-  takeLocation(node: MindNode): Point {
+  saveScroll(node: MindNode): Point {
     const viewData = node.data.view;
     return new Point(
       parseInt(viewData.element!.style.left) -
@@ -438,7 +420,7 @@ export default class ViewProvider {
     );
   }
 
-  restoreLocation(node: MindNode, location: Point): void {
+  restoreScroll(node: MindNode, location: Point): void {
     const viewData = node.data.view;
     this.mindCheeseInnerElement.scrollLeft =
       parseInt(viewData.element!.style.left) - location.x;
@@ -455,7 +437,6 @@ export default class ViewProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
       node.data.view.element = null;
-      node.data.view.expander = null;
       node.data.view.adder = null;
     }
     this.mcnodes.innerHTML = "";
@@ -469,37 +450,12 @@ export default class ViewProvider {
 
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
-      const expander = viewData.expander!;
-      const adder = viewData.adder!;
-      if (!node.data.layout.visible) {
-        nodeElement.style.display = "none";
-        expander.style.display = "none";
-        adder.style.display = "none";
-        continue;
-      }
       const p = this.layout.getTopLeft(node);
       viewData.location = offset.convertCenterOfNodeOffsetFromRootNode(p);
       nodeElement.style.left = viewData.location.x + "px";
       nodeElement.style.top = viewData.location.y + "px";
       nodeElement.style.display = "";
       nodeElement.style.visibility = "visible";
-
-      if (!node.isroot && node.children.length > 0) {
-        const expanderText = node.expanded ? "-" : "+";
-        const expanderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
-          this.layout.getExpanderPoint(node)
-        );
-        expander.style.left = expanderPoint.x + "px";
-        expander.style.top = expanderPoint.y + "px";
-        expander.style.display = "";
-        expander.style.visibility = "visible";
-        expander.innerText = expanderText;
-      }
-      // hide expander while all children have been removed
-      if (!node.isroot && node.children.length == 0) {
-        expander.style.display = "none";
-        expander.style.visibility = "hidden";
-      }
 
       if (!node.isroot && node.children.length == 0) {
         const adder = viewData.adder!;
@@ -525,12 +481,9 @@ export default class ViewProvider {
       if (node.isroot) {
         continue;
       }
-      if ("visible" in node.data.layout && !node.data.layout.visible) {
-        continue;
-      }
+      const pin = this.layout.getNodePointIn(node);
       {
         // Draw line between previous node and next node
-        const pin = this.layout.getNodePointIn(node);
         const pout = this.layout.getNodePointOutWithDestination(
           node.parent!,
           node
@@ -544,7 +497,6 @@ export default class ViewProvider {
       }
       {
         // Draw line under the bottom of the node
-        const pin = this.layout.getNodePointIn(node);
         const pout = new CenterOfNodeOffsetFromRootNode(
           pin.x + node.data.view.width * node.direction,
           pin.y

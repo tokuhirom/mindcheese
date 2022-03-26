@@ -48,16 +48,6 @@ export default class ShortcutHandlers {
     return false;
   }
 
-  static toggle(mindCheese: MindCheese, e: Event): boolean {
-    const selectedNode = mindCheese.getSelectedNode();
-    if (selectedNode) {
-      mindCheese.toggleNode(selectedNode);
-      e.stopPropagation();
-      e.preventDefault();
-    }
-    return false;
-  }
-
   static moveUp(mindCheese: MindCheese): boolean {
     console.debug(`ShortcutProvider.handle_move_up`);
     const selectedNode = mindCheese.getSelectedNode();

@@ -1,6 +1,6 @@
 "use strict";
 
-import { markdown2mindmap } from "../src/mindmap/format/markdown/markdown2mindmap";
+import {markdown2mindmap} from "../src/mindmap/format/markdown/markdown2mindmap";
 
 test("complex", () => {
   const md = [
@@ -28,41 +28,34 @@ test("complex", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
     children: [
       {
         id: 2,
         topic: "jsMind",
         direction: "right",
-        expanded: true,
         children: [
           {
             id: 3,
             topic: "Easy",
-            expanded: true,
             children: [
               {
                 id: 4,
                 topic: "Easy to show",
-                expanded: true,
                 children: [],
               },
               {
                 id: 5,
                 topic: "Easy to edit",
-                expanded: true,
                 children: [],
               },
               {
                 id: 6,
                 topic: "Easy to store",
-                expanded: true,
                 children: [],
               },
               {
                 id: 7,
                 topic: "Easy to embed",
-                expanded: true,
                 children: [],
               },
             ],
@@ -70,18 +63,15 @@ test("complex", () => {
           {
             id: 8,
             topic: "Open Source",
-            expanded: true,
             children: [
               {
                 id: 9,
                 topic: "on GitHub",
-                expanded: true,
                 children: [],
               },
               {
                 id: 10,
                 topic: "BSD License",
-                expanded: true,
                 children: [],
               },
             ],
@@ -89,24 +79,20 @@ test("complex", () => {
           {
             id: 11,
             topic: "Powerful",
-            expanded: true,
             children: [
               {
                 id: 12,
                 topic: "Base on Javascript",
-                expanded: true,
                 children: [],
               },
               {
                 id: 13,
                 topic: "Base on HTML5",
-                expanded: true,
                 children: [],
               },
               {
                 id: 14,
                 topic: "Depends on you",
-                expanded: true,
                 children: [],
               },
             ],
@@ -114,18 +100,15 @@ test("complex", () => {
           {
             id: 15,
             topic: "test node",
-            expanded: true,
             children: [
               {
                 id: 16,
                 topic: "I'm from local variable",
-                expanded: true,
                 children: [],
               },
               {
                 id: 17,
                 topic: "I can do everything",
-                expanded: true,
                 children: [],
               },
             ],
@@ -143,16 +126,14 @@ test("basic", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
     children: [
       {
         id: 2,
         topic: "A",
         direction: "right",
-        expanded: true,
-        children: [{ id: 3, topic: "B", expanded: true, children: [] }],
+        children: [{id: 3, topic: "B", children: []}],
       },
-      { id: 4, topic: "C", direction: "right", expanded: true, children: [] },
+      {id: 4, topic: "C", direction: "right", children: []},
     ],
   });
 });
@@ -164,16 +145,14 @@ test("left", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
     children: [
       {
         id: 2,
         topic: "A",
         direction: "right",
-        expanded: true,
-        children: [{ id: 3, topic: "B", expanded: true, children: [] }],
+        children: [{id: 3, topic: "B", children: []}],
       },
-      { id: 4, topic: "C", direction: "left", expanded: true, children: [] },
+      {id: 4, topic: "C", direction: "left", children: []},
     ],
   });
 });
@@ -185,9 +164,9 @@ test("ignore yfm", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
+
     children: [
-      { id: 2, topic: "A", direction: "right", expanded: true, children: [] },
+      {id: 2, topic: "A", direction: "right", children: []},
     ],
   });
 });
@@ -208,28 +187,25 @@ test("dedent 2 step", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
     children: [
-      { id: 2, topic: "A1", direction: "right", expanded: true, children: [] },
+      {id: 2, topic: "A1", direction: "right", children: []},
       {
         id: 3,
         topic: "A2",
         direction: "right",
-        expanded: true,
         children: [
-          { id: 4, topic: "B1", expanded: true, children: [] },
+          {id: 4, topic: "B1", children: []},
           {
             id: 5,
             topic: "B2",
-            expanded: true,
             children: [
-              { id: 6, topic: "C1", expanded: true, children: [] },
-              { id: 7, topic: "C2", expanded: true, children: [] },
+              {id: 6, topic: "C1", children: []},
+              {id: 7, topic: "C2", children: []},
             ],
           },
         ],
       },
-      { id: 8, topic: "A3", direction: "right", expanded: true, children: [] },
+      {id: 8, topic: "A3", direction: "right", children: []},
     ],
   });
 });
@@ -252,36 +228,32 @@ test("dedent 3 step", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
     children: [
-      { id: 2, topic: "A1", direction: "right", expanded: true, children: [] },
+      {id: 2, topic: "A1", direction: "right", children: []},
       {
         id: 3,
         topic: "A2",
         direction: "right",
-        expanded: true,
         children: [
-          { id: 4, topic: "B1", expanded: true, children: [] },
+          {id: 4, topic: "B1", children: []},
           {
             id: 5,
             topic: "B2",
-            expanded: true,
             children: [
-              { id: 6, topic: "C1", expanded: true, children: [] },
+              {id: 6, topic: "C1", children: []},
               {
                 id: 7,
                 topic: "C2",
-                expanded: true,
                 children: [
-                  { id: 8, topic: "D1", expanded: true, children: [] },
-                  { id: 9, topic: "D2", expanded: true, children: [] },
+                  {id: 8, topic: "D1", children: []},
+                  {id: 9, topic: "D2", children: []},
                 ],
               },
             ],
           },
         ],
       },
-      { id: 10, topic: "A3", direction: "right", expanded: true, children: [] },
+      {id: 10, topic: "A3", direction: "right", children: []},
     ],
   });
 });
@@ -300,15 +272,13 @@ test("Multiline", () => {
   expect(mm).toStrictEqual({
     id: 1,
     topic: "top",
-    expanded: true,
     children: [
       {
         id: 2,
         topic: "A1\nA2",
         direction: "right",
-        expanded: true,
         children: [
-          { id: 3, topic: "B1\nB2\nB3", expanded: true, children: [] },
+          {id: 3, topic: "B1\nB2\nB3", children: []},
         ],
       },
     ],

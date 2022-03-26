@@ -1,5 +1,5 @@
 import MindNode from "./model/MindNode";
-import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
 
 export default class Mind {
   root: MindNode | null;
@@ -31,8 +31,7 @@ export default class Mind {
       topic,
       true,
       null,
-      Direction.CENTER,
-      true
+      Direction.CENTER
     );
     this.putNode(this.root);
   }
@@ -43,7 +42,6 @@ export default class Mind {
     topic: string,
     idx: number | null,
     direction: Direction | null,
-    expanded: boolean
   ): MindNode {
     const nodeindex: number = idx || -1;
     let node;
@@ -74,7 +72,6 @@ export default class Mind {
         false,
         parentNode,
         d,
-        expanded
       );
     } else {
       node = new MindNode(
@@ -84,7 +81,6 @@ export default class Mind {
         false,
         parentNode,
         parentNode.direction,
-        expanded
       );
     }
 
@@ -106,8 +102,7 @@ export default class Mind {
       nodeid,
       topic,
       nodeIndex,
-      null,
-      true
+      null
     );
   }
 
@@ -137,8 +132,7 @@ export default class Mind {
       nodeid,
       topic,
       nodeIndex,
-      nodeAfter.direction,
-      true
+      nodeAfter.direction
     );
   }
 

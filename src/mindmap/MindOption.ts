@@ -22,7 +22,7 @@ class ViewOption {
 class LayoutOption {
   hspace = 30; // horizontal spacing between nodes
   vspace = 20; // vspace vertical spacing between nodes
-  pspace = 13; // Horizontal spacing between node and connection line (to place node expander)
+  pspace = 13; // Horizontal spacing between node and connection line (to place node adder)
 }
 
 class ShortcutOption {
@@ -34,7 +34,6 @@ class ShortcutOption {
     [KeyModifier.NONE, "Enter", ShortcutHandlers.addBrother],
     [KeyModifier.CTRL, "Enter", ShortcutHandlers.editNode], // windows
     [KeyModifier.META, "Enter", ShortcutHandlers.editNode], // mac
-    [KeyModifier.NONE, "Space", ShortcutHandlers.toggle],
     [KeyModifier.SHIFT, "ArrowUp", ShortcutHandlers.moveUp],
     [KeyModifier.SHIFT, "ArrowDown", ShortcutHandlers.moveDown],
     [KeyModifier.NONE, "ArrowUp", ShortcutHandlers.up],

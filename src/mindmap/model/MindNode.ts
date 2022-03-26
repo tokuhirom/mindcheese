@@ -12,7 +12,6 @@ export default class MindNode {
   public readonly isroot: boolean;
   public parent: MindNode | null;
   public direction: Direction;
-  public expanded: boolean;
   public readonly children: MindNode[];
   public color: string | null;
   public readonly data: {
@@ -27,7 +26,6 @@ export default class MindNode {
     isRoot: boolean,
     parent: MindNode | null,
     direction: Direction,
-    expanded: boolean
   ) {
     if (!id) {
       throw new Error("invalid nodeid");
@@ -38,7 +36,6 @@ export default class MindNode {
     this.isroot = isRoot;
     this.parent = parent;
     this.direction = direction;
-    this.expanded = expanded;
     this.children = [];
     this.data = {
       view: new ViewData(),
@@ -105,7 +102,6 @@ export default class MindNode {
     const o: Record<string, any> = {
       id: this.id,
       topic: this.topic,
-      expanded: this.expanded,
       children: this.children.map((it) => it.toObject()),
     };
     if (!!this.parent && this.parent.isroot) {

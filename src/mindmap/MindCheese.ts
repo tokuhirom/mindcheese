@@ -118,7 +118,6 @@ export default class MindCheese {
       (e) => {
         if (e.ctrlKey) {
           e.stopPropagation();
-          e.preventDefault();
           if (e.deltaY > 0) {
             this.zoomScale -= 0.1;
           } else {
@@ -156,19 +155,6 @@ export default class MindCheese {
   clickHandle(e: Event): boolean {
     const element = e.target as HTMLElement;
     switch (element.tagName.toLowerCase()) {
-      case "mcexpander": {
-        const nodeid = this.view.getBindedNodeId(element);
-        if (nodeid) {
-          const theNode = this.getNodeById(nodeid);
-          if (!theNode) {
-            throw new Error("the node[id=" + nodeid + "] can not be found.");
-          } else {
-            console.log(`element: ${element.tagName.toLowerCase()}`);
-            this.toggleNode(theNode);
-          }
-        }
-        return false;
-      }
       case "mcadder": {
         const nodeid = this.view.getBindedNodeId(element);
         if (nodeid) {
@@ -230,26 +216,6 @@ export default class MindCheese {
     this.view.editNodeEnd();
   }
 
-  toggleNode(node: MindNode): void {
-    if (node.isroot) {
-      return;
-    }
-    const location = this.view.takeLocation(node);
-    this.layout.toggleNode(node);
-    this.view.layoutAgain();
-    this.view.restoreLocation(node, location);
-  }
-
-  expandNode(node: MindNode): void {
-    if (node.isroot) {
-      return;
-    }
-    const location = this.view.takeLocation(node);
-    node.expanded = true;
-    this.view.layoutAgain();
-    this.view.restoreLocation(node, location);
-  }
-
   private doReset(): void {
     this.view.reset();
     this.layout.reset();
@@ -276,7 +242,6 @@ export default class MindCheese {
   }
 
   getMarkdown(): string {
-    // return convertMM2MD(this.mind.root.toObject());
     return mindmap2markdown(this.mind);
   }
 
@@ -288,7 +253,7 @@ export default class MindCheese {
     return this.mind.root;
   }
 
-  getNodeById(nodeid: string): MindNode {
+  getNodeById(nodeid: string): MindNode { // TODO `| null`
     return this.mind.getNodeById(nodeid);
   }
 
@@ -297,11 +262,10 @@ export default class MindCheese {
 
     this.undoManager.recordSnapshot();
     parentNode.data.view.adder!.style.display = "none";
-    const node = this.mind.addNode(parentNode, nodeid, topic, null, null, true);
+    const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
       this.view.addNode(node);
       this.view.layoutAgain();
-      this.expandNode(parentNode);
     }
     return node;
   }
@@ -325,7 +289,7 @@ export default class MindCheese {
     this.checkEditable();
 
     if (node.isroot) {
-      throw new Error("fail, can not remove root node");
+      throw new Error("fail, cannot remove root node");
     }
 
     const nodeid = node.id;
@@ -335,7 +299,8 @@ export default class MindCheese {
       parentNode,
       nodeid
     );
-    const location = this.view.takeLocation(node);
+
+    const scroll = this.view.saveScroll(node);
     this.view.removeNode(node);
     this.mind.removeNode(node);
     this.view.layoutAgain();
@@ -343,7 +308,8 @@ export default class MindCheese {
       this.mind.selected = nextSelectedNode;
       this.view.selectNode(nextSelectedNode);
     }
-    this.view.restoreLocation(parentNode, location);
+    this.view.restoreScroll(parentNode, scroll);
+
     return true;
   }
 
@@ -372,7 +338,7 @@ export default class MindCheese {
       throw new Error("fail, topic can not be empty");
     }
 
-    const node = this.getNodeById(nodeid);
+    const node = this.getNodeById(nodeid)!;
     if (!node) {
       throw new Error(`Unknown node: ${nodeid}`);
     }
@@ -412,9 +378,6 @@ export default class MindCheese {
   }
 
   selectNode(node: MindNode): void {
-    if (!node.data.layout.visible) {
-      return;
-    }
     this.mind.selected = node;
     this.view.selectNode(node);
   }

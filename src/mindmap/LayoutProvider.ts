@@ -1,9 +1,9 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "./MindmapConstants";
 
 import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
-import { Size } from "./Size";
+import {Size} from "./Size";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -89,7 +89,7 @@ export default class LayoutProvider {
    * @param mindCheese MindCheese instance
    * @param hspace horizontal spacing between nodes
    * @param vspace vertical spacing between nodes
-   * @param pspace Horizontal spacing between node and connection line (to place node expander)
+   * @param pspace Horizontal spacing between node and connection line (to place node adder)
    * @param graphCanvas
    */
   constructor(
@@ -137,10 +137,7 @@ export default class LayoutProvider {
         const layoutData = node.data.layout;
 
         const childrenHeight = this.layoutOffsetSubNodes(node.children);
-        const nodeOuterHeight = Math.max(
-          node.data.view.height,
-          node.expanded ? childrenHeight : 0
-        );
+        const nodeOuterHeight = Math.max(node.data.view.height, childrenHeight);
         layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
         layoutData.relativeCenterOffsetX =
           this.hSpace * node.direction +
@@ -211,9 +208,7 @@ export default class LayoutProvider {
       );
     } else {
       const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
-      const x =
-        offsetPoint.x +
-        (node.data.view.width / 2 + this.pSpace) * node.direction;
+      const x = offsetPoint.x + (node.data.view.width / 2) * node.direction;
       return new CenterOfNodeOffsetFromRootNode(
         x,
         offsetPoint.y + node.data.view.height / 2
@@ -222,10 +217,6 @@ export default class LayoutProvider {
   }
 
   getAdderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    return this.getExpanderPoint(node);
-  }
-
-  getExpanderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
 
     const x =
@@ -247,44 +238,24 @@ export default class LayoutProvider {
     let s = 0;
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
-      if (node.data.layout.visible) {
-        const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
-        console.log(
-          `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
-        );
-        e = Math.max(offsetPoint.x + node.data.view.width / 2 + this.hSpace, e);
-        w = Math.min(offsetPoint.x - node.data.view.width / 2 - this.hSpace, w);
-        n = Math.min(
-          offsetPoint.y - node.data.view.height / 2 - this.vSpace,
-          n
-        );
-        s = Math.max(
-          offsetPoint.y + node.data.view.height / 2 - this.vSpace,
-          s
-        );
-      }
+
+      const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+      console.log(
+        `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
+      );
+      e = Math.max(offsetPoint.x + node.data.view.width / 2 + this.hSpace, e);
+      w = Math.min(offsetPoint.x - node.data.view.width / 2 - this.hSpace, w);
+      n = Math.min(
+        offsetPoint.y - node.data.view.height / 2 - this.vSpace,
+        n
+      );
+      s = Math.max(
+        offsetPoint.y + node.data.view.height / 2 - this.vSpace,
+        s
+      );
     }
     // maximum distance from center of root node.
     console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
     return new Bounds(n, e, w, s);
-  }
-
-  toggleNode(node: MindNode): void {
-    if (node.isroot) {
-      return;
-    }
-
-    node.expanded = !node.expanded;
-  }
-
-  setVisibleRecursively(node: MindNode, visible: boolean) {
-    node.data.layout.visible = visible;
-    for (let i = 0, l = node.children.length; i < l; i++) {
-      if (!visible) {
-        this.setVisibleRecursively(node.children[i], false);
-      } else {
-        this.setVisibleRecursively(node.children[i], node.expanded);
-      }
-    }
   }
 }
