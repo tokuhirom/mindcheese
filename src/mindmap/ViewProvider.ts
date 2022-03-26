@@ -1,10 +1,10 @@
 import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
-import { Direction, KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
+import {Direction, KEYCODE_ENTER, KEYCODE_ESC} from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, { Point } from "./LayoutProvider";
-import { TextFormatter } from "./renderer/TextFormatter";
-import { Size } from "./Size";
+import LayoutProvider, {OffsetFromTopLeftOfMcnodes, Point} from "./LayoutProvider";
+import {TextFormatter} from "./renderer/TextFormatter";
+import {Size} from "./Size";
 
 /**
  * View renderer
@@ -271,10 +271,10 @@ export default class ViewProvider {
       console.debug("select_node! right adjust");
       panelEl.scrollLeft = Math.max(
         panelEl.scrollLeft +
-          (nodeEl.offsetLeft +
-            nodeEl.clientWidth +
-            30 -
-            (panelEl.scrollLeft + panelEl.clientWidth)),
+        (nodeEl.offsetLeft +
+          nodeEl.clientWidth +
+          30 -
+          (panelEl.scrollLeft + panelEl.clientWidth)),
         0
       );
     }
@@ -289,10 +289,10 @@ export default class ViewProvider {
       console.debug("select_node! bottom adjust");
       panelEl.scrollTop = Math.max(
         panelEl.scrollTop +
-          (nodeEl.offsetTop +
-            nodeEl.clientHeight +
-            30 -
-            (panelEl.scrollTop + panelEl.clientHeight)),
+        (nodeEl.offsetTop +
+          nodeEl.clientHeight +
+          30 -
+          (panelEl.scrollTop + panelEl.clientHeight)),
         0
       );
     }
@@ -363,15 +363,13 @@ export default class ViewProvider {
   }
 
   // get the center point offset
-  getOffsetOfTheRootNode(): Point {
+  getOffsetOfTheRootNode(): OffsetFromTopLeftOfMcnodes {
     const bounds = this.layout.getBounds();
-    console.log(
-      `getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`
-    );
-    const x = (this.size.w - bounds.e - bounds.w) / 2;
+    console.log(`getViewOffset: size.w=${this.size.w}, e=${bounds.e}, w=${bounds.w}`);
+    const x = -bounds.w + this.mindCheese.mind.root.data.view.width / 2;
     // const x = (this.size.w - bounds.e - bounds.w) / 2;
-    const y = this.size.h / 2;
-    return new Point(x, y);
+    const y = -bounds.n + this.mindCheese.mind.root.data.view.height / 2;
+    return new OffsetFromTopLeftOfMcnodes(x, y);
   }
 
   resize(): void {
@@ -416,9 +414,9 @@ export default class ViewProvider {
     const viewData = node.data.view;
     return new Point(
       parseInt(viewData.element.style.left) -
-        this.mindCheeseInnerElement.scrollLeft,
+      this.mindCheeseInnerElement.scrollLeft,
       parseInt(viewData.element.style.top) -
-        this.mindCheeseInnerElement.scrollTop
+      this.mindCheeseInnerElement.scrollTop
     );
   }
 
@@ -506,7 +504,7 @@ export default class ViewProvider {
         const pin: Point = this.layout.getNodePointIn(node);
         const pout = new Point(
           pin.x -
-            node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
+          node.data.view.width * (node.direction == Direction.LEFT ? 1 : -1),
           pin.y
         );
         this.graph.drawLine(pout, pin, offset, node.color, "butt");
