@@ -212,12 +212,10 @@ export default class MindCheese {
     this.view.editNodeEnd();
   }
 
-  private doReset(): void {
+  private showMind(mind: Mind): void {
     this.view.reset();
     this.layout.reset();
-  }
 
-  private doShow(mind: Mind): void {
     this.mind = mind;
 
     this.view.createNodes();
@@ -228,13 +226,11 @@ export default class MindCheese {
 
   // nodeTree = object representation of the mindmap.
   showNodeTree(nodeTree: any): void {
-    this.doReset();
-    this.doShow(object2mindmap(nodeTree));
+    this.showMind(object2mindmap(nodeTree));
   }
 
   showMarkdown(body: string): void {
-    this.doReset();
-    this.doShow(markdown2mindmap(body));
+    this.showMind(markdown2mindmap(body));
   }
 
   getMarkdown(): string {
