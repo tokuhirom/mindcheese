@@ -8,6 +8,8 @@ import { Size } from "./Size";
 import {CenterOfNodeOffsetFromRootNode} from "./layout/CenterOfNodeOffsetFromRootNode";
 import {RootNodeOffsetFromTopLeftOfMcnodes} from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
 import {Point} from "./layout/Point";
+import {LayoutResult} from "./layout/LayoutResult";
+import {LayoutEngine} from "./layout/LayoutEngine";
 
 /**
  * View renderer
@@ -15,6 +17,7 @@ import {Point} from "./layout/Point";
 export default class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layout: LayoutProvider;
+  private readonly layoutEngine: LayoutEngine;
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   readonly mcnodes: HTMLElement; // <mcnodes>
   size: Size;
@@ -24,6 +27,7 @@ export default class ViewProvider {
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
   private readonly vMargin: number;
+  private layoutResult: LayoutResult | null = null;
 
   /**
    *
@@ -32,17 +36,20 @@ export default class ViewProvider {
    * @param vmargin ???
    * @param graph instance of GraphCanvas
    * @param textFormatter Formatter of the text
+   * @param layoutEngine
    */
   constructor(
     mindCheese: MindCheese,
     hmargin: number,
     vmargin: number,
     graph: GraphCanvas,
-    textFormatter: TextFormatter
+    textFormatter: TextFormatter,
+    layoutEngine: LayoutEngine
   ) {
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
     this.layout = mindCheese.layout;
+    this.layoutEngine = layoutEngine;
 
     this.mcnodes = document.createElement("mcnodes");
 
@@ -409,7 +416,7 @@ export default class ViewProvider {
 
   // TODO pull this method to MindCheese?
   renderAgain(): void {
-    this.mindCheese.layoutAgain();
+    this.layoutResult = this.layoutEngine.layout(this.mindCheese.mind);
     this.size = this.getCanvasSize();
 
     console.log(`doShow: ${this.size.width} ${this.size.height}`);
@@ -518,5 +525,11 @@ export default class ViewProvider {
         );
       }
     }
+  }
+
+  getCenterOffsetOfTheNodeFromRootNode(
+    node: MindNode
+  ): CenterOfNodeOffsetFromRootNode {
+    return this.layoutResult!.getCenterOffsetOfTheNodeFromRootNode(node);
   }
 }

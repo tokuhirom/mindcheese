@@ -38,7 +38,7 @@ export default class LayoutProvider {
   getTopLeft(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const viewSize = node.data.view.elementSizeCache!;
     const offsetPoint =
-      this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
+      this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
     if (node.isroot) {
       const x = offsetPoint.x + (viewSize.width / 2) * -1;
       const y = offsetPoint.y - viewSize.height - this.graphCanvas.lineWidth;
@@ -57,7 +57,7 @@ export default class LayoutProvider {
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
    */
   getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const point = this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
+    const point = this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
     return new CenterOfNodeOffsetFromRootNode(
       point.x - (node.data.view.elementSizeCache!.width / 2) * node.direction,
       point.y + node.data.view.elementSizeCache!.height / 2
@@ -80,7 +80,7 @@ export default class LayoutProvider {
       );
     } else {
       const offsetPoint =
-        this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
+        this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
       const x =
         offsetPoint.x +
         (node.data.view.elementSizeCache!.width / 2) * node.direction;
@@ -93,7 +93,7 @@ export default class LayoutProvider {
 
   getAdderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const offsetPoint =
-      this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
+      this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
 
     const x =
       offsetPoint.x +
@@ -119,7 +119,7 @@ export default class LayoutProvider {
       const node = nodes[nodeid];
 
       const offsetPoint =
-        this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
+        this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
       console.log(
         `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
       );

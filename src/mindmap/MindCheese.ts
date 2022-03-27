@@ -31,7 +31,6 @@ export default class MindCheese {
   private editable: boolean;
   private readonly container: HTMLElement;
   private zoomScale = 1.0;
-  private _layoutEngine: LayoutEngine;
   private layoutResult: LayoutResult | null = null;
 
   constructor(
@@ -55,7 +54,7 @@ export default class MindCheese {
       options.view.lineColor,
       options.view.lineWidth
     );
-    this._layoutEngine = new LayoutEngine(
+    const layoutEngine = new LayoutEngine(
       options.layout.hspace,
       options.layout.vspace,
       options.layout.pspace
@@ -72,7 +71,8 @@ export default class MindCheese {
       options.view.hmargin,
       options.view.vmargin,
       graph,
-      options.view.renderer
+      options.view.renderer,
+      layoutEngine
     );
     this.shortcut = new ShortcutProvider(
       this,
@@ -511,15 +511,5 @@ export default class MindCheese {
         }
       }
     }
-  }
-
-  layoutAgain() {
-    this.layoutResult = this._layoutEngine.layout(this.mind);
-  }
-
-  getCenterOffsetOfTheNodeFromRootNode(
-    node: MindNode
-  ): CenterOfNodeOffsetFromRootNode {
-    return this.layoutResult!.getCenterOffsetOfTheNodeFromRootNode(node);
   }
 }
