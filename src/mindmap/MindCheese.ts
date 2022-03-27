@@ -12,6 +12,11 @@ import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
+import {
+  CenterOfNodeOffsetFromRootNode,
+  LayoutEngine,
+  LayoutResult,
+} from "./LayoutEngine";
 
 export default class MindCheese {
   options: MindOption;
@@ -25,6 +30,8 @@ export default class MindCheese {
   private editable: boolean;
   private readonly container: HTMLElement;
   private zoomScale = 1.0;
+  private _layoutEngine: LayoutEngine;
+  private layoutResult: LayoutResult | null = null;
 
   constructor(
     id: number,
@@ -46,6 +53,11 @@ export default class MindCheese {
     const graph = new GraphCanvas(
       options.view.lineColor,
       options.view.lineWidth
+    );
+    this._layoutEngine = new LayoutEngine(
+      options.layout.hspace,
+      options.layout.vspace,
+      options.layout.pspace
     );
     this.layout = new LayoutProvider(
       this,
@@ -212,7 +224,7 @@ export default class MindCheese {
 
     this.view.createNodes();
     this.view.cacheNodeSize();
-    this.view.layoutAgain();
+    this.view.renderAgain();
     this.view.centerRoot();
   }
 
@@ -241,7 +253,7 @@ export default class MindCheese {
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
       this.view.addNode(node);
-      this.view.layoutAgain();
+      this.view.renderAgain();
     }
     return node;
   }
@@ -257,7 +269,7 @@ export default class MindCheese {
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
     this.view.addNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
     return node;
   }
 
@@ -279,7 +291,7 @@ export default class MindCheese {
     const scroll = this.view.saveScroll(node);
     this.view.removeNode(node);
     this.mind.removeNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
     if (parentNode.children.length > 0) {
       this.mind.selected = nextSelectedNode;
       this.view.selectNode(nextSelectedNode);
@@ -324,7 +336,7 @@ export default class MindCheese {
     }
     node.topic = topic;
     this.view.updateNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
   }
 
   /**
@@ -347,7 +359,7 @@ export default class MindCheese {
     this.undoManager.recordSnapshot();
     this.mind.moveNode(node, beforeid, parent, direction);
     this.view.updateNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
   }
 
   selectNode(node: MindNode): void {
@@ -498,5 +510,15 @@ export default class MindCheese {
         }
       }
     }
+  }
+
+  layoutAgain() {
+    this.layoutResult = this._layoutEngine.layout(this.mind);
+  }
+
+  getCenterOffsetOfTheNodeFromRootNode(
+    node: MindNode
+  ): CenterOfNodeOffsetFromRootNode {
+    return this.layoutResult!.getCenterOffsetOfTheNodeFromRootNode(node);
   }
 }

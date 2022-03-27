@@ -3,12 +3,12 @@ import MindNode from "./model/MindNode";
 import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
 import LayoutProvider, {
-  CenterOfNodeOffsetFromRootNode,
   Point,
   RootNodeOffsetFromTopLeftOfMcnodes,
 } from "./LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
+import { CenterOfNodeOffsetFromRootNode } from "./LayoutEngine";
 
 /**
  * View renderer
@@ -29,7 +29,6 @@ export default class ViewProvider {
   /**
    *
    * @param mindCheese MindCheese instance
-   * @param container container element
    * @param hmargin ???
    * @param vmargin ???
    * @param graph instance of GraphCanvas
@@ -73,11 +72,11 @@ export default class ViewProvider {
     });
     // adjust size dynamically.
     this.mcnodes.addEventListener("keyup", () => {
-      this.layoutAgain();
+      this.renderAgain();
     });
     this.mcnodes.addEventListener("input", () => {
       // TODO is this required?
-      this.layoutAgain();
+      this.renderAgain();
     });
     // when the element lost focus.
     this.mcnodes.addEventListener(
@@ -340,7 +339,7 @@ export default class ViewProvider {
     selectElementContents(element);
     element.focus();
 
-    this.layoutAgain();
+    this.renderAgain();
   }
 
   editNodeEnd(): void {
@@ -363,7 +362,7 @@ export default class ViewProvider {
           element.clientWidth,
           element.clientHeight
         );
-        this.layoutAgain();
+        this.renderAgain();
       } else {
         console.debug("Calling updateNode");
         this.mindCheese.updateNode(node.id, topic);
@@ -393,7 +392,7 @@ export default class ViewProvider {
     this.mcnodes.style.width = "1px";
     this.mcnodes.style.height = "1px";
 
-    this.layoutAgain();
+    this.renderAgain();
   }
 
   // Display root position at center of container element.
@@ -409,8 +408,9 @@ export default class ViewProvider {
     }
   }
 
-  layoutAgain(): void {
-    this.layout.layout();
+  // TODO pull this method to MindCheese?
+  renderAgain(): void {
+    this.mindCheese.layoutAgain();
     this.size = this.getCanvasSize();
 
     console.log(`doShow: ${this.size.width} ${this.size.height}`);

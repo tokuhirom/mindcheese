@@ -4,6 +4,7 @@ import MindNode from "./model/MindNode";
 import MindCheese from "./MindCheese";
 import GraphCanvas from "./GraphCanvas";
 import { Size } from "./Size";
+import { CenterOfNodeOffsetFromRootNode } from "./LayoutEngine";
 
 export class Point {
   constructor(x: number, y: number) {
@@ -11,30 +12,6 @@ export class Point {
     this.y = y;
   }
 
-  readonly x: number;
-  readonly y: number;
-}
-
-export class CenterOfNodeOffsetFromParentNode {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  // https://ageek.dev/ts-nominal-typing
-  __CenterOfNodeOffsetFromParentNodeBrand: any;
-  readonly x: number;
-  readonly y: number;
-}
-
-export class CenterOfNodeOffsetFromRootNode {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  // https://ageek.dev/ts-nominal-typing
-  __CenterOfNodeOffsetFromRootNodeBrand: any;
   readonly x: number;
   readonly y: number;
 }
@@ -106,68 +83,10 @@ export default class LayoutProvider {
     this.graphCanvas = graphCanvas;
   }
 
-  layout(): void {
-    const rootNode = this.mindCheese.mind.root!;
-    rootNode.data.layout.relativeCenterOffsetX = 0;
-    rootNode.data.layout.relativeCenterOffsetY = 0;
-
-    this.layoutOffsetSubNodes(
-      rootNode.children.filter((it) => it.direction == Direction.LEFT)
-    );
-    this.layoutOffsetSubNodes(
-      rootNode.children.filter((it) => it.direction == Direction.RIGHT)
-    );
-  }
-
-  // layout both the x and y axis
-  private layoutOffsetSubNodes(nodes: MindNode[]): number {
-    if (nodes.length == 0) {
-      return 0;
-    }
-
-    let totalHeight = 0;
-    {
-      let baseY = 0;
-      for (let i = 0, l = nodes.length; i < l; i++) {
-        const node = nodes[i];
-        const layoutData = node.data.layout;
-
-        const childrenHeight = this.layoutOffsetSubNodes(node.children);
-        const nodeOuterHeight = Math.max(
-          node.data.view.elementSizeCache!.height,
-          childrenHeight
-        );
-        layoutData.relativeCenterOffsetY = baseY + nodeOuterHeight / 2;
-        layoutData.relativeCenterOffsetX =
-          this.hSpace * node.direction +
-          (node.parent!.data.view.elementSizeCache!.width / 2) *
-            node.direction +
-          this.hSpace * node.direction +
-          (node.data.view.elementSizeCache!.width / 2) * node.direction +
-          (node.parent?.isroot ? 0 : this.pSpace * node.direction);
-
-        baseY += nodeOuterHeight + this.vSpace;
-        totalHeight += nodeOuterHeight;
-      }
-    }
-
-    if (nodes.length > 1) {
-      totalHeight += this.vSpace * (nodes.length - 1);
-    }
-
-    {
-      const middleHeight = totalHeight / 2;
-      for (let i = 0, l = nodes.length; i < l; i++) {
-        nodes[i].data.layout.relativeCenterOffsetY -= middleHeight;
-      }
-    }
-
-    return totalHeight;
-  }
-
   getTopLeft(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const viewSize = node.data.view.elementSizeCache!;
-    const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+    const offsetPoint =
+      this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
     if (node.isroot) {
       const x = offsetPoint.x + (viewSize.width / 2) * -1;
       const y = offsetPoint.y - viewSize.height - this.graphCanvas.lineWidth;
@@ -186,7 +105,7 @@ export default class LayoutProvider {
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
    */
   getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const point = node.getCenterOffsetOfTheNodeFromRootNode();
+    const point = this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
     return new CenterOfNodeOffsetFromRootNode(
       point.x - (node.data.view.elementSizeCache!.width / 2) * node.direction,
       point.y + node.data.view.elementSizeCache!.height / 2
@@ -208,7 +127,8 @@ export default class LayoutProvider {
         -(node.data.view.elementSizeCache!.height / 2)
       );
     } else {
-      const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+      const offsetPoint =
+        this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
       const x =
         offsetPoint.x +
         (node.data.view.elementSizeCache!.width / 2) * node.direction;
@@ -220,7 +140,8 @@ export default class LayoutProvider {
   }
 
   getAdderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+    const offsetPoint =
+      this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
 
     const x =
       offsetPoint.x +
@@ -245,7 +166,8 @@ export default class LayoutProvider {
     for (const nodeid in nodes) {
       const node = nodes[nodeid];
 
-      const offsetPoint = node.getCenterOffsetOfTheNodeFromRootNode();
+      const offsetPoint =
+        this.mindCheese.getCenterOffsetOfTheNodeFromRootNode(node);
       console.log(
         `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
       );
