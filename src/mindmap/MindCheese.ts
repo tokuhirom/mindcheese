@@ -1,4 +1,3 @@
-import LayoutProvider from "./layout/LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
@@ -13,13 +12,10 @@ import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
-import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
-import { LayoutResult } from "./layout/LayoutResult";
 
 export default class MindCheese {
   options: MindOption;
   public mind: Mind;
-  layout: LayoutProvider;
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
@@ -28,7 +24,6 @@ export default class MindCheese {
   private editable: boolean;
   private readonly container: HTMLElement;
   private zoomScale = 1.0;
-  private layoutResult: LayoutResult | null = null;
 
   constructor(
     id: number,
@@ -56,20 +51,14 @@ export default class MindCheese {
       options.layout.vspace,
       options.layout.pspace
     );
-    this.layout = new LayoutProvider(
-      this,
-      options.layout.hspace,
-      options.layout.vspace,
-      options.layout.pspace,
-      graph
-    );
     this.view = new ViewProvider(
       this,
       options.view.hmargin,
       options.view.vmargin,
       graph,
       options.view.renderer,
-      layoutEngine
+      layoutEngine,
+      options.layout.pspace
     );
     this.shortcut = new ShortcutProvider(
       this,

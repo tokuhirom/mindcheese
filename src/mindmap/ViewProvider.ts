@@ -2,7 +2,6 @@ import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
 import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider from "./layout/LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
 import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
@@ -16,7 +15,6 @@ import { LayoutEngine } from "./layout/LayoutEngine";
  */
 export default class ViewProvider {
   private readonly mindCheese: MindCheese;
-  private readonly layout: LayoutProvider;
   private readonly layoutEngine: LayoutEngine;
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   readonly mcnodes: HTMLElement; // <mcnodes>
@@ -28,6 +26,7 @@ export default class ViewProvider {
   private readonly hMargin: number;
   private readonly vMargin: number;
   private layoutResult: LayoutResult | null = null;
+  private readonly pSpace: number;
 
   /**
    *
@@ -37,6 +36,7 @@ export default class ViewProvider {
    * @param graph instance of GraphCanvas
    * @param textFormatter Formatter of the text
    * @param layoutEngine
+   * @param pSpace Horizontal spacing between node and connection line (to place node adder)
    */
   constructor(
     mindCheese: MindCheese,
@@ -44,12 +44,13 @@ export default class ViewProvider {
     vmargin: number,
     graph: GraphCanvas,
     textFormatter: TextFormatter,
-    layoutEngine: LayoutEngine
+    layoutEngine: LayoutEngine,
+    pSpace: number
   ) {
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
-    this.layout = mindCheese.layout;
     this.layoutEngine = layoutEngine;
+    this.pSpace = pSpace;
 
     this.mcnodes = document.createElement("mcnodes");
 
@@ -170,7 +171,7 @@ export default class ViewProvider {
   }
 
   private getCanvasSize(): Size {
-    const minSize = this.layout.getBounds().size;
+    const minSize = this.layoutResult!.getBounds(this.mindCheese.mind).size;
 
     const minWidth = minSize.width + this.hMargin * 2;
     const minHeight = minSize.height + this.vMargin * 2;
@@ -378,7 +379,7 @@ export default class ViewProvider {
 
   // get the center point offset
   getOffsetOfTheRootNode(): RootNodeOffsetFromTopLeftOfMcnodes {
-    const bounds = this.layout.getBounds();
+    const bounds = this.layoutResult!.getBounds(this.mindCheese.mind);
     console.log(
       `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
     );
@@ -469,7 +470,7 @@ export default class ViewProvider {
 
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
-      const p = this.layout.getTopLeft(node);
+      const p = this.layoutResult!.getTopLeft(node, this.graph.lineWidth);
       viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
       nodeElement.style.left = viewData.elementTopLeft.x + "px";
       nodeElement.style.top = viewData.elementTopLeft.y + "px";
@@ -480,7 +481,7 @@ export default class ViewProvider {
         const adder = viewData.adder!;
         const adderText = "+";
         const adderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
-          this.layout.getAdderPoint(node)
+          this.layoutResult!.getAdderPosition(node, this.pSpace)
         );
         adder.style.left = adderPoint.x + "px";
         adder.style.top = adderPoint.y + "px";
@@ -500,10 +501,10 @@ export default class ViewProvider {
       if (node.isroot) {
         continue;
       }
-      const pin = this.layout.getNodePointIn(node);
+      const pin = this.layoutResult!.getNodePointIn(node);
       {
         // Draw line between previous node and next node
-        const pout = this.layout.getNodePointOut(node.parent!, node);
+        const pout = this.layoutResult!.getNodePointOut(node.parent!, node);
         this.graph.drawLine(
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),

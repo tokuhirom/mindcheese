@@ -1,10 +1,5 @@
-import { Direction } from "../MindmapConstants";
-
-import MindNode from "../model/MindNode";
 import MindCheese from "../MindCheese";
 import GraphCanvas from "../GraphCanvas";
-import { Bounds } from "./Bounds";
-import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
 
 export default class LayoutProvider {
   private readonly mindCheese: MindCheese;
@@ -33,105 +28,5 @@ export default class LayoutProvider {
     this.pSpace = pspace;
     this.mindCheese = mindCheese;
     this.graphCanvas = graphCanvas;
-  }
-
-  getTopLeft(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const viewSize = node.data.view.elementSizeCache!;
-    const offsetPoint =
-      this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
-    if (node.isroot) {
-      const x = offsetPoint.x + (viewSize.width / 2) * -1;
-      const y = offsetPoint.y - viewSize.height - this.graphCanvas.lineWidth;
-      return new CenterOfNodeOffsetFromRootNode(x, y);
-    } else {
-      // XXX To be honest, I think we should think about the **direction**,
-      // but it is buggy when used in calculations. A mystery.
-      const x = offsetPoint.x + (viewSize.width / 2) * -1;
-      const y =
-        offsetPoint.y - viewSize.height / 2 - this.graphCanvas.lineWidth;
-      return new CenterOfNodeOffsetFromRootNode(x, y);
-    }
-  }
-
-  /**
-   * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
-   */
-  getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const point =
-      this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
-    return new CenterOfNodeOffsetFromRootNode(
-      point.x - (node.data.view.elementSizeCache!.width / 2) * node.direction,
-      point.y + node.data.view.elementSizeCache!.height / 2
-    );
-  }
-
-  /**
-   * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointout.png?raw=true
-   */
-  getNodePointOut(
-    node: MindNode,
-    destination: MindNode
-  ): CenterOfNodeOffsetFromRootNode {
-    if (node.isroot) {
-      const x =
-        (node.data.view.elementSizeCache!.width / 2) * destination.direction;
-      return new CenterOfNodeOffsetFromRootNode(
-        x,
-        -(node.data.view.elementSizeCache!.height / 2)
-      );
-    } else {
-      const offsetPoint =
-        this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
-      const x =
-        offsetPoint.x +
-        (node.data.view.elementSizeCache!.width / 2) * node.direction;
-      return new CenterOfNodeOffsetFromRootNode(
-        x,
-        offsetPoint.y + node.data.view.elementSizeCache!.height / 2
-      );
-    }
-  }
-
-  getAdderPoint(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const offsetPoint =
-      this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
-
-    const x =
-      offsetPoint.x +
-      (node.data.view.elementSizeCache!.width / 2 + this.pSpace) *
-        node.direction -
-      (node.direction == Direction.RIGHT ? this.pSpace : 0);
-
-    const y =
-      offsetPoint.y +
-      node.data.view.elementSizeCache!.height / 2 -
-      Math.ceil(this.pSpace / 2);
-
-    return new CenterOfNodeOffsetFromRootNode(x, y);
-  }
-
-  getBounds(): Bounds {
-    const nodes = this.mindCheese.mind.nodes;
-    let n = 0;
-    let e = 0;
-    let w = 0;
-    let s = 0;
-    for (const nodeid in nodes) {
-      const node = nodes[nodeid];
-
-      const offsetPoint =
-        this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
-      console.log(
-        `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
-      );
-      const viewSize = node.data.view.elementSizeCache!;
-      e = Math.max(offsetPoint.x + viewSize.width / 2 + this.hSpace, e);
-      w = Math.min(offsetPoint.x - viewSize.width / 2 - this.hSpace, w);
-      n = Math.min(offsetPoint.y - viewSize.height / 2 - this.vSpace, n);
-      s = Math.max(offsetPoint.y + viewSize.height / 2 - this.vSpace, s);
-    }
-    // maximum distance from center of root node.
-    console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
-    return new Bounds(n, e, w, s);
   }
 }
