@@ -49,26 +49,6 @@ mcnodes {
   background-color: #000;
 }
 
-mcexpander {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  display: block;
-  overflow: hidden;
-  line-height: 12px;
-  font-size: 12px;
-  text-align: center;
-  border-radius: 2px;
-  border-width: 1px;
-  border-style: solid;
-  cursor: pointer;
-  border-color: gray;
-}
-mcexpander:hover {
-  border-color: #000;
-}
-
-
 mcadder {
   position: absolute;
   width: 11px;
@@ -82,7 +62,7 @@ mcadder {
   border-width: 1px;
   border-style: solid;
   cursor: pointer;
-  color: #4a5963;
+  color: #999999;
   border-color: #cccccc;
 }
 mcadder:hover {
