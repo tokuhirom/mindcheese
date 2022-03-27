@@ -15,9 +15,7 @@ canvas.mindcheese-draggable-graph {
 mcnode {
   max-width: 400px;
   width: max-content;
-
   position: absolute;
-
   cursor: default;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -62,11 +60,12 @@ mcadder {
   border-width: 1px;
   border-style: solid;
   cursor: pointer;
-  color: #999999;
-  border-color: #cccccc;
+  color: #999;
+  border-color: #ccc;
 }
+
 mcadder:hover {
-  color: #000000;
+  color: #000;
   border-color: #000;
 }
 

@@ -9,7 +9,8 @@
     "build": "rollup --config browser/rollup.config.js --environment BUILD:production",
     "test": "jest",
     "prettier": "prettier --write .",
-    "eslint": "npx eslint . --ext .ts,.tsx"
+    "eslint": "npx eslint . --ext .ts,.tsx",
+    "stylelint": "npx stylelint \"**/*.css\""
   },
   "keywords": [],
   "author": "",

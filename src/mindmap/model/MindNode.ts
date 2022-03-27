@@ -1,5 +1,4 @@
 import { Direction } from "../MindmapConstants";
-import { Size } from "../Size";
 import { ViewData } from "./ViewData";
 import { LayoutData } from "./LayoutData";
 import { COLORS } from "./COLORS";
