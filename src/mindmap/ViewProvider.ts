@@ -178,8 +178,10 @@ export default class ViewProvider {
 
   private static initNodeSize(node: MindNode): void {
     const viewData = node.data.view;
-    viewData.width = viewData.element!.clientWidth;
-    viewData.height = viewData.element!.clientHeight;
+    viewData.elementSizeCache = new Size(
+      viewData.element!.clientWidth,
+      viewData.element!.clientHeight
+    );
   }
 
   addNode(node: MindNode): void {
@@ -236,9 +238,12 @@ export default class ViewProvider {
     if (node.topic) {
       element.innerHTML = this.textFormatter.render(node.topic);
     }
-    viewData.width = element.clientWidth;
-    viewData.height = element.clientHeight;
+    viewData.elementSizeCache = new Size(
+      element.clientWidth,
+      element.clientHeight
+    );
   }
+
   selectNode(node: MindNode | null): void {
     if (this.selectedNode) {
       const el = this.selectedNode.data.view.element!;
@@ -318,7 +323,10 @@ export default class ViewProvider {
     const element = node.data.view.element!;
     element.contentEditable = "true";
     element.innerText = node.topic;
-    node.data.view.width = element.clientWidth;
+    node.data.view.elementSizeCache = new Size(
+      element.clientWidth,
+      element.clientHeight
+    );
 
     // https://stackoverflow.com/questions/6139107/programmatically-select-text-in-a-contenteditable-html-element
     function selectElementContents(el: HTMLElement) {
@@ -351,7 +359,10 @@ export default class ViewProvider {
       ) {
         console.debug("Calling updateNode");
         element.innerHTML = this.textFormatter.render(node.topic);
-        node.data.view.width = element.clientWidth;
+        node.data.view.elementSizeCache = new Size(
+          element.clientWidth,
+          element.clientHeight
+        );
         this.layoutAgain();
       } else {
         console.debug("Calling updateNode");
@@ -367,9 +378,13 @@ export default class ViewProvider {
       `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
     );
 
-    const x = -bounds.w + this.mindCheese.mind.root!.data.view.width / 2;
+    const x =
+      -bounds.w +
+      this.mindCheese.mind.root!.data.view.elementSizeCache!.width / 2;
     // const x = (this.size.w - bounds.e - bounds.w) / 2;
-    const y = -bounds.n + this.mindCheese.mind.root!.data.view.height / 2;
+    const y =
+      -bounds.n +
+      this.mindCheese.mind.root!.data.view.elementSizeCache!.height / 2;
     return new RootNodeOffsetFromTopLeftOfMcnodes(x, y);
   }
 
@@ -449,9 +464,9 @@ export default class ViewProvider {
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
       const p = this.layout.getTopLeft(node);
-      viewData.location = offset.convertCenterOfNodeOffsetFromRootNode(p);
-      nodeElement.style.left = viewData.location.x + "px";
-      nodeElement.style.top = viewData.location.y + "px";
+      viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
+      nodeElement.style.left = viewData.elementTopLeft.x + "px";
+      nodeElement.style.top = viewData.elementTopLeft.y + "px";
       nodeElement.style.display = "";
       nodeElement.style.visibility = "visible";
 
@@ -493,7 +508,7 @@ export default class ViewProvider {
       {
         // Draw line under the bottom of the node
         const pout = new CenterOfNodeOffsetFromRootNode(
-          pin.x + node.data.view.width * node.direction,
+          pin.x + node.data.view.elementSizeCache!.width * node.direction,
           pin.y
         );
         this.graph.drawLine(

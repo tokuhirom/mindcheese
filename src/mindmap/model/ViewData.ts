@@ -1,11 +1,10 @@
 import { OffsetFromTopLeftOfMcnodes } from "../LayoutProvider";
+import { Size } from "../Size";
 
 export class ViewData {
   element: HTMLElement | null = null;
   adder: HTMLElement | null = null;
 
-  width = 0;
-  height = 0;
-
-  location: OffsetFromTopLeftOfMcnodes = new OffsetFromTopLeftOfMcnodes(0, 0);
+  elementSizeCache: Size | null = null;
+  elementTopLeft: OffsetFromTopLeftOfMcnodes | null = null;
 }
