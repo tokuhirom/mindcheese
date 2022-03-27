@@ -1,6 +1,5 @@
 import { Direction } from "./MindmapConstants";
 import MindNode from "./model/MindNode";
-import MindCheese from "./MindCheese";
 import Mind from "./Mind";
 
 class RelativeOffsetFromParent {
