@@ -6,7 +6,7 @@ import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
 import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
 import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
-import { Point } from "./layout/Point";
+import { Point, ScrollSnapshot } from "./layout/Point";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
 
@@ -430,9 +430,9 @@ export default class ViewProvider {
     this.showLines();
   }
 
-  saveScroll(node: MindNode): Point {
+  saveScroll(node: MindNode): ScrollSnapshot {
     const viewData = node.data.view;
-    return new Point(
+    return new ScrollSnapshot(
       parseInt(viewData.element!.style.left) -
         this.mindCheeseInnerElement.scrollLeft,
       parseInt(viewData.element!.style.top) -
@@ -440,12 +440,12 @@ export default class ViewProvider {
     );
   }
 
-  restoreScroll(node: MindNode, location: Point): void {
+  restoreScroll(node: MindNode, scrollSnapshot: ScrollSnapshot): void {
     const viewData = node.data.view;
     this.mindCheeseInnerElement.scrollLeft =
-      parseInt(viewData.element!.style.left) - location.x;
+      parseInt(viewData.element!.style.left) - scrollSnapshot.x;
     this.mindCheeseInnerElement.scrollTop =
-      parseInt(viewData.element!.style.top) - location.y;
+      parseInt(viewData.element!.style.top) - scrollSnapshot.y;
   }
 
   clearNodes(): void {

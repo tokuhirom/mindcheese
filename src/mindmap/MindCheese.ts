@@ -276,7 +276,7 @@ export default class MindCheese {
       nodeid
     );
 
-    const scroll = this.view.saveScroll(node);
+    const scrollSnapshot = this.view.saveScroll(node);
     this.view.removeNode(node);
     this.mind.removeNode(node);
     this.view.renderAgain();
@@ -284,7 +284,7 @@ export default class MindCheese {
       this.mind.selected = nextSelectedNode;
       this.view.selectNode(nextSelectedNode);
     }
-    this.view.restoreScroll(parentNode, scroll);
+    this.view.restoreScroll(parentNode, scrollSnapshot);
 
     return true;
   }
