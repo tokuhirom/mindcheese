@@ -1,5 +1,5 @@
-import {OffsetFromTopLeftOfMcnodes} from "./OffsetFromTopLeftOfMcnodes";
-import {CenterOfNodeOffsetFromRootNode} from "./CenterOfNodeOffsetFromRootNode";
+import { OffsetFromTopLeftOfMcnodes } from "./OffsetFromTopLeftOfMcnodes";
+import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
 
 export class RootNodeOffsetFromTopLeftOfMcnodes extends OffsetFromTopLeftOfMcnodes {
   convertCenterOfNodeOffsetFromRootNode(

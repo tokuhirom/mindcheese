@@ -1,9 +1,9 @@
-import {Direction} from "../MindmapConstants";
+import { Direction } from "../MindmapConstants";
 import MindNode from "../model/MindNode";
 import Mind from "../Mind";
-import {RelativeOffsetFromParent} from "./RelativeOffsetFromParent";
-import {CenterOfNodeOffsetFromRootNode} from "./CenterOfNodeOffsetFromRootNode";
-import {LayoutResult} from "./LayoutResult";
+import { RelativeOffsetFromParent } from "./RelativeOffsetFromParent";
+import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
+import { LayoutResult } from "./LayoutResult";
 
 export class LayoutEngine {
   private readonly hSpace: number;

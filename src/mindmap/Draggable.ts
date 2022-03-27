@@ -15,8 +15,8 @@
 
 import MindCheese from "./MindCheese";
 import MindNode from "./model/MindNode";
-import {BEFOREID_FIRST, BEFOREID_LAST, Direction} from "./MindmapConstants";
-import {Point} from "./layout/Point";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import { Point } from "./layout/Point";
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -206,7 +206,7 @@ export default class Draggable {
             Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = new Point(
             nl.x + ns.width - this.lineWidth,
-            nl.y + (node.isroot ? ns.height / 2 : ns.height),
+            nl.y + (node.isroot ? ns.height / 2 : ns.height)
           );
           sp = new Point(sx + this.lineWidth, sy + sh);
         } else {
@@ -218,7 +218,7 @@ export default class Draggable {
             Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = new Point(
             nl.x + this.lineWidth,
-            nl.y + (node.isroot ? ns.height / 2 : ns.height),
+            nl.y + (node.isroot ? ns.height / 2 : ns.height)
           );
           sp = new Point(sx + sw - this.lineWidth, sy + sh);
         }
@@ -269,7 +269,7 @@ export default class Draggable {
             this.mindCheese.dblclickHandle(e);
           }
         },
-        {passive: true}
+        { passive: true }
       );
     }
     container.addEventListener("touchmove", this.drag.bind(this), {

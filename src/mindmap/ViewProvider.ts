@@ -5,11 +5,11 @@ import MindCheese from "./MindCheese";
 import LayoutProvider from "./layout/LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
-import {CenterOfNodeOffsetFromRootNode} from "./layout/CenterOfNodeOffsetFromRootNode";
-import {RootNodeOffsetFromTopLeftOfMcnodes} from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
-import {Point} from "./layout/Point";
-import {LayoutResult} from "./layout/LayoutResult";
-import {LayoutEngine} from "./layout/LayoutEngine";
+import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
+import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
+import { Point } from "./layout/Point";
+import { LayoutResult } from "./layout/LayoutResult";
+import { LayoutEngine } from "./layout/LayoutEngine";
 
 /**
  * View renderer

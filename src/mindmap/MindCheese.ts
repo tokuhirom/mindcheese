@@ -12,12 +12,9 @@ import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
-import {
-  LayoutEngine,
-
-} from "./layout/LayoutEngine";
-import {CenterOfNodeOffsetFromRootNode} from "./layout/CenterOfNodeOffsetFromRootNode";
-import {LayoutResult} from "./layout/LayoutResult";
+import { LayoutEngine } from "./layout/LayoutEngine";
+import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
+import { LayoutResult } from "./layout/LayoutResult";
 
 export default class MindCheese {
   options: MindOption;

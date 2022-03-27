@@ -1,10 +1,10 @@
-import {Direction} from "../MindmapConstants";
+import { Direction } from "../MindmapConstants";
 
 import MindNode from "../model/MindNode";
 import MindCheese from "../MindCheese";
 import GraphCanvas from "../GraphCanvas";
-import {Bounds} from "./Bounds";
-import {CenterOfNodeOffsetFromRootNode} from "./CenterOfNodeOffsetFromRootNode";
+import { Bounds } from "./Bounds";
+import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
 
 export default class LayoutProvider {
   private readonly mindCheese: MindCheese;
@@ -57,7 +57,8 @@ export default class LayoutProvider {
    * https://github.com/tokuhirom/mindcheese/blob/main/docs/images/pointin.png?raw=true
    */
   getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
-    const point = this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
+    const point =
+      this.mindCheese.view.getCenterOffsetOfTheNodeFromRootNode(node);
     return new CenterOfNodeOffsetFromRootNode(
       point.x - (node.data.view.elementSizeCache!.width / 2) * node.direction,
       point.y + node.data.view.elementSizeCache!.height / 2

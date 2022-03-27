@@ -1,9 +1,11 @@
-import {CenterOfNodeOffsetFromRootNode} from "./CenterOfNodeOffsetFromRootNode";
+import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
 import MindNode from "../model/MindNode";
 
 export class LayoutResult {
-  private readonly _relativeFromRootMap: Record<string,
-    CenterOfNodeOffsetFromRootNode>;
+  private readonly _relativeFromRootMap: Record<
+    string,
+    CenterOfNodeOffsetFromRootNode
+  >;
 
   constructor(
     relativeFromRootMap: Record<string, CenterOfNodeOffsetFromRootNode>

@@ -1,7 +1,7 @@
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.
  */
-import {OffsetFromTopLeftOfMcnodes} from "./layout/OffsetFromTopLeftOfMcnodes";
+import { OffsetFromTopLeftOfMcnodes } from "./layout/OffsetFromTopLeftOfMcnodes";
 
 export default class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
