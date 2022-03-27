@@ -12,6 +12,7 @@ import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
+import { findMcnode } from "./utils/DomUtils";
 
 export default class MindCheese {
   options: MindOption;
@@ -134,11 +135,11 @@ export default class MindCheese {
     });
   }
 
-  mousedownHandle(e: Event): void {
+  private mousedownHandle(e: Event): void {
     const element = e.target as HTMLElement;
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
-      if (element.tagName.toLowerCase() === "mcnode") {
+      if (findMcnode(element)) {
         const theNode = this.mind.getNodeById(nodeid);
         return this.selectNode(theNode);
       }
@@ -147,7 +148,7 @@ export default class MindCheese {
     }
   }
 
-  clickHandle(e: Event): boolean {
+  private clickHandle(e: Event): boolean {
     const element = e.target as HTMLElement;
     switch (element.tagName.toLowerCase()) {
       case "mcadder": {

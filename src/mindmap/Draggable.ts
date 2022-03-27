@@ -17,6 +17,7 @@ import MindCheese from "./MindCheese";
 import MindNode from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { Point } from "./layout/Point";
+import { findMcnode } from "./utils/DomUtils";
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -279,14 +280,7 @@ export default class Draggable {
   }
 
   private static findMcnode(htmlElement: HTMLElement): HTMLElement | null {
-    let el: HTMLElement | null = htmlElement;
-    while (el) {
-      if (el.tagName.toLowerCase() == "mcnode") {
-        return el;
-      }
-      el = el.parentElement;
-    }
-    return null;
+    return findMcnode(htmlElement);
   }
 
   dragstart(e: MouseEvent | TouchEvent): void {
@@ -299,7 +293,7 @@ export default class Draggable {
     this.activeNode = null;
 
     const viewProvider = this.mindCheese.view;
-    const el = Draggable.findMcnode(e.target as HTMLElement);
+    const el = findMcnode(e.target as HTMLElement);
     if (!el) {
       return;
     }
