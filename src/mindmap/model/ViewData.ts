@@ -1,5 +1,5 @@
-import { OffsetFromTopLeftOfMcnodes } from "../LayoutProvider";
 import { Size } from "../Size";
+import { OffsetFromTopLeftOfMcnodes } from "../layout/OffsetFromTopLeftOfMcnodes";
 
 export class ViewData {
   element: HTMLElement | null = null;

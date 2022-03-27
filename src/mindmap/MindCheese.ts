@@ -1,4 +1,3 @@
-import LayoutProvider from "./LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
@@ -12,11 +11,12 @@ import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
+import { LayoutEngine } from "./layout/LayoutEngine";
+import { findMcnode } from "./utils/DomUtils";
 
 export default class MindCheese {
   options: MindOption;
   public mind: Mind;
-  layout: LayoutProvider;
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
@@ -47,19 +47,19 @@ export default class MindCheese {
       options.view.lineColor,
       options.view.lineWidth
     );
-    this.layout = new LayoutProvider(
-      this,
+    const layoutEngine = new LayoutEngine(
       options.layout.hspace,
       options.layout.vspace,
-      options.layout.pspace,
-      graph
+      options.layout.pspace
     );
     this.view = new ViewProvider(
       this,
       options.view.hmargin,
       options.view.vmargin,
       graph,
-      options.view.renderer
+      options.view.renderer,
+      layoutEngine,
+      options.layout.pspace
     );
     this.shortcut = new ShortcutProvider(
       this,
@@ -135,11 +135,11 @@ export default class MindCheese {
     });
   }
 
-  mousedownHandle(e: Event): void {
+  private mousedownHandle(e: Event): void {
     const element = e.target as HTMLElement;
     const nodeid = this.view.getBindedNodeId(element);
     if (nodeid) {
-      if (element.tagName.toLowerCase() === "mcnode") {
+      if (findMcnode(element)) {
         const theNode = this.mind.getNodeById(nodeid);
         return this.selectNode(theNode);
       }
@@ -148,7 +148,7 @@ export default class MindCheese {
     }
   }
 
-  clickHandle(e: Event): boolean {
+  private clickHandle(e: Event): boolean {
     const element = e.target as HTMLElement;
     switch (element.tagName.toLowerCase()) {
       case "mcadder": {
@@ -212,7 +212,7 @@ export default class MindCheese {
 
     this.view.createNodes();
     this.view.cacheNodeSize();
-    this.view.layoutAgain();
+    this.view.renderAgain();
     this.view.centerRoot();
   }
 
@@ -241,7 +241,7 @@ export default class MindCheese {
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
       this.view.addNode(node);
-      this.view.layoutAgain();
+      this.view.renderAgain();
     }
     return node;
   }
@@ -257,7 +257,7 @@ export default class MindCheese {
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
     this.view.addNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
     return node;
   }
 
@@ -279,7 +279,7 @@ export default class MindCheese {
     const scroll = this.view.saveScroll(node);
     this.view.removeNode(node);
     this.mind.removeNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
     if (parentNode.children.length > 0) {
       this.mind.selected = nextSelectedNode;
       this.view.selectNode(nextSelectedNode);
@@ -324,7 +324,7 @@ export default class MindCheese {
     }
     node.topic = topic;
     this.view.updateNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
   }
 
   /**
@@ -347,7 +347,7 @@ export default class MindCheese {
     this.undoManager.recordSnapshot();
     this.mind.moveNode(node, beforeid, parent, direction);
     this.view.updateNode(node);
-    this.view.layoutAgain();
+    this.view.renderAgain();
   }
 
   selectNode(node: MindNode): void {

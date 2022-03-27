@@ -2,20 +2,20 @@ import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
 import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, {
-  CenterOfNodeOffsetFromRootNode,
-  Point,
-  RootNodeOffsetFromTopLeftOfMcnodes,
-} from "./LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
+import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
+import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
+import { Point } from "./layout/Point";
+import { LayoutResult } from "./layout/LayoutResult";
+import { LayoutEngine } from "./layout/LayoutEngine";
 
 /**
  * View renderer
  */
 export default class ViewProvider {
   private readonly mindCheese: MindCheese;
-  private readonly layout: LayoutProvider;
+  private readonly layoutEngine: LayoutEngine;
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   readonly mcnodes: HTMLElement; // <mcnodes>
   size: Size;
@@ -25,26 +25,32 @@ export default class ViewProvider {
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
   private readonly vMargin: number;
+  private layoutResult: LayoutResult | null = null;
+  private readonly pSpace: number;
 
   /**
    *
    * @param mindCheese MindCheese instance
-   * @param container container element
    * @param hmargin ???
    * @param vmargin ???
    * @param graph instance of GraphCanvas
    * @param textFormatter Formatter of the text
+   * @param layoutEngine
+   * @param pSpace Horizontal spacing between node and connection line (to place node adder)
    */
   constructor(
     mindCheese: MindCheese,
     hmargin: number,
     vmargin: number,
     graph: GraphCanvas,
-    textFormatter: TextFormatter
+    textFormatter: TextFormatter,
+    layoutEngine: LayoutEngine,
+    pSpace: number
   ) {
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
-    this.layout = mindCheese.layout;
+    this.layoutEngine = layoutEngine;
+    this.pSpace = pSpace;
 
     this.mcnodes = document.createElement("mcnodes");
 
@@ -73,11 +79,11 @@ export default class ViewProvider {
     });
     // adjust size dynamically.
     this.mcnodes.addEventListener("keyup", () => {
-      this.layoutAgain();
+      this.renderAgain();
     });
     this.mcnodes.addEventListener("input", () => {
       // TODO is this required?
-      this.layoutAgain();
+      this.renderAgain();
     });
     // when the element lost focus.
     this.mcnodes.addEventListener(
@@ -165,7 +171,7 @@ export default class ViewProvider {
   }
 
   private getCanvasSize(): Size {
-    const minSize = this.layout.getBounds().size;
+    const minSize = this.layoutResult!.getBounds(this.mindCheese.mind).size;
 
     const minWidth = minSize.width + this.hMargin * 2;
     const minHeight = minSize.height + this.vMargin * 2;
@@ -340,7 +346,7 @@ export default class ViewProvider {
     selectElementContents(element);
     element.focus();
 
-    this.layoutAgain();
+    this.renderAgain();
   }
 
   editNodeEnd(): void {
@@ -363,7 +369,7 @@ export default class ViewProvider {
           element.clientWidth,
           element.clientHeight
         );
-        this.layoutAgain();
+        this.renderAgain();
       } else {
         console.debug("Calling updateNode");
         this.mindCheese.updateNode(node.id, topic);
@@ -373,7 +379,7 @@ export default class ViewProvider {
 
   // get the center point offset
   getOffsetOfTheRootNode(): RootNodeOffsetFromTopLeftOfMcnodes {
-    const bounds = this.layout.getBounds();
+    const bounds = this.layoutResult!.getBounds(this.mindCheese.mind);
     console.log(
       `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
     );
@@ -393,7 +399,7 @@ export default class ViewProvider {
     this.mcnodes.style.width = "1px";
     this.mcnodes.style.height = "1px";
 
-    this.layoutAgain();
+    this.renderAgain();
   }
 
   // Display root position at center of container element.
@@ -409,8 +415,9 @@ export default class ViewProvider {
     }
   }
 
-  layoutAgain(): void {
-    this.layout.layout();
+  // TODO pull this method to MindCheese?
+  renderAgain(): void {
+    this.layoutResult = this.layoutEngine.layout(this.mindCheese.mind);
     this.size = this.getCanvasSize();
 
     console.log(`doShow: ${this.size.width} ${this.size.height}`);
@@ -463,7 +470,7 @@ export default class ViewProvider {
 
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
-      const p = this.layout.getTopLeft(node);
+      const p = this.layoutResult!.getTopLeft(node, this.graph.lineWidth);
       viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
       nodeElement.style.left = viewData.elementTopLeft.x + "px";
       nodeElement.style.top = viewData.elementTopLeft.y + "px";
@@ -474,7 +481,7 @@ export default class ViewProvider {
         const adder = viewData.adder!;
         const adderText = "+";
         const adderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
-          this.layout.getAdderPoint(node)
+          this.layoutResult!.getAdderPosition(node, this.pSpace)
         );
         adder.style.left = adderPoint.x + "px";
         adder.style.top = adderPoint.y + "px";
@@ -494,10 +501,10 @@ export default class ViewProvider {
       if (node.isroot) {
         continue;
       }
-      const pin = this.layout.getNodePointIn(node);
+      const pin = this.layoutResult!.getNodePointIn(node);
       {
         // Draw line between previous node and next node
-        const pout = this.layout.getNodePointOut(node.parent!, node);
+        const pout = this.layoutResult!.getNodePointOut(node.parent!, node);
         this.graph.drawLine(
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),
@@ -519,5 +526,11 @@ export default class ViewProvider {
         );
       }
     }
+  }
+
+  getCenterOffsetOfTheNodeFromRootNode(
+    node: MindNode
+  ): CenterOfNodeOffsetFromRootNode {
+    return this.layoutResult!.getCenterOffsetOfTheNodeFromRootNode(node);
   }
 }

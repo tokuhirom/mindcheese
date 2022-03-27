@@ -1,8 +1,6 @@
 import { Direction } from "../MindmapConstants";
 import { ViewData } from "./ViewData";
-import { LayoutData } from "./LayoutData";
 import { COLORS } from "./COLORS";
-import { CenterOfNodeOffsetFromRootNode } from "../LayoutProvider";
 
 export default class MindNode {
   public readonly id: string;
@@ -15,7 +13,6 @@ export default class MindNode {
   public color: string | null;
   public readonly data: {
     view: ViewData;
-    layout: LayoutData;
   };
 
   constructor(
@@ -38,7 +35,6 @@ export default class MindNode {
     this.children = [];
     this.data = {
       view: new ViewData(),
-      layout: new LayoutData(),
     };
 
     // console.log(`ID: ${id}`);
@@ -109,21 +105,5 @@ export default class MindNode {
     for (let i = 0, l = this.children.length; i < l; i++) {
       this.children[i].applyColor(color);
     }
-  }
-
-  getCenterOffsetOfTheNodeFromRootNode(): CenterOfNodeOffsetFromRootNode {
-    let x = 0;
-    let y = 0;
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let n: MindNode | null = this;
-
-    do {
-      x += n!.data.layout.relativeCenterOffsetX;
-      y += n!.data.layout.relativeCenterOffsetY;
-
-      n = n!.parent;
-    } while (n);
-
-    return new CenterOfNodeOffsetFromRootNode(x, y);
   }
 }

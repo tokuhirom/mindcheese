@@ -77,15 +77,6 @@ export default class Mind {
     return node;
   }
 
-  insertNodeBefore(
-    nodeBefore: MindNode,
-    nodeid: string,
-    topic: string
-  ): MindNode {
-    const nodeIndex = nodeBefore.index - 0.5;
-    return this.addNode(nodeBefore.parent!, nodeid, topic, nodeIndex, null);
-  }
-
   getNodeBefore(node: MindNode): MindNode | null {
     if (node.isroot) {
       return null;

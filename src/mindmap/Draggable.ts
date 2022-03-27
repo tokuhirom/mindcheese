@@ -16,7 +16,8 @@
 import MindCheese from "./MindCheese";
 import MindNode from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
-import { Point } from "./LayoutProvider";
+import { Point } from "./layout/Point";
+import { findMcnode } from "./utils/DomUtils";
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -188,7 +189,7 @@ export default class Draggable {
     let closestPoint: Point | null = null;
     let shadowPoint: Point | null = null;
     for (const nodeid in nodes) {
-      let np, sp;
+      let np: Point, sp: Point;
       const node = nodes[nodeid];
       let distance = 0;
       if (node.isroot || node.direction == direct) {
@@ -204,11 +205,11 @@ export default class Draggable {
           distance =
             Math.abs(sx - nl.x - ns.width) +
             Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
-          np = {
-            x: nl.x + ns.width - this.lineWidth,
-            y: nl.y + (node.isroot ? ns.height / 2 : ns.height),
-          };
-          sp = { x: sx + this.lineWidth, y: sy + sh };
+          np = new Point(
+            nl.x + ns.width - this.lineWidth,
+            nl.y + (node.isroot ? ns.height / 2 : ns.height)
+          );
+          sp = new Point(sx + this.lineWidth, sy + sh);
         } else {
           if (nl.x - sx - sw <= 0) {
             continue;
@@ -216,11 +217,11 @@ export default class Draggable {
           distance =
             Math.abs(sx + sw - nl.x) +
             Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
-          np = {
-            x: nl.x + this.lineWidth,
-            y: nl.y + (node.isroot ? ns.height / 2 : ns.height),
-          };
-          sp = { x: sx + sw - this.lineWidth, y: sy + sh };
+          np = new Point(
+            nl.x + this.lineWidth,
+            nl.y + (node.isroot ? ns.height / 2 : ns.height)
+          );
+          sp = new Point(sx + sw - this.lineWidth, sy + sh);
         }
         if (distance < minDistance) {
           closestNode = node;
@@ -279,14 +280,7 @@ export default class Draggable {
   }
 
   private static findMcnode(htmlElement: HTMLElement): HTMLElement | null {
-    let el: HTMLElement | null = htmlElement;
-    while (el) {
-      if (el.tagName.toLowerCase() == "mcnode") {
-        return el;
-      }
-      el = el.parentElement;
-    }
-    return null;
+    return findMcnode(htmlElement);
   }
 
   dragstart(e: MouseEvent | TouchEvent): void {
@@ -299,7 +293,7 @@ export default class Draggable {
     this.activeNode = null;
 
     const viewProvider = this.mindCheese.view;
-    const el = Draggable.findMcnode(e.target as HTMLElement);
+    const el = findMcnode(e.target as HTMLElement);
     if (!el) {
       return;
     }
