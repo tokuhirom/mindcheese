@@ -91,10 +91,6 @@ export default class Draggable {
     this.moved = false;
   }
 
-  init(container: HTMLElement): void {
-    this.eventBind(container);
-  }
-
   resize(width: number, height: number): void {
     this.mindCheese.view.mcnodes.appendChild(this.shadow);
     this.canvasElement.width = width;
@@ -247,7 +243,7 @@ export default class Draggable {
     }
   }
 
-  private eventBind(container: HTMLElement): void {
+  eventBind(container: HTMLElement): void {
     container.addEventListener("mousedown", this.dragstart.bind(this), false);
     container.addEventListener("mousemove", this.drag.bind(this), false);
     container.addEventListener("mouseup", this.dragend.bind(this), false);
@@ -277,10 +273,6 @@ export default class Draggable {
       passive: true,
     });
     container.addEventListener("touchend", this.dragend.bind(this), false);
-  }
-
-  private static findMcnode(htmlElement: HTMLElement): HTMLElement | null {
-    return findMcnode(htmlElement);
   }
 
   dragstart(e: MouseEvent | TouchEvent): void {
