@@ -1,4 +1,4 @@
-import LayoutProvider from "./LayoutProvider";
+import LayoutProvider from "./layout/LayoutProvider";
 import ViewProvider from "./ViewProvider";
 import ShortcutProvider from "./ShortcutProvider";
 import MindNode from "./model/MindNode";
@@ -13,10 +13,11 @@ import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
 import {
-  CenterOfNodeOffsetFromRootNode,
   LayoutEngine,
-  LayoutResult,
-} from "./LayoutEngine";
+
+} from "./layout/LayoutEngine";
+import {CenterOfNodeOffsetFromRootNode} from "./layout/CenterOfNodeOffsetFromRootNode";
+import {LayoutResult} from "./layout/LayoutResult";
 
 export default class MindCheese {
   options: MindOption;

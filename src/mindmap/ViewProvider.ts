@@ -2,13 +2,12 @@ import GraphCanvas from "./GraphCanvas";
 import MindNode from "./model/MindNode";
 import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import MindCheese from "./MindCheese";
-import LayoutProvider, {
-  Point,
-  RootNodeOffsetFromTopLeftOfMcnodes,
-} from "./LayoutProvider";
+import LayoutProvider from "./layout/LayoutProvider";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
-import { CenterOfNodeOffsetFromRootNode } from "./LayoutEngine";
+import {CenterOfNodeOffsetFromRootNode} from "./layout/CenterOfNodeOffsetFromRootNode";
+import {RootNodeOffsetFromTopLeftOfMcnodes} from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
+import {Point} from "./layout/Point";
 
 /**
  * View renderer

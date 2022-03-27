@@ -1,49 +1,9 @@
-import { Direction } from "./MindmapConstants";
-import MindNode from "./model/MindNode";
-import Mind from "./Mind";
-
-class RelativeOffsetFromParent {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  // https://ageek.dev/ts-nominal-typing
-  __RelativeOffsetFromParentBrand: any;
-  x: number;
-  y: number;
-}
-
-export class CenterOfNodeOffsetFromRootNode {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  // https://ageek.dev/ts-nominal-typing
-  __CenterOfNodeOffsetFromRootNodeBrand: any;
-  readonly x: number;
-  readonly y: number;
-}
-
-export class LayoutResult {
-  private readonly _relativeFromRootMap: Record<
-    string,
-    CenterOfNodeOffsetFromRootNode
-  >;
-
-  constructor(
-    relativeFromRootMap: Record<string, CenterOfNodeOffsetFromRootNode>
-  ) {
-    this._relativeFromRootMap = relativeFromRootMap;
-  }
-
-  getCenterOffsetOfTheNodeFromRootNode(
-    node: MindNode
-  ): CenterOfNodeOffsetFromRootNode {
-    return this._relativeFromRootMap[node.id];
-  }
-}
+import {Direction} from "../MindmapConstants";
+import MindNode from "../model/MindNode";
+import Mind from "../Mind";
+import {RelativeOffsetFromParent} from "./RelativeOffsetFromParent";
+import {CenterOfNodeOffsetFromRootNode} from "./CenterOfNodeOffsetFromRootNode";
+import {LayoutResult} from "./LayoutResult";
 
 export class LayoutEngine {
   private readonly hSpace: number;

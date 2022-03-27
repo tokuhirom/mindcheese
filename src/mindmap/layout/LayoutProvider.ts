@@ -1,58 +1,10 @@
-import { Direction } from "./MindmapConstants";
+import {Direction} from "../MindmapConstants";
 
-import MindNode from "./model/MindNode";
-import MindCheese from "./MindCheese";
-import GraphCanvas from "./GraphCanvas";
-import { Size } from "./Size";
-import { CenterOfNodeOffsetFromRootNode } from "./LayoutEngine";
-
-export class Point {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  readonly x: number;
-  readonly y: number;
-}
-
-export class OffsetFromTopLeftOfMcnodes {
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  __OffsetFromTopLeftOfMcnodesBrand: any;
-  readonly x: number;
-  readonly y: number;
-}
-
-export class RootNodeOffsetFromTopLeftOfMcnodes extends OffsetFromTopLeftOfMcnodes {
-  convertCenterOfNodeOffsetFromRootNode(
-    offset: CenterOfNodeOffsetFromRootNode
-  ): OffsetFromTopLeftOfMcnodes {
-    return new OffsetFromTopLeftOfMcnodes(this.x + offset.x, this.y + offset.y);
-  }
-}
-
-export class Bounds {
-  constructor(n: number, e: number, w: number, s: number) {
-    this.n = n;
-    this.e = e;
-    this.w = w;
-    this.s = s;
-    this.size = new Size(this.e + this.w * -1, this.s + this.n * -1);
-    console.log(
-      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.width},h=${this.size.height}`
-    );
-  }
-
-  readonly n: number; // negative
-  readonly e: number;
-  readonly w: number; // negative
-  readonly s: number;
-  readonly size: Size;
-}
+import MindNode from "../model/MindNode";
+import MindCheese from "../MindCheese";
+import GraphCanvas from "../GraphCanvas";
+import {Bounds} from "./Bounds";
+import {CenterOfNodeOffsetFromRootNode} from "./CenterOfNodeOffsetFromRootNode";
 
 export default class LayoutProvider {
   private readonly mindCheese: MindCheese;
