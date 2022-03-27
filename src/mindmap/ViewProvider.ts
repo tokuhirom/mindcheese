@@ -264,44 +264,27 @@ export default class ViewProvider {
   }
 
   // Adjust the scroll bar. show node in the browser.
-  adjustScrollBar(node: MindNode): void {
+  private adjustScrollBar(node: MindNode): void {
     const nodeEl = node.data.view.element!;
-    const panelEl = this.mindCheeseInnerElement;
-    if (panelEl.scrollLeft > nodeEl.offsetLeft) {
-      console.debug(`select_node! left adjust`);
-      panelEl.scrollLeft = Math.max(nodeEl.offsetLeft - 10, 0);
+
+    // https://stackoverflow.com/questions/5685589/scroll-to-element-only-if-not-in-view-jquery
+    if (nodeEl.getBoundingClientRect().bottom > window.innerHeight) {
+      nodeEl.scrollIntoView(false);
     }
+
+    if (nodeEl.getBoundingClientRect().top < 0) {
+      nodeEl.scrollIntoView();
+    }
+
+    if (nodeEl.getBoundingClientRect().left > window.innerWidth) {
+      nodeEl.scrollIntoView(false);
+    }
+
     if (
-      nodeEl.offsetLeft + nodeEl.clientWidth >=
-      panelEl.scrollLeft + panelEl.clientWidth
+      nodeEl.getBoundingClientRect().left < 0 ||
+      nodeEl.getBoundingClientRect().right < 0
     ) {
-      console.debug("select_node! right adjust");
-      panelEl.scrollLeft = Math.max(
-        panelEl.scrollLeft +
-          (nodeEl.offsetLeft +
-            nodeEl.clientWidth +
-            30 -
-            (panelEl.scrollLeft + panelEl.clientWidth)),
-        0
-      );
-    }
-    if (panelEl.scrollTop > nodeEl.offsetTop) {
-      console.debug("select_node! top adjust");
-      panelEl.scrollTop = Math.max(nodeEl.offsetTop - 10, 0);
-    }
-    if (
-      nodeEl.offsetTop + nodeEl.clientHeight >=
-      panelEl.scrollTop + panelEl.clientHeight
-    ) {
-      console.debug("select_node! bottom adjust");
-      panelEl.scrollTop = Math.max(
-        panelEl.scrollTop +
-          (nodeEl.offsetTop +
-            nodeEl.clientHeight +
-            30 -
-            (panelEl.scrollTop + panelEl.clientHeight)),
-        0
-      );
+      nodeEl.scrollIntoView();
     }
   }
 
