@@ -19,7 +19,6 @@ export default {
     sourcemap: "inline",
     sourcemapExcludeSources: isProd,
     format: "iife",
-    exports: "default",
     banner,
   },
   plugins: [
