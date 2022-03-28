@@ -19,6 +19,8 @@ jobs:
       - run: npm run stylelint
       - run: npm run build
       - run: npm ci
+      - name: Set version from tag
+        run: npm --no-git-tag-version version ${GITHUB_REF#refs/*/}
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
