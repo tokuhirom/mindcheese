@@ -1,4 +1,4 @@
-import MindCheese from "../src/mindmap/MindCheese";
+import { MindCheese } from "../src/mindmap/MindCheese";
 import { DEMO_MARKDOWN, DEMO_NODE_TREE } from "./DemoData";
 
 console.log("Loaded browser.ts");
