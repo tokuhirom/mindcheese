@@ -19,7 +19,7 @@ function downloadText(filename: string, text: string) {
   document.body.removeChild(element);
 }
 
-function initDemo() {
+export function initDemo() {
   const container = document.getElementById("container");
   const mindCheese = new MindCheese(1, container!);
   // @ts-ignore
@@ -68,4 +68,3 @@ function initDemo() {
 
 // @ts-ignore
 window.initDemo = initDemo;
-export default initDemo;
