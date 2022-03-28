@@ -14,7 +14,7 @@ import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { findMcnode } from "./utils/DomUtils";
 
-export default class MindCheese {
+export class MindCheese {
   options: MindOption;
   public mind: Mind;
   view: ViewProvider;

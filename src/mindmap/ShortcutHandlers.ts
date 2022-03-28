@@ -1,4 +1,4 @@
-import MindCheese from "./MindCheese";
+import { MindCheese } from "./MindCheese";
 import { Direction } from "./MindmapConstants";
 import { generateNewId } from "./utils/RandomID";
 

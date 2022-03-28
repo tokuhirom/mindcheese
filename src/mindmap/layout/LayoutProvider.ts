@@ -1,4 +1,4 @@
-import MindCheese from "../MindCheese";
+import { MindCheese } from "../MindCheese";
 import GraphCanvas from "../GraphCanvas";
 
 export default class LayoutProvider {

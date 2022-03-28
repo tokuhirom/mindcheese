@@ -13,7 +13,7 @@
  * Copyright (C) 2021 Tokuhiro Matsuno.
  */
 
-import MindCheese from "./MindCheese";
+import { MindCheese } from "./MindCheese";
 import MindNode from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { Point } from "./layout/Point";

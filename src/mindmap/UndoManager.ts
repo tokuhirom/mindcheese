@@ -1,4 +1,4 @@
-import MindCheese from "./MindCheese";
+import { MindCheese } from "./MindCheese";
 
 export default class UndoManager {
   private readonly mindCheese: MindCheese;

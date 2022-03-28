@@ -1,4 +1,4 @@
-import MindCheese from "./MindCheese";
+import { MindCheese } from "./MindCheese";
 import { KeyModifier } from "./MindmapConstants";
 
 export default class ShortcutProvider {
