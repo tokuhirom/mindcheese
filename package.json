@@ -2,7 +2,8 @@
   "name": "mindcheese",
   "version": "0.12.0",
   "description": "Yet another editable mindmap library",
-  "main": "dist/mindcheese.js",
+  "main": "dist/mindcheese.cjs.js",
+  "browser": "dist/mindcheese.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "browserDev": "rollup --config browser/rollup.config.js -w --environment BUILD:development",
