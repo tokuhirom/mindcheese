@@ -17,7 +17,7 @@ function escapeHtml(src: string): string {
   });
 }
 
-export default class MarkdownRenderer implements TextFormatter {
+export class MarkdownRenderer implements TextFormatter {
   render(src: string): string {
     return src.replace(
       /(\n)|\*\*(.*?)\*\*|\*(.*?)\*|`(.*?)`|([&><"'`{}])|(.)/g,

@@ -1,7 +1,7 @@
-import GraphCanvas from "./GraphCanvas";
-import MindNode from "./model/MindNode";
+import { GraphCanvas } from "./GraphCanvas";
+import { MindNode } from "./model/MindNode";
 import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
-import MindCheese from "./MindCheese";
+import { MindCheese } from "./MindCheese";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
 import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
@@ -13,7 +13,7 @@ import { LayoutEngine } from "./layout/LayoutEngine";
 /**
  * View renderer
  */
-export default class ViewProvider {
+export class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layoutEngine: LayoutEngine;
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner

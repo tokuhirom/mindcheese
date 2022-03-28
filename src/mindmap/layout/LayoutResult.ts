@@ -1,8 +1,8 @@
 import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
-import MindNode from "../model/MindNode";
+import { MindNode } from "../model/MindNode";
 import { Direction } from "../MindmapConstants";
 import { Bounds } from "./Bounds";
-import Mind from "../Mind";
+import { Mind } from "../Mind";
 
 export class LayoutResult {
   private readonly _relativeFromRootMap: Record<

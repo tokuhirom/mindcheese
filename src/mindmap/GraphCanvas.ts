@@ -3,7 +3,7 @@
  */
 import { OffsetFromTopLeftOfMcnodes } from "./layout/OffsetFromTopLeftOfMcnodes";
 
-export default class GraphCanvas {
+export class GraphCanvas {
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
   private readonly lineColor: string;

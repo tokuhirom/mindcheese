@@ -13,8 +13,8 @@
  * Copyright (C) 2021 Tokuhiro Matsuno.
  */
 
-import MindCheese from "./MindCheese";
-import MindNode from "./model/MindNode";
+import { MindCheese } from "./MindCheese";
+import { MindNode } from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { Point } from "./layout/Point";
 import { findMcnode } from "./utils/DomUtils";
@@ -46,7 +46,7 @@ class ClosePoint {
   }
 }
 
-export default class Draggable {
+export class Draggable {
   private readonly mindCheese: MindCheese;
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;

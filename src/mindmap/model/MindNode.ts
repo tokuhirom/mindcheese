@@ -2,7 +2,7 @@ import { Direction } from "../MindmapConstants";
 import { ViewData } from "./ViewData";
 import { COLORS } from "./COLORS";
 
-export default class MindNode {
+export class MindNode {
   public readonly id: string;
   public index: number;
   public topic: string;

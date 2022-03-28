@@ -1,12 +1,12 @@
 {
   "name": "mindcheese",
   "version": "0.12.0",
-  "description": "Yet another mindmap library",
-  "main": "main.js",
+  "description": "Yet another editable mindmap library",
+  "main": "dist/mindcheese.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "browserDev": "rollup --config browser/rollup.config.js -w --environment BUILD:development",
-    "build": "rollup --config browser/rollup.config.js --environment BUILD:production",
+    "build": "rollup --config rollup.config.js --environment BUILD:production",
     "test": "jest",
     "prettier": "prettier --write .",
     "eslint": "npx eslint . --ext .ts,.tsx",

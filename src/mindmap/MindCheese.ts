@@ -1,11 +1,11 @@
-import ViewProvider from "./ViewProvider";
-import ShortcutProvider from "./ShortcutProvider";
-import MindNode from "./model/MindNode";
-import Mind from "./Mind";
-import Draggable from "./Draggable";
+import { ViewProvider } from "./ViewProvider";
+import { ShortcutProvider } from "./ShortcutProvider";
+import { MindNode } from "./model/MindNode";
+import { Mind } from "./Mind";
+import { Draggable } from "./Draggable";
 import { BEFOREID_LAST, Direction } from "./MindmapConstants";
-import UndoManager from "./UndoManager";
-import GraphCanvas from "./GraphCanvas";
+import { UndoManager } from "./UndoManager";
+import { GraphCanvas } from "./GraphCanvas";
 import { object2mindmap } from "./format/node_tree/object2mindmap";
 import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
@@ -14,7 +14,7 @@ import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { findMcnode } from "./utils/DomUtils";
 
-export default class MindCheese {
+export class MindCheese {
   options: MindOption;
   public mind: Mind;
   view: ViewProvider;

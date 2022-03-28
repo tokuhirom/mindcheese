@@ -1,7 +1,7 @@
-import MindCheese from "./MindCheese";
+import { MindCheese } from "./MindCheese";
 import { KeyModifier } from "./MindmapConstants";
 
-export default class ShortcutProvider {
+export class ShortcutProvider {
   private readonly mindCheese: MindCheese;
   private enable: boolean;
   private readonly mappings: Record<
