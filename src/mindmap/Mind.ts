@@ -1,7 +1,7 @@
-import MindNode from "./model/MindNode";
+import { MindNode } from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
 
-export default class Mind {
+export class Mind {
   root: MindNode | null;
   selected: MindNode | null;
   readonly nodes: Record<string, MindNode>;

@@ -1,6 +1,6 @@
 import { MindCheese } from "./MindCheese";
 
-export default class UndoManager {
+export class UndoManager {
   private readonly mindCheese: MindCheese;
   private readonly undoStack: any[];
   private readonly undoStackLimit: number;

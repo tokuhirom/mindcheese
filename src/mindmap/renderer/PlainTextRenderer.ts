@@ -1,6 +1,6 @@
 import { TextFormatter } from "./TextFormatter";
 
-export default class PlainTextRenderer implements TextFormatter {
+export class PlainTextRenderer implements TextFormatter {
   render(src: string): string {
     return PlainTextRenderer.escapeHtml(src).replace(/\n/g, "<br>");
   }

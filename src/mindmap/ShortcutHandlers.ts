@@ -2,7 +2,7 @@ import { MindCheese } from "./MindCheese";
 import { Direction } from "./MindmapConstants";
 import { generateNewId } from "./utils/RandomID";
 
-export default class ShortcutHandlers {
+export class ShortcutHandlers {
   static delete(mindCheese: MindCheese): boolean {
     const selectedNode = mindCheese.getSelectedNode();
     if (!!selectedNode && !selectedNode.isroot) {
