@@ -13,7 +13,7 @@
     "stylelint": "npx stylelint \"**/*.css\""
   },
   "keywords": [],
-  "author": "",
+  "author": "tokuhirom",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "7.17.8",
@@ -40,5 +40,8 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npx prettier --write ."
-  }
+  },
+  "files": [
+    "dist/*.js"
+  ]
 }
