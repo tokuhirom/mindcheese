@@ -126,7 +126,6 @@ export class Mind {
     parent: MindNode,
     direction: Direction
   ): void {
-    console.assert(node instanceof MindNode, "node should be Node");
     console.log(`move_node: ${node} ${beforeid} ${parent.id} ${direction}`);
     this.doMoveNode(node, beforeid, parent, direction);
     if (parent.color && node.color != parent.color) {

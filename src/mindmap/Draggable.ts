@@ -127,7 +127,7 @@ export class Draggable {
     return mcnode;
   }
 
-  resetShadow(el: HTMLElement): void {
+  private resetShadow(el: HTMLElement): void {
     const s = this.shadow.style;
     this.shadow.innerHTML = el.innerHTML;
     s.left = el.style.left;
@@ -382,7 +382,7 @@ export class Draggable {
     this.capture = false;
   }
 
-  moveNode(
+  private moveNode(
     srcNode: MindNode,
     targetNode: MindNode,
     targetDirect: Direction
@@ -393,13 +393,11 @@ export class Draggable {
       console.log(`let's move!`);
       // lookup before_node
       const siblingNodes = targetNode.children;
-      let sc = siblingNodes.length;
-      let node = null;
       let deltaY = Number.MAX_VALUE;
       let nodeBefore = null;
       let beforeid = BEFOREID_LAST;
-      while (sc--) {
-        node = siblingNodes[sc];
+      for (let i = siblingNodes.length - 1; i >= 0; i--) {
+        const node = siblingNodes[i];
         if (node.direction === targetDirect && node.id !== srcNode.id) {
           const dy = node.data.view.elementTopLeft!.y - shadowH;
           if (dy > 0 && dy < deltaY) {
