@@ -1,8 +1,8 @@
-import { CenterOfNodeOffsetFromRootNode } from "../layout/CenterOfNodeOffsetFromRootNode";
+import { CenterOfNodeOffsetFromRootNode } from "../../layout/CenterOfNodeOffsetFromRootNode";
 import { GraphCanvas } from "./GraphCanvas";
-import { Mind } from "../Mind";
-import { LayoutResult } from "../layout/LayoutResult";
-import { RootNodeOffsetFromTopLeftOfMcnodes } from "../layout/RootNodeOffsetFromTopLeftOfMcnodes";
+import { Mind } from "../../Mind";
+import { LayoutResult } from "../../layout/LayoutResult";
+import { RootNodeOffsetFromTopLeftOfMcnodes } from "../../layout/RootNodeOffsetFromTopLeftOfMcnodes";
 
 export class GraphView {
   private readonly graphCanvas: GraphCanvas;

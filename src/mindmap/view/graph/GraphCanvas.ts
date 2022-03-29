@@ -1,4 +1,4 @@
-import { OffsetFromTopLeftOfMcnodes } from "../layout/OffsetFromTopLeftOfMcnodes";
+import { OffsetFromTopLeftOfMcnodes } from "../../layout/OffsetFromTopLeftOfMcnodes";
 
 /**
  * GraphCanvas renders bezier lines between nodes on the canvas element.

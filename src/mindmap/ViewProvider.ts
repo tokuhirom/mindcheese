@@ -7,8 +7,8 @@ import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromT
 import { ScrollSnapshot } from "./layout/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
-import { GraphCanvas } from "./graph/GraphCanvas";
-import { GraphView } from "./graph/GraphView";
+import { GraphCanvas } from "./view/graph/GraphCanvas";
+import { GraphView } from "./view/graph/GraphView";
 
 /**
  * View renderer

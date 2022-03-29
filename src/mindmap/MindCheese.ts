@@ -12,7 +12,7 @@ import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { findMcnode } from "./utils/DomUtils";
-import { GraphCanvas } from "./graph/GraphCanvas";
+import { GraphCanvas } from "./view/graph/GraphCanvas";
 
 export class MindCheese {
   options: MindOption;
