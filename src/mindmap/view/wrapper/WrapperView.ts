@@ -10,7 +10,7 @@ export class WrapperView {
   private readonly wrapperElement: HTMLElement;
   private readonly hMargin: number;
   private readonly vMargin: number;
-  private nodesView: NodesView;
+  private readonly nodesView: NodesView;
   private zoomScale = 1.0;
 
   constructor(
