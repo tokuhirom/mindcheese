@@ -107,7 +107,7 @@ export class Draggable {
   }
 
   resize(width: number, height: number): void {
-    this.mindCheese.view.mcnodes.appendChild(this.shadow);
+    this.mindCheese.view.nodesView.appendChild(this.shadow);
     this.canvasElement.width = width;
     this.canvasElement.height = height;
   }
@@ -278,7 +278,7 @@ export class Draggable {
             }, 350);
           } else {
             // double tap
-            this.mindCheese.dblclickHandle(e);
+            this.mindCheese.view.nodesView.dblclickHandle(e);
           }
         },
         { passive: true }

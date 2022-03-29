@@ -104,15 +104,6 @@ export class MindCheese {
   }
 
   private bindEvent(): void {
-    this.view.mcnodes.addEventListener(
-      "mousedown",
-      this.mousedownHandle.bind(this)
-    );
-    this.view.mcnodes.addEventListener("click", this.clickHandle.bind(this));
-    this.view.mcnodes.addEventListener(
-      "dblclick",
-      this.dblclickHandle.bind(this)
-    );
     this.view.mindCheeseInnerElement.addEventListener(
       "wheel",
       (e) => {
@@ -135,71 +126,6 @@ export class MindCheese {
     });
   }
 
-  private mousedownHandle(e: Event): void {
-    const element = e.target as HTMLElement;
-    const nodeid = this.view.getBindedNodeId(element);
-    if (nodeid) {
-      if (findMcnode(element)) {
-        const theNode = this.mind.getNodeById(nodeid);
-        return this.selectNode(theNode);
-      }
-    } else {
-      this.selectClear();
-    }
-  }
-
-  private clickHandle(e: Event): boolean {
-    const element = e.target as HTMLElement;
-    switch (element.tagName.toLowerCase()) {
-      case "mcadder": {
-        const nodeid = this.view.getBindedNodeId(element);
-        if (nodeid) {
-          const theNode = this.mind.getNodeById(nodeid);
-          if (!theNode) {
-            throw new Error("the node[id=" + nodeid + "] can not be found.");
-          } else {
-            console.log(`element: ${element.tagName.toLowerCase()}`);
-            const nodeid = generateNewId();
-            const node = this.addNode(theNode, nodeid, "New Node");
-            if (node) {
-              this.selectNode(node);
-
-              this.checkEditable();
-              this.view.editNodeBegin(node);
-            }
-          }
-        }
-        return false;
-      }
-    }
-    return true;
-  }
-
-  dblclickHandle(e: Event): boolean {
-    this.checkEditable();
-    e.preventDefault();
-    e.stopPropagation();
-
-    const element = e.target as HTMLElement;
-    const nodeid = this.view.getBindedNodeId(element);
-    if (nodeid) {
-      const theNode = this.mind.getNodeById(nodeid);
-      if (theNode.data.view.element!.contentEditable == "true") {
-        // The node is already in the editing mode.
-        return false;
-      }
-
-      if (!theNode) {
-        throw new Error(`the node[id=${nodeid}] can not be found.`);
-      }
-
-      this.view.editNodeBegin(theNode);
-
-      return false;
-    }
-    return true;
-  }
-
   zoom(n: number): void {
     console.log(`set zoom scale to ${n}`);
     this.view.mindCheeseInnerElement.style.transform = `scale(${n})`;
@@ -210,8 +136,9 @@ export class MindCheese {
 
     this.mind = mind;
 
-    this.view.createNodes();
-    this.view.cacheNodeSize();
+    // TODO move core logic to ViewProvider.
+    this.view.nodesView.createNodes();
+    this.view.nodesView.cacheNodeSize();
     this.view.renderAgain();
     this.view.centerRoot();
   }
@@ -240,7 +167,7 @@ export class MindCheese {
     parentNode.data.view.adder!.style.display = "none";
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
-      this.view.addNode(node);
+      this.view.nodesView.addNode(node);
       this.view.renderAgain();
     }
     return node;
@@ -256,7 +183,7 @@ export class MindCheese {
     this.undoManager.recordSnapshot();
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
-    this.view.addNode(node);
+    this.view.nodesView.addNode(node);
     this.view.renderAgain();
     return node;
   }

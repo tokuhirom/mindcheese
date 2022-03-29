@@ -1,14 +1,13 @@
 import { MindNode } from "./model/MindNode";
-import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import { MindCheese } from "./MindCheese";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./model/Size";
-import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
 import { ScrollSnapshot } from "./layout/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { GraphCanvas } from "./view/graph/GraphCanvas";
 import { GraphView } from "./view/graph/GraphView";
+import { NodesView } from "./view/node/NodesView";
 
 /**
  * View renderer
@@ -17,7 +16,6 @@ export class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layoutEngine: LayoutEngine;
   readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
-  readonly mcnodes: HTMLElement; // <mcnodes>
   size: Size;
   private selectedNode: MindNode | null;
   private editingNode: MindNode | null;
@@ -27,6 +25,7 @@ export class ViewProvider {
   private readonly vMargin: number;
   private layoutResult: LayoutResult | null = null;
   private readonly pSpace: number;
+  readonly nodesView: NodesView; // TODO make this private
 
   /**
    *
@@ -52,57 +51,12 @@ export class ViewProvider {
     this.layoutEngine = layoutEngine;
     this.pSpace = pSpace;
 
-    this.mcnodes = document.createElement("mcnodes");
-
-    this.mcnodes.addEventListener("keydown", (e) => {
-      const el = e.target as HTMLElement;
-      console.debug(
-        `keydown=${e.keyCode}==${KEYCODE_ENTER} tagName=${el.tagName} shiftkey=${e.shiftKey}`
-      );
-      if (el.tagName != "MCNODE") {
-        console.log(`It's not MCNODE. ${el.tagName}`);
-        return;
-      }
-
-      // https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
-      // keyCode is deprecated field. But it's a hack for Japanese IME.
-      // noinspection JSDeprecatedSymbols
-      if (
-        (e.keyCode === KEYCODE_ENTER && !e.shiftKey) ||
-        e.keyCode == KEYCODE_ESC
-      ) {
-        console.log("editNodeEnd");
-        e.stopPropagation();
-        e.preventDefault();
-        this.editNodeEnd();
-      }
-    });
-    // adjust size dynamically.
-    this.mcnodes.addEventListener("keyup", () => {
-      this.renderAgain();
-    });
-    this.mcnodes.addEventListener("input", () => {
-      // TODO is this required?
-      this.renderAgain();
-    });
-    // when the element lost focus.
-    this.mcnodes.addEventListener(
-      "blur",
-      (e: FocusEvent) => {
-        const el = e.target as HTMLElement;
-        if (el.tagName.toLowerCase() != "mcnode") {
-          return;
-        }
-
-        this.editNodeEnd();
-      },
-      true
-    );
+    this.nodesView = new NodesView(this, this.mindCheese, textFormatter);
 
     this.mindCheeseInnerElement = document.createElement("div");
     this.mindCheeseInnerElement.className = "mindcheese-inner";
     this.mindCheeseInnerElement.appendChild(graphCanvas.element());
-    this.mindCheeseInnerElement.appendChild(this.mcnodes);
+    this.nodesView.attach(this.mindCheeseInnerElement);
 
     this.size = new Size(0, 0);
 
@@ -139,34 +93,16 @@ export class ViewProvider {
     console.debug("view.reset");
     this.selectedNode = null;
     this.graphView.clear();
-    this.clearNodes();
+    this.nodesView.clearNodes();
     this.resetTheme();
   }
 
   resetTheme(): void {
     const themeName = this.mindCheese.options.theme;
     if (themeName) {
-      this.mcnodes.parentElement!.className = "theme-" + themeName;
+      this.mindCheeseInnerElement!.className = "theme-" + themeName;
     } else {
-      this.mcnodes.parentElement!.className = "";
-    }
-  }
-
-  createNodes() {
-    const nodes = this.mindCheese.mind.nodes;
-
-    const documentFragment = document.createDocumentFragment();
-    for (const node of Object.values(nodes)) {
-      this.createNodeElement(node, documentFragment);
-    }
-    this.mcnodes.appendChild(documentFragment);
-  }
-
-  cacheNodeSize() {
-    const nodes = this.mindCheese.mind.nodes;
-
-    for (const node of Object.values(nodes)) {
-      ViewProvider.initNodeSize(node);
+      this.mindCheeseInnerElement!.className = "";
     }
   }
 
@@ -182,41 +118,6 @@ export class ViewProvider {
     return new Size(Math.max(clientW, minWidth), Math.max(clientH, minHeight));
   }
 
-  private static initNodeSize(node: MindNode): void {
-    const viewData = node.data.view;
-    viewData.elementSizeCache = new Size(
-      viewData.element!.clientWidth,
-      viewData.element!.clientHeight
-    );
-  }
-
-  addNode(node: MindNode): void {
-    this.createNodeElement(node, this.mcnodes);
-    ViewProvider.initNodeSize(node);
-  }
-
-  private createNodeElement(node: MindNode, parentNode: Node): void {
-    const nodeEl: HTMLElement = document.createElement("mcnode");
-    if (node.isroot) {
-      nodeEl.className = "root";
-    } else {
-      const adderElement = document.createElement("mcadder");
-      adderElement.innerText = "-";
-      adderElement.setAttribute("nodeid", node.id);
-      adderElement.style.visibility = "hidden";
-      parentNode.appendChild(adderElement);
-      node.data.view.adder = adderElement;
-    }
-    if (node.topic) {
-      nodeEl.innerHTML = this.textFormatter.render(node.topic);
-    }
-    nodeEl.setAttribute("nodeid", node.id);
-    nodeEl.style.visibility = "hidden";
-
-    parentNode.appendChild(nodeEl);
-    node.data.view.element = nodeEl;
-  }
-
   removeNode(node: MindNode): void {
     if (this.selectedNode != null && this.selectedNode.id == node.id) {
       this.selectedNode = null;
@@ -229,12 +130,7 @@ export class ViewProvider {
       this.removeNode(node.children[i]);
     }
     if (node.data.view) {
-      const element = node.data.view.element!;
-      const adder = node.data.view.adder!;
-      this.mcnodes.removeChild(element);
-      this.mcnodes.removeChild(adder);
-      node.data.view.element = null;
-      node.data.view.adder = null;
+      this.nodesView.removeNode(node);
     }
   }
 
@@ -362,9 +258,7 @@ export class ViewProvider {
 
   resize(): void {
     this.graphView.setSize(1, 1);
-    this.mcnodes.style.width = "1px";
-    this.mcnodes.style.height = "1px";
-
+    this.nodesView.resetSize();
     this.renderAgain();
   }
 
@@ -391,8 +285,8 @@ export class ViewProvider {
     console.log(`doShow: ${this.size.width} ${this.size.height}`);
     this.graphView.setSize(this.size.width, this.size.height);
     this.mindCheese.draggable.resize(this.size.width, this.size.height);
-    this.mcnodes.parentElement!.style.width = this.size.width + "px";
-    this.mcnodes.parentElement!.style.height = this.size.height + "px";
+    this.mindCheeseInnerElement!.style.width = this.size.width + "px";
+    this.mindCheeseInnerElement!.style.height = this.size.height + "px";
 
     this.showNodes();
 
@@ -418,20 +312,6 @@ export class ViewProvider {
       parseInt(viewData.element!.style.left) - scrollSnapshot.x;
     this.mindCheeseInnerElement.scrollTop =
       parseInt(viewData.element!.style.top) - scrollSnapshot.y;
-  }
-
-  clearNodes(): void {
-    const mind = this.mindCheese.mind;
-    if (mind == null) {
-      return;
-    }
-    const nodes = mind.nodes;
-    for (const nodeid in nodes) {
-      const node = nodes[nodeid];
-      node.data.view.element = null;
-      node.data.view.adder = null;
-    }
-    this.mcnodes.innerHTML = "";
   }
 
   private showNodes(): void {
