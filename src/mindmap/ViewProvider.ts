@@ -506,10 +506,4 @@ export class ViewProvider {
       }
     }
   }
-
-  getCenterOffsetOfTheNodeFromRootNode(
-    node: MindNode
-  ): CenterOfNodeOffsetFromRootNode {
-    return this.layoutResult!.getCenterOffsetOfTheNodeFromRootNode(node);
-  }
 }
