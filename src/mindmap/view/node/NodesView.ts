@@ -217,8 +217,8 @@ export class NodesView {
   clearNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
     for (const node of Object.values(nodes)) {
-      node.view.element = null;
-      node.view.adder = null;
+      node.viewData.element = null;
+      node.viewData.adder = null;
     }
     this.mcnodes.innerHTML = "";
   }
@@ -242,7 +242,7 @@ export class NodesView {
     const offset = layoutResult.getOffsetOfTheRootNode(this.mindCheese.mind);
 
     for (const node of Object.values(nodes)) {
-      const viewData = node.view;
+      const viewData = node.viewData;
       const nodeElement = viewData.element!;
       const p = layoutResult.getTopLeft(node, this.lineWidth);
       viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
