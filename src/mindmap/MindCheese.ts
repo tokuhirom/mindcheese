@@ -1,7 +1,7 @@
 import { ViewProvider } from "./ViewProvider";
 import { ShortcutProvider } from "./ShortcutProvider";
 import { MindNode } from "./model/MindNode";
-import { Mind } from "./Mind";
+import { Mind } from "./model/Mind";
 import { Draggable } from "./Draggable";
 import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { UndoManager } from "./UndoManager";

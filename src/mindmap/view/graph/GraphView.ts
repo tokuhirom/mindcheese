@@ -1,6 +1,6 @@
 import { CenterOfNodeOffsetFromRootNode } from "../../layout/CenterOfNodeOffsetFromRootNode";
 import { GraphCanvas } from "./GraphCanvas";
-import { Mind } from "../../Mind";
+import { Mind } from "../../model/Mind";
 import { LayoutResult } from "../../layout/LayoutResult";
 import { RootNodeOffsetFromTopLeftOfMcnodes } from "../../layout/RootNodeOffsetFromTopLeftOfMcnodes";
 

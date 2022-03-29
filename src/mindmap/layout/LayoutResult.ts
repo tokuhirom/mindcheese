@@ -2,7 +2,7 @@ import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode
 import { MindNode } from "../model/MindNode";
 import { Direction } from "../MindmapConstants";
 import { Bounds } from "./Bounds";
-import { Mind } from "../Mind";
+import { Mind } from "../model/Mind";
 import { RootNodeOffsetFromTopLeftOfMcnodes } from "./RootNodeOffsetFromTopLeftOfMcnodes";
 
 export class LayoutResult {

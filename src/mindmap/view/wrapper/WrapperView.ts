@@ -1,6 +1,6 @@
 import { Size } from "../../model/Size";
 import { LayoutResult } from "../../layout/LayoutResult";
-import { Mind } from "../../Mind";
+import { Mind } from "../../model/Mind";
 import { NodesView } from "../node/NodesView";
 import { GraphCanvas } from "../graph/GraphCanvas";
 import { MindNode } from "../../model/MindNode";

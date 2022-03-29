@@ -1,5 +1,5 @@
-import { MindNode } from "./model/MindNode";
-import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
+import { MindNode } from "./MindNode";
+import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "../MindmapConstants";
 
 export class Mind {
   root: MindNode | null;

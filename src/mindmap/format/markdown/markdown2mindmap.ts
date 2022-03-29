@@ -1,5 +1,5 @@
 import { object2mindmap } from "../node_tree/object2mindmap";
-import { Mind } from "../../Mind";
+import { Mind } from "../../model/Mind";
 
 function parse(md: string) {
   if (md == null) {

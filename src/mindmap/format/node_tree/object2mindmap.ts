@@ -1,4 +1,4 @@
-import { Mind } from "../../Mind";
+import { Mind } from "../../model/Mind";
 import { MindNode } from "../../model/MindNode";
 import { Direction } from "../../MindmapConstants";
 

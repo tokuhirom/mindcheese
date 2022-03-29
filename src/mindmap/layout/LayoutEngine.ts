@@ -1,6 +1,6 @@
 import { Direction } from "../MindmapConstants";
 import { MindNode } from "../model/MindNode";
-import { Mind } from "../Mind";
+import { Mind } from "../model/Mind";
 import { RelativeOffsetFromParent } from "./RelativeOffsetFromParent";
 import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
 import { LayoutResult } from "./LayoutResult";
