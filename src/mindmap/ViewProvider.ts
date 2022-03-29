@@ -1,4 +1,3 @@
-import { GraphCanvas } from "./GraphCanvas";
 import { MindNode } from "./model/MindNode";
 import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import { MindCheese } from "./MindCheese";
@@ -9,6 +8,8 @@ import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromT
 import { ScrollSnapshot } from "./layout/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
+import { GraphCanvas } from "./graph/GraphCanvas";
+import { GraphView } from "./graph/GraphView";
 
 /**
  * View renderer
@@ -21,7 +22,7 @@ export class ViewProvider {
   size: Size;
   private selectedNode: MindNode | null;
   private editingNode: MindNode | null;
-  private readonly graph: GraphCanvas;
+  private readonly graphView: GraphView;
   private readonly textFormatter: TextFormatter;
   private readonly hMargin: number;
   private readonly vMargin: number;
@@ -33,7 +34,7 @@ export class ViewProvider {
    * @param mindCheese MindCheese instance
    * @param hmargin ???
    * @param vmargin ???
-   * @param graph instance of GraphCanvas
+   * @param graphCanvas instance of GraphCanvas
    * @param textFormatter Formatter of the text
    * @param layoutEngine
    * @param pSpace Horizontal spacing between node and connection line (to place node adder)
@@ -42,7 +43,7 @@ export class ViewProvider {
     mindCheese: MindCheese,
     hmargin: number,
     vmargin: number,
-    graph: GraphCanvas,
+    graphCanvas: GraphCanvas,
     textFormatter: TextFormatter,
     layoutEngine: LayoutEngine,
     pSpace: number
@@ -101,7 +102,7 @@ export class ViewProvider {
 
     this.mindCheeseInnerElement = document.createElement("div");
     this.mindCheeseInnerElement.className = "mindcheese-inner";
-    this.mindCheeseInnerElement.appendChild(graph.element());
+    this.mindCheeseInnerElement.appendChild(graphCanvas.element());
     this.mindCheeseInnerElement.appendChild(this.mcnodes);
 
     this.size = new Size(0, 0);
@@ -112,7 +113,7 @@ export class ViewProvider {
     this.hMargin = hmargin;
     this.vMargin = vmargin;
 
-    this.graph = graph;
+    this.graphView = new GraphView(graphCanvas);
   }
 
   init(container: HTMLElement): void {
@@ -138,7 +139,7 @@ export class ViewProvider {
   reset(): void {
     console.debug("view.reset");
     this.selectedNode = null;
-    this.graph.clear();
+    this.graphView.clear();
     this.clearNodes();
     this.resetTheme();
   }
@@ -378,7 +379,7 @@ export class ViewProvider {
   }
 
   resize(): void {
-    this.graph.setSize(1, 1);
+    this.graphView.setSize(1, 1);
     this.mcnodes.style.width = "1px";
     this.mcnodes.style.height = "1px";
 
@@ -404,13 +405,15 @@ export class ViewProvider {
     this.size = this.getCanvasSize();
 
     console.log(`doShow: ${this.size.width} ${this.size.height}`);
-    this.graph.setSize(this.size.width, this.size.height);
+    this.graphView.setSize(this.size.width, this.size.height);
     this.mindCheese.draggable.resize(this.size.width, this.size.height);
     this.mcnodes.parentElement!.style.width = this.size.width + "px";
     this.mcnodes.parentElement!.style.height = this.size.height + "px";
 
     this.showNodes();
-    this.showLines();
+
+    const offset = this.getOffsetOfTheRootNode();
+    this.graphView.renderLines(this.mindCheese.mind, this.layoutResult, offset);
   }
 
   saveScroll(node: MindNode): ScrollSnapshot {
@@ -452,7 +455,7 @@ export class ViewProvider {
     for (const node of Object.values(nodes)) {
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
-      const p = this.layoutResult!.getTopLeft(node, this.graph.lineWidth);
+      const p = this.layoutResult!.getTopLeft(node, this.graphView.lineWidth);
       viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
       nodeElement.style.left = viewData.elementTopLeft.x + "px";
       nodeElement.style.top = viewData.elementTopLeft.y + "px";
@@ -470,39 +473,6 @@ export class ViewProvider {
         adder.style.display = "";
         adder.style.visibility = "visible";
         adder.innerText = adderText;
-      }
-    }
-  }
-
-  private showLines(): void {
-    this.graph.clear();
-
-    const nodes = this.mindCheese.mind.nodes;
-    const offset = this.getOffsetOfTheRootNode();
-    for (const node of Object.values(nodes).filter((it) => !it.isroot)) {
-      const pin = this.layoutResult!.getNodePointIn(node);
-      {
-        // Draw line between previous node and next node
-        const pout = this.layoutResult!.getNodePointOut(node.parent!, node);
-        this.graph.drawLine(
-          offset.convertCenterOfNodeOffsetFromRootNode(pout),
-          offset.convertCenterOfNodeOffsetFromRootNode(pin),
-          node.color!,
-          "round"
-        );
-      }
-      {
-        // Draw line under the bottom of the node
-        const pout = new CenterOfNodeOffsetFromRootNode(
-          pin.x + node.data.view.elementSizeCache!.width * node.direction,
-          pin.y
-        );
-        this.graph.drawLine(
-          offset.convertCenterOfNodeOffsetFromRootNode(pout),
-          offset.convertCenterOfNodeOffsetFromRootNode(pin),
-          node.color!,
-          "butt"
-        );
       }
     }
   }

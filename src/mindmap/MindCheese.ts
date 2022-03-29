@@ -5,7 +5,6 @@ import { Mind } from "./Mind";
 import { Draggable } from "./Draggable";
 import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { UndoManager } from "./UndoManager";
-import { GraphCanvas } from "./GraphCanvas";
 import { object2mindmap } from "./format/node_tree/object2mindmap";
 import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
@@ -13,6 +12,7 @@ import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { findMcnode } from "./utils/DomUtils";
+import { GraphCanvas } from "./graph/GraphCanvas";
 
 export class MindCheese {
   options: MindOption;
