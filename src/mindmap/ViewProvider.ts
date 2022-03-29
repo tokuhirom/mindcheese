@@ -35,6 +35,7 @@ export class ViewProvider {
    * @param textFormatter Formatter of the text
    * @param layoutEngine
    * @param pSpace Horizontal spacing between node and connection line (to place node adder)
+   * @param lineWidth
    */
   constructor(
     mindCheese: MindCheese,
@@ -43,7 +44,8 @@ export class ViewProvider {
     graphCanvas: GraphCanvas,
     textFormatter: TextFormatter,
     layoutEngine: LayoutEngine,
-    pSpace: number
+    pSpace: number,
+    lineWidth: number
   ) {
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
@@ -55,7 +57,7 @@ export class ViewProvider {
       this,
       this.mindCheese,
       textFormatter,
-      this.graphView.lineWidth,
+      lineWidth,
       this.pSpace
     );
     this.wrapperView = new WrapperView(

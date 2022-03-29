@@ -50,7 +50,8 @@ export class MindCheese {
       graph,
       options.view.renderer,
       layoutEngine,
-      options.layout.pspace
+      options.layout.pspace,
+      options.view.lineWidth
     );
     this.shortcut = new ShortcutProvider(
       this,

@@ -6,7 +6,7 @@ import { RootNodeOffsetFromTopLeftOfMcnodes } from "../../layout/RootNodeOffsetF
 
 export class GraphView {
   private readonly graphCanvas: GraphCanvas;
-  readonly lineWidth: number;
+  private readonly lineWidth: number;
 
   constructor(graphCanvas: GraphCanvas) {
     this.graphCanvas = graphCanvas;
