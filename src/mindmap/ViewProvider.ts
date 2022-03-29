@@ -259,12 +259,12 @@ export class ViewProvider {
       this.selectedNode = node;
       node.data.view.element!.classList.add("selected");
       // Note: scrollIntoView is not the best method.
-      this.adjustScrollBar(node);
+      ViewProvider.adjustScrollBar(node);
     }
   }
 
   // Adjust the scroll bar. show node in the browser.
-  private adjustScrollBar(node: MindNode): void {
+  private static adjustScrollBar(node: MindNode): void {
     const nodeEl = node.data.view.element!;
 
     // https://stackoverflow.com/questions/5685589/scroll-to-element-only-if-not-in-view-jquery
@@ -445,12 +445,11 @@ export class ViewProvider {
     this.mcnodes.innerHTML = "";
   }
 
-  showNodes(): void {
+  private showNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
     const offset = this.getOffsetOfTheRootNode();
-    for (const nodeid in nodes) {
-      const node = nodes[nodeid];
 
+    for (const node of Object.values(nodes)) {
       const viewData = node.data.view;
       const nodeElement = viewData.element!;
       const p = this.layoutResult!.getTopLeft(node, this.graph.lineWidth);
@@ -475,15 +474,12 @@ export class ViewProvider {
     }
   }
 
-  showLines(): void {
+  private showLines(): void {
     this.graph.clear();
+
     const nodes = this.mindCheese.mind.nodes;
     const offset = this.getOffsetOfTheRootNode();
-    for (const nodeid in nodes) {
-      const node = nodes[nodeid];
-      if (node.isroot) {
-        continue;
-      }
+    for (const node of Object.values(nodes).filter((it) => !it.isroot)) {
       const pin = this.layoutResult!.getNodePointIn(node);
       {
         // Draw line between previous node and next node
