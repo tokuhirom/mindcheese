@@ -2,13 +2,13 @@ import { MindNode } from "./model/MindNode";
 import { MindCheese } from "./MindCheese";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./model/Size";
-import { ScrollSnapshot } from "./view/ScrollSnapshot";
+import { ScrollSnapshot } from "./view/wrapper/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { GraphCanvas } from "./view/graph/GraphCanvas";
 import { GraphView } from "./view/graph/GraphView";
 import { NodesView } from "./view/node/NodesView";
-import { WrapperView } from "./view/WrapperView";
+import { WrapperView } from "./view/wrapper/WrapperView";
 
 /**
  * View renderer
