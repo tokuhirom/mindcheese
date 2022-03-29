@@ -35,7 +35,7 @@ export class GraphView {
       {
         // Draw line under the bottom of the node
         const pout = new CenterOfNodeOffsetFromRootNode(
-          pin.x + node.data.view.elementSizeCache!.width * node.direction,
+          pin.x + node.view.elementSizeCache!.width * node.direction,
           pin.y
         );
         this.graphCanvas.drawLine(

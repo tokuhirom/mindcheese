@@ -11,9 +11,7 @@ export class MindNode {
   public direction: Direction;
   public readonly children: MindNode[];
   public color: string | null;
-  public readonly data: {
-    view: ViewData;
-  };
+  public viewData: ViewData;
 
   constructor(
     id: string,
@@ -33,9 +31,7 @@ export class MindNode {
     this.parent = parent;
     this.direction = direction;
     this.children = [];
-    this.data = {
-      view: new ViewData(),
-    };
+    this.viewData = new ViewData();
 
     // console.log(`ID: ${id}`);
     if (!parent) {

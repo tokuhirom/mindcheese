@@ -184,8 +184,8 @@ export class Draggable {
 
   private doLookupCloseNode(): ClosePoint | null {
     const root = this.mindCheese.mind.root!;
-    const rootLocation = root.data.view.elementTopLeft!;
-    const rootSize = root.data.view.elementSizeCache!;
+    const rootLocation = root.viewData.elementTopLeft!;
+    const rootSize = root.viewData.elementSizeCache!;
     const rootX = rootLocation.x + rootSize.width / 2;
 
     const sw = this.shadowW;
@@ -207,8 +207,8 @@ export class Draggable {
         if (node.id == this.activeNode!.id) {
           continue;
         }
-        const ns = node.data.view.elementSizeCache!;
-        const nl = node.data.view.elementTopLeft!;
+        const ns = node.viewData.elementSizeCache!;
+        const nl = node.viewData.elementTopLeft!;
         if (direct == Direction.RIGHT) {
           if (sx - nl.x - ns.width <= 0) {
             continue;
@@ -399,7 +399,7 @@ export class Draggable {
       for (let i = siblingNodes.length - 1; i >= 0; i--) {
         const node = siblingNodes[i];
         if (node.direction === targetDirect && node.id !== srcNode.id) {
-          const dy = node.data.view.elementTopLeft!.y - shadowH;
+          const dy = node.viewData.elementTopLeft!.y - shadowH;
           if (dy > 0 && dy < deltaY) {
             deltaY = dy;
             nodeBefore = node;

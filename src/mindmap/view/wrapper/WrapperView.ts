@@ -94,7 +94,7 @@ export class WrapperView {
   }
 
   restoreScroll(node: MindNode, scrollSnapshot: ScrollSnapshot) {
-    const viewData = node.data.view;
+    const viewData = node.viewData;
     this.wrapperElement.scrollLeft =
       parseInt(viewData.element!.style.left) - scrollSnapshot.x;
     this.wrapperElement.scrollTop =
@@ -102,7 +102,7 @@ export class WrapperView {
   }
 
   saveScroll(node: MindNode) {
-    const viewData = node.data.view;
+    const viewData = node.viewData;
     return new ScrollSnapshot(
       parseInt(viewData.element!.style.left) - this.wrapperElement.scrollLeft,
       parseInt(viewData.element!.style.top) - this.wrapperElement.scrollTop

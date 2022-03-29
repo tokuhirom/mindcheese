@@ -134,7 +134,7 @@ export class MindCheese {
     this.checkEditable();
 
     this.undoManager.recordSnapshot();
-    parentNode.data.view.adder!.style.display = "none";
+    parentNode.viewData.adder!.style.display = "none";
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
       this.view.nodesView.addNode(node);

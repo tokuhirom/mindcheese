@@ -110,19 +110,19 @@ export class ViewProvider {
       this.selectedNode = null;
     }
     if (this.editingNode != null && this.editingNode.id == node.id) {
-      node.data.view.element!.contentEditable = "false";
+      node.viewData.element!.contentEditable = "false";
       this.editingNode = null;
     }
     for (let i = 0, l = node.children.length; i < l; i++) {
       this.removeNode(node.children[i]);
     }
-    if (node.data.view) {
+    if (node.viewData) {
       this.nodesView.removeNode(node);
     }
   }
 
   updateNode(node: MindNode): void {
-    const viewData = node.data.view;
+    const viewData = node.viewData;
     const element = viewData.element!;
     if (node.topic) {
       element.innerHTML = this.textFormatter.render(node.topic);
@@ -135,12 +135,12 @@ export class ViewProvider {
 
   selectNode(node: MindNode | null): void {
     if (this.selectedNode) {
-      const el = this.selectedNode.data.view.element!;
+      const el = this.selectedNode.viewData.element!;
       el.classList.remove("selected");
     }
     if (node) {
       this.selectedNode = node;
-      node.data.view.element!.classList.add("selected");
+      node.viewData.element!.classList.add("selected");
       // Note: scrollIntoView is not the best method.
       ViewProvider.adjustScrollBar(node);
     }
@@ -148,7 +148,7 @@ export class ViewProvider {
 
   // Adjust the scroll bar. show node in the browser.
   private static adjustScrollBar(node: MindNode): void {
-    const nodeEl = node.data.view.element!;
+    const nodeEl = node.viewData.element!;
 
     // https://stackoverflow.com/questions/5685589/scroll-to-element-only-if-not-in-view-jquery
     if (nodeEl.getBoundingClientRect().bottom > window.innerHeight) {
@@ -173,7 +173,7 @@ export class ViewProvider {
 
   selectClear(): void {
     if (this.selectedNode) {
-      const el = this.selectedNode.data.view.element!;
+      const el = this.selectedNode.viewData.element!;
       el.classList.remove("selected");
     }
   }
@@ -192,10 +192,10 @@ export class ViewProvider {
     }
     this.editingNode = node;
 
-    const element = node.data.view.element!;
+    const element = node.viewData.element!;
     element.contentEditable = "true";
     element.innerText = node.topic;
-    node.data.view.elementSizeCache = new Size(
+    node.viewData.elementSizeCache = new Size(
       element.clientWidth,
       element.clientHeight
     );
@@ -221,7 +221,7 @@ export class ViewProvider {
       const node = this.editingNode;
       this.editingNode = null;
 
-      const element = node.data.view.element!;
+      const element = node.viewData.element!;
       element.contentEditable = "false";
       const topic = element.innerText;
       if (
@@ -231,7 +231,7 @@ export class ViewProvider {
       ) {
         console.debug("Calling updateNode");
         element.innerHTML = this.textFormatter.render(node.topic);
-        node.data.view.elementSizeCache = new Size(
+        node.viewData.elementSizeCache = new Size(
           element.clientWidth,
           element.clientHeight
         );

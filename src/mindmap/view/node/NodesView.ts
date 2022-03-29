@@ -132,7 +132,7 @@ export class NodesView {
     const nodeid = this.viewProvider.getBindedNodeId(element);
     if (nodeid) {
       const theNode = this.mindCheese.mind.getNodeById(nodeid);
-      if (theNode.data.view.element!.contentEditable == "true") {
+      if (theNode.viewData.element!.contentEditable == "true") {
         // The node is already in the editing mode.
         return false;
       }
@@ -177,7 +177,7 @@ export class NodesView {
   }
 
   private static initNodeSize(node: MindNode): void {
-    const viewData = node.data.view;
+    const viewData = node.viewData;
     viewData.elementSizeCache = new Size(
       viewData.element!.clientWidth,
       viewData.element!.clientHeight
@@ -194,7 +194,7 @@ export class NodesView {
       adderElement.setAttribute("nodeid", node.id);
       adderElement.style.visibility = "hidden";
       parentNode.appendChild(adderElement);
-      node.data.view.adder = adderElement;
+      node.viewData.adder = adderElement;
     }
     if (node.topic) {
       nodeEl.innerHTML = this.textFormatter.render(node.topic);
@@ -203,7 +203,7 @@ export class NodesView {
     nodeEl.style.visibility = "hidden";
 
     parentNode.appendChild(nodeEl);
-    node.data.view.element = nodeEl;
+    node.viewData.element = nodeEl;
   }
 
   cacheNodeSize() {
@@ -217,19 +217,19 @@ export class NodesView {
   clearNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
     for (const node of Object.values(nodes)) {
-      node.data.view.element = null;
-      node.data.view.adder = null;
+      node.view.element = null;
+      node.view.adder = null;
     }
     this.mcnodes.innerHTML = "";
   }
 
   removeNode(node: MindNode) {
-    const element = node.data.view.element!;
-    const adder = node.data.view.adder!;
+    const element = node.viewData.element!;
+    const adder = node.viewData.adder!;
     this.mcnodes.removeChild(element);
     this.mcnodes.removeChild(adder);
-    node.data.view.element = null;
-    node.data.view.adder = null;
+    node.viewData.element = null;
+    node.viewData.adder = null;
   }
 
   appendChild(shadow: HTMLElement) {
@@ -242,7 +242,7 @@ export class NodesView {
     const offset = layoutResult.getOffsetOfTheRootNode(this.mindCheese.mind);
 
     for (const node of Object.values(nodes)) {
-      const viewData = node.data.view;
+      const viewData = node.view;
       const nodeElement = viewData.element!;
       const p = layoutResult.getTopLeft(node, this.lineWidth);
       viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
