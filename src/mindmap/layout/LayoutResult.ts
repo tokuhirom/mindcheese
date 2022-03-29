@@ -3,6 +3,7 @@ import { MindNode } from "../model/MindNode";
 import { Direction } from "../MindmapConstants";
 import { Bounds } from "./Bounds";
 import { Mind } from "../Mind";
+import { RootNodeOffsetFromTopLeftOfMcnodes } from "./RootNodeOffsetFromTopLeftOfMcnodes";
 
 export class LayoutResult {
   private readonly _relativeFromRootMap: Record<
@@ -138,5 +139,15 @@ export class LayoutResult {
     // maximum distance from center of root node.
     console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
     return new Bounds(n, e, w, s);
+  }
+
+  // get the center point offset
+  getOffsetOfTheRootNode(mind: Mind): RootNodeOffsetFromTopLeftOfMcnodes {
+    const bounds = this.getBounds(mind);
+    console.log(`getViewOffset: e=${bounds.e}, w=${bounds.w}`);
+
+    const x = -bounds.w + mind.root!.data.view.elementSizeCache!.width / 2;
+    const y = -bounds.n + mind.root!.data.view.elementSizeCache!.height / 2;
+    return new RootNodeOffsetFromTopLeftOfMcnodes(x, y);
   }
 }

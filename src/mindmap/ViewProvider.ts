@@ -3,7 +3,6 @@ import { KEYCODE_ENTER, KEYCODE_ESC } from "./MindmapConstants";
 import { MindCheese } from "./MindCheese";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./model/Size";
-import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
 import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
 import { ScrollSnapshot } from "./layout/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
@@ -361,23 +360,6 @@ export class ViewProvider {
     }
   }
 
-  // get the center point offset
-  getOffsetOfTheRootNode(): RootNodeOffsetFromTopLeftOfMcnodes {
-    const bounds = this.layoutResult!.getBounds(this.mindCheese.mind);
-    console.log(
-      `getViewOffset: size.w=${this.size.width}, e=${bounds.e}, w=${bounds.w}`
-    );
-
-    const x =
-      -bounds.w +
-      this.mindCheese.mind.root!.data.view.elementSizeCache!.width / 2;
-    // const x = (this.size.w - bounds.e - bounds.w) / 2;
-    const y =
-      -bounds.n +
-      this.mindCheese.mind.root!.data.view.elementSizeCache!.height / 2;
-    return new RootNodeOffsetFromTopLeftOfMcnodes(x, y);
-  }
-
   resize(): void {
     this.graphView.setSize(1, 1);
     this.mcnodes.style.width = "1px";
@@ -391,7 +373,9 @@ export class ViewProvider {
     const outerW = this.mindCheeseInnerElement.clientWidth;
     const outerH = this.mindCheeseInnerElement.clientHeight;
     if (this.size.width > outerW) {
-      const offset = this.getOffsetOfTheRootNode();
+      const offset = this.layoutResult!.getOffsetOfTheRootNode(
+        this.mindCheese.mind
+      );
       this.mindCheeseInnerElement.scrollLeft = offset.x - outerW / 2;
     }
     if (this.size.height > outerH) {
@@ -412,7 +396,9 @@ export class ViewProvider {
 
     this.showNodes();
 
-    const offset = this.getOffsetOfTheRootNode();
+    const offset = this.layoutResult!.getOffsetOfTheRootNode(
+      this.mindCheese.mind
+    );
     this.graphView.renderLines(this.mindCheese.mind, this.layoutResult, offset);
   }
 
@@ -450,7 +436,9 @@ export class ViewProvider {
 
   private showNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
-    const offset = this.getOffsetOfTheRootNode();
+    const offset = this.layoutResult!.getOffsetOfTheRootNode(
+      this.mindCheese.mind
+    );
 
     for (const node of Object.values(nodes)) {
       const viewData = node.data.view;
