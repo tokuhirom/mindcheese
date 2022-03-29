@@ -6,7 +6,7 @@ import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./Size";
 import { CenterOfNodeOffsetFromRootNode } from "./layout/CenterOfNodeOffsetFromRootNode";
 import { RootNodeOffsetFromTopLeftOfMcnodes } from "./layout/RootNodeOffsetFromTopLeftOfMcnodes";
-import { ScrollSnapshot } from "./layout/Point";
+import { ScrollSnapshot } from "./layout/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
 

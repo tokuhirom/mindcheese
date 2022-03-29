@@ -16,8 +16,18 @@
 import { MindCheese } from "./MindCheese";
 import { MindNode } from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
-import { Point } from "./layout/Point";
 import { findMcnode } from "./utils/DomUtils";
+
+class Point {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  __PointBrand: any;
+  readonly x: number;
+  readonly y: number;
+}
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -48,11 +58,16 @@ class ClosePoint {
 
 export class Draggable {
   private readonly mindCheese: MindCheese;
+
+  // Draggable class draws bezier line into the canvas while dragging.
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
+
+  // "Shadow" is an instance of mcnode, that follows the cursor while dragging.
   private readonly shadow: HTMLElement; // <mcnode>
   private shadowW: number;
   private shadowH: number;
+
   private activeNode: MindNode | null;
   private targetNode: MindNode | null;
   private targetDirect: Direction | null;
