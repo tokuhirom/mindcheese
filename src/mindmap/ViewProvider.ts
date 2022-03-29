@@ -2,12 +2,13 @@ import { MindNode } from "./model/MindNode";
 import { MindCheese } from "./MindCheese";
 import { TextFormatter } from "./renderer/TextFormatter";
 import { Size } from "./model/Size";
-import { ScrollSnapshot } from "./layout/ScrollSnapshot";
+import { ScrollSnapshot } from "./view/ScrollSnapshot";
 import { LayoutResult } from "./layout/LayoutResult";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { GraphCanvas } from "./view/graph/GraphCanvas";
 import { GraphView } from "./view/graph/GraphView";
 import { NodesView } from "./view/node/NodesView";
+import { WrapperView } from "./view/WrapperView";
 
 /**
  * View renderer
@@ -15,7 +16,6 @@ import { NodesView } from "./view/node/NodesView";
 export class ViewProvider {
   private readonly mindCheese: MindCheese;
   private readonly layoutEngine: LayoutEngine;
-  readonly mindCheeseInnerElement: HTMLDivElement; // div.mindcheese-inner
   size: Size;
   private selectedNode: MindNode | null;
   private editingNode: MindNode | null;
@@ -26,6 +26,7 @@ export class ViewProvider {
   private layoutResult: LayoutResult | null = null;
   private readonly pSpace: number;
   readonly nodesView: NodesView; // TODO make this private
+  readonly wrapperView: WrapperView; // TODO make this private
 
   /**
    *
@@ -52,11 +53,12 @@ export class ViewProvider {
     this.pSpace = pSpace;
 
     this.nodesView = new NodesView(this, this.mindCheese, textFormatter);
-
-    this.mindCheeseInnerElement = document.createElement("div");
-    this.mindCheeseInnerElement.className = "mindcheese-inner";
-    this.mindCheeseInnerElement.appendChild(graphCanvas.element());
-    this.nodesView.attach(this.mindCheeseInnerElement);
+    this.wrapperView = new WrapperView(
+      hmargin,
+      vmargin,
+      this.nodesView,
+      graphCanvas
+    );
 
     this.size = new Size(0, 0);
 
@@ -71,7 +73,7 @@ export class ViewProvider {
 
   init(container: HTMLElement): void {
     console.debug("view.init");
-    container.appendChild(this.mindCheeseInnerElement);
+    this.wrapperView.attach(container);
   }
 
   getBindedNodeId(element: HTMLElement): string | null {
@@ -98,24 +100,7 @@ export class ViewProvider {
   }
 
   resetTheme(): void {
-    const themeName = this.mindCheese.options.theme;
-    if (themeName) {
-      this.mindCheeseInnerElement!.className = "theme-" + themeName;
-    } else {
-      this.mindCheeseInnerElement!.className = "";
-    }
-  }
-
-  private getCanvasSize(): Size {
-    const minSize = this.layoutResult!.getBounds(this.mindCheese.mind).size;
-
-    const minWidth = minSize.width + this.hMargin * 2;
-    const minHeight = minSize.height + this.vMargin * 2;
-    const clientW = this.mindCheeseInnerElement.clientWidth;
-    const clientH = this.mindCheeseInnerElement.clientHeight;
-
-    console.log(`expandSize: ${clientH} ${minHeight}`);
-    return new Size(Math.max(clientW, minWidth), Math.max(clientH, minHeight));
+    this.wrapperView.setTheme(this.mindCheese.options.theme);
   }
 
   removeNode(node: MindNode): void {
@@ -264,31 +249,27 @@ export class ViewProvider {
 
   // Display root position at center of container element.
   centerRoot(): void {
-    const outerW = this.mindCheeseInnerElement.clientWidth;
-    const outerH = this.mindCheeseInnerElement.clientHeight;
-    if (this.size.width > outerW) {
-      const offset = this.layoutResult!.getOffsetOfTheRootNode(
-        this.mindCheese.mind
-      );
-      this.mindCheeseInnerElement.scrollLeft = offset.x - outerW / 2;
-    }
-    if (this.size.height > outerH) {
-      this.mindCheeseInnerElement.scrollTop = (this.size.height - outerH) / 2;
-    }
+    this.wrapperView.centerRoot(
+      this.layoutResult!,
+      this.size,
+      this.mindCheese.mind
+    );
   }
 
   // TODO pull this method to MindCheese?
   renderAgain(): void {
     this.layoutResult = this.layoutEngine.layout(this.mindCheese.mind);
-    this.size = this.getCanvasSize();
+    this.size = this.wrapperView.getCanvasSize(
+      this.layoutResult,
+      this.mindCheese.mind
+    );
 
     console.log(`doShow: ${this.size.width} ${this.size.height}`);
     this.graphView.setSize(this.size.width, this.size.height);
     this.mindCheese.draggable.resize(this.size.width, this.size.height);
-    this.mindCheeseInnerElement!.style.width = this.size.width + "px";
-    this.mindCheeseInnerElement!.style.height = this.size.height + "px";
+    this.wrapperView.setSize(this.size.width, this.size.height);
 
-    this.showNodes();
+    this.renderNodes();
 
     const offset = this.layoutResult!.getOffsetOfTheRootNode(
       this.mindCheese.mind
@@ -297,24 +278,15 @@ export class ViewProvider {
   }
 
   saveScroll(node: MindNode): ScrollSnapshot {
-    const viewData = node.data.view;
-    return new ScrollSnapshot(
-      parseInt(viewData.element!.style.left) -
-        this.mindCheeseInnerElement.scrollLeft,
-      parseInt(viewData.element!.style.top) -
-        this.mindCheeseInnerElement.scrollTop
-    );
+    return this.wrapperView.saveScroll(node);
   }
 
   restoreScroll(node: MindNode, scrollSnapshot: ScrollSnapshot): void {
-    const viewData = node.data.view;
-    this.mindCheeseInnerElement.scrollLeft =
-      parseInt(viewData.element!.style.left) - scrollSnapshot.x;
-    this.mindCheeseInnerElement.scrollTop =
-      parseInt(viewData.element!.style.top) - scrollSnapshot.y;
+    this.wrapperView.restoreScroll(node, scrollSnapshot);
   }
 
-  private showNodes(): void {
+  // TODO move to NodesView
+  private renderNodes(): void {
     const nodes = this.mindCheese.mind.nodes;
     const offset = this.layoutResult!.getOffsetOfTheRootNode(
       this.mindCheese.mind

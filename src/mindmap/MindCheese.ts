@@ -9,9 +9,7 @@ import { object2mindmap } from "./format/node_tree/object2mindmap";
 import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
-import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
-import { findMcnode } from "./utils/DomUtils";
 import { GraphCanvas } from "./view/graph/GraphCanvas";
 
 export class MindCheese {
@@ -24,7 +22,6 @@ export class MindCheese {
   private undoManager: UndoManager;
   private editable: boolean;
   private readonly container: HTMLElement;
-  private zoomScale = 1.0;
 
   constructor(
     id: number,
@@ -104,33 +101,11 @@ export class MindCheese {
   }
 
   private bindEvent(): void {
-    this.view.mindCheeseInnerElement.addEventListener(
-      "wheel",
-      (e) => {
-        if (e.ctrlKey) {
-          e.stopPropagation();
-          if (e.deltaY > 0) {
-            this.zoomScale -= 0.1;
-          } else {
-            this.zoomScale += 0.1;
-          }
-          this.zoomScale = Math.min(Math.max(this.zoomScale, 0.2), 20);
-          this.zoom(this.zoomScale);
-        }
-      },
-      { passive: true }
-    );
     window.addEventListener("resize", () => {
       this.resize();
       return false;
     });
   }
-
-  zoom(n: number): void {
-    console.log(`set zoom scale to ${n}`);
-    this.view.mindCheeseInnerElement.style.transform = `scale(${n})`;
-  }
-
   private showMind(mind: Mind): void {
     this.view.reset();
 

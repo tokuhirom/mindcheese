@@ -88,7 +88,7 @@ export class Draggable {
   constructor(mindCheese: MindCheese) {
     this.mindCheese = mindCheese;
     this.canvasElement = Draggable.createCanvas();
-    this.mindCheese.view.mindCheeseInnerElement.appendChild(this.canvasElement);
+    this.mindCheese.view.wrapperView.appendChild(this.canvasElement);
     this.canvasContext = this.canvasElement.getContext("2d")!;
     this.shadow = Draggable.createShadow();
     this.shadowW = 0;
