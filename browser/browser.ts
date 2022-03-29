@@ -21,7 +21,7 @@ function downloadText(filename: string, text: string) {
 
 export function initDemo() {
   const container = document.getElementById("container");
-  const mindCheese = new MindCheese(1, container!);
+  const mindCheese = new MindCheese(container!);
   // @ts-ignore
   this.mindCheese = mindCheese;
   mindCheese.showNodeTree(DEMO_NODE_TREE);

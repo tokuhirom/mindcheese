@@ -18,16 +18,11 @@ export class MindCheese {
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
-  private readonly id: number;
   private undoManager: UndoManager;
   private editable: boolean;
   private readonly container: HTMLElement;
 
-  constructor(
-    id: number,
-    container: HTMLElement,
-    options: MindOption = new MindOption()
-  ) {
+  constructor(container: HTMLElement, options: MindOption = new MindOption()) {
     if (!container) {
       throw new Error("container shouldn't be null!");
     }
@@ -36,7 +31,6 @@ export class MindCheese {
 
     this.options = options;
     this.mind = new Mind();
-    this.id = id;
     this.editable = true;
 
     // create instance of function provider
