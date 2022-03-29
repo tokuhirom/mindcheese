@@ -94,6 +94,12 @@ As a result, I port whole of the jsMind to TypeScript. And I added some features
 
 Please look at [ShortuctOption](https://github.com/tokuhirom/mindcheese/blob/main/src/mindmap/MindOption.ts#L32-L45)
 
+## How to release new version
+
+- Create new git tag.
+- Create release on github site.
+- Github actions released new version to npmjs.org.
+
 ## FAQ
 
 ### How do I input multiple lines in the node?
