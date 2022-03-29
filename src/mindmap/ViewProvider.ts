@@ -52,7 +52,14 @@ export class ViewProvider {
     this.layoutEngine = layoutEngine;
     this.pSpace = pSpace;
 
-    this.nodesView = new NodesView(this, this.mindCheese, textFormatter);
+    this.graphView = new GraphView(graphCanvas);
+    this.nodesView = new NodesView(
+      this,
+      this.mindCheese,
+      textFormatter,
+      this.graphView.lineWidth,
+      this.pSpace
+    );
     this.wrapperView = new WrapperView(
       hmargin,
       vmargin,
@@ -67,8 +74,6 @@ export class ViewProvider {
 
     this.hMargin = hmargin;
     this.vMargin = vmargin;
-
-    this.graphView = new GraphView(graphCanvas);
   }
 
   init(container: HTMLElement): void {
@@ -269,7 +274,7 @@ export class ViewProvider {
     this.mindCheese.draggable.resize(this.size.width, this.size.height);
     this.wrapperView.setSize(this.size.width, this.size.height);
 
-    this.renderNodes();
+    this.nodesView.renderNodes(this.layoutResult!);
 
     const offset = this.layoutResult!.getOffsetOfTheRootNode(
       this.mindCheese.mind
@@ -283,37 +288,5 @@ export class ViewProvider {
 
   restoreScroll(node: MindNode, scrollSnapshot: ScrollSnapshot): void {
     this.wrapperView.restoreScroll(node, scrollSnapshot);
-  }
-
-  // TODO move to NodesView
-  private renderNodes(): void {
-    const nodes = this.mindCheese.mind.nodes;
-    const offset = this.layoutResult!.getOffsetOfTheRootNode(
-      this.mindCheese.mind
-    );
-
-    for (const node of Object.values(nodes)) {
-      const viewData = node.data.view;
-      const nodeElement = viewData.element!;
-      const p = this.layoutResult!.getTopLeft(node, this.graphView.lineWidth);
-      viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
-      nodeElement.style.left = viewData.elementTopLeft.x + "px";
-      nodeElement.style.top = viewData.elementTopLeft.y + "px";
-      nodeElement.style.display = "";
-      nodeElement.style.visibility = "visible";
-
-      if (!node.isroot && node.children.length == 0) {
-        const adder = viewData.adder!;
-        const adderText = "+";
-        const adderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
-          this.layoutResult!.getAdderPosition(node, this.pSpace)
-        );
-        adder.style.left = adderPoint.x + "px";
-        adder.style.top = adderPoint.y + "px";
-        adder.style.display = "";
-        adder.style.visibility = "visible";
-        adder.innerText = adderText;
-      }
-    }
   }
 }

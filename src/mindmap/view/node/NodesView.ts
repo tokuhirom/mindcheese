@@ -6,21 +6,28 @@ import { MindCheese } from "../../MindCheese";
 import { MindNode } from "../../model/MindNode";
 import { Size } from "../../model/Size";
 import { TextFormatter } from "../../renderer/TextFormatter";
+import { LayoutResult } from "../../layout/LayoutResult";
 
 export class NodesView {
   private readonly mcnodes: HTMLElement; // <mcnodes>
   private readonly viewProvider: ViewProvider; // TODO
   private readonly mindCheese: MindCheese;
   private readonly textFormatter: TextFormatter;
+  private readonly lineWidth: number;
+  private readonly pSpace: number;
 
   constructor(
     viewProvider: ViewProvider,
     mindCheese: MindCheese,
-    textFormatter: TextFormatter
+    textFormatter: TextFormatter,
+    lineWidth: number,
+    pSpace: number
   ) {
     this.viewProvider = viewProvider;
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
+    this.lineWidth = lineWidth;
+    this.pSpace = pSpace;
 
     this.mcnodes = document.createElement("mcnodes");
     this.bindEvent();
@@ -227,5 +234,35 @@ export class NodesView {
 
   appendChild(shadow: HTMLElement) {
     this.mcnodes.appendChild(shadow);
+  }
+
+  // TODO move to NodesView
+  renderNodes(layoutResult: LayoutResult): void {
+    const nodes = this.mindCheese.mind.nodes;
+    const offset = layoutResult.getOffsetOfTheRootNode(this.mindCheese.mind);
+
+    for (const node of Object.values(nodes)) {
+      const viewData = node.data.view;
+      const nodeElement = viewData.element!;
+      const p = layoutResult.getTopLeft(node, this.lineWidth);
+      viewData.elementTopLeft = offset.convertCenterOfNodeOffsetFromRootNode(p);
+      nodeElement.style.left = viewData.elementTopLeft.x + "px";
+      nodeElement.style.top = viewData.elementTopLeft.y + "px";
+      nodeElement.style.display = "";
+      nodeElement.style.visibility = "visible";
+
+      if (!node.isroot && node.children.length == 0) {
+        const adder = viewData.adder!;
+        const adderText = "+";
+        const adderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
+          layoutResult.getAdderPosition(node, this.pSpace)
+        );
+        adder.style.left = adderPoint.x + "px";
+        adder.style.top = adderPoint.y + "px";
+        adder.style.display = "";
+        adder.style.visibility = "visible";
+        adder.innerText = adderText;
+      }
+    }
   }
 }
