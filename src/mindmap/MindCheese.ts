@@ -320,7 +320,7 @@ export class MindCheese {
 
   resize(): void {
     console.log("MindCheese.resize()");
-    this.view.resize();
+    this.view.resetSize();
   }
 
   undo(): void {

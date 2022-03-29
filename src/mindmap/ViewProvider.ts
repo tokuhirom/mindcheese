@@ -246,7 +246,7 @@ export class ViewProvider {
     }
   }
 
-  resize(): void {
+  resetSize(): void {
     this.graphView.setSize(1, 1);
     this.nodesView.resetSize();
     this.renderAgain();
