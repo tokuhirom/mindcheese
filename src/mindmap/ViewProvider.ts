@@ -21,8 +21,6 @@ export class ViewProvider {
   private editingNode: MindNode | null;
   private readonly graphView: GraphView;
   private readonly textFormatter: TextFormatter;
-  private readonly hMargin: number;
-  private readonly vMargin: number;
   private layoutResult: LayoutResult | null = null;
   private readonly pSpace: number;
   readonly nodesView: NodesView; // TODO make this private
@@ -71,9 +69,6 @@ export class ViewProvider {
 
     this.selectedNode = null;
     this.editingNode = null;
-
-    this.hMargin = hmargin;
-    this.vMargin = vmargin;
   }
 
   init(container: HTMLElement): void {
