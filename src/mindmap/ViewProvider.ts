@@ -73,11 +73,6 @@ export class ViewProvider {
     this.editingNode = null;
   }
 
-  init(container: HTMLElement): void {
-    console.debug("view.init");
-    this.wrapperView.attach(container);
-  }
-
   getBindedNodeId(element: HTMLElement): string | null {
     if (element == null) {
       return null;

@@ -61,7 +61,7 @@ export class MindCheese {
     this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
 
-    this.view.init(this.container);
+    this.view.wrapperView.attach(this.container);
     this.draggable.eventBind(this.container);
 
     this.shortcut.bindKeyEvents();
