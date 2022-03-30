@@ -1,6 +1,6 @@
 import { Direction } from "../MindmapConstants";
 import { MindNode } from "../model/MindNode";
-import { Mind } from "../Mind";
+import { Mind } from "../model/Mind";
 import { RelativeOffsetFromParent } from "./RelativeOffsetFromParent";
 import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode";
 import { LayoutResult } from "./LayoutResult";
@@ -87,16 +87,15 @@ export class LayoutEngine {
           relativeMap
         );
         const nodeOuterHeight = Math.max(
-          node.data.view.elementSizeCache!.height,
+          node.viewData.elementSizeCache!.height,
           childrenHeight
         );
 
         const x =
           this.hSpace * node.direction +
-          (node.parent!.data.view.elementSizeCache!.width / 2) *
-            node.direction +
+          (node.parent!.viewData.elementSizeCache!.width / 2) * node.direction +
           this.hSpace * node.direction +
-          (node.data.view.elementSizeCache!.width / 2) * node.direction +
+          (node.viewData.elementSizeCache!.width / 2) * node.direction +
           (node.parent?.isroot ? 0 : this.pSpace * node.direction);
 
         const y = baseY + nodeOuterHeight / 2;

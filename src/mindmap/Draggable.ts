@@ -16,8 +16,18 @@
 import { MindCheese } from "./MindCheese";
 import { MindNode } from "./model/MindNode";
 import { BEFOREID_FIRST, BEFOREID_LAST, Direction } from "./MindmapConstants";
-import { Point } from "./layout/Point";
 import { findMcnode } from "./utils/DomUtils";
+
+class Point {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  __PointBrand: any;
+  readonly x: number;
+  readonly y: number;
+}
 
 function getClientFromEvent(e: MouseEvent | TouchEvent): {
   clientX: number;
@@ -48,11 +58,16 @@ class ClosePoint {
 
 export class Draggable {
   private readonly mindCheese: MindCheese;
+
+  // Draggable class draws bezier line into the canvas while dragging.
   private readonly canvasElement: HTMLCanvasElement;
   private readonly canvasContext: CanvasRenderingContext2D;
+
+  // "Shadow" is an instance of mcnode, that follows the cursor while dragging.
   private readonly shadow: HTMLElement; // <mcnode>
   private shadowW: number;
   private shadowH: number;
+
   private activeNode: MindNode | null;
   private targetNode: MindNode | null;
   private targetDirect: Direction | null;
@@ -73,7 +88,7 @@ export class Draggable {
   constructor(mindCheese: MindCheese) {
     this.mindCheese = mindCheese;
     this.canvasElement = Draggable.createCanvas();
-    this.mindCheese.view.mindCheeseInnerElement.appendChild(this.canvasElement);
+    this.mindCheese.view.wrapperView.appendChild(this.canvasElement);
     this.canvasContext = this.canvasElement.getContext("2d")!;
     this.shadow = Draggable.createShadow();
     this.shadowW = 0;
@@ -92,7 +107,7 @@ export class Draggable {
   }
 
   resize(width: number, height: number): void {
-    this.mindCheese.view.mcnodes.appendChild(this.shadow);
+    this.mindCheese.view.nodesView.appendChild(this.shadow);
     this.canvasElement.width = width;
     this.canvasElement.height = height;
   }
@@ -112,7 +127,7 @@ export class Draggable {
     return mcnode;
   }
 
-  resetShadow(el: HTMLElement): void {
+  private resetShadow(el: HTMLElement): void {
     const s = this.shadow.style;
     this.shadow.innerHTML = el.innerHTML;
     s.left = el.style.left;
@@ -169,8 +184,8 @@ export class Draggable {
 
   private doLookupCloseNode(): ClosePoint | null {
     const root = this.mindCheese.mind.root!;
-    const rootLocation = root.data.view.elementTopLeft!;
-    const rootSize = root.data.view.elementSizeCache!;
+    const rootLocation = root.viewData.elementTopLeft!;
+    const rootSize = root.viewData.elementSizeCache!;
     const rootX = rootLocation.x + rootSize.width / 2;
 
     const sw = this.shadowW;
@@ -192,8 +207,8 @@ export class Draggable {
         if (node.id == this.activeNode!.id) {
           continue;
         }
-        const ns = node.data.view.elementSizeCache!;
-        const nl = node.data.view.elementTopLeft!;
+        const ns = node.viewData.elementSizeCache!;
+        const nl = node.viewData.elementTopLeft!;
         if (direct == Direction.RIGHT) {
           if (sx - nl.x - ns.width <= 0) {
             continue;
@@ -263,7 +278,7 @@ export class Draggable {
             }, 350);
           } else {
             // double tap
-            this.mindCheese.dblclickHandle(e);
+            this.mindCheese.view.nodesView.dblclickHandle(e);
           }
         },
         { passive: true }
@@ -367,7 +382,7 @@ export class Draggable {
     this.capture = false;
   }
 
-  moveNode(
+  private moveNode(
     srcNode: MindNode,
     targetNode: MindNode,
     targetDirect: Direction
@@ -378,15 +393,13 @@ export class Draggable {
       console.log(`let's move!`);
       // lookup before_node
       const siblingNodes = targetNode.children;
-      let sc = siblingNodes.length;
-      let node = null;
       let deltaY = Number.MAX_VALUE;
       let nodeBefore = null;
       let beforeid = BEFOREID_LAST;
-      while (sc--) {
-        node = siblingNodes[sc];
+      for (let i = siblingNodes.length - 1; i >= 0; i--) {
+        const node = siblingNodes[i];
         if (node.direction === targetDirect && node.id !== srcNode.id) {
-          const dy = node.data.view.elementTopLeft!.y - shadowH;
+          const dy = node.viewData.elementTopLeft!.y - shadowH;
           if (dy > 0 && dy < deltaY) {
             deltaY = dy;
             nodeBefore = node;

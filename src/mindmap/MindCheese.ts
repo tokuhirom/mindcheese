@@ -1,18 +1,16 @@
 import { ViewProvider } from "./ViewProvider";
 import { ShortcutProvider } from "./ShortcutProvider";
 import { MindNode } from "./model/MindNode";
-import { Mind } from "./Mind";
+import { Mind } from "./model/Mind";
 import { Draggable } from "./Draggable";
 import { BEFOREID_LAST, Direction } from "./MindmapConstants";
 import { UndoManager } from "./UndoManager";
-import { GraphCanvas } from "./GraphCanvas";
 import { object2mindmap } from "./format/node_tree/object2mindmap";
 import { MindOption } from "./MindOption";
 import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
-import { generateNewId } from "./utils/RandomID";
 import { LayoutEngine } from "./layout/LayoutEngine";
-import { findMcnode } from "./utils/DomUtils";
+import { GraphCanvas } from "./view/graph/GraphCanvas";
 
 export class MindCheese {
   options: MindOption;
@@ -20,17 +18,11 @@ export class MindCheese {
   view: ViewProvider;
   shortcut: ShortcutProvider;
   draggable: Draggable;
-  private readonly id: number;
   private undoManager: UndoManager;
   private editable: boolean;
   private readonly container: HTMLElement;
-  private zoomScale = 1.0;
 
-  constructor(
-    id: number,
-    container: HTMLElement,
-    options: MindOption = new MindOption()
-  ) {
+  constructor(container: HTMLElement, options: MindOption = new MindOption()) {
     if (!container) {
       throw new Error("container shouldn't be null!");
     }
@@ -39,7 +31,6 @@ export class MindCheese {
 
     this.options = options;
     this.mind = new Mind();
-    this.id = id;
     this.editable = true;
 
     // create instance of function provider
@@ -59,7 +50,8 @@ export class MindCheese {
       graph,
       options.view.renderer,
       layoutEngine,
-      options.layout.pspace
+      options.layout.pspace,
+      options.view.lineWidth
     );
     this.shortcut = new ShortcutProvider(
       this,
@@ -104,114 +96,19 @@ export class MindCheese {
   }
 
   private bindEvent(): void {
-    this.view.mcnodes.addEventListener(
-      "mousedown",
-      this.mousedownHandle.bind(this)
-    );
-    this.view.mcnodes.addEventListener("click", this.clickHandle.bind(this));
-    this.view.mcnodes.addEventListener(
-      "dblclick",
-      this.dblclickHandle.bind(this)
-    );
-    this.view.mindCheeseInnerElement.addEventListener(
-      "wheel",
-      (e) => {
-        if (e.ctrlKey) {
-          e.stopPropagation();
-          if (e.deltaY > 0) {
-            this.zoomScale -= 0.1;
-          } else {
-            this.zoomScale += 0.1;
-          }
-          this.zoomScale = Math.min(Math.max(this.zoomScale, 0.2), 20);
-          this.zoom(this.zoomScale);
-        }
-      },
-      { passive: true }
-    );
     window.addEventListener("resize", () => {
       this.resize();
       return false;
     });
   }
-
-  private mousedownHandle(e: Event): void {
-    const element = e.target as HTMLElement;
-    const nodeid = this.view.getBindedNodeId(element);
-    if (nodeid) {
-      if (findMcnode(element)) {
-        const theNode = this.mind.getNodeById(nodeid);
-        return this.selectNode(theNode);
-      }
-    } else {
-      this.selectClear();
-    }
-  }
-
-  private clickHandle(e: Event): boolean {
-    const element = e.target as HTMLElement;
-    switch (element.tagName.toLowerCase()) {
-      case "mcadder": {
-        const nodeid = this.view.getBindedNodeId(element);
-        if (nodeid) {
-          const theNode = this.mind.getNodeById(nodeid);
-          if (!theNode) {
-            throw new Error("the node[id=" + nodeid + "] can not be found.");
-          } else {
-            console.log(`element: ${element.tagName.toLowerCase()}`);
-            const nodeid = generateNewId();
-            const node = this.addNode(theNode, nodeid, "New Node");
-            if (node) {
-              this.selectNode(node);
-
-              this.checkEditable();
-              this.view.editNodeBegin(node);
-            }
-          }
-        }
-        return false;
-      }
-    }
-    return true;
-  }
-
-  dblclickHandle(e: Event): boolean {
-    this.checkEditable();
-    e.preventDefault();
-    e.stopPropagation();
-
-    const element = e.target as HTMLElement;
-    const nodeid = this.view.getBindedNodeId(element);
-    if (nodeid) {
-      const theNode = this.mind.getNodeById(nodeid);
-      if (theNode.data.view.element!.contentEditable == "true") {
-        // The node is already in the editing mode.
-        return false;
-      }
-
-      if (!theNode) {
-        throw new Error(`the node[id=${nodeid}] can not be found.`);
-      }
-
-      this.view.editNodeBegin(theNode);
-
-      return false;
-    }
-    return true;
-  }
-
-  zoom(n: number): void {
-    console.log(`set zoom scale to ${n}`);
-    this.view.mindCheeseInnerElement.style.transform = `scale(${n})`;
-  }
-
   private showMind(mind: Mind): void {
     this.view.reset();
 
     this.mind = mind;
 
-    this.view.createNodes();
-    this.view.cacheNodeSize();
+    // TODO move core logic to ViewProvider.
+    this.view.nodesView.createNodes();
+    this.view.nodesView.cacheNodeSize();
     this.view.renderAgain();
     this.view.centerRoot();
   }
@@ -237,10 +134,10 @@ export class MindCheese {
     this.checkEditable();
 
     this.undoManager.recordSnapshot();
-    parentNode.data.view.adder!.style.display = "none";
+    parentNode.viewData.adder!.style.display = "none";
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
-      this.view.addNode(node);
+      this.view.nodesView.addNode(node);
       this.view.renderAgain();
     }
     return node;
@@ -256,7 +153,7 @@ export class MindCheese {
     this.undoManager.recordSnapshot();
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
-    this.view.addNode(node);
+    this.view.nodesView.addNode(node);
     this.view.renderAgain();
     return node;
   }
@@ -424,7 +321,7 @@ export class MindCheese {
 
   resize(): void {
     console.log("MindCheese.resize()");
-    this.view.resize();
+    this.view.resetSize();
   }
 
   undo(): void {

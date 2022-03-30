@@ -1,4 +1,4 @@
-import { Size } from "../Size";
+import { Size } from "../model/Size";
 
 export class Bounds {
   constructor(n: number, e: number, w: number, s: number) {

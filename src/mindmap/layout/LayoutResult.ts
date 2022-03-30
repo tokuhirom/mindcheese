@@ -2,7 +2,8 @@ import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode
 import { MindNode } from "../model/MindNode";
 import { Direction } from "../MindmapConstants";
 import { Bounds } from "./Bounds";
-import { Mind } from "../Mind";
+import { Mind } from "../model/Mind";
+import { RootNodeOffsetFromTopLeftOfMcnodes } from "./RootNodeOffsetFromTopLeftOfMcnodes";
 
 export class LayoutResult {
   private readonly _relativeFromRootMap: Record<
@@ -34,8 +35,8 @@ export class LayoutResult {
   getNodePointIn(node: MindNode): CenterOfNodeOffsetFromRootNode {
     const point = this.getCenterOffsetOfTheNodeFromRootNode(node);
     return new CenterOfNodeOffsetFromRootNode(
-      point.x - (node.data.view.elementSizeCache!.width / 2) * node.direction,
-      point.y + node.data.view.elementSizeCache!.height / 2
+      point.x - (node.viewData.elementSizeCache!.width / 2) * node.direction,
+      point.y + node.viewData.elementSizeCache!.height / 2
     );
   }
 
@@ -60,19 +61,19 @@ export class LayoutResult {
   ): CenterOfNodeOffsetFromRootNode {
     if (node.isroot) {
       const x =
-        (node.data.view.elementSizeCache!.width / 2) * destination.direction;
+        (node.viewData.elementSizeCache!.width / 2) * destination.direction;
       return new CenterOfNodeOffsetFromRootNode(
         x,
-        -(node.data.view.elementSizeCache!.height / 2)
+        -(node.viewData.elementSizeCache!.height / 2)
       );
     } else {
       const offsetPoint = this.getCenterOffsetOfTheNodeFromRootNode(node);
       const x =
         offsetPoint.x +
-        (node.data.view.elementSizeCache!.width / 2) * node.direction;
+        (node.viewData.elementSizeCache!.width / 2) * node.direction;
       return new CenterOfNodeOffsetFromRootNode(
         x,
-        offsetPoint.y + node.data.view.elementSizeCache!.height / 2
+        offsetPoint.y + node.viewData.elementSizeCache!.height / 2
       );
     }
   }
@@ -85,13 +86,13 @@ export class LayoutResult {
 
     const x =
       offsetPoint.x +
-      (node.data.view.elementSizeCache!.width / 2 + marginForAdder) *
+      (node.viewData.elementSizeCache!.width / 2 + marginForAdder) *
         node.direction -
       (node.direction == Direction.RIGHT ? marginForAdder : 0);
 
     const y =
       offsetPoint.y +
-      node.data.view.elementSizeCache!.height / 2 -
+      node.viewData.elementSizeCache!.height / 2 -
       Math.ceil(marginForAdder / 2);
 
     return new CenterOfNodeOffsetFromRootNode(x, y);
@@ -101,7 +102,7 @@ export class LayoutResult {
     node: MindNode,
     lineWidth: number
   ): CenterOfNodeOffsetFromRootNode {
-    const viewSize = node.data.view.elementSizeCache!;
+    const viewSize = node.viewData.elementSizeCache!;
     const offsetPoint = this.getCenterOffsetOfTheNodeFromRootNode(node);
     if (node.isroot) {
       const x = offsetPoint.x + (viewSize.width / 2) * -1;
@@ -129,7 +130,7 @@ export class LayoutResult {
       console.log(
         `getMinSize: id=${node.id}, x=${offsetPoint.x}, y=${offsetPoint.y}`
       );
-      const viewSize = node.data.view.elementSizeCache!;
+      const viewSize = node.viewData.elementSizeCache!;
       e = Math.max(offsetPoint.x + viewSize.width / 2, e);
       w = Math.min(offsetPoint.x - viewSize.width / 2, w);
       n = Math.min(offsetPoint.y - viewSize.height / 2, n);
@@ -138,5 +139,15 @@ export class LayoutResult {
     // maximum distance from center of root node.
     console.log(`getMinSize: n=${n}, e=${e}, w=${w}, s=${s}`);
     return new Bounds(n, e, w, s);
+  }
+
+  // get the center point offset
+  getOffsetOfTheRootNode(mind: Mind): RootNodeOffsetFromTopLeftOfMcnodes {
+    const bounds = this.getBounds(mind);
+    console.log(`getViewOffset: e=${bounds.e}, w=${bounds.w}`);
+
+    const x = -bounds.w + mind.root!.viewData.elementSizeCache!.width / 2;
+    const y = -bounds.n + mind.root!.viewData.elementSizeCache!.height / 2;
+    return new RootNodeOffsetFromTopLeftOfMcnodes(x, y);
   }
 }

@@ -1,4 +1,4 @@
-import { Size } from "../Size";
+import { Size } from "./Size";
 import { OffsetFromTopLeftOfMcnodes } from "../layout/OffsetFromTopLeftOfMcnodes";
 
 export class ViewData {

@@ -21,7 +21,7 @@ Here's a demo site: https://tokuhirom.github.io/mindcheese/index.html
 
 ```javascript
 const container = document.getElementById("container");
-const mindCheese = new MindCheese(1, container);
+const mindCheese = new MindCheese(container);
 mindCheese.showNodeTree({
   id: "root",
   topic: "mindCheese",
