@@ -1,5 +1,4 @@
 import { KEYCODE_ENTER, KEYCODE_ESC } from "../../MindmapConstants";
-import { ViewProvider } from "../../ViewProvider";
 import { findMcnode } from "../../utils/DomUtils";
 import { generateNewId } from "../../utils/RandomID";
 import { MindCheese } from "../../MindCheese";
@@ -7,23 +6,24 @@ import { MindNode } from "../../model/MindNode";
 import { Size } from "../../model/Size";
 import { TextFormatter } from "../../renderer/TextFormatter";
 import { LayoutResult } from "../../layout/LayoutResult";
+import { WrapperView } from "../wrapper/WrapperView";
 
 export class NodesView {
   private readonly mcnodes: HTMLElement; // <mcnodes>
-  private readonly viewProvider: ViewProvider; // TODO
   private readonly mindCheese: MindCheese;
   private readonly textFormatter: TextFormatter;
   private readonly lineWidth: number;
   private readonly pSpace: number;
+  private wrapperView: WrapperView;
 
   constructor(
-    viewProvider: ViewProvider,
+    wrapperView: WrapperView,
     mindCheese: MindCheese,
     textFormatter: TextFormatter,
     lineWidth: number,
     pSpace: number
   ) {
-    this.viewProvider = viewProvider;
+    this.wrapperView = wrapperView;
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
     this.lineWidth = lineWidth;
@@ -54,16 +54,16 @@ export class NodesView {
         console.log("editNodeEnd");
         e.stopPropagation();
         e.preventDefault();
-        this.viewProvider.editNodeEnd();
+        this.wrapperView.editNodeEnd();
       }
     });
     // adjust size dynamically.
     this.mcnodes.addEventListener("keyup", () => {
-      this.viewProvider.renderAgain();
+      this.wrapperView.renderAgain();
     });
     this.mcnodes.addEventListener("input", () => {
       // TODO is this required?
-      this.viewProvider.renderAgain();
+      this.wrapperView.renderAgain();
     });
     // when the element lost focus.
     this.mcnodes.addEventListener(
@@ -74,7 +74,7 @@ export class NodesView {
           return;
         }
 
-        this.viewProvider.editNodeEnd();
+        this.wrapperView.editNodeEnd();
       },
       true
     );
@@ -85,7 +85,7 @@ export class NodesView {
 
   private mousedownHandle(e: Event): void {
     const element = e.target as HTMLElement;
-    const nodeid = this.viewProvider.getBindedNodeId(element);
+    const nodeid = this.wrapperView.getBindedNodeId(element);
     if (nodeid) {
       if (findMcnode(element)) {
         const theNode = this.mindCheese.mind.getNodeById(nodeid);
@@ -100,7 +100,7 @@ export class NodesView {
     const element = e.target as HTMLElement;
     switch (element.tagName.toLowerCase()) {
       case "mcadder": {
-        const nodeid = this.viewProvider.getBindedNodeId(element);
+        const nodeid = this.wrapperView.getBindedNodeId(element);
         if (nodeid) {
           const theNode = this.mindCheese.mind.getNodeById(nodeid);
           if (!theNode) {
@@ -113,7 +113,7 @@ export class NodesView {
               this.mindCheese.selectNode(node);
 
               this.checkEditable();
-              this.viewProvider.editNodeBegin(node);
+              this.wrapperView.editNodeBegin(node);
             }
           }
         }
@@ -129,7 +129,7 @@ export class NodesView {
     e.stopPropagation();
 
     const element = e.target as HTMLElement;
-    const nodeid = this.viewProvider.getBindedNodeId(element);
+    const nodeid = this.wrapperView.getBindedNodeId(element);
     if (nodeid) {
       const theNode = this.mindCheese.mind.getNodeById(nodeid);
       if (theNode.viewData.element!.contentEditable == "true") {
@@ -141,7 +141,7 @@ export class NodesView {
         throw new Error(`the node[id=${nodeid}] can not be found.`);
       }
 
-      this.viewProvider.editNodeBegin(theNode);
+      this.wrapperView.editNodeBegin(theNode);
 
       return false;
     }

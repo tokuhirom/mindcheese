@@ -21,7 +21,7 @@ export class ShortcutHandlers {
         mindCheese.selectNode(node);
         mindCheese.checkEditable();
 
-        mindCheese.view.editNodeBegin(node);
+        mindCheese.wrapperView.editNodeBegin(node);
       }
     }
     return false;
@@ -38,7 +38,7 @@ export class ShortcutHandlers {
         mindCheese.selectNode(node);
         mindCheese.checkEditable();
 
-        mindCheese.view.editNodeBegin(node);
+        mindCheese.wrapperView.editNodeBegin(node);
       }
     }
     return false;
@@ -49,7 +49,7 @@ export class ShortcutHandlers {
     if (selectedNode) {
       mindCheese.checkEditable();
 
-      mindCheese.view.editNodeBegin(selectedNode);
+      mindCheese.wrapperView.editNodeBegin(selectedNode);
     }
     return false;
   }

@@ -5,29 +5,66 @@ import { NodesView } from "../node/NodesView";
 import { GraphCanvas } from "../graph/GraphCanvas";
 import { MindNode } from "../../model/MindNode";
 import { ScrollSnapshot } from "./ScrollSnapshot";
+import { GraphView } from "../graph/GraphView";
+import { MindCheese } from "../../MindCheese";
+import { LayoutEngine } from "../../layout/LayoutEngine";
+import { TextFormatter } from "../../renderer/TextFormatter";
 
 export class WrapperView {
   private readonly wrapperElement: HTMLElement;
   private readonly hMargin: number;
   private readonly vMargin: number;
-  private readonly nodesView: NodesView;
+  readonly nodesView: NodesView;
   private zoomScale = 1.0;
+  private graphView: GraphView;
+  private readonly mindCheese: MindCheese;
+  private selectedNode: MindNode | null;
+  private editingNode: MindNode | null;
+
+  private readonly layoutEngine: LayoutEngine;
+  size: Size;
+  private readonly textFormatter: TextFormatter;
+  private layoutResult: LayoutResult | null = null;
+  private readonly pSpace: number;
 
   constructor(
-    hMargin: number,
-    vMargin: number,
-    nodesView: NodesView,
-    graphCanvas: GraphCanvas
+    mindCheese: MindCheese,
+    hmargin: number,
+    vmargin: number,
+    graphCanvas: GraphCanvas,
+    textFormatter: TextFormatter,
+    layoutEngine: LayoutEngine,
+    pSpace: number,
+    lineWidth: number
   ) {
-    this.hMargin = hMargin;
-    this.vMargin = vMargin;
-    this.nodesView = nodesView;
+    this.mindCheese = mindCheese;
+    this.textFormatter = textFormatter;
+    this.layoutEngine = layoutEngine;
+    this.pSpace = pSpace;
+
+    this.graphView = new GraphView(graphCanvas);
+    this.nodesView = new NodesView(
+      this,
+      this.mindCheese,
+      textFormatter,
+      lineWidth,
+      this.pSpace
+    );
+
+    this.size = new Size(0, 0);
+
+    this.hMargin = hmargin;
+    this.vMargin = vmargin;
+    this.mindCheese = mindCheese;
 
     this.wrapperElement = document.createElement("div");
     this.wrapperElement.className = "mindcheese-inner";
     this.wrapperElement.appendChild(graphCanvas.element());
 
     this.nodesView.attach(this.wrapperElement);
+
+    this.selectedNode = null;
+    this.editingNode = null;
 
     this.bindEvents();
   }
@@ -76,15 +113,17 @@ export class WrapperView {
   }
 
   // Display root position at center of container element.
-  centerRoot(layoutResult: LayoutResult, size: Size, mind: Mind): void {
+  centerRoot(): void {
     const outerW = this.wrapperElement.clientWidth;
     const outerH = this.wrapperElement.clientHeight;
-    if (size.width > outerW) {
-      const offset = layoutResult.getOffsetOfTheRootNode(mind);
+    if (this.size.width > outerW) {
+      const offset = this.layoutResult!.getOffsetOfTheRootNode(
+        this.mindCheese.mind
+      );
       this.wrapperElement.scrollLeft = offset.x - outerW / 2;
     }
-    if (size.height > outerH) {
-      this.wrapperElement.scrollTop = (size.height - outerH) / 2;
+    if (this.size.height > outerH) {
+      this.wrapperElement.scrollTop = (this.size.height - outerH) / 2;
     }
   }
 
@@ -115,5 +154,190 @@ export class WrapperView {
 
   appendChild(element: HTMLCanvasElement) {
     this.wrapperElement.appendChild(element);
+  }
+
+  reset(): void {
+    console.debug("view.reset");
+    this.selectedNode = null;
+    this.graphView.clear();
+    this.nodesView.clearNodes();
+    this.setTheme(this.mindCheese.options.theme);
+  }
+
+  selectClear(): void {
+    if (this.selectedNode) {
+      const el = this.selectedNode.viewData.element!;
+      el.classList.remove("selected");
+    }
+  }
+
+  selectNode(node: MindNode | null): void {
+    if (this.selectedNode) {
+      const el = this.selectedNode.viewData.element!;
+      el.classList.remove("selected");
+    }
+    if (node) {
+      this.selectedNode = node;
+      node.viewData.element!.classList.add("selected");
+      // Note: scrollIntoView is not the best method.
+      WrapperView.adjustScrollBar(node);
+    }
+  }
+
+  // Adjust the scroll bar. show node in the browser.
+  private static adjustScrollBar(node: MindNode): void {
+    const nodeEl = node.viewData.element!;
+
+    // https://stackoverflow.com/questions/5685589/scroll-to-element-only-if-not-in-view-jquery
+    if (nodeEl.getBoundingClientRect().bottom > window.innerHeight) {
+      nodeEl.scrollIntoView(false);
+    }
+
+    if (nodeEl.getBoundingClientRect().top < 0) {
+      nodeEl.scrollIntoView();
+    }
+
+    if (nodeEl.getBoundingClientRect().left > window.innerWidth) {
+      nodeEl.scrollIntoView(false);
+    }
+
+    if (
+      nodeEl.getBoundingClientRect().left < 0 ||
+      nodeEl.getBoundingClientRect().right < 0
+    ) {
+      nodeEl.scrollIntoView();
+    }
+  }
+
+  removeNode(node: MindNode): void {
+    if (this.selectedNode != null && this.selectedNode.id == node.id) {
+      this.selectedNode = null;
+    }
+    if (this.editingNode != null && this.editingNode.id == node.id) {
+      node.viewData.element!.contentEditable = "false";
+      this.editingNode = null;
+    }
+    for (let i = 0, l = node.children.length; i < l; i++) {
+      this.removeNode(node.children[i]);
+    }
+    if (node.viewData) {
+      this.nodesView.removeNode(node);
+    }
+  }
+
+  isEditing(): boolean {
+    return !!this.editingNode;
+  }
+
+  editNodeBegin(node: MindNode): void {
+    if (!node.topic) {
+      console.warn("don't edit image nodes");
+      return;
+    }
+    if (this.editingNode != null) {
+      this.editNodeEnd();
+    }
+    this.editingNode = node;
+
+    const element = node.viewData.element!;
+    element.contentEditable = "true";
+    element.innerText = node.topic;
+    node.viewData.elementSizeCache = new Size(
+      element.clientWidth,
+      element.clientHeight
+    );
+
+    // https://stackoverflow.com/questions/6139107/programmatically-select-text-in-a-contenteditable-html-element
+    function selectElementContents(el: HTMLElement) {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection()!;
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    selectElementContents(element);
+    element.focus();
+
+    this.renderAgain();
+  }
+
+  getBindedNodeId(element: HTMLElement): string | null {
+    if (element == null) {
+      return null;
+    }
+    const tagName = element.tagName.toLowerCase();
+    if (tagName === "mcnodes" || tagName === "body" || tagName === "html") {
+      return null;
+    }
+    if (tagName === "mcnode" || tagName == "mcadder") {
+      return element.getAttribute("nodeid");
+    } else {
+      return this.getBindedNodeId(element.parentElement!);
+    }
+  }
+
+  updateNode(node: MindNode): void {
+    const viewData = node.viewData;
+    const element = viewData.element!;
+    if (node.topic) {
+      element.innerHTML = this.textFormatter.render(node.topic);
+    }
+    viewData.elementSizeCache = new Size(
+      element.clientWidth,
+      element.clientHeight
+    );
+  }
+
+  editNodeEnd(): void {
+    console.log(`editNodeEnd(editingNode=${this.editingNode})`);
+    if (this.editingNode != null) {
+      const node = this.editingNode;
+      this.editingNode = null;
+
+      const element = node.viewData.element!;
+      element.contentEditable = "false";
+      const topic = element.innerText;
+      if (
+        !topic ||
+        topic.replace(/\s*/, "").length == 0 ||
+        node.topic === topic
+      ) {
+        console.debug("Calling updateNode");
+        element.innerHTML = this.textFormatter.render(node.topic);
+        node.viewData.elementSizeCache = new Size(
+          element.clientWidth,
+          element.clientHeight
+        );
+        this.renderAgain();
+      } else {
+        console.debug("Calling updateNode");
+        this.mindCheese.updateNode(node.id, topic);
+      }
+    }
+  }
+
+  resetSize(): void {
+    this.graphView.setSize(1, 1);
+    this.nodesView.resetSize();
+    this.renderAgain();
+  }
+
+  // TODO pull this method to MindCheese?
+  renderAgain(): void {
+    this.layoutResult = this.layoutEngine.layout(this.mindCheese.mind);
+    this.size = this.getCanvasSize(this.layoutResult, this.mindCheese.mind);
+
+    console.log(`doShow: ${this.size.width} ${this.size.height}`);
+    this.graphView.setSize(this.size.width, this.size.height);
+    this.mindCheese.draggable.resize(this.size.width, this.size.height);
+    this.setSize(this.size.width, this.size.height);
+
+    this.nodesView.renderNodes(this.layoutResult!);
+
+    const offset = this.layoutResult!.getOffsetOfTheRootNode(
+      this.mindCheese.mind
+    );
+    this.graphView.renderLines(this.mindCheese.mind, this.layoutResult, offset);
   }
 }

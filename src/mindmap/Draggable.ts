@@ -88,7 +88,7 @@ export class Draggable {
   constructor(mindCheese: MindCheese) {
     this.mindCheese = mindCheese;
     this.canvasElement = Draggable.createCanvas();
-    this.mindCheese.view.wrapperView.appendChild(this.canvasElement);
+    this.mindCheese.wrapperView.appendChild(this.canvasElement);
     this.canvasContext = this.canvasElement.getContext("2d")!;
     this.shadow = Draggable.createShadow();
     this.shadowW = 0;
@@ -107,7 +107,7 @@ export class Draggable {
   }
 
   resize(width: number, height: number): void {
-    this.mindCheese.view.nodesView.appendChild(this.shadow);
+    this.mindCheese.wrapperView.nodesView.appendChild(this.shadow);
     this.canvasElement.width = width;
     this.canvasElement.height = height;
   }
@@ -163,8 +163,8 @@ export class Draggable {
     this.canvasContext.clearRect(
       0,
       0,
-      this.mindCheese.view.size.width,
-      this.mindCheese.view.size.height
+      this.mindCheese.wrapperView.size.width,
+      this.mindCheese.wrapperView.size.height
     );
   }
 
@@ -278,7 +278,7 @@ export class Draggable {
             }, 350);
           } else {
             // double tap
-            this.mindCheese.view.nodesView.dblclickHandle(e);
+            this.mindCheese.wrapperView.nodesView.dblclickHandle(e);
           }
         },
         { passive: true }
@@ -299,7 +299,7 @@ export class Draggable {
     }
     this.activeNode = null;
 
-    const viewProvider = this.mindCheese.view;
+    const viewProvider = this.mindCheese.wrapperView;
     const el = findMcnode(e.target as HTMLElement);
     if (!el) {
       return;

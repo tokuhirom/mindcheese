@@ -36,7 +36,7 @@ export class ShortcutProvider {
     if (e.which == 9) {
       e.preventDefault();
     } //prevent tab to change focus in browser
-    if (this.mindCheese.view.isEditing()) {
+    if (this.mindCheese.wrapperView.isEditing()) {
       return true;
     }
     if (!this.enable) {

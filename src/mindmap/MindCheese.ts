@@ -1,4 +1,3 @@
-import { ViewProvider } from "./ViewProvider";
 import { ShortcutProvider } from "./ShortcutProvider";
 import { MindNode } from "./model/MindNode";
 import { Mind } from "./model/Mind";
@@ -11,11 +10,12 @@ import { mindmap2markdown } from "./format/markdown/mindmap2markdown";
 import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { GraphCanvas } from "./view/graph/GraphCanvas";
+import { WrapperView } from "./view/wrapper/WrapperView";
 
 export class MindCheese {
   options: MindOption;
   public mind: Mind;
-  view: ViewProvider;
+  wrapperView: WrapperView; // TODO private
   shortcut: ShortcutProvider;
   draggable: Draggable;
   private undoManager: UndoManager;
@@ -43,7 +43,7 @@ export class MindCheese {
       options.layout.vspace,
       options.layout.pspace
     );
-    this.view = new ViewProvider(
+    this.wrapperView = new WrapperView(
       this,
       options.view.hmargin,
       options.view.vmargin,
@@ -61,7 +61,7 @@ export class MindCheese {
     this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
 
-    this.view.wrapperView.attach(this.container);
+    this.wrapperView.attach(this.container);
     this.draggable.eventBind(this.container);
 
     this.shortcut.bindKeyEvents();
@@ -91,7 +91,7 @@ export class MindCheese {
     const themeOld = this.options.theme;
     this.options.theme = theme;
     if (themeOld !== this.options.theme) {
-      this.view.resetTheme();
+      this.wrapperView.setTheme(this.options.theme);
     }
   }
 
@@ -101,16 +101,17 @@ export class MindCheese {
       return false;
     });
   }
+
   private showMind(mind: Mind): void {
-    this.view.reset();
+    this.wrapperView.reset();
 
     this.mind = mind;
 
     // TODO move core logic to ViewProvider.
-    this.view.nodesView.createNodes();
-    this.view.nodesView.cacheNodeSize();
-    this.view.renderAgain();
-    this.view.centerRoot();
+    this.wrapperView.nodesView.createNodes();
+    this.wrapperView.nodesView.cacheNodeSize();
+    this.wrapperView.renderAgain();
+    this.wrapperView.centerRoot();
   }
 
   // nodeTree = object representation of the mindmap.
@@ -137,8 +138,8 @@ export class MindCheese {
     parentNode.viewData.adder!.style.display = "none";
     const node = this.mind.addNode(parentNode, nodeid, topic, null, null);
     if (node) {
-      this.view.nodesView.addNode(node);
-      this.view.renderAgain();
+      this.wrapperView.nodesView.addNode(node);
+      this.wrapperView.renderAgain();
     }
     return node;
   }
@@ -153,8 +154,8 @@ export class MindCheese {
     this.undoManager.recordSnapshot();
 
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
-    this.view.nodesView.addNode(node);
-    this.view.renderAgain();
+    this.wrapperView.nodesView.addNode(node);
+    this.wrapperView.renderAgain();
     return node;
   }
 
@@ -173,15 +174,15 @@ export class MindCheese {
       nodeid
     );
 
-    const scrollSnapshot = this.view.saveScroll(node);
-    this.view.removeNode(node);
+    const scrollSnapshot = this.wrapperView.saveScroll(node);
+    this.wrapperView.removeNode(node);
     this.mind.removeNode(node);
-    this.view.renderAgain();
+    this.wrapperView.renderAgain();
     if (parentNode.children.length > 0) {
       this.mind.selected = nextSelectedNode;
-      this.view.selectNode(nextSelectedNode);
+      this.wrapperView.selectNode(nextSelectedNode);
     }
-    this.view.restoreScroll(parentNode, scrollSnapshot);
+    this.wrapperView.restoreScroll(parentNode, scrollSnapshot);
 
     return true;
   }
@@ -216,12 +217,12 @@ export class MindCheese {
     this.undoManager.recordSnapshot();
     if (node.topic === topic) {
       console.info("nothing changed");
-      this.view.updateNode(node);
+      this.wrapperView.updateNode(node);
       return;
     }
     node.topic = topic;
-    this.view.updateNode(node);
-    this.view.renderAgain();
+    this.wrapperView.updateNode(node);
+    this.wrapperView.renderAgain();
   }
 
   /**
@@ -243,13 +244,13 @@ export class MindCheese {
 
     this.undoManager.recordSnapshot();
     this.mind.moveNode(node, beforeid, parent, direction);
-    this.view.updateNode(node);
-    this.view.renderAgain();
+    this.wrapperView.updateNode(node);
+    this.wrapperView.renderAgain();
   }
 
   selectNode(node: MindNode): void {
     this.mind.selected = node;
-    this.view.selectNode(node);
+    this.wrapperView.selectNode(node);
   }
 
   getSelectedNode(): MindNode | null {
@@ -263,7 +264,7 @@ export class MindCheese {
   selectClear(): void {
     if (this.mind) {
       this.mind.selected = null;
-      this.view.selectClear();
+      this.wrapperView.selectClear();
     }
   }
 
@@ -321,7 +322,7 @@ export class MindCheese {
 
   resize(): void {
     console.log("MindCheese.resize()");
-    this.view.resetSize();
+    this.wrapperView.resetSize();
   }
 
   undo(): void {
