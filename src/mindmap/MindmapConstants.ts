@@ -4,6 +4,10 @@ export const enum Direction {
   RIGHT = 1,
 }
 
+export const enum EventType {
+  AfterEdit = 1,
+}
+
 export const BEFOREID_FIRST = "_first_";
 export const BEFOREID_LAST = "_last_";
 

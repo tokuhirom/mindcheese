@@ -2,7 +2,7 @@ import { ShortcutProvider } from "./ShortcutProvider";
 import { MindNode } from "./model/MindNode";
 import { Mind } from "./model/Mind";
 import { Draggable } from "./Draggable";
-import { BEFOREID_LAST, Direction } from "./MindmapConstants";
+import { BEFOREID_LAST, Direction, EventType } from "./MindmapConstants";
 import { UndoManager } from "./UndoManager";
 import { object2mindmap } from "./format/node_tree/object2mindmap";
 import { MindOption } from "./MindOption";
@@ -11,6 +11,7 @@ import { markdown2mindmap } from "./format/markdown/markdown2mindmap";
 import { LayoutEngine } from "./layout/LayoutEngine";
 import { GraphCanvas } from "./view/graph/GraphCanvas";
 import { WrapperView } from "./view/wrapper/WrapperView";
+import EventRouter, { EventCallback } from "./EventRouter";
 
 export class MindCheese {
   options: MindOption;
@@ -21,6 +22,7 @@ export class MindCheese {
   private undoManager: UndoManager;
   private editable: boolean;
   private readonly container: HTMLElement;
+  private eventRouter: EventRouter;
 
   constructor(container: HTMLElement, options: MindOption = new MindOption()) {
     if (!container) {
@@ -32,6 +34,7 @@ export class MindCheese {
     this.options = options;
     this.mind = new Mind();
     this.editable = true;
+    this.eventRouter = new EventRouter();
 
     // create instance of function provider
     const graph = new GraphCanvas(
@@ -67,6 +70,10 @@ export class MindCheese {
     this.shortcut.bindKeyEvents();
 
     this.bindEvent();
+  }
+
+  addEventListener(eventType: EventType, callback: EventCallback) {
+    this.eventRouter.addEventListener(eventType, callback);
   }
 
   enableEdit(): void {
@@ -140,6 +147,7 @@ export class MindCheese {
     if (node) {
       this.wrapperView.nodesView.addNode(node);
       this.wrapperView.renderAgain();
+      this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
     }
     return node;
   }
@@ -156,6 +164,7 @@ export class MindCheese {
     const node = this.mind.insertNodeAfter(nodeAfter, nodeid, topic);
     this.wrapperView.nodesView.addNode(node);
     this.wrapperView.renderAgain();
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
     return node;
   }
 
@@ -183,6 +192,7 @@ export class MindCheese {
       this.wrapperView.selectNode(nextSelectedNode);
     }
     this.wrapperView.restoreScroll(parentNode, scrollSnapshot);
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
 
     return true;
   }
@@ -223,6 +233,7 @@ export class MindCheese {
     node.topic = topic;
     this.wrapperView.updateNode(node);
     this.wrapperView.renderAgain();
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
   }
 
   /**
@@ -246,6 +257,7 @@ export class MindCheese {
     this.mind.moveNode(node, beforeid, parent, direction);
     this.wrapperView.updateNode(node);
     this.wrapperView.renderAgain();
+    this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
   }
 
   selectNode(node: MindNode): void {
@@ -344,6 +356,7 @@ export class MindCheese {
     const upNode = this.findNodeBefore(node);
     if (upNode) {
       this.moveNode(node, upNode.id, node.parent!, node.direction);
+      this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
     }
   }
 
@@ -370,6 +383,7 @@ export class MindCheese {
            *     - b = LAST
            */
           this.moveNode(node, BEFOREID_LAST, node.parent!, node.direction);
+          this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
           return; // Put on last element.
         } else {
           /*
@@ -391,7 +405,7 @@ export class MindCheese {
             } direction=${node.direction}`
           );
           this.moveNode(node, children[i + 2].id, node.parent!, node.direction);
-          console.log(this.mind);
+          this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);
           return;
         }
       }
