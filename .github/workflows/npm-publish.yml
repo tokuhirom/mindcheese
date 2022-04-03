@@ -24,8 +24,9 @@ jobs:
         run: npm --no-git-tag-version version ${GITHUB_REF#refs/*/}
       - name: Generate d.ts
         run: tsc
-      - run: git commit -a -m 'commit version'
-      - run: git push
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply Prettier Change
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
