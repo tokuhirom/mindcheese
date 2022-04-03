@@ -1,5 +1,6 @@
 import { MindCheese } from "../src/mindmap/MindCheese";
 import { DEMO_MARKDOWN, DEMO_NODE_TREE } from "./DemoData";
+import { EventType } from "../src/mindmap/MindmapConstants";
 
 console.log("Loaded browser.ts");
 
@@ -25,6 +26,10 @@ export function initDemo() {
   // @ts-ignore
   this.mindCheese = mindCheese;
   mindCheese.showNodeTree(DEMO_NODE_TREE);
+  mindCheese.addEventListener(EventType.AfterEdit, (mind) => {
+    console.log(`AfterEdit`);
+    console.log(mind);
+  });
 
   document.getElementById("download_json")!.addEventListener("click", () => {
     const data = mindCheese.getNodeTree();
