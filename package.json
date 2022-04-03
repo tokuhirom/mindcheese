@@ -3,7 +3,7 @@
   "version": "0.14.0",
   "description": "Yet another editable mindmap library",
   "main": "dist/mindcheese.cjs.js",
-  "types": "dist/types/src/mindmap/MindCheese.d.ts",
+  "types": "types/src/mindmap/MindCheese.d.ts",
   "browser": "dist/mindcheese.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
