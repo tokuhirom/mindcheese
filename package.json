@@ -45,6 +45,7 @@
     "pre-commit": "npx prettier --write ."
   },
   "files": [
-    "dist/*.js"
+    "dist/*.js",
+    "types/**/*.d.ts"
   ]
 }
