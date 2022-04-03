@@ -1,6 +1,6 @@
 {
   "name": "mindcheese",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Yet another editable mindmap library",
   "main": "dist/mindcheese.cjs.js",
   "browser": "dist/mindcheese.js",
