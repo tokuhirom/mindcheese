@@ -10,6 +10,9 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": "types",
+    "emitDeclarationOnly": true,
     "lib": ["dom", "es5", "scripthost", "es2015"]
   },
   "include": ["**/*.ts"]
