@@ -26,7 +26,7 @@
     "@rollup/plugin-node-resolve": "13.3.0",
     "@rollup/plugin-typescript": "8.3.4",
     "@types/jest": "28.1.7",
-    "@types/node": "16.11.53",
+    "@types/node": "16.11.54",
     "@typescript-eslint/eslint-plugin": "5.34.0",
     "@typescript-eslint/parser": "5.34.0",
     "babel-jest": "28.1.3",
