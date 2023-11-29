@@ -19,8 +19,8 @@
   "author": "tokuhirom",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "7.23.3",
-    "@babel/preset-env": "7.23.3",
+    "@babel/core": "7.23.5",
+    "@babel/preset-env": "7.23.5",
     "@babel/preset-typescript": "7.23.3",
     "@rollup/plugin-commonjs": "25.0.7",
     "@rollup/plugin-node-resolve": "15.2.3",
