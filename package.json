@@ -39,7 +39,7 @@
     "stylelint": "15.11.0",
     "stylelint-config-standard": "35.0.0",
     "tslib": "2.6.2",
-    "typescript": "5.3.3"
+    "typescript": "5.4.2"
   },
   "simple-git-hooks": {
     "pre-commit": "npx prettier --write ."
