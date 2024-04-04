@@ -20,15 +20,11 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          rm browser/.gitignore
           npm install
-          npm run buildDemo
-          perl -i -pe 's!../styles.css!styles.css!' browser/index.html
-          cp styles.css browser/
-          ls browser/
+          npm run build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: browser
+          folder: dist/demo/

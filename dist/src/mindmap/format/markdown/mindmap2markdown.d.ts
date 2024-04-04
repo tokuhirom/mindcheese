@@ -1,3 +1,3 @@
-import { Mind } from "../../model/Mind";
+import { Mind } from '../../model/Mind';
 
 export declare function mindmap2markdown(mind: Mind): string;
