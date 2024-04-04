@@ -1,15 +1,43 @@
-var u = /* @__PURE__ */ ((o) => (
+(function () {
+  const e = document.createElement("link").relList;
+  if (e && e.supports && e.supports("modulepreload")) return;
+  for (const n of document.querySelectorAll('link[rel="modulepreload"]')) i(n);
+  new MutationObserver((n) => {
+    for (const s of n)
+      if (s.type === "childList")
+        for (const r of s.addedNodes)
+          r.tagName === "LINK" && r.rel === "modulepreload" && i(r);
+  }).observe(document, { childList: !0, subtree: !0 });
+  function t(n) {
+    const s = {};
+    return (
+      n.integrity && (s.integrity = n.integrity),
+      n.referrerPolicy && (s.referrerPolicy = n.referrerPolicy),
+      n.crossOrigin === "use-credentials"
+        ? (s.credentials = "include")
+        : n.crossOrigin === "anonymous"
+          ? (s.credentials = "omit")
+          : (s.credentials = "same-origin"),
+      s
+    );
+  }
+  function i(n) {
+    if (n.ep) return;
+    n.ep = !0;
+    const s = t(n);
+    fetch(n.href, s);
+  }
+})();
+var u = ((o) => (
     (o[(o.LEFT = -1)] = "LEFT"),
     (o[(o.CENTER = 0)] = "CENTER"),
     (o[(o.RIGHT = 1)] = "RIGHT"),
     o
   ))(u || {}),
-  v = /* @__PURE__ */ ((o) => ((o[(o.AfterEdit = 1)] = "AfterEdit"), o))(
-    v || {},
-  );
+  g = ((o) => ((o[(o.AfterEdit = 1)] = "AfterEdit"), o))(g || {});
 const W = "_first_",
-  M = "_last_";
-var f = /* @__PURE__ */ ((o) => (
+  R = "_last_";
+var f = ((o) => (
   (o[(o.NONE = 0)] = "NONE"),
   (o[(o.META = 2)] = "META"),
   (o[(o.CTRL = 4)] = "CTRL"),
@@ -17,9 +45,9 @@ var f = /* @__PURE__ */ ((o) => (
   (o[(o.SHIFT = 16)] = "SHIFT"),
   o
 ))(f || {});
-const I = 13,
+const $ = 13,
   Z = 27;
-class q {
+class Q {
   constructor(e, t, i) {
     (this.mindCheese = e),
       (this.enable = t),
@@ -48,9 +76,9 @@ class q {
       (e.ctrlKey ? f.CTRL : 0) |
       (e.altKey ? f.ALT : 0) |
       (e.shiftKey ? f.SHIFT : 0);
-    for (const s of t) {
-      const [n, r] = s;
-      if (n === i) return r(this.mindCheese, e);
+    for (const n of t) {
+      const [s, r] = n;
+      if (s === i) return r(this.mindCheese, e);
     }
     return !0;
   }
@@ -58,14 +86,14 @@ class q {
     const t = {};
     return (
       e.forEach((i) => {
-        const [s, n, r] = i;
-        t[n] || (t[n] = []), t[n].push([s, r]);
+        const [n, s, r] = i;
+        t[s] || (t[s] = []), t[s].push([n, r]);
       }),
       t
     );
   }
 }
-class Q {
+class J {
   constructor() {
     (this.element = null),
       (this.adder = null),
@@ -73,7 +101,7 @@ class Q {
       (this.elementTopLeft = null);
   }
 }
-class J {
+class ee {
   constructor(e) {
     (this.data = e), (this.index = 0);
   }
@@ -82,7 +110,7 @@ class J {
     return this.index == this.data.length && (this.index = 0), e;
   }
 }
-const ee = new J([
+const te = new ee([
   "#cc0000",
   "#00cc00",
   "#0000cc",
@@ -90,35 +118,35 @@ const ee = new J([
   "#cc00cc",
   "#cccc00",
 ]);
-class b {
-  constructor(e, t, i, s, n, r) {
+class S {
+  constructor(e, t, i, n, s, r) {
     if (!e) throw new Error("invalid nodeid");
     (this.id = e),
       (this.index = t),
       (this.topic = i),
-      (this.isroot = s),
-      (this.parent = n),
+      (this.isroot = n),
+      (this.parent = s),
       (this.direction = r),
       (this.children = []),
-      (this.viewData = new Q()),
-      n
-        ? n && n.color
-          ? (this.color = n.color)
-          : (this.color = ee.take())
+      (this.viewData = new J()),
+      s
+        ? s && s.color
+          ? (this.color = s.color)
+          : (this.color = te.take())
         : (this.color = null);
   }
   static compare(e, t) {
     let i;
-    const s = e.index,
-      n = t.index;
+    const n = e.index,
+      s = t.index;
     return (
-      s >= 0 && n >= 0
-        ? (i = s - n)
-        : s === -1 && n === -1
+      n >= 0 && s >= 0
+        ? (i = n - s)
+        : n === -1 && s === -1
           ? (i = 0)
-          : s === -1
+          : n === -1
             ? (i = 1)
-            : n === -1
+            : s === -1
               ? (i = -1)
               : (i = 0),
       i
@@ -128,8 +156,8 @@ class b {
     if (e && t) {
       if (e.id === t.id || e.isroot) return !0;
       const i = e.id;
-      let s = t;
-      for (; !s.isroot; ) if (((s = s.parent), s.id === i)) return !0;
+      let n = t;
+      for (; !n.isroot; ) if (((n = n.parent), n.id === i)) return !0;
     }
     return !1;
   }
@@ -152,7 +180,7 @@ class b {
       this.children[t].applyColor(e);
   }
 }
-class P {
+class _ {
   constructor() {
     (this.root = null), (this.selected = null), (this.nodes = {});
   }
@@ -162,42 +190,41 @@ class P {
   }
   setRoot(e, t) {
     if (this.root != null) throw new Error("root node is already exist");
-    (this.root = new b(e, 0, t, !0, null, u.CENTER)), this.putNode(this.root);
+    (this.root = new S(e, 0, t, !0, null, u.CENTER)), this.putNode(this.root);
   }
-  addNode(e, t, i, s, n) {
-    const r = s || -1;
-    let h;
+  addNode(e, t, i, n, s) {
+    const r = n || -1;
+    let d;
     if (e.isroot) {
       let l;
-      if (n == null) {
-        const a = e.children,
-          d = a.length;
+      if (s == null) {
+        const h = e.children,
+          a = h.length;
         let c = 0;
-        for (let w = 0; w < d; w++) a[w].direction === u.LEFT ? c-- : c++;
-        l = d > 1 && c > 0 ? u.LEFT : u.RIGHT;
-      } else l = n === u.LEFT ? u.LEFT : u.RIGHT;
-      h = new b(t, r, i, !1, e, l);
-    } else h = new b(t, r, i, !1, e, e.direction);
-    return this.putNode(h), e.children.push(h), this.reindex(e), h;
+        for (let m = 0; m < a; m++) h[m].direction === u.LEFT ? c-- : c++;
+        l = a > 1 && c > 0 ? u.LEFT : u.RIGHT;
+      } else l = s === u.LEFT ? u.LEFT : u.RIGHT;
+      d = new S(t, r, i, !1, e, l);
+    } else d = new S(t, r, i, !1, e, e.direction);
+    return this.putNode(d), e.children.push(d), this.reindex(e), d;
   }
   getNodeBefore(e) {
     if (e.isroot) return null;
     const t = e.index - 2;
     return t >= 0 ? e.parent.children[t] : null;
   }
-  // add little brother node.
   insertNodeAfter(e, t, i) {
-    const s = e.index + 0.5;
-    return this.addNode(e.parent, t, i, s, e.direction);
+    const n = e.index + 0.5;
+    return this.addNode(e.parent, t, i, n, e.direction);
   }
   getNodeAfter(e) {
     if (e.isroot) return null;
     const t = e.index;
     return e.parent.children.length >= t ? e.parent.children[t] : null;
   }
-  moveNode(e, t, i, s) {
-    console.log(`move_node: ${e} ${t} ${i.id} ${s}`),
-      this.doMoveNode(e, t, i, s),
+  moveNode(e, t, i, n) {
+    console.log(`move_node: ${e} ${t} ${i.id} ${n}`),
+      this.doMoveNode(e, t, i, n),
       i.color && e.color != i.color && e.applyColor(i.color);
   }
   flowNodeDirection(e, t) {
@@ -207,7 +234,7 @@ class P {
   }
   moveNodeInternal(e, t) {
     if (e && t)
-      if (t === M) (e.index = -1), this.reindex(e.parent);
+      if (t === R) (e.index = -1), this.reindex(e.parent);
       else if (t === W) (e.index = 0), this.reindex(e.parent);
       else {
         const i = t ? this.getNodeById(t) : null;
@@ -217,9 +244,9 @@ class P {
       }
     return e;
   }
-  doMoveNode(e, t, i, s) {
+  doMoveNode(e, t, i, n) {
     if (
-      (console.log(`_move_node: node=${e}, ${t}, parentid=${i.id}, ${s}`),
+      (console.log(`_move_node: node=${e}, ${t}, parentid=${i.id}, ${n}`),
       e && i.id)
     ) {
       if (
@@ -227,18 +254,18 @@ class P {
         e.parent.id !== i.id)
       ) {
         console.log("_move_node: node.parent.id!==parentid");
-        const n = e.parent.children;
-        let r = n.length;
+        const s = e.parent.children;
+        let r = s.length;
         for (; r--; )
-          if ((console.assert(n[r], "sibling[si] is null"), n[r].id === e.id)) {
-            n.splice(r, 1);
+          if ((console.assert(s[r], "sibling[si] is null"), s[r].id === e.id)) {
+            s.splice(r, 1);
             break;
           }
         (e.parent = this.getNodeById(i.id)), e.parent.children.push(e);
       }
-      e.parent.isroot ? (e.direction = s) : (e.direction = e.parent.direction),
+      e.parent.isroot ? (e.direction = n) : (e.direction = e.parent.direction),
         this.moveNodeInternal(e, t),
-        this.flowNodeDirection(e, s);
+        this.flowNodeDirection(e, n);
     }
   }
   removeNode(e) {
@@ -250,11 +277,11 @@ class P {
     let i = t.length;
     for (; i--; ) this.removeNode(t[i]);
     t.length = 0;
-    const s = e.parent.children;
-    let n = s.length;
-    for (; n--; )
-      if (s[n].id === e.id) {
-        s.splice(n, 1);
+    const n = e.parent.children;
+    let s = n.length;
+    for (; s--; )
+      if (n[s].id === e.id) {
+        n.splice(s, 1);
         break;
       }
     return delete this.nodes[e.id], !0;
@@ -265,7 +292,7 @@ class P {
     this.nodes[e.id] = e;
   }
   reindex(e) {
-    e.children.sort(b.compare);
+    e.children.sort(S.compare);
     for (let t = 0; t < e.children.length; t++) e.children[t].index = t + 1;
   }
 }
@@ -277,7 +304,7 @@ function U(o) {
   }
   return null;
 }
-class x {
+class T {
   constructor(e, t) {
     (this.x = e), (this.y = t);
   }
@@ -287,12 +314,12 @@ function A(o) {
   if (o instanceof TouchEvent) return o.touches[0];
   throw new Error("Unknown event type");
 }
-class te {
-  constructor(e, t, i, s) {
-    (this.node = e), (this.direction = t), (this.sp = i), (this.np = s);
+class ie {
+  constructor(e, t, i, n) {
+    (this.node = e), (this.direction = t), (this.sp = i), (this.np = n);
   }
 }
-class D {
+class L {
   constructor(e) {
     (this.clientHW = 0),
       (this.clientHH = 0),
@@ -300,10 +327,10 @@ class D {
       (this.lookupDelay = 500),
       (this.lookupInterval = 80),
       (this.mindCheese = e),
-      (this.canvasElement = D.createCanvas()),
+      (this.canvasElement = L.createCanvas()),
       this.mindCheese.wrapperView.appendChild(this.canvasElement),
       (this.canvasContext = this.canvasElement.getContext("2d")),
-      (this.shadow = D.createShadow()),
+      (this.shadow = L.createShadow()),
       (this.shadowW = 0),
       (this.shadowH = 0),
       (this.activeNode = null),
@@ -371,59 +398,59 @@ class D {
       this.mindCheese.wrapperView.size.height,
     );
   }
-  canvasLineTo(e, t, i, s) {
+  canvasLineTo(e, t, i, n) {
     this.canvasContext.beginPath(),
       this.canvasContext.moveTo(e, t),
-      this.canvasContext.bezierCurveTo(e + ((i - e) * 2) / 3, t, e, s, i, s),
+      this.canvasContext.bezierCurveTo(e + ((i - e) * 2) / 3, t, e, n, i, n),
       this.canvasContext.stroke();
   }
   doLookupCloseNode() {
     const e = this.mindCheese.mind.root,
       t = e.viewData.elementTopLeft,
       i = e.viewData.elementSizeCache,
-      s = t.x + i.width / 2,
-      n = this.shadowW,
+      n = t.x + i.width / 2,
+      s = this.shadowW,
       r = this.shadowH,
-      h = this.shadow.offsetLeft,
+      d = this.shadow.offsetLeft,
       l = this.shadow.offsetTop,
-      a = h + n / 2 >= s ? u.RIGHT : u.LEFT,
-      d = this.mindCheese.mind.nodes;
+      h = d + s / 2 >= n ? u.RIGHT : u.LEFT,
+      a = this.mindCheese.mind.nodes;
     let c = Number.MAX_VALUE,
-      w = null,
-      C = null,
-      S = null;
-    for (const K in d) {
-      let k, z;
-      const N = d[K];
-      let T = 0;
-      if (N.isroot || N.direction == a) {
+      m = null,
+      y = null,
+      b = null;
+    for (const K in a) {
+      let D, O;
+      const N = a[K];
+      let k = 0;
+      if (N.isroot || N.direction == h) {
         if (N.id == this.activeNode.id) continue;
-        const g = N.viewData.elementSizeCache,
-          m = N.viewData.elementTopLeft;
-        if (a == u.RIGHT) {
-          if (h - m.x - g.width <= 0) continue;
-          (T =
-            Math.abs(h - m.x - g.width) +
-            Math.abs(l + r / 2 - m.y - g.height / 2)),
-            (k = new x(
-              m.x + g.width - this.lineWidth,
-              m.y + (N.isroot ? g.height / 2 : g.height),
+        const v = N.viewData.elementSizeCache,
+          w = N.viewData.elementTopLeft;
+        if (h == u.RIGHT) {
+          if (d - w.x - v.width <= 0) continue;
+          (k =
+            Math.abs(d - w.x - v.width) +
+            Math.abs(l + r / 2 - w.y - v.height / 2)),
+            (D = new T(
+              w.x + v.width - this.lineWidth,
+              w.y + (N.isroot ? v.height / 2 : v.height),
             )),
-            (z = new x(h + this.lineWidth, l + r));
+            (O = new T(d + this.lineWidth, l + r));
         } else {
-          if (m.x - h - n <= 0) continue;
-          (T =
-            Math.abs(h + n - m.x) + Math.abs(l + r / 2 - m.y - g.height / 2)),
-            (k = new x(
-              m.x + this.lineWidth,
-              m.y + (N.isroot ? g.height / 2 : g.height),
+          if (w.x - d - s <= 0) continue;
+          (k =
+            Math.abs(d + s - w.x) + Math.abs(l + r / 2 - w.y - v.height / 2)),
+            (D = new T(
+              w.x + this.lineWidth,
+              w.y + (N.isroot ? v.height / 2 : v.height),
             )),
-            (z = new x(h + n - this.lineWidth, l + r));
+            (O = new T(d + s - this.lineWidth, l + r));
         }
-        T < c && ((w = N), (C = k), (S = z), (c = T));
+        k < c && ((m = N), (y = D), (b = O), (c = k));
       }
     }
-    return w ? new te(w, a, S, C) : null;
+    return m ? new ie(m, h, b, y) : null;
   }
   lookupCloseNode() {
     const e = this.doLookupCloseNode();
@@ -452,9 +479,7 @@ class D {
         { passive: !0 },
       );
     }
-    e.addEventListener("touchmove", this.drag.bind(this), {
-      passive: !0,
-    }),
+    e.addEventListener("touchmove", this.drag.bind(this), { passive: !0 }),
       e.addEventListener("touchend", this.dragend.bind(this), !1);
   }
   dragstart(e) {
@@ -463,11 +488,11 @@ class D {
     const t = this.mindCheese.wrapperView,
       i = U(e.target);
     if (!i) return;
-    const s = t.getBindedNodeId(i);
-    if (s) {
-      const n = this.mindCheese.mind.getNodeById(s);
-      if (!n.isroot) {
-        this.resetShadow(i), (this.activeNode = n);
+    const n = t.getBindedNodeId(i);
+    if (n) {
+      const s = this.mindCheese.mind.getNodeById(n);
+      if (!s.isroot) {
+        this.resetShadow(i), (this.activeNode = s);
         const r = A(e);
         (this.offsetX = r.clientX - i.offsetLeft),
           (this.offsetY = r.clientY - i.offsetTop),
@@ -494,9 +519,9 @@ class D {
         window.getSelection().removeAllRanges();
       const t = A(e),
         i = t.clientX - this.offsetX,
-        s = t.clientY - this.offsetY;
+        n = t.clientY - this.offsetY;
       (this.shadow.style.left = i + "px"),
-        (this.shadow.style.top = s + "px"),
+        (this.shadow.style.top = n + "px"),
         window.getSelection().removeAllRanges();
     }
   }
@@ -526,21 +551,21 @@ class D {
   }
   moveNode(e, t, i) {
     console.log(`Draggable.moveNode: ${e} ${t} ${i}`);
-    const s = this.shadow.offsetTop;
-    if (t && e && !b.inherited(e, t)) {
+    const n = this.shadow.offsetTop;
+    if (t && e && !S.inherited(e, t)) {
       console.log("let's move!");
-      const n = t.children;
+      const s = t.children;
       let r = Number.MAX_VALUE,
-        h = null,
-        l = M;
-      for (let a = n.length - 1; a >= 0; a--) {
-        const d = n[a];
-        if (d.direction === i && d.id !== e.id) {
-          const c = d.viewData.elementTopLeft.y - s;
-          c > 0 && c < r && ((r = c), (h = d), (l = W));
+        d = null,
+        l = R;
+      for (let h = s.length - 1; h >= 0; h--) {
+        const a = s[h];
+        if (a.direction === i && a.id !== e.id) {
+          const c = a.viewData.elementTopLeft.y - n;
+          c > 0 && c < r && ((r = c), (d = a), (l = W));
         }
       }
-      h && (l = h.id),
+      d && (l = d.id),
         console.log(`Calling jm.move_node: ${e.id}, ${l}, ${t.id}, ${i}`),
         this.mindCheese.moveNode(e, l, t, i);
     }
@@ -549,13 +574,10 @@ class D {
       (this.targetDirect = null);
   }
 }
-class ie {
+class ne {
   constructor(e, t = 1e4) {
     (this.mindCheese = e), (this.undoStack = []), (this.undoStackLimit = t);
   }
-  /**
-   * Before every editing graph, call this method.
-   */
   recordSnapshot() {
     this.undoStack.length > this.undoStackLimit &&
       (console.log("UndoManager: callback event. too much stacks."),
@@ -572,27 +594,27 @@ class ie {
     } else console.log("UndoManager: undo. stack is empty.");
   }
 }
-function j(o) {
-  const e = new P();
+function G(o) {
+  const e = new _();
   return se(e, o), e;
 }
 function se(o, e) {
   if ((o.setRoot(e.id, e.topic), "children" in e)) {
     const t = e.children;
-    for (let i = 0; i < t.length; i++) _(o, o.root, t[i]);
+    for (let i = 0; i < t.length; i++) Y(o, o.root, t[i]);
   }
 }
-function _(o, e, t) {
+function Y(o, e, t) {
   let i = null;
   e.isroot && (i = t.direction == "left" ? u.LEFT : u.RIGHT);
-  const s = o.addNode(e, t.id, t.topic, null, i);
+  const n = o.addNode(e, t.id, t.topic, null, i);
   if ("children" in t) {
-    const n = t.children;
-    for (let r = 0; r < n.length; r++) _(o, s, n[r]);
+    const s = t.children;
+    for (let r = 0; r < s.length; r++) Y(o, n, s[r]);
   }
 }
-function R() {
-  return /* @__PURE__ */ (
+function z() {
+  return (
     new Date().getTime().toString(16) + Math.random().toString(16).substring(2)
   ).substring(2, 16);
 }
@@ -604,9 +626,9 @@ class p {
   static addChild(e) {
     const t = e.getSelectedNode();
     if (t) {
-      const i = R(),
-        s = e.addNode(t, i, "New Node");
-      s && (e.selectNode(s), e.checkEditable(), e.wrapperView.editNodeBegin(s));
+      const i = z(),
+        n = e.addNode(t, i, "New Node");
+      n && (e.selectNode(n), e.checkEditable(), e.wrapperView.editNodeBegin(n));
     }
     return !1;
   }
@@ -614,9 +636,9 @@ class p {
     t.preventDefault();
     const i = e.getSelectedNode();
     if (i && !i.isroot) {
-      const s = R(),
-        n = e.insertNodeAfter(i, s, "New Node");
-      n && (e.selectNode(n), e.checkEditable(), e.wrapperView.editNodeBegin(n));
+      const n = z(),
+        s = e.insertNodeAfter(i, n, "New Node");
+      s && (e.selectNode(s), e.checkEditable(), e.wrapperView.editNodeBegin(s));
     }
     return !1;
   }
@@ -637,12 +659,12 @@ class p {
     const i = e.getSelectedNode();
     if (i.isroot) return !1;
     if (i) {
-      let s = e.findNodeBefore(i);
-      if (!s) {
-        const n = e.findNodeBefore(i.parent);
-        n && n.children.length > 0 && (s = n.children[n.children.length - 1]);
+      let n = e.findNodeBefore(i);
+      if (!n) {
+        const s = e.findNodeBefore(i.parent);
+        s && s.children.length > 0 && (n = s.children[s.children.length - 1]);
       }
-      s && e.selectNode(s), t.stopPropagation(), t.preventDefault();
+      n && e.selectNode(n), t.stopPropagation(), t.preventDefault();
     }
     return !1;
   }
@@ -650,12 +672,12 @@ class p {
     const i = e.getSelectedNode();
     if (i.isroot) return !1;
     if (i) {
-      let s = e.findNodeAfter(i);
-      if (!s) {
-        const n = e.findNodeAfter(i.parent);
-        n && n.children.length > 0 && (s = n.children[0]);
+      let n = e.findNodeAfter(i);
+      if (!n) {
+        const s = e.findNodeAfter(i.parent);
+        s && s.children.length > 0 && (n = s.children[0]);
       }
-      s && e.selectNode(s), t.stopPropagation(), t.preventDefault();
+      n && e.selectNode(n), t.stopPropagation(), t.preventDefault();
     }
     return !1;
   }
@@ -666,20 +688,20 @@ class p {
     return p.handleDirection(e, t, u.RIGHT), !1;
   }
   static handleDirection(e, t, i) {
-    let s;
-    const n = e.getSelectedNode();
+    let n;
+    const s = e.getSelectedNode();
     let r = null;
-    if (n) {
-      if (n.isroot) {
-        const h = n.children;
-        s = [];
-        for (let l = 0; l < h.length; l++) h[l].direction === i && s.push(l);
-        r = h[s[Math.floor((s.length - 1) / 2)]];
-      } else if (n.direction === i) {
-        s = n.children;
-        const h = s.length;
-        h > 0 && (r = s[Math.floor((h - 1) / 2)]);
-      } else r = n.parent;
+    if (s) {
+      if (s.isroot) {
+        const d = s.children;
+        n = [];
+        for (let l = 0; l < d.length; l++) d[l].direction === i && n.push(l);
+        r = d[n[Math.floor((n.length - 1) / 2)]];
+      } else if (s.direction === i) {
+        n = s.children;
+        const d = n.length;
+        d > 0 && (r = n[Math.floor((d - 1) / 2)]);
+      } else r = s.parent;
       r && e.selectNode(r), t.stopPropagation(), t.preventDefault();
     }
   }
@@ -693,7 +715,7 @@ class p {
     );
   }
 }
-const G = {
+const q = {
   "&": "&amp;",
   ">": "&gt;",
   "<": "&lt;",
@@ -703,61 +725,56 @@ const G = {
   "{": "&#123;",
   "}": "&#125;",
 };
-function O(o) {
-  return o.replace(/([&><"'`{}])/g, (e, t) => G[t]);
+function M(o) {
+  return o.replace(/([&><"'`{}])/g, (e, t) => q[t]);
 }
-class ne {
+class oe {
   render(e) {
     return e.replace(
       /(\n)|\*\*(.*?)\*\*|\*(.*?)\*|`(.*?)`|([&><"'`{}])|(.)/g,
-      (t, i, s, n, r, h, l) => {
+      (t, i, n, s, r, d, l) => {
         if (i) return "<br>";
-        if (s) return `<b>${O(s)}</b>`;
-        if (n) return `<i>${O(n)}</i>`;
-        if (r) return `<code>${O(r)}</code>`;
-        if (h) return G[h];
+        if (n) return `<b>${M(n)}</b>`;
+        if (s) return `<i>${M(s)}</i>`;
+        if (r) return `<code>${M(r)}</code>`;
+        if (d) return q[d];
         if (l) return l;
       },
     );
   }
 }
-class oe {
+class re {
   constructor() {
     (this.theme = "primary"),
-      (this.view = new re()),
-      (this.layout = new le()),
-      (this.shortcut = new he());
+      (this.view = new le()),
+      (this.layout = new de()),
+      (this.shortcut = new ae());
   }
 }
-class re {
+class le {
   constructor() {
     (this.hmargin = 100),
       (this.vmargin = 50),
       (this.lineWidth = 2),
       (this.lineColor = "#555"),
-      (this.renderer = new ne());
+      (this.renderer = new oe());
   }
 }
-class le {
+class de {
   constructor() {
     (this.hspace = 30), (this.vspace = 20), (this.pspace = 13);
   }
-  // Horizontal spacing between node and connection line (to place node adder)
 }
-class he {
+class ae {
   constructor() {
     (this.enable = !0),
       (this.mappings = [
         [f.NONE, "Delete", p.delete],
-        // windows
         [f.NONE, "Backspace", p.delete],
-        // for Mac
         [f.NONE, "Tab", p.addChild],
         [f.NONE, "Enter", p.addBrother],
         [f.CTRL, "Enter", p.editNode],
-        // windows
         [f.META, "Enter", p.editNode],
-        // mac
         [f.SHIFT, "ArrowUp", p.moveUp],
         [f.SHIFT, "ArrowDown", p.moveDown],
         [f.NONE, "ArrowUp", p.up],
@@ -766,80 +783,73 @@ class he {
         [f.NONE, "ArrowRight", p.right],
         [f.CTRL, "KeyZ", p.undo],
         [f.META, "KeyZ", p.undo],
-        // for mac
       ]);
   }
 }
-function de(o) {
-  return Y(o.root, 0);
+function he(o) {
+  return X(o.root, 0);
 }
-function Y(o, e) {
+function X(o, e) {
   let t = "";
   if (o.topic) {
     const i = o.topic.split(`
 `);
-    for (let s = 0; s < i.length; s++) {
-      for (let n = 0; n < e; n++) t += "	";
-      s === 0 ? (t += o.direction == u.LEFT ? "+ " : "- ") : (t += "  "),
-        (t += i[s]),
-        s + 1 < i.length && (t += " \\"),
+    for (let n = 0; n < i.length; n++) {
+      for (let s = 0; s < e; s++) t += "	";
+      n === 0 ? (t += o.direction == u.LEFT ? "+ " : "- ") : (t += "  "),
+        (t += i[n]),
+        n + 1 < i.length && (t += " \\"),
         (t += `
 `);
     }
   }
   if (o.children) {
     const i = o.children;
-    for (let s = 0, n = i.length; s < n; s++) t += Y(i[s], e + 1);
+    for (let n = 0, s = i.length; n < s; n++) t += X(i[n], e + 1);
   }
   return t;
 }
-function ae(o) {
+function ce(o) {
   if (o == null) throw new Error("md should not be null");
   const e = o.split(/\n/);
   let t = "";
-  const i = {
-    id: "root",
-    topic: "DUMMY",
-    children: [],
-  };
-  let s = 0,
-    n = i;
-  const r = {
-    0: i,
-  };
-  let h = !1;
-  for (const a of e)
-    if (a.match(/\S/))
-      if (h) {
-        let d = a;
-        d.match(/ [\\ ]$/)
-          ? ((d = d.replace(/ [\\ ]$/, "")), (h = !0))
-          : (h = !1);
-        for (let c = 0; c < t.length + 2; c++) d = d.replace(/^\s/, "");
-        n.topic +=
+  const i = { id: "root", topic: "DUMMY", children: [] };
+  let n = 0,
+    s = i;
+  const r = { 0: i };
+  let d = !1;
+  for (const h of e)
+    if (h.match(/\S/))
+      if (d) {
+        let a = h;
+        a.match(/ [\\ ]$/)
+          ? ((a = a.replace(/ [\\ ]$/, "")), (d = !0))
+          : (d = !1);
+        for (let c = 0; c < t.length + 2; c++) a = a.replace(/^\s/, "");
+        s.topic +=
           `
-` + d;
+` + a;
       } else {
-        const d = a.match(/^(\s*)([+-])\s*(.*?)$/);
-        if (!d) {
-          console.log(`'${a}' is not a bullet list.`);
+        const a = h.match(/^(\s*)([+-])\s*(.*?)$/);
+        if (!a) {
+          console.log(`'${h}' is not a bullet list.`);
           continue;
         }
-        const c = d[1],
-          w = d[2];
-        let C = d[3];
-        C.match(/ [\\ ]$/)
-          ? ((C = C.replace(/ [\\ ]$/, "")), (h = !0))
-          : (h = !1);
-        const S = {
-          id: ++s,
-          topic: C,
-          direction: w === "+" ? "left" : "right",
+        const c = a[1],
+          m = a[2];
+        let y = a[3];
+        y.match(/ [\\ ]$/)
+          ? ((y = y.replace(/ [\\ ]$/, "")), (d = !0))
+          : (d = !1);
+        const b = {
+          id: ++n,
+          topic: y,
+          direction: m === "+" ? "left" : "right",
           children: [],
         };
-        t.length === c.length || (t.length < c.length && (r[c.length] = n)),
-          r[c.length].children.push(S),
-          (n = S),
+        t.length === c.length || (t.length < c.length && (r[c.length] = s)),
+          r[c.length].children.push(b),
+          (s = b),
           (t = c);
       }
   const l = i.children[0];
@@ -849,11 +859,11 @@ function ae(o) {
     );
   return l;
 }
-function ce(o) {
-  const e = ae(o.replace(/^---$.*^---$/ms, ""));
-  return j(e);
+function ue(o) {
+  const e = ce(o.replace(/^---$.*^---$/ms, ""));
+  return G(e);
 }
-class F {
+class B {
   constructor(e, t) {
     (this.x = e), (this.y = t);
   }
@@ -863,49 +873,40 @@ class E {
     (this.x = e), (this.y = t);
   }
 }
-class y {
+class C {
   constructor(e, t) {
     (this.width = e), (this.height = t);
   }
 }
-class ue {
-  constructor(e, t, i, s) {
+class fe {
+  constructor(e, t, i, n) {
     (this.n = e),
       (this.e = t),
       (this.w = i),
-      (this.s = s),
-      (this.size = new y(this.e + this.w * -1, this.s + this.n * -1)),
+      (this.s = n),
+      (this.size = new C(this.e + this.w * -1, this.s + this.n * -1)),
       console.log(
-        `size: e=${t},w=${i},s=${s},n=${e} w=${this.size.width},h=${this.size.height}`,
+        `size: e=${t},w=${i},s=${n},n=${e} w=${this.size.width},h=${this.size.height}`,
       );
   }
 }
-class B {
+class F {
   constructor(e, t) {
     (this.x = e), (this.y = t);
   }
 }
-class fe extends B {
+class pe extends F {
   convertCenterOfNodeOffsetFromRootNode(e) {
-    return new B(this.x + e.x, this.y + e.y);
+    return new F(this.x + e.x, this.y + e.y);
   }
 }
-class pe {
+class me {
   constructor(e) {
     this._relativeFromRootMap = e;
   }
   getCenterOffsetOfTheNodeFromRootNode(e) {
     return this._relativeFromRootMap[e.id];
   }
-  /**
-   *                  Child
-   *             xxxxx───────
-   * ┌──────┐  xxx   ▲
-   * │ Root │xxx     │
-   * └──────┘        │
-   *                 │
-   *                 │
-   */
   getNodePointIn(e) {
     const t = this.getCenterOffsetOfTheNodeFromRootNode(e);
     return new E(
@@ -913,157 +914,127 @@ class pe {
       t.y + e.viewData.elementSizeCache.height / 2,
     );
   }
-  /**
-   *                                    ┌───────┐
-   *                                    │ Child │
-   *                                 xxx└───────┘
-   *                    ┌───────┐  xxx
-   *                    │ Child │xxx
-   *                xxxx└───────┘▲
-   * ┌───────┐   xxxx            │
-   * │  Root │xxxx               │
-   * └───────┘▲                  │
-   *          │                  │
-   *          │                  │
-   *          │                  │
-   *          │                  │
-   */
   getNodePointOut(e, t) {
     if (e.isroot) {
       const i = (e.viewData.elementSizeCache.width / 2) * t.direction;
       return new E(i, -(e.viewData.elementSizeCache.height / 2));
     } else {
       const i = this.getCenterOffsetOfTheNodeFromRootNode(e),
-        s = i.x + (e.viewData.elementSizeCache.width / 2) * e.direction;
-      return new E(s, i.y + e.viewData.elementSizeCache.height / 2);
+        n = i.x + (e.viewData.elementSizeCache.width / 2) * e.direction;
+      return new E(n, i.y + e.viewData.elementSizeCache.height / 2);
     }
   }
   getAdderPosition(e, t) {
     const i = this.getCenterOffsetOfTheNodeFromRootNode(e),
-      s =
+      n =
         i.x +
         (e.viewData.elementSizeCache.width / 2 + t) * e.direction -
         (e.direction == u.RIGHT ? t : 0),
-      n = i.y + e.viewData.elementSizeCache.height / 2 - Math.ceil(t / 2);
-    return new E(s, n);
+      s = i.y + e.viewData.elementSizeCache.height / 2 - Math.ceil(t / 2);
+    return new E(n, s);
   }
   getTopLeft(e, t) {
     const i = e.viewData.elementSizeCache,
-      s = this.getCenterOffsetOfTheNodeFromRootNode(e);
+      n = this.getCenterOffsetOfTheNodeFromRootNode(e);
     if (e.isroot) {
-      const n = s.x + (i.width / 2) * -1,
-        r = s.y - i.height - t;
-      return new E(n, r);
+      const s = n.x + (i.width / 2) * -1,
+        r = n.y - i.height - t;
+      return new E(s, r);
     } else {
-      const n = s.x + (i.width / 2) * -1,
-        r = s.y - i.height / 2 - t;
-      return new E(n, r);
+      const s = n.x + (i.width / 2) * -1,
+        r = n.y - i.height / 2 - t;
+      return new E(s, r);
     }
   }
   getBounds(e) {
     const t = e.nodes;
     let i = 0,
-      s = 0,
       n = 0,
+      s = 0,
       r = 0;
-    for (const h in t) {
-      const l = t[h],
-        a = this.getCenterOffsetOfTheNodeFromRootNode(l);
-      console.log(`getMinSize: id=${l.id}, x=${a.x}, y=${a.y}`);
-      const d = l.viewData.elementSizeCache;
-      (s = Math.max(a.x + d.width / 2, s)),
-        (n = Math.min(a.x - d.width / 2, n)),
-        (i = Math.min(a.y - d.height / 2, i)),
-        (r = Math.max(a.y + d.height / 2, r));
+    for (const d in t) {
+      const l = t[d],
+        h = this.getCenterOffsetOfTheNodeFromRootNode(l);
+      console.log(`getMinSize: id=${l.id}, x=${h.x}, y=${h.y}`);
+      const a = l.viewData.elementSizeCache;
+      (n = Math.max(h.x + a.width / 2, n)),
+        (s = Math.min(h.x - a.width / 2, s)),
+        (i = Math.min(h.y - a.height / 2, i)),
+        (r = Math.max(h.y + a.height / 2, r));
     }
     return (
-      console.log(`getMinSize: n=${i}, e=${s}, w=${n}, s=${r}`),
-      new ue(i, s, n, r)
+      console.log(`getMinSize: n=${i}, e=${n}, w=${s}, s=${r}`),
+      new fe(i, n, s, r)
     );
   }
-  // get the center point offset
   getOffsetOfTheRootNode(e) {
     const t = this.getBounds(e);
     console.log(`getViewOffset: e=${t.e}, w=${t.w}`);
     const i = -t.w + e.root.viewData.elementSizeCache.width / 2,
-      s = -t.n + e.root.viewData.elementSizeCache.height / 2;
-    return new fe(i, s);
+      n = -t.n + e.root.viewData.elementSizeCache.height / 2;
+    return new pe(i, n);
   }
 }
-class V {
-  /**
-   * The constructor
-   *
-   * @param hspace horizontal spacing between nodes
-   * @param vspace vertical spacing between nodes
-   * @param pspace Horizontal spacing between node and connection line (to place node adder)
-   */
+class I {
   constructor(e, t, i) {
     (this.hSpace = e), (this.vSpace = t), (this.pSpace = i);
   }
   layout(e) {
     const t = e.root,
       i = {};
-    (i[e.root.id] = new F(0, 0)),
+    (i[e.root.id] = new B(0, 0)),
       this.layoutOffsetSubNodes(
-        t.children.filter((n) => n.direction == u.LEFT),
+        t.children.filter((s) => s.direction == u.LEFT),
         i,
       ),
       this.layoutOffsetSubNodes(
-        t.children.filter((n) => n.direction == u.RIGHT),
+        t.children.filter((s) => s.direction == u.RIGHT),
         i,
       );
-    const s = {};
-    for (const n of Object.values(e.nodes))
-      s[n.id] = V.calcRelativeOffsetFromRoot(n, i);
-    return new pe(s);
+    const n = {};
+    for (const s of Object.values(e.nodes))
+      n[s.id] = I.calcRelativeOffsetFromRoot(s, i);
+    return new me(n);
   }
   static calcRelativeOffsetFromRoot(e, t) {
     let i = 0,
-      s = 0,
-      n = e;
-    do (i += t[n.id].x), (s += t[n.id].y), (n = n.parent);
-    while (n && !n.isroot);
-    return new E(i, s);
+      n = 0,
+      s = e;
+    do (i += t[s.id].x), (n += t[s.id].y), (s = s.parent);
+    while (s && !s.isroot);
+    return new E(i, n);
   }
-  // layout both the x and y axis
   layoutOffsetSubNodes(e, t) {
-    var s;
+    var n;
     if (e.length == 0) return 0;
     let i = 0;
     {
-      let n = 0;
-      for (let r = 0, h = e.length; r < h; r++) {
+      let s = 0;
+      for (let r = 0, d = e.length; r < d; r++) {
         const l = e[r],
-          a = this.layoutOffsetSubNodes(l.children, t),
-          d = Math.max(l.viewData.elementSizeCache.height, a),
+          h = this.layoutOffsetSubNodes(l.children, t),
+          a = Math.max(l.viewData.elementSizeCache.height, h),
           c =
             this.hSpace * l.direction +
             (l.parent.viewData.elementSizeCache.width / 2) * l.direction +
             this.hSpace * l.direction +
             (l.viewData.elementSizeCache.width / 2) * l.direction +
-            ((s = l.parent) != null && s.isroot
+            ((n = l.parent) != null && n.isroot
               ? 0
               : this.pSpace * l.direction),
-          w = n + d / 2;
-        (t[l.id] = new F(c, w)), (n += d + this.vSpace), (i += d);
+          m = s + a / 2;
+        (t[l.id] = new B(c, m)), (s += a + this.vSpace), (i += a);
       }
     }
     e.length > 1 && (i += this.vSpace * (e.length - 1));
     {
-      const n = i / 2;
-      for (let r = 0, h = e.length; r < h; r++) t[e[r].id].y -= n;
+      const s = i / 2;
+      for (let r = 0, d = e.length; r < d; r++) t[e[r].id].y -= s;
     }
     return i;
   }
 }
-class H {
-  /**
-   * Create new instance of GraphCanvas.
-   *
-   * @param lineColor color of lines. CSS compatible colors are ok. e.g. "#ffffff"
-   * @param lineWidth Pixel of line width.
-   */
+class j {
   constructor(e, t) {
     (this.lineColor = e),
       (this.lineWidth = t),
@@ -1085,27 +1056,27 @@ class H {
       this.canvasElement.height,
     );
   }
-  drawLine(e, t, i, s) {
-    const n = this.canvasContext;
-    (n.strokeStyle = i),
-      (n.lineWidth = this.lineWidth),
-      (n.lineCap = s),
-      H.bezierTo(n, t.x, t.y, e.x, e.y);
+  drawLine(e, t, i, n) {
+    const s = this.canvasContext;
+    (s.strokeStyle = i),
+      (s.lineWidth = this.lineWidth),
+      (s.lineCap = n),
+      j.bezierTo(s, t.x, t.y, e.x, e.y);
   }
-  static bezierTo(e, t, i, s, n) {
+  static bezierTo(e, t, i, n, s) {
     e.beginPath(),
       e.moveTo(t, i),
-      e.bezierCurveTo(t + ((s - t) * 2) / 3, i, t, n, s, n),
+      e.bezierCurveTo(t + ((n - t) * 2) / 3, i, t, s, n, s),
       e.stroke();
   }
 }
-class L {
-  constructor(e, t, i, s, n) {
+class x {
+  constructor(e, t, i, n, s) {
     (this.wrapperView = e),
       (this.mindCheese = t),
       (this.textFormatter = i),
-      (this.lineWidth = s),
-      (this.pSpace = n),
+      (this.lineWidth = n),
+      (this.pSpace = s),
       (this.mcnodes = document.createElement("mcnodes")),
       this.bindEvent();
   }
@@ -1114,14 +1085,14 @@ class L {
       const t = e.target;
       if (
         (console.debug(
-          `keydown=${e.keyCode}==${I} tagName=${t.tagName} shiftkey=${e.shiftKey}`,
+          `keydown=${e.keyCode}==${$} tagName=${t.tagName} shiftkey=${e.shiftKey}`,
         ),
         t.tagName != "MCNODE")
       ) {
         console.log(`It's not MCNODE. ${t.tagName}`);
         return;
       }
-      ((e.keyCode === I && !e.shiftKey) || e.keyCode == Z) &&
+      ((e.keyCode === $ && !e.shiftKey) || e.keyCode == Z) &&
         (console.log("editNodeEnd"),
         e.stopPropagation(),
         e.preventDefault(),
@@ -1153,8 +1124,8 @@ class L {
       i = this.wrapperView.getBindedNodeId(t);
     if (i) {
       if (U(t)) {
-        const s = this.mindCheese.mind.getNodeById(i);
-        return this.mindCheese.selectNode(s);
+        const n = this.mindCheese.mind.getNodeById(i);
+        return this.mindCheese.selectNode(n);
       }
     } else this.mindCheese.selectClear();
   }
@@ -1164,11 +1135,11 @@ class L {
       case "mcadder": {
         const i = this.wrapperView.getBindedNodeId(t);
         if (i) {
-          const s = this.mindCheese.mind.getNodeById(i);
-          if (s) {
+          const n = this.mindCheese.mind.getNodeById(i);
+          if (n) {
             console.log(`element: ${t.tagName.toLowerCase()}`);
-            const n = R(),
-              r = this.mindCheese.addNode(s, n, "New Node");
+            const s = z(),
+              r = this.mindCheese.addNode(n, s, "New Node");
             r &&
               (this.mindCheese.selectNode(r),
               this.checkEditable(),
@@ -1185,10 +1156,10 @@ class L {
     const t = e.target,
       i = this.wrapperView.getBindedNodeId(t);
     if (i) {
-      const s = this.mindCheese.mind.getNodeById(i);
-      if (s.viewData.element.contentEditable == "true") return !1;
-      if (!s) throw new Error(`the node[id=${i}] can not be found.`);
-      return this.wrapperView.editNodeBegin(s), !1;
+      const n = this.mindCheese.mind.getNodeById(i);
+      if (n.viewData.element.contentEditable == "true") return !1;
+      if (!n) throw new Error(`the node[id=${i}] can not be found.`);
+      return this.wrapperView.editNodeBegin(n), !1;
     }
     return !0;
   }
@@ -1208,22 +1179,22 @@ class L {
     this.mcnodes.appendChild(t);
   }
   addNode(e) {
-    this.createNodeElement(e, this.mcnodes), L.initNodeSize(e);
+    this.createNodeElement(e, this.mcnodes), x.initNodeSize(e);
   }
   static initNodeSize(e) {
     const t = e.viewData;
-    t.elementSizeCache = new y(t.element.clientWidth, t.element.clientHeight);
+    t.elementSizeCache = new C(t.element.clientWidth, t.element.clientHeight);
   }
   createNodeElement(e, t) {
     const i = document.createElement("mcnode");
     if (e.isroot) i.className = "root";
     else {
-      const s = document.createElement("mcadder");
-      (s.innerText = "-"),
-        s.setAttribute("nodeid", e.id),
-        (s.style.visibility = "hidden"),
-        t.appendChild(s),
-        (e.viewData.adder = s);
+      const n = document.createElement("mcadder");
+      (n.innerText = "-"),
+        n.setAttribute("nodeid", e.id),
+        (n.style.visibility = "hidden"),
+        t.appendChild(n),
+        (e.viewData.adder = n);
     }
     e.topic && (i.innerHTML = this.textFormatter.render(e.topic)),
       i.setAttribute("nodeid", e.id),
@@ -1233,7 +1204,7 @@ class L {
   }
   cacheNodeSize() {
     const e = this.mindCheese.mind.nodes;
-    for (const t of Object.values(e)) L.initNodeSize(t);
+    for (const t of Object.values(e)) x.initNodeSize(t);
   }
   clearNodes() {
     const e = this.mindCheese.mind.nodes;
@@ -1252,32 +1223,31 @@ class L {
   appendChild(e) {
     this.mcnodes.appendChild(e);
   }
-  // TODO move to NodesView
   renderNodes(e) {
     const t = this.mindCheese.mind.nodes,
       i = e.getOffsetOfTheRootNode(this.mindCheese.mind);
-    for (const s of Object.values(t)) {
-      const n = s.viewData,
-        r = n.element,
-        h = e.getTopLeft(s, this.lineWidth);
+    for (const n of Object.values(t)) {
+      const s = n.viewData,
+        r = s.element,
+        d = e.getTopLeft(n, this.lineWidth);
       if (
-        ((n.elementTopLeft = i.convertCenterOfNodeOffsetFromRootNode(h)),
-        (r.style.left = n.elementTopLeft.x + "px"),
-        (r.style.top = n.elementTopLeft.y + "px"),
+        ((s.elementTopLeft = i.convertCenterOfNodeOffsetFromRootNode(d)),
+        (r.style.left = s.elementTopLeft.x + "px"),
+        (r.style.top = s.elementTopLeft.y + "px"),
         (r.style.display = ""),
         (r.style.visibility = "visible"),
-        !s.isroot && s.children.length == 0)
+        !n.isroot && n.children.length == 0)
       ) {
-        const l = n.adder,
-          a = "+",
-          d = i.convertCenterOfNodeOffsetFromRootNode(
-            e.getAdderPosition(s, this.pSpace),
+        const l = s.adder,
+          h = "+",
+          a = i.convertCenterOfNodeOffsetFromRootNode(
+            e.getAdderPosition(n, this.pSpace),
           );
-        (l.style.left = d.x + "px"),
-          (l.style.top = d.y + "px"),
+        (l.style.left = a.x + "px"),
+          (l.style.top = a.y + "px"),
           (l.style.display = ""),
           (l.style.visibility = "visible"),
-          (l.innerText = a);
+          (l.innerText = h);
       }
     }
   }
@@ -1287,32 +1257,32 @@ class we {
     (this.x = e), (this.y = t);
   }
 }
-class me {
+class ge {
   constructor(e) {
     (this.graphCanvas = e), (this.lineWidth = this.graphCanvas.lineWidth);
   }
   renderLines(e, t, i) {
     this.graphCanvas.clear();
-    for (const s of Object.values(e.nodes).filter((n) => !n.isroot)) {
-      const n = t.getNodePointIn(s);
+    for (const n of Object.values(e.nodes).filter((s) => !s.isroot)) {
+      const s = t.getNodePointIn(n);
       {
-        const r = t.getNodePointOut(s.parent, s);
+        const r = t.getNodePointOut(n.parent, n);
         this.graphCanvas.drawLine(
           i.convertCenterOfNodeOffsetFromRootNode(r),
-          i.convertCenterOfNodeOffsetFromRootNode(n),
-          s.color,
+          i.convertCenterOfNodeOffsetFromRootNode(s),
+          n.color,
           "round",
         );
       }
       {
         const r = new E(
-          n.x + s.viewData.elementSizeCache.width * s.direction,
-          n.y,
+          s.x + n.viewData.elementSizeCache.width * n.direction,
+          s.y,
         );
         this.graphCanvas.drawLine(
           i.convertCenterOfNodeOffsetFromRootNode(r),
-          i.convertCenterOfNodeOffsetFromRootNode(n),
-          s.color,
+          i.convertCenterOfNodeOffsetFromRootNode(s),
+          n.color,
           "butt",
         );
       }
@@ -1325,23 +1295,23 @@ class me {
     this.graphCanvas.clear();
   }
 }
-class $ {
-  constructor(e, t, i, s, n, r, h, l) {
+class H {
+  constructor(e, t, i, n, s, r, d, l) {
     (this.zoomScale = 1),
       (this.layoutResult = null),
       (this.mindCheese = e),
-      (this.textFormatter = n),
+      (this.textFormatter = s),
       (this.layoutEngine = r),
-      (this.pSpace = h),
-      (this.graphView = new me(s)),
-      (this.nodesView = new L(this, this.mindCheese, n, l, this.pSpace)),
-      (this.size = new y(0, 0)),
+      (this.pSpace = d),
+      (this.graphView = new ge(n)),
+      (this.nodesView = new x(this, this.mindCheese, s, l, this.pSpace)),
+      (this.size = new C(0, 0)),
       (this.hMargin = t),
       (this.vMargin = i),
       (this.mindCheese = e),
       (this.wrapperElement = document.createElement("div")),
       (this.wrapperElement.className = "mindcheese-inner"),
-      this.wrapperElement.appendChild(s.element()),
+      this.wrapperElement.appendChild(n.element()),
       this.nodesView.attach(this.wrapperElement),
       (this.selectedNode = null),
       (this.editingNode = null),
@@ -1362,13 +1332,13 @@ class $ {
   }
   getCanvasSize(e, t) {
     const i = e.getBounds(t).size,
-      s = i.width + this.hMargin * 2,
-      n = i.height + this.vMargin * 2,
+      n = i.width + this.hMargin * 2,
+      s = i.height + this.vMargin * 2,
       r = this.wrapperElement.clientWidth,
-      h = this.wrapperElement.clientHeight;
+      d = this.wrapperElement.clientHeight;
     return (
-      console.log(`expandSize: ${h} ${n}`),
-      new y(Math.max(r, s), Math.max(h, n))
+      console.log(`expandSize: ${d} ${s}`),
+      new C(Math.max(r, n), Math.max(d, s))
     );
   }
   attach(e) {
@@ -1379,7 +1349,6 @@ class $ {
       ? (this.wrapperElement.className = "theme-" + e)
       : (this.wrapperElement.className = "");
   }
-  // Display root position at center of container element.
   centerRoot() {
     const e = this.wrapperElement.clientWidth,
       t = this.wrapperElement.clientHeight;
@@ -1429,9 +1398,8 @@ class $ {
       e &&
         ((this.selectedNode = e),
         e.viewData.element.classList.add("selected"),
-        $.adjustScrollBar(e));
+        H.adjustScrollBar(e));
   }
-  // Adjust the scroll bar. show node in the browser.
   static adjustScrollBar(e) {
     const t = e.viewData.element;
     t.getBoundingClientRect().bottom > window.innerHeight &&
@@ -1467,12 +1435,12 @@ class $ {
     const t = e.viewData.element;
     (t.contentEditable = "true"),
       (t.innerText = e.topic),
-      (e.viewData.elementSizeCache = new y(t.clientWidth, t.clientHeight));
-    function i(s) {
-      const n = document.createRange();
-      n.selectNodeContents(s);
+      (e.viewData.elementSizeCache = new C(t.clientWidth, t.clientHeight));
+    function i(n) {
+      const s = document.createRange();
+      s.selectNodeContents(n);
       const r = window.getSelection();
-      r.removeAllRanges(), r.addRange(n);
+      r.removeAllRanges(), r.addRange(s);
     }
     i(t), t.focus(), this.renderAgain();
   }
@@ -1489,7 +1457,7 @@ class $ {
     const t = e.viewData,
       i = t.element;
     e.topic && (i.innerHTML = this.textFormatter.render(e.topic)),
-      (t.elementSizeCache = new y(i.clientWidth, i.clientHeight));
+      (t.elementSizeCache = new C(i.clientWidth, i.clientHeight));
   }
   editNodeEnd() {
     if (
@@ -1504,7 +1472,7 @@ class $ {
       !i || i.replace(/\s*/, "").length == 0 || e.topic === i
         ? (console.debug("Calling updateNode"),
           (t.innerHTML = this.textFormatter.render(e.topic)),
-          (e.viewData.elementSizeCache = new y(t.clientWidth, t.clientHeight)),
+          (e.viewData.elementSizeCache = new C(t.clientWidth, t.clientHeight)),
           this.renderAgain())
         : (console.debug("Calling updateNode"),
           this.mindCheese.updateNode(e.id, i));
@@ -1515,7 +1483,6 @@ class $ {
       this.nodesView.resetSize(),
       this.renderAgain();
   }
-  // TODO pull this method to MindCheese?
   renderAgain() {
     (this.layoutResult = this.layoutEngine.layout(this.mindCheese.mind)),
       (this.size = this.getCanvasSize(this.layoutResult, this.mindCheese.mind)),
@@ -1528,7 +1495,7 @@ class $ {
     this.graphView.renderLines(this.mindCheese.mind, this.layoutResult, e);
   }
 }
-class ge {
+class ve {
   constructor() {
     this.eventHandlersMap = { 1: [] };
   }
@@ -1537,32 +1504,32 @@ class ge {
   }
   invokeEventHandler(e, t) {
     const i = this.eventHandlersMap[e].length;
-    for (let s = 0; s < i; s++) this.eventHandlersMap[e][s](t);
+    for (let n = 0; n < i; n++) this.eventHandlersMap[e][n](t);
   }
 }
-class X {
-  constructor(e, t = new oe()) {
+class V {
+  constructor(e, t = new re()) {
     if (!e) throw new Error("container shouldn't be null!");
     (this.container = e),
       (this.options = t),
-      (this.mind = new P()),
+      (this.mind = new _()),
       (this.editable = !0),
-      (this.eventRouter = new ge());
-    const i = new H(t.view.lineColor, t.view.lineWidth),
-      s = new V(t.layout.hspace, t.layout.vspace, t.layout.pspace);
-    (this.wrapperView = new $(
+      (this.eventRouter = new ve());
+    const i = new j(t.view.lineColor, t.view.lineWidth),
+      n = new I(t.layout.hspace, t.layout.vspace, t.layout.pspace);
+    (this.wrapperView = new H(
       this,
       t.view.hmargin,
       t.view.vmargin,
       i,
       t.view.renderer,
-      s,
+      n,
       t.layout.pspace,
       t.view.lineWidth,
     )),
-      (this.shortcut = new q(this, t.shortcut.enable, t.shortcut.mappings)),
-      (this.draggable = new D(this)),
-      (this.undoManager = new ie(this)),
+      (this.shortcut = new Q(this, t.shortcut.enable, t.shortcut.mappings)),
+      (this.draggable = new L(this)),
+      (this.undoManager = new ne(this)),
       this.wrapperView.attach(this.container),
       this.draggable.eventBind(this.container),
       this.shortcut.bindKeyEvents(),
@@ -1599,15 +1566,14 @@ class X {
       this.wrapperView.renderAgain(),
       this.wrapperView.centerRoot();
   }
-  // nodeTree = object representation of the mindmap.
   showNodeTree(e) {
-    this.showMind(j(e));
+    this.showMind(G(e));
   }
   showMarkdown(e) {
-    this.showMind(ce(e));
+    this.showMind(ue(e));
   }
   getMarkdown() {
-    return de(this.mind);
+    return he(this.mind);
   }
   getNodeTree() {
     return this.mind.root.toObject();
@@ -1616,23 +1582,23 @@ class X {
     this.checkEditable(),
       this.undoManager.recordSnapshot(),
       (e.viewData.adder.style.display = "none");
-    const s = this.mind.addNode(e, t, i, null, null);
+    const n = this.mind.addNode(e, t, i, null, null);
     return (
-      s &&
-        (this.wrapperView.nodesView.addNode(s),
+      n &&
+        (this.wrapperView.nodesView.addNode(n),
         this.wrapperView.renderAgain(),
-        this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind)),
-      s
+        this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind)),
+      n
     );
   }
   insertNodeAfter(e, t, i) {
     this.checkEditable(), this.undoManager.recordSnapshot();
-    const s = this.mind.insertNodeAfter(e, t, i);
+    const n = this.mind.insertNodeAfter(e, t, i);
     return (
-      this.wrapperView.nodesView.addNode(s),
+      this.wrapperView.nodesView.addNode(n),
       this.wrapperView.renderAgain(),
-      this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind),
-      s
+      this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind),
+      n
     );
   }
   removeNode(e) {
@@ -1641,26 +1607,25 @@ class X {
     const t = e.id,
       i = e.parent;
     this.undoManager.recordSnapshot();
-    const s = X.findUpperBrotherOrParentNode(i, t),
-      n = this.wrapperView.saveScroll(e);
+    const n = V.findUpperBrotherOrParentNode(i, t),
+      s = this.wrapperView.saveScroll(e);
     return (
       this.wrapperView.removeNode(e),
       this.mind.removeNode(e),
       this.wrapperView.renderAgain(),
       i.children.length > 0 &&
-        ((this.mind.selected = s), this.wrapperView.selectNode(s)),
-      this.wrapperView.restoreScroll(i, n),
-      this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind),
+        ((this.mind.selected = n), this.wrapperView.selectNode(n)),
+      this.wrapperView.restoreScroll(i, s),
+      this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind),
       !0
     );
   }
   static findUpperBrotherOrParentNode(e, t) {
     const i = e.children;
-    for (let s = 0; s < i.length; s++)
-      if (i[s].id == t) return s == 0 ? e : i[s - 1];
+    for (let n = 0; n < i.length; n++)
+      if (i[n].id == t) return n == 0 ? e : i[n - 1];
     return e;
   }
-  // set topic to the node
   updateNode(e, t) {
     if ((this.checkEditable(), !t || t.replace(/\s*/, "").length == 0))
       throw new Error("fail, topic can not be empty");
@@ -1672,22 +1637,16 @@ class X {
     (i.topic = t),
       this.wrapperView.updateNode(i),
       this.wrapperView.renderAgain(),
-      this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind);
+      this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind);
   }
-  /**
-   * @param node Target node to move.
-   * @param beforeid Move nodeid's node to above of the *beforeid*. You can use BEFOREID_* constants.
-   * @param parent
-   * @param direction
-   */
-  moveNode(e, t, i, s) {
-    console.log(`jm.move_node: ${e.id} ${t} ${i.id} ${s}`),
+  moveNode(e, t, i, n) {
+    console.log(`jm.move_node: ${e.id} ${t} ${i.id} ${n}`),
       this.checkEditable(),
       this.undoManager.recordSnapshot(),
-      this.mind.moveNode(e, t, i, s),
+      this.mind.moveNode(e, t, i, n),
       this.wrapperView.updateNode(e),
       this.wrapperView.renderAgain(),
-      this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind);
+      this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind);
   }
   selectNode(e) {
     (this.mind.selected = e), this.wrapperView.selectNode(e);
@@ -1703,8 +1662,8 @@ class X {
     if (e.parent.isroot) {
       const t = e.parent.children.filter((i) => i.direction === e.direction);
       for (let i = 0; i < t.length; i++) {
-        const s = t[i];
-        if (e.id === s.id) return i !== 0 ? t[i - 1] : null;
+        const n = t[i];
+        if (e.id === n.id) return i !== 0 ? t[i - 1] : null;
       }
       throw new Error(`Missing the node in parent: ${e.id}`);
     } else return this.mind.getNodeBefore(e);
@@ -1714,8 +1673,8 @@ class X {
     if (e.parent.isroot) {
       const t = e.parent.children.filter((i) => i.direction == e.direction);
       for (let i = 0; i < t.length; i++) {
-        const s = t[i];
-        if (e.id === s.id) return i + 1 < t.length ? t[i + 1] : null;
+        const n = t[i];
+        if (e.id === n.id) return i + 1 < t.length ? t[i + 1] : null;
       }
       throw new Error(
         `Illegal state. The parent node doesn't have this child: ${e.id}`,
@@ -1732,7 +1691,7 @@ class X {
     const t = this.findNodeBefore(e);
     t &&
       (this.moveNode(e, t.id, e.parent, e.direction),
-      this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind));
+      this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind));
   }
   moveDown(e) {
     const t = e.parent.children.filter((i) => i.direction === e.direction);
@@ -1740,18 +1699,202 @@ class X {
       if (t[i].id == e.id) {
         if (i === t.length - 1) return;
         if (i === t.length - 2) {
-          this.moveNode(e, M, e.parent, e.direction),
-            this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind);
+          this.moveNode(e, R, e.parent, e.direction),
+            this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind);
           return;
         } else {
           console.debug(
             `MindCheese.moveDown: topic=${e.topic} before.topic=${t[i + 1].topic} direction=${e.direction}`,
           ),
             this.moveNode(e, t[i + 2].id, e.parent, e.direction),
-            this.eventRouter.invokeEventHandler(v.AfterEdit, this.mind);
+            this.eventRouter.invokeEventHandler(g.AfterEdit, this.mind);
           return;
         }
       }
   }
 }
-export { X as MindCheese };
+const Ne = {
+    id: "root",
+    topic: "mindCheese 🧀",
+    children: [
+      {
+        id: "easy",
+        topic: "Easy",
+        direction: "left",
+        children: [
+          { id: "easy1", topic: "Easy to show" },
+          { id: "easy2", topic: "Easy to edit" },
+          { id: "easy3", topic: "Easy to store" },
+          { id: "easy4", topic: "Easy to embed" },
+        ],
+      },
+      {
+        id: "open",
+        topic: "Open Source",
+        direction: "right",
+        children: [
+          { id: "open1", topic: "on GitHub" },
+          { id: "open2", topic: "BSD License" },
+        ],
+      },
+      {
+        id: "powerful",
+        topic: "Powerful",
+        direction: "right",
+        children: [
+          { id: "powerful1", topic: "Base on **TypeScript**" },
+          {
+            id: "powerful2",
+            topic: "Base on **jsMind**",
+            children: [
+              { id: "jsMind1", topic: "Base on HTML5" },
+              { id: "jsMind2", topic: "Supported CJK chars" },
+            ],
+          },
+          { id: "powerful4", topic: "Depends on you" },
+        ],
+      },
+      {
+        id: "other",
+        topic: "test node",
+        direction: "left",
+        children: [
+          { id: "other1", topic: "I'm from local variable" },
+          { id: "other2", topic: "I can do everything: `3*2`" },
+          {
+            id: "other3",
+            topic: `Multi line
+Multi line
+Multi line
+Multi line
+Multi line
+Multi line
+Multi line
+Multi line
+Multi line`,
+            children: [
+              { id: "hello1", topic: "こんにちは" },
+              { id: "hello2", topic: "Hello" },
+              { id: "hello3", topic: "Здравствуйте" },
+            ],
+          },
+          {
+            id: "other4",
+            topic:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget mauris pharetra et ultrices neque ornare aenean euismod elementum. Tempus egestas sed sed risus. Lacus vel facilisis volutpat est velit egestas. Odio aenean sed adipiscing diam donec adipiscing tristique risus. Eu ultrices vitae auctor eu augue ut lectus. Nulla pharetra diam sit amet. Integer quis auctor elit sed vulputate mi sit amet. Interdum varius sit amet mattis vulputate enim nulla aliquet. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Sed euismod nisi porta lorem. Suspendisse potenti nullam ac tortor. Curabitur gravida arcu ac tortor.",
+          },
+        ],
+      },
+    ],
+  },
+  Ee = `- マークダウンのテスト
+  - a1
+    - b1
+        - dddddddddddddddddddd1
+          - eeeeeeeeeeeeeeeeeeeeee2
+            - ffffffffffffffffffffff3
+              - gggggggggggggggggggggggggg3
+                - hhhhhhhhhhhhhhhhhhhhhh2
+                  - iiiiiiiiiiiiii52iiiiiiiiiii
+                    - jjjjjjjjjjjjjj25jjjjjjjjjjjj
+                      - kkkkkkkkk2342kkkkkkkkkkkkkkkkk2
+                        - lllllllllll52llllllllllllllllllll
+    - b2
+    - b3
+      - c1
+      - c2
+        - dddddddddddddddddddd
+          - eeeeeeeeeeeeeeeeeeeeee
+            - ffffffffffffffffffffff
+              - gggggggggggggggggggggggggg
+                - hhhhhhhhhhhhhhhhhhhhhh
+                  - iiiiiiiiiiiiiiiiiiiiiiiii
+                    - jjjjjjjjjjjjjjjjjjjjjjjjjj
+                      - kkkkkkkkkkkkkkkkkkkkkkkkkk
+                        - lllllllllllllllllllllllllllllll
+  + a2 \\
+    複数行だよ
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+  + aaa
+`;
+var ye = {};
+console.log("Loaded browser.ts!111");
+function P(o, e) {
+  const t = document.createElement("a");
+  t.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(e),
+  ),
+    t.setAttribute("download", o),
+    (t.style.display = "none"),
+    document.body.appendChild(t),
+    t.click(),
+    document.body.removeChild(t);
+}
+function Ce() {
+  const o = document.getElementById("container"),
+    e = new V(o);
+  (this.mindCheese = e),
+    e.showNodeTree(Ne),
+    e.addEventListener(g.AfterEdit, (i) => {
+      console.log("AfterEdit"), console.log(i);
+    }),
+    document.getElementById("download_json").addEventListener("click", () => {
+      const i = e.getNodeTree();
+      return (
+        P(
+          encodeURIComponent(e.mind.root.topic) + ".json",
+          JSON.stringify(i, null, 2),
+        ),
+        !1
+      );
+    }),
+    document
+      .getElementById("download_markdown")
+      .addEventListener("click", () => {
+        const i = e.getMarkdown();
+        return P(encodeURIComponent(e.mind.root.topic) + ".md", i), !1;
+      }),
+    document
+      .getElementById("undo")
+      .addEventListener("click", () => (e.undo(), !1)),
+    ye.BUILD == "development"
+      ? document
+          .getElementById("load_markdown")
+          .addEventListener("click", () => (e.showMarkdown(Ee), !1))
+      : (document.getElementById("navItemDebug").style.display = "none");
+  let t = !0;
+  document
+    .getElementById("toggle_theme")
+    .addEventListener(
+      "click",
+      () => (e.setTheme(t ? "dark" : "primary"), (t = !t), !1),
+    );
+}
+window.initDemo = Ce;

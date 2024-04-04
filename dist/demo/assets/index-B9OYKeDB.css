@@ -1,0 +1,98 @@
+canvas.mindcheese-draggable-graph {
+  vertical-align: top;
+}
+mcnode {
+  max-width: 400px;
+  width: max-content;
+  position: absolute;
+  cursor: default;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 2px;
+  font:
+    16px/1.125 Verdana,
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+.mindcheese-inner {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+}
+canvas.mindcheese-graph-canvas {
+  position: absolute;
+  z-index: 1;
+}
+mcnodes {
+  position: absolute;
+  z-index: 2;
+  background-color: #000;
+}
+mcadder {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  display: block;
+  overflow: hidden;
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 2px;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  color: #999;
+  border-color: #ccc;
+}
+mcadder:hover {
+  color: #000;
+  border-color: #000;
+}
+mcnode.selected {
+  color: #fff;
+}
+mcnode.root {
+  font-size: 24px;
+}
+mcnode.root.selected {
+  box-shadow: 2px 2px 8px #000;
+}
+mcnode code {
+  border: 1px solid antiquewhite;
+  background-color: #faebd7;
+  color: #cd5c5c;
+}
+div.theme-primary mcnode {
+  background-color: #fff;
+  color: #000;
+}
+div.theme-primary mcnode.selected {
+  color: #000;
+  background-color: #ccc;
+}
+div.theme-primary mcnode.root {
+  background-color: #000;
+  color: #fff;
+}
+div.theme-dark {
+  background-color: #4a5963;
+}
+div.theme-dark mcnode {
+  background-color: #4a5963;
+  color: #fff;
+}
+div.theme-dark mcnode.selected {
+  color: #fff;
+  background-color: #7070c0;
+}
+div.theme-dark mcnode.root {
+  background-color: #fff;
+  color: #000;
+}
