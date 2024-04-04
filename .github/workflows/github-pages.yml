@@ -22,6 +22,7 @@ jobs:
         run: |
           npm install
           npm run build:demo
+          perl -i -pe 's!"/assets/!"assets/!' dist/demo/index.html
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.5.0
