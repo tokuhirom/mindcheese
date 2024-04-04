@@ -30,4 +30,4 @@ jobs:
       - run: npm run build
       - run: npm run test
       - run: npx eslint . --ext .ts,.tsx
-      - run: npx stylelint "**/*.css"
+      - run: npm run stylelint
