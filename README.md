@@ -11,9 +11,6 @@ Here's a demo site: https://tokuhirom.github.io/mindcheese/index.html
 
 - This library based on jsMind: https://github.com/hizzgdev/jsmind
   - base commit hash is 33ad14832661034dc9a5a84bc0b0f18c93ceca4a
-- [x] TODO: run jest on github actions
-- [x] DnD support
-- [x] Undo feature
 
 自分でビルドしたら試せます。
 
@@ -87,8 +84,7 @@ As a result, I port whole of the jsMind to TypeScript. And I added some features
 
 ## Hacking
 
-    rollup -c
-    rollup -c browser/rollup.config.js
+    npm run dev
 
 ## Keyboard shortcuts
 
