@@ -38,6 +38,7 @@
   },
   "files": [
     "dist/*.js",
+    "styles/*.css",
     "types/**/*.d.ts"
   ]
 }
