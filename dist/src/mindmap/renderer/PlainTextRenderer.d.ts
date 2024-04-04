@@ -1,6 +1,6 @@
-import { TextFormatter } from './TextFormatter';
+import { TextFormatter } from "./TextFormatter";
 
 export declare class PlainTextRenderer implements TextFormatter {
-    render(src: string): string;
-    private static escapeHtml;
+  render(src: string): string;
+  private static escapeHtml;
 }

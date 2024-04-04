@@ -1,1 +1,3 @@
-export declare function findMcnode(htmlElement: HTMLElement): HTMLElement | null;
+export declare function findMcnode(
+  htmlElement: HTMLElement,
+): HTMLElement | null;

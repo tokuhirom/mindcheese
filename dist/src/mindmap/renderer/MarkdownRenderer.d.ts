@@ -1,5 +1,5 @@
-import { TextFormatter } from './TextFormatter';
+import { TextFormatter } from "./TextFormatter";
 
 export declare class MarkdownRenderer implements TextFormatter {
-    render(src: string): string;
+  render(src: string): string;
 }
