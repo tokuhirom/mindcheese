@@ -21,7 +21,7 @@ export class NodesView {
     mindCheese: MindCheese,
     textFormatter: TextFormatter,
     lineWidth: number,
-    pSpace: number
+    pSpace: number,
   ) {
     this.wrapperView = wrapperView;
     this.mindCheese = mindCheese;
@@ -37,7 +37,7 @@ export class NodesView {
     this.mcnodes.addEventListener("keydown", (e) => {
       const el = e.target as HTMLElement;
       console.debug(
-        `keydown=${e.keyCode}==${KEYCODE_ENTER} tagName=${el.tagName} shiftkey=${e.shiftKey}`
+        `keydown=${e.keyCode}==${KEYCODE_ENTER} tagName=${el.tagName} shiftkey=${e.shiftKey}`,
       );
       if (el.tagName != "MCNODE") {
         console.log(`It's not MCNODE. ${el.tagName}`);
@@ -76,7 +76,7 @@ export class NodesView {
 
         this.wrapperView.editNodeEnd();
       },
-      true
+      true,
     );
     this.mcnodes.addEventListener("mousedown", this.mousedownHandle.bind(this));
     this.mcnodes.addEventListener("click", this.clickHandle.bind(this));
@@ -180,7 +180,7 @@ export class NodesView {
     const viewData = node.viewData;
     viewData.elementSizeCache = new Size(
       viewData.element!.clientWidth,
-      viewData.element!.clientHeight
+      viewData.element!.clientHeight,
     );
   }
 
@@ -255,7 +255,7 @@ export class NodesView {
         const adder = viewData.adder!;
         const adderText = "+";
         const adderPoint = offset.convertCenterOfNodeOffsetFromRootNode(
-          layoutResult.getAdderPosition(node, this.pSpace)
+          layoutResult.getAdderPosition(node, this.pSpace),
         );
         adder.style.left = adderPoint.x + "px";
         adder.style.top = adderPoint.y + "px";

@@ -34,7 +34,7 @@ export class Mind {
     nodeid: string,
     topic: string,
     idx: number | null,
-    direction: Direction | null
+    direction: Direction | null,
   ): MindNode {
     const nodeindex: number = idx || -1;
     let node;
@@ -66,7 +66,7 @@ export class Mind {
         topic,
         false,
         parentNode,
-        parentNode.direction
+        parentNode.direction,
       );
     }
 
@@ -94,7 +94,7 @@ export class Mind {
   insertNodeAfter(
     nodeAfter: MindNode,
     nodeid: string,
-    topic: string
+    topic: string,
   ): MindNode {
     const nodeIndex = nodeAfter.index + 0.5;
     // follow current direction.
@@ -103,7 +103,7 @@ export class Mind {
       nodeid,
       topic,
       nodeIndex,
-      nodeAfter.direction
+      nodeAfter.direction,
     );
   }
 
@@ -124,7 +124,7 @@ export class Mind {
     node: MindNode,
     beforeid: string,
     parent: MindNode,
-    direction: Direction
+    direction: Direction,
   ): void {
     console.log(`move_node: ${node} ${beforeid} ${parent.id} ${direction}`);
     this.doMoveNode(node, beforeid, parent, direction);
@@ -194,10 +194,10 @@ export class Mind {
     node: MindNode,
     beforeid: string,
     parent: MindNode,
-    direction: Direction
+    direction: Direction,
   ): void {
     console.log(
-      `_move_node: node=${node}, ${beforeid}, parentid=${parent.id}, ${direction}`
+      `_move_node: node=${node}, ${beforeid}, parentid=${parent.id}, ${direction}`,
     );
     if (!!node && !!parent.id) {
       console.assert(node.parent, `node.parent is null: ${node}`);

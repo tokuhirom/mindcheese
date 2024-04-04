@@ -70,7 +70,7 @@ test("basic", () => {
       "\t\t+ I'm from local variable",
       "\t\t+ I can do everything",
       "",
-    ].join("\n")
+    ].join("\n"),
   );
 });
 
@@ -105,6 +105,6 @@ test("multiline", () => {
       "\t\t  Abc 2 \\",
       "\t\t  Abc 3",
       "",
-    ].join("\n")
+    ].join("\n"),
   );
 });

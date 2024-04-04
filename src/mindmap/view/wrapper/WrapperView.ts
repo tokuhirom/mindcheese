@@ -35,7 +35,7 @@ export class WrapperView {
     textFormatter: TextFormatter,
     layoutEngine: LayoutEngine,
     pSpace: number,
-    lineWidth: number
+    lineWidth: number,
   ) {
     this.mindCheese = mindCheese;
     this.textFormatter = textFormatter;
@@ -48,7 +48,7 @@ export class WrapperView {
       this.mindCheese,
       textFormatter,
       lineWidth,
-      this.pSpace
+      this.pSpace,
     );
 
     this.size = new Size(0, 0);
@@ -84,7 +84,7 @@ export class WrapperView {
           this.zoom(this.zoomScale);
         }
       },
-      { passive: true }
+      { passive: true },
     );
   }
 
@@ -118,7 +118,7 @@ export class WrapperView {
     const outerH = this.wrapperElement.clientHeight;
     if (this.size.width > outerW) {
       const offset = this.layoutResult!.getOffsetOfTheRootNode(
-        this.mindCheese.mind
+        this.mindCheese.mind,
       );
       this.wrapperElement.scrollLeft = offset.x - outerW / 2;
     }
@@ -144,7 +144,7 @@ export class WrapperView {
     const viewData = node.viewData;
     return new ScrollSnapshot(
       parseInt(viewData.element!.style.left) - this.wrapperElement.scrollLeft,
-      parseInt(viewData.element!.style.top) - this.wrapperElement.scrollTop
+      parseInt(viewData.element!.style.top) - this.wrapperElement.scrollTop,
     );
   }
 
@@ -244,7 +244,7 @@ export class WrapperView {
     element.innerText = node.topic;
     node.viewData.elementSizeCache = new Size(
       element.clientWidth,
-      element.clientHeight
+      element.clientHeight,
     );
 
     // https://stackoverflow.com/questions/6139107/programmatically-select-text-in-a-contenteditable-html-element
@@ -285,7 +285,7 @@ export class WrapperView {
     }
     viewData.elementSizeCache = new Size(
       element.clientWidth,
-      element.clientHeight
+      element.clientHeight,
     );
   }
 
@@ -307,7 +307,7 @@ export class WrapperView {
         element.innerHTML = this.textFormatter.render(node.topic);
         node.viewData.elementSizeCache = new Size(
           element.clientWidth,
-          element.clientHeight
+          element.clientHeight,
         );
         this.renderAgain();
       } else {
@@ -336,7 +336,7 @@ export class WrapperView {
     this.nodesView.renderNodes(this.layoutResult!);
 
     const offset = this.layoutResult!.getOffsetOfTheRootNode(
-      this.mindCheese.mind
+      this.mindCheese.mind,
     );
     this.graphView.renderLines(this.mindCheese.mind, this.layoutResult, offset);
   }

@@ -37,7 +37,7 @@ export class GraphCanvas {
       0,
       0,
       this.canvasElement.width,
-      this.canvasElement.height
+      this.canvasElement.height,
     );
   }
 
@@ -45,7 +45,7 @@ export class GraphCanvas {
     pout: OffsetFromTopLeftOfMcnodes,
     pin: OffsetFromTopLeftOfMcnodes,
     color: string,
-    lineCap: CanvasLineCap
+    lineCap: CanvasLineCap,
   ): void {
     const ctx = this.canvasContext;
     ctx.strokeStyle = color;
@@ -60,7 +60,7 @@ export class GraphCanvas {
     x1: number,
     y1: number,
     x2: number,
-    y2: number
+    y2: number,
   ): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);

@@ -3,7 +3,7 @@ import { CenterOfNodeOffsetFromRootNode } from "./CenterOfNodeOffsetFromRootNode
 
 export class RootNodeOffsetFromTopLeftOfMcnodes extends OffsetFromTopLeftOfMcnodes {
   convertCenterOfNodeOffsetFromRootNode(
-    offset: CenterOfNodeOffsetFromRootNode
+    offset: CenterOfNodeOffsetFromRootNode,
   ): OffsetFromTopLeftOfMcnodes {
     return new OffsetFromTopLeftOfMcnodes(this.x + offset.x, this.y + offset.y);
   }

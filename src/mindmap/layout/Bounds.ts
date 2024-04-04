@@ -8,7 +8,7 @@ export class Bounds {
     this.s = s;
     this.size = new Size(this.e + this.w * -1, this.s + this.n * -1);
     console.log(
-      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.width},h=${this.size.height}`
+      `size: e=${e},w=${w},s=${s},n=${n} w=${this.size.width},h=${this.size.height}`,
     );
   }
 

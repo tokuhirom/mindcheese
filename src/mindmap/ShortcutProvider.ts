@@ -12,7 +12,7 @@ export class ShortcutProvider {
   constructor(
     mindCheese: MindCheese,
     enable: boolean,
-    mappings: [number, string, (jm: MindCheese, e: Event) => boolean][]
+    mappings: [number, string, (jm: MindCheese, e: Event) => boolean][],
   ) {
     this.mindCheese = mindCheese;
     this.enable = enable;
@@ -63,7 +63,7 @@ export class ShortcutProvider {
   }
 
   private compileHandlers(
-    handlers: [number, string, (jm: MindCheese, e: Event) => boolean][]
+    handlers: [number, string, (jm: MindCheese, e: Event) => boolean][],
   ): Record<string, [number, (jm: MindCheese, e: Event) => boolean][]> {
     const result: Record<
       string,

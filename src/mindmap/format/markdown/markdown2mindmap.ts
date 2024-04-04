@@ -83,7 +83,7 @@ function parse(md: string) {
   const realRoot = root.children[0];
   if (!realRoot) {
     throw new Error(
-      "MindCheese can't parse this markdown as a mindmap: '" + md + "'"
+      "MindCheese can't parse this markdown as a mindmap: '" + md + "'",
     );
   }
   return realRoot;

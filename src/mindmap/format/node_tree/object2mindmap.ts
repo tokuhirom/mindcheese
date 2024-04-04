@@ -28,7 +28,7 @@ function parse(mind: Mind, nodeRoot: Record<string, any>): void {
 function extractSubNode(
   mind: Mind,
   nodeParent: MindNode,
-  nodeJson: Record<string, any>
+  nodeJson: Record<string, any>,
 ): void {
   let d: Direction | null = null;
   if (nodeParent.isroot) {

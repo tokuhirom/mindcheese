@@ -16,7 +16,7 @@ export class GraphView {
   renderLines(
     mind: Mind,
     layoutResult: LayoutResult,
-    offset: RootNodeOffsetFromTopLeftOfMcnodes
+    offset: RootNodeOffsetFromTopLeftOfMcnodes,
   ): void {
     this.graphCanvas.clear();
 
@@ -29,20 +29,20 @@ export class GraphView {
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),
           node.color!,
-          "round"
+          "round",
         );
       }
       {
         // Draw line under the bottom of the node
         const pout = new CenterOfNodeOffsetFromRootNode(
           pin.x + node.viewData.elementSizeCache!.width * node.direction,
-          pin.y
+          pin.y,
         );
         this.graphCanvas.drawLine(
           offset.convertCenterOfNodeOffsetFromRootNode(pout),
           offset.convertCenterOfNodeOffsetFromRootNode(pin),
           node.color!,
-          "butt"
+          "butt",
         );
       }
     }

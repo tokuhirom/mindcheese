@@ -132,7 +132,7 @@ export class ShortcutHandlers {
   private static handleDirection(
     mindCheese: MindCheese,
     e: Event,
-    d: Direction
+    d: Direction,
   ): void {
     let children; // TODO maybe optimizable
     const selectedNode = mindCheese.getSelectedNode();

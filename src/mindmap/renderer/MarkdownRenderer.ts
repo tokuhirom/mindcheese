@@ -35,7 +35,7 @@ export class MarkdownRenderer implements TextFormatter {
         } else if (dot) {
           return dot;
         }
-      }
+      },
     );
   }
 }

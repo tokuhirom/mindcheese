@@ -39,12 +39,12 @@ export class MindCheese {
     // create instance of function provider
     const graph = new GraphCanvas(
       options.view.lineColor,
-      options.view.lineWidth
+      options.view.lineWidth,
     );
     const layoutEngine = new LayoutEngine(
       options.layout.hspace,
       options.layout.vspace,
-      options.layout.pspace
+      options.layout.pspace,
     );
     this.wrapperView = new WrapperView(
       this,
@@ -54,12 +54,12 @@ export class MindCheese {
       options.view.renderer,
       layoutEngine,
       options.layout.pspace,
-      options.view.lineWidth
+      options.view.lineWidth,
     );
     this.shortcut = new ShortcutProvider(
       this,
       options.shortcut.enable,
-      options.shortcut.mappings
+      options.shortcut.mappings,
     );
     this.draggable = new Draggable(this);
     this.undoManager = new UndoManager(this);
@@ -155,7 +155,7 @@ export class MindCheese {
   insertNodeAfter(
     nodeAfter: MindNode,
     nodeid: string,
-    topic: string
+    topic: string,
   ): MindNode {
     this.checkEditable();
 
@@ -180,7 +180,7 @@ export class MindCheese {
     this.undoManager.recordSnapshot();
     const nextSelectedNode = MindCheese.findUpperBrotherOrParentNode(
       parentNode,
-      nodeid
+      nodeid,
     );
 
     const scrollSnapshot = this.wrapperView.saveScroll(node);
@@ -199,7 +199,7 @@ export class MindCheese {
 
   private static findUpperBrotherOrParentNode(
     parentNode: MindNode,
-    targetNodeId: string
+    targetNodeId: string,
   ) {
     const children = parentNode.children;
     for (let i = 0; i < children.length; i++) {
@@ -246,10 +246,10 @@ export class MindCheese {
     node: MindNode,
     beforeid: string,
     parent: MindNode,
-    direction: Direction
+    direction: Direction,
   ): void {
     console.log(
-      `jm.move_node: ${node.id} ${beforeid} ${parent.id} ${direction}`
+      `jm.move_node: ${node.id} ${beforeid} ${parent.id} ${direction}`,
     );
     this.checkEditable();
 
@@ -287,7 +287,7 @@ export class MindCheese {
 
     if (node.parent!.isroot) {
       const children = node.parent!.children.filter(
-        (it) => it.direction === node.direction
+        (it) => it.direction === node.direction,
       );
       for (let i = 0; i < children.length; i++) {
         const ni = children[i];
@@ -312,7 +312,7 @@ export class MindCheese {
 
     if (node.parent!.isroot) {
       const children = node.parent!.children.filter(
-        (it) => it.direction == node.direction
+        (it) => it.direction == node.direction,
       );
       for (let i = 0; i < children.length; i++) {
         const ni = children[i];
@@ -325,7 +325,7 @@ export class MindCheese {
         }
       }
       throw new Error(
-        `Illegal state. The parent node doesn't have this child: ${node.id}`
+        `Illegal state. The parent node doesn't have this child: ${node.id}`,
       );
     } else {
       return this.mind.getNodeAfter(node);
@@ -362,7 +362,7 @@ export class MindCheese {
 
   moveDown(node: MindNode) {
     const children = node.parent!.children.filter(
-      (it) => it.direction === node.direction
+      (it) => it.direction === node.direction,
     );
     for (let i = 0; i < children.length; i++) {
       if (children[i].id == node.id) {
@@ -402,7 +402,7 @@ export class MindCheese {
           console.debug(
             `MindCheese.moveDown: topic=${node.topic} before.topic=${
               children[i + 1].topic
-            } direction=${node.direction}`
+            } direction=${node.direction}`,
           );
           this.moveNode(node, children[i + 2].id, node.parent!, node.direction);
           this.eventRouter.invokeEventHandler(EventType.AfterEdit, this.mind);

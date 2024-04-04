@@ -164,7 +164,7 @@ export class Draggable {
       0,
       0,
       this.mindCheese.wrapperView.size.width,
-      this.mindCheese.wrapperView.size.height
+      this.mindCheese.wrapperView.size.height,
     );
   }
 
@@ -177,7 +177,7 @@ export class Draggable {
       x1,
       y2,
       x2,
-      y2
+      y2,
     );
     this.canvasContext.stroke();
   }
@@ -218,7 +218,7 @@ export class Draggable {
             Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = new Point(
             nl.x + ns.width - this.lineWidth,
-            nl.y + (node.isroot ? ns.height / 2 : ns.height)
+            nl.y + (node.isroot ? ns.height / 2 : ns.height),
           );
           sp = new Point(sx + this.lineWidth, sy + sh);
         } else {
@@ -230,7 +230,7 @@ export class Draggable {
             Math.abs(sy + sh / 2 - nl.y - ns.height / 2);
           np = new Point(
             nl.x + this.lineWidth,
-            nl.y + (node.isroot ? ns.height / 2 : ns.height)
+            nl.y + (node.isroot ? ns.height / 2 : ns.height),
           );
           sp = new Point(sx + sw - this.lineWidth, sy + sh);
         }
@@ -281,7 +281,7 @@ export class Draggable {
             this.mindCheese.wrapperView.nodesView.dblclickHandle(e);
           }
         },
-        { passive: true }
+        { passive: true },
       );
     }
     container.addEventListener("touchmove", this.drag.bind(this), {
@@ -327,7 +327,7 @@ export class Draggable {
           this.hlookupDelay = 0;
           this.hlookupTimer = window.setInterval(
             this.lookupCloseNode.bind(this),
-            this.lookupInterval
+            this.lookupInterval,
           );
         }, this.lookupDelay);
         this.capture = true;
@@ -385,7 +385,7 @@ export class Draggable {
   private moveNode(
     srcNode: MindNode,
     targetNode: MindNode,
-    targetDirect: Direction
+    targetDirect: Direction,
   ): void {
     console.log(`Draggable.moveNode: ${srcNode} ${targetNode} ${targetDirect}`);
     const shadowH = this.shadow.offsetTop;
@@ -411,7 +411,7 @@ export class Draggable {
         beforeid = nodeBefore.id;
       }
       console.log(
-        `Calling jm.move_node: ${srcNode.id}, ${beforeid}, ${targetNode.id}, ${targetDirect}`
+        `Calling jm.move_node: ${srcNode.id}, ${beforeid}, ${targetNode.id}, ${targetDirect}`,
       );
       this.mindCheese.moveNode(srcNode, beforeid, targetNode, targetDirect);
     }

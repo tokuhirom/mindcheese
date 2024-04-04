@@ -8,7 +8,7 @@ function downloadText(filename: string, text: string) {
   const element = document.createElement("a");
   element.setAttribute(
     "href",
-    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text),
   );
   element.setAttribute("download", filename);
 
@@ -35,7 +35,7 @@ export function initDemo() {
     const data = mindCheese.getNodeTree();
     downloadText(
       encodeURIComponent(mindCheese.mind.root!.topic) + ".json",
-      JSON.stringify(data, null, 2)
+      JSON.stringify(data, null, 2),
     );
     return false;
   });
@@ -45,7 +45,7 @@ export function initDemo() {
       const data = mindCheese.getMarkdown();
       downloadText(
         encodeURIComponent(mindCheese.mind.root!.topic) + ".md",
-        data
+        data,
       );
       return false;
     });

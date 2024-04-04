@@ -31,11 +31,11 @@ export class LayoutEngine {
 
     this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.LEFT),
-      relativeFromParentMap
+      relativeFromParentMap,
     );
     this.layoutOffsetSubNodes(
       rootNode.children.filter((it) => it.direction == Direction.RIGHT),
-      relativeFromParentMap
+      relativeFromParentMap,
     );
 
     const relativeFromRootMap: Record<string, CenterOfNodeOffsetFromRootNode> =
@@ -43,7 +43,7 @@ export class LayoutEngine {
     for (const node of Object.values(mind.nodes)) {
       relativeFromRootMap[node.id] = LayoutEngine.calcRelativeOffsetFromRoot(
         node,
-        relativeFromParentMap
+        relativeFromParentMap,
       );
     }
     return new LayoutResult(relativeFromRootMap);
@@ -51,7 +51,7 @@ export class LayoutEngine {
 
   private static calcRelativeOffsetFromRoot(
     node: MindNode,
-    relativeMap: Record<string, RelativeOffsetFromParent>
+    relativeMap: Record<string, RelativeOffsetFromParent>,
   ): CenterOfNodeOffsetFromRootNode {
     let x = 0;
     let y = 0;
@@ -70,7 +70,7 @@ export class LayoutEngine {
   // layout both the x and y axis
   private layoutOffsetSubNodes(
     nodes: MindNode[],
-    relativeMap: Record<string, RelativeOffsetFromParent>
+    relativeMap: Record<string, RelativeOffsetFromParent>,
   ): number {
     if (nodes.length == 0) {
       return 0;
@@ -84,11 +84,11 @@ export class LayoutEngine {
 
         const childrenHeight = this.layoutOffsetSubNodes(
           node.children,
-          relativeMap
+          relativeMap,
         );
         const nodeOuterHeight = Math.max(
           node.viewData.elementSizeCache!.height,
-          childrenHeight
+          childrenHeight,
         );
 
         const x =
