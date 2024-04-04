@@ -4,16 +4,9 @@
     "selector-type-no-unknown": [
       true,
       {
-        "ignoreTypes": [
-          "mcnode",
-          "mcnodes",
-          "mcadder"
-        ]
+        "ignoreTypes": ["mcnode", "mcnodes", "mcadder"]
       }
     ]
   },
-  "ignoreFiles": [
-    "node_modules/**/*",
-    "dist/**/*"
-  ]
+  "ignoreFiles": ["node_modules/**/*", "dist/**/*"]
 }

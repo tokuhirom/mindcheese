@@ -2,7 +2,7 @@
 name: Publish Package to npmjs
 on:
   release:
-    types: [created]
+    types: [ created ]
 
 jobs:
   build:
@@ -22,8 +22,6 @@ jobs:
       - run: npm ci
       - name: Set version from tag
         run: npm --no-git-tag-version version ${GITHUB_REF#refs/*/}
-      - name: Generate d.ts
-        run: npx tsc
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
