@@ -7,5 +7,6 @@
         "ignoreTypes": ["mcnode", "mcnodes", "mcadder"]
       }
     ]
-  }
+  },
+  "ignoreFiles": ["node_modules/**/*"]
 }
