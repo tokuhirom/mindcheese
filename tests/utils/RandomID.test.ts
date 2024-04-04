@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 import { generateNewId } from "../../src/mindmap/utils/RandomID";
 
 describe("RandomID generator functionality", () => {

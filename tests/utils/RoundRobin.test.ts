@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 import { RoundRobin } from "../../src/mindmap/utils/RoundRobin";
 
 const p = new RoundRobin<string>(["a", "b", "c"]);
