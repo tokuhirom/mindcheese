@@ -5,15 +5,15 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "ESNext",
-    "target": "es6",
+    "target": "es2020",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationDir": "types",
+    "declarationDir": "./dist/types",
     "emitDeclarationOnly": true,
-    "lib": ["dom", "es5", "scripthost", "es2015"]
+    "lib": ["dom", "es2020", "scripthost"]
   },
   "include": ["**/*.ts"]
 }

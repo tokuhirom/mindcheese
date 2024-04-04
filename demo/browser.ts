@@ -2,7 +2,7 @@ import { MindCheese } from "../src/mindmap/MindCheese";
 import { DEMO_MARKDOWN, DEMO_NODE_TREE } from "./DemoData";
 import { EventType } from "../src/mindmap/MindmapConstants";
 
-console.log("Loaded browser.ts");
+console.log("Loaded browser.ts!111");
 
 function downloadText(filename: string, text: string) {
   const element = document.createElement("a");
