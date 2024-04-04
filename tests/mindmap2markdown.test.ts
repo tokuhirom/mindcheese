@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { object2mindmap } from "../src/mindmap/format/node_tree/object2mindmap";
 import { mindmap2markdown } from "../src/mindmap/format/markdown/mindmap2markdown";
 
@@ -47,64 +48,66 @@ const mind = {
   ],
 };
 
-test("basic", () => {
-  const mindobj = object2mindmap(mind);
-  console.log(JSON.stringify(mindobj.root!.toObject(), null, 2));
-  const md = mindmap2markdown(mindobj);
-  expect(md).toBe(
-    [
-      "- jsMind",
-      "\t+ Easy",
-      "\t\t+ Easy to show",
-      "\t\t+ Easy to edit",
-      "\t\t+ Easy to store",
-      "\t\t+ Easy to embed",
-      "\t- Open Source",
-      "\t\t- on GitHub",
-      "\t\t- BSD License",
-      "\t- Powerful",
-      "\t\t- Base on Javascript",
-      "\t\t- Base on HTML5",
-      "\t\t- Depends on you",
-      "\t+ test node",
-      "\t\t+ I'm from local variable",
-      "\t\t+ I can do everything",
-      "",
-    ].join("\n"),
-  );
-});
+describe("Mindmap Conversion Tests", () => {
+  it("basic conversion to markdown", () => {
+    const mindobj = object2mindmap(mind);
+    console.log(JSON.stringify(mindobj.root!.toObject(), null, 2));
+    const md = mindmap2markdown(mindobj);
+    expect(md).toBe(
+      [
+        "- jsMind",
+        "\t+ Easy",
+        "\t\t+ Easy to show",
+        "\t\t+ Easy to edit",
+        "\t\t+ Easy to store",
+        "\t\t+ Easy to embed",
+        "\t- Open Source",
+        "\t\t- on GitHub",
+        "\t\t- BSD License",
+        "\t- Powerful",
+        "\t\t- Base on Javascript",
+        "\t\t- Base on HTML5",
+        "\t\t- Depends on you",
+        "\t+ test node",
+        "\t\t+ I'm from local variable",
+        "\t\t+ I can do everything",
+        "",
+      ].join("\n"),
+    );
+  });
 
-test("multiline", () => {
-  const mind = {
-    id: "root",
-    topic: "jsMind",
-    children: [
-      {
-        id: "easy",
-        topic: "Easy 1\nEasy 2\nEasy 3",
-        direction: "left",
-        children: [
-          {
-            id: "abc",
-            topic: "Abc 1\nAbc 2\nAbc 3",
-            direction: "left",
-          },
-        ],
-      },
-    ],
-  };
-  const mindobj = object2mindmap(mind);
-  const md = mindmap2markdown(mindobj);
-  expect(md).toBe(
-    [
-      "- jsMind",
-      "\t+ Easy 1 \\",
-      "\t  Easy 2 \\",
-      "\t  Easy 3",
-      "\t\t+ Abc 1 \\",
-      "\t\t  Abc 2 \\",
-      "\t\t  Abc 3",
-      "",
-    ].join("\n"),
-  );
+  it("handles multiline nodes correctly", () => {
+    const mind = {
+      id: "root",
+      topic: "jsMind",
+      children: [
+        {
+          id: "easy",
+          topic: "Easy 1\nEasy 2\nEasy 3",
+          direction: "left",
+          children: [
+            {
+              id: "abc",
+              topic: "Abc 1\nAbc 2\nAbc 3",
+              direction: "left",
+            },
+          ],
+        },
+      ],
+    };
+    const mindobj = object2mindmap(mind);
+    const md = mindmap2markdown(mindobj);
+    expect(md).toBe(
+      [
+        "- jsMind",
+        "\t+ Easy 1 \\",
+        "\t  Easy 2 \\",
+        "\t  Easy 3",
+        "\t\t+ Abc 1 \\",
+        "\t\t  Abc 2 \\",
+        "\t\t  Abc 3",
+        "",
+      ].join("\n"),
+    );
+  });
 });
