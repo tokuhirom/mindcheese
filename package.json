@@ -12,7 +12,7 @@
     "serve": "vite preview",
     "test": "vitest",
     "prettier": "prettier --write .",
-    "eslint": "npx eslint . --ext .ts,.tsx",
+    "eslint": "npx eslint .",
     "stylelint": "npx stylelint \"**/*.css\""
   },
   "keywords": [],
