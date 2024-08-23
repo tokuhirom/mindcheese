@@ -27,7 +27,7 @@
     "simple-git-hooks": "2.11.1",
     "stylelint": "16.8.2",
     "stylelint-config-standard": "36.0.1",
-    "tslib": "2.6.3",
+    "tslib": "2.7.0",
     "typescript": "5.5.4",
     "vite": "^5.2.8",
     "vite-plugin-dts": "^4.0.0",
