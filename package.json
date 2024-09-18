@@ -36,7 +36,7 @@
     "vite-plugin-dts": "^4.0.0",
     "vitest": "^2.0.0"
   },
-   "optionalDependencies": {
+  "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
   },
   "simple-git-hooks": {
