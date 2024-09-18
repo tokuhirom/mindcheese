@@ -12,26 +12,32 @@
     "serve": "vite preview",
     "test": "vitest",
     "prettier": "prettier --write .",
-    "eslint": "npx eslint . --ext .ts,.tsx",
+    "eslint": "npx eslint .",
     "stylelint": "npx stylelint \"**/*.css\""
   },
   "keywords": [],
   "author": "tokuhirom",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "20.16.5",
     "@typescript-eslint/eslint-plugin": "8.6.0",
     "@typescript-eslint/parser": "8.6.0",
-    "eslint": "8.57.1",
+    "eslint": "^9.9.0",
     "prettier": "3.3.3",
     "simple-git-hooks": "2.11.1",
     "stylelint": "16.9.0",
     "stylelint-config-standard": "36.0.1",
     "tslib": "2.7.0",
     "typescript": "5.6.2",
+    "typescript-eslint": "^8.2.0",
     "vite": "^5.2.8",
     "vite-plugin-dts": "^4.0.0",
     "vitest": "^2.0.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   },
   "simple-git-hooks": {
     "pre-commit": "npx prettier --write ."

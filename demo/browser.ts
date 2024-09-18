@@ -23,7 +23,7 @@ function downloadText(filename: string, text: string) {
 export function initDemo() {
   const container = document.getElementById("container");
   const mindCheese = new MindCheese(container!);
-  // @ts-ignore
+  // @ts-expect-error it's required
   this.mindCheese = mindCheese;
   mindCheese.showNodeTree(DEMO_NODE_TREE);
   mindCheese.addEventListener(EventType.AfterEdit, (mind) => {
@@ -71,5 +71,5 @@ export function initDemo() {
   });
 }
 
-// @ts-ignore
+// @ts-expect-error it's required
 window.initDemo = initDemo;
