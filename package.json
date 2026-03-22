@@ -37,7 +37,7 @@
     "vitest": "^4.0.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.59.1"
+    "@rollup/rollup-linux-x64-gnu": "4.60.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npx prettier --write ."
